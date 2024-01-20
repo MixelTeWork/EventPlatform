@@ -76,6 +76,7 @@ def init_values(dev=False, cmd=False):
 
     def init_values_dev(db_sess, user_admin):
         now = get_datetime_now()
+        user_admin.balance = 100
 
         def log(tableName, recordId, changes):
             db_sess.add(Log(
@@ -98,7 +99,7 @@ def init_values(dev=False, cmd=False):
             log(Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
 
-        User.new(db_sess, user_admin, "manager", "manager", "Организатор", [Roles.manager])
+        User.new(db_sess, user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
         User.new(db_sess, user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
 
         db_sess.commit()

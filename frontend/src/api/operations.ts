@@ -5,6 +5,9 @@ import useUser from "./user";
 const Operations = {
 	page_debug: "page_debug",
 	page_users: "page_users",
+	page_worker: "page_worker",
+	page_scanner_quest: "page_scanner_quest",
+	page_scanner_store: "page_scanner_store",
 }
 
 export type Operation = keyof typeof Operations;

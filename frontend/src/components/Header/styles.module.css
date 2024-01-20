@@ -13,6 +13,9 @@
 .home {
 	width: 3rem;
 	height: 100%;
+	text-decoration: none;
+	color: darkblue;
+	font-size: 2rem;
 }
 
 .block {
@@ -36,6 +39,7 @@
 	color: lime;
 	text-align: center;
 	cursor: pointer;
+	text-decoration: none;
 }
 
 .menu {

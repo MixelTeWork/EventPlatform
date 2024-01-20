@@ -30,7 +30,7 @@ export default function StorePage()
 						setPopupIsOpen(true);
 					}}>
 						<div className={styles.item__img}>
-							<img src="https://ipsumimg.dakovdev.com/512x512" />
+							<img src="https://ipsumimg.dakovdev.com/512x512" alt="Товар" />
 						</div>
 						<div className={styles.item__desc}>
 							<span>{item.name}</span>

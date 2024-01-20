@@ -19,7 +19,7 @@ export default function Header()
 
 	return (
 		<div className={styles.root}>
-			<Link to={"/"} className={styles.home}></Link>
+			<Link to={"/"} className={classNames(styles.home, "material_symbols")}>home</Link>
 			<span className={styles.block}>
 				<div className={styles.balance}>{user.data?.balance || 0} G</div>
 				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/login")}>
@@ -30,6 +30,7 @@ export default function Header()
 						Профиль
 					</button>
 					{hasPermission(user, "page_debug") && <Link to="/debug">{`</>`}</Link>}
+					{hasPermission(user, "page_worker") && <Link to="/worker" className="material_symbols">deployed_code</Link>}
 					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle"}>
 						Выйти
 					</button>

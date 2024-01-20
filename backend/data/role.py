@@ -123,8 +123,8 @@ class Role(SqlAlchemyBase, SerializerMixin):
 class Roles:
     admin = 1
     manager = 2
-    worker = 2
-    user = 3
+    worker = 3
+    user = 4
 
 
 ROLES = {
@@ -134,13 +134,15 @@ ROLES = {
         ]
     },
     Roles.worker: {
-        "name": "Волонтёр",
+        "name": "Персонал",
         "operations": [
+            Operations.page_worker,
+            Operations.page_scanner_quest,
+            Operations.page_scanner_store,
         ]
     },
     Roles.user: {
         "name": "Пользователь",
-        "operations": [
-        ]
+        "operations": []
     },
 }
