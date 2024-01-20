@@ -5,6 +5,8 @@ import Layout from "../../components/Layout";
 import { useTitle } from "../../utils/useTtile";
 import { Form, FormField } from "../../components/Form";
 import Spinner from "../../components/Spinner";
+import { Link } from "react-router-dom";
+import classNames from "../../utils/classNames";
 
 export default function AuthPage()
 {
@@ -23,7 +25,8 @@ export default function AuthPage()
 
 	return (
 		<Layout header={null} centered centeredPage gap="2em">
-			<h1>Билетная Система</h1>
+			<Link to="/" className={classNames(styles.back, "material_symbols")}>arrow_back</Link>
+			<h1>Мероприятие</h1>
 			{error && <h3>{error}</h3>}
 			{mutation.isLoading && <Spinner />}
 			<Form className={styles.form} onSubmit={onSubmit}>
@@ -35,10 +38,6 @@ export default function AuthPage()
 				</FormField>
 				<button type="submit" className="button button_light button_small" disabled={mutation.status == "loading"}>Войти</button>
 			</Form>
-			<div>
-				<div>Для сканирования билетов получите ссылку у управляющего.</div>
-				<div>Если вы попали сюда, перейдите по полученной ссылке ещё раз.</div>
-			</div>
 		</Layout>
 	);
 }
