@@ -22,7 +22,7 @@ export default function Header()
 			<Link to={"/"} className={styles.home}></Link>
 			<span className={styles.block}>
 				<div className={styles.balance}>{user.data?.balance || 0} G</div>
-				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/auth")}>
+				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/login")}>
 					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
 				</button>
 				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)}>

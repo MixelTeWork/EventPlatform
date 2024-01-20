@@ -13,6 +13,7 @@ import IndexPage from "./pages/IndexPage";
 import DebugPage from "./pages/DebugPage";
 import UsersPage from "./pages/UsersPage";
 import LogPage from "./pages/LogPage";
+import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import TimetablePage from "./pages/TimetablePage";
 import QuestPage from "./pages/QuestPage";
@@ -39,8 +40,9 @@ export default function App()
 		{displayError(user)}
 		{user.isSuccess &&
 			<Routes>
-				<Route path="/auth" element={!user.data?.auth ? <AuthPage /> : <Navigate to="/" />} />
 				<Route path="/" element={<IndexPage />} />
+				<Route path="/login" element={!user.data?.auth ? <LoginPage /> : <Navigate to="/" />} />
+				<Route path="/auth" element={!user.data?.auth ? <AuthPage /> : <Navigate to="/" />} />
 				<Route path="/timetable" element={<TimetablePage />} />
 				<Route path="/quest" element={<QuestPage />} />
 				<Route path="/store" element={<StorePage />} />
