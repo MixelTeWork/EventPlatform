@@ -34,3 +34,16 @@ export interface UserWithPwd extends User
 	password: string,
 }
 
+export interface Quest
+{
+	id: number,
+	name: string,
+	reward: number,
+}
+
+export interface StoreItem
+{
+	id: number,
+	name: string,
+	price: number,
+}

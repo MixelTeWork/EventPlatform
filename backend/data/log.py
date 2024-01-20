@@ -35,3 +35,5 @@ class Tables:
     User = "User"
     Role = "Role"
     UserRole = "UserRole"
+    Quest = "Quest"
+    StoreItem = "StoreItem"
