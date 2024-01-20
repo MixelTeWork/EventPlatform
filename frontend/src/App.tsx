@@ -18,6 +18,7 @@ import ProfilePage from "./pages/ProfilePage";
 import TimetablePage from "./pages/TimetablePage";
 import QuestPage from "./pages/QuestPage";
 import StorePage from "./pages/StorePage";
+import ScannerQuestPage from "./pages/ScannerQuestPage";
 import WorkerPage from "./pages/WorkerPage";
 
 export default function App()
@@ -50,6 +51,7 @@ export default function App()
 				{/* <Route path="/race" element={<RacePage />} /> */}
 				{ProtectedRoute(null, "/profile", <ProfilePage />)}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
+				{ProtectedRoute("page_scanner_quest", "/scanner_quest", <ScannerQuestPage />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
 				{ProtectedRoute("page_debug", "/log", <LogPage />)}
 				{ProtectedRoute("page_users", "/users", <UsersPage />)}

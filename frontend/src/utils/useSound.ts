@@ -15,5 +15,5 @@ export default function useSound(url: string)
 		audio.play();
 	};
 
-	return [play];
+	return play;
 };
