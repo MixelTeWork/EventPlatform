@@ -1,7 +1,6 @@
 * {
 	box-sizing: border-box;
 	font-family: inherit;
-	font-size: inherit;
 }
 
 body {
@@ -9,9 +8,11 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-decoration-skip-ink: none;
-	font-family: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+	font-family: "Determination", "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
 		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
 		sans-serif;
+
+	background: radial-gradient(circle at 100% 50%, #6868ff, transparent 60%), linear-gradient(45deg, #7e6ed3, #95cdff);
 }
 
 pre, code {
@@ -30,4 +31,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 {
 	text-align: center;
+}
+
+::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: gray;
 }

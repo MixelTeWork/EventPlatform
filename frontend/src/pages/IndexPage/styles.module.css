@@ -1,0 +1,18 @@
+.root {
+	padding-inline: 0;
+}
+
+.title {
+	font-size: 3rem;
+	text-transform: uppercase;
+}
+
+.map {
+	overflow: auto;
+	margin-block: auto;
+}
+.map img {
+	display: block;
+	width: 100%;
+	height: auto;
+}

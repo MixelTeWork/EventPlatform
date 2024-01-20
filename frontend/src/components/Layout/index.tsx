@@ -2,12 +2,12 @@ import classNames from "../../utils/classNames";
 import Header from "../Header";
 import styles from "./styles.module.css"
 
-export default function Layout({ children, className, backLink, centered = false, centeredPage = false, height100 = false, gap = 0, header }: LayoutProps)
+export default function Layout({ children, className, styles: el_styles, centered = false, centeredPage = false, height100 = false, gap = 0, header, footer }: LayoutProps)
 {
-	if (header === undefined) header = <Header backLink={backLink} />
-	
+	if (header === undefined) header = <Header />
+
 	return (
-		<div className={styles.root} style={{ maxHeight: height100 ? "100dvh" : "" }}>
+		<div className={classNames(styles.root, !!footer && styles.hasFooter)} style={{ ...el_styles, maxHeight: height100 ? "100dvh" : "" }}>
 			{header || <div></div>}
 			<div
 				className={classNames(
@@ -19,17 +19,19 @@ export default function Layout({ children, className, backLink, centered = false
 			>
 				{children}
 			</div>
+			{footer}
 		</div>
 	);
 }
 
 interface LayoutProps extends React.PropsWithChildren
 {
-	backLink?: string,
 	centeredPage?: boolean,
 	centered?: boolean,
 	height100?: boolean,
 	gap?: number | string,
 	className?: string,
 	header?: React.ReactNode,
+	footer?: React.ReactNode,
+	styles?: React.CSSProperties,
 }

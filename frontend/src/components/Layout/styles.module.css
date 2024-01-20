@@ -1,12 +1,19 @@
 .root {
 	min-height: 100%;
 	width: 100%;
+	/* max-width: 100vw; */
 	display: grid;
 	grid-template-rows: max-content auto;
+}
+.hasFooter {
+	max-height: 100vh;
+	max-height: 100dvh;
+	grid-template-rows: max-content auto max-content;
 }
 
 .body {
 	min-height: 0;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 }

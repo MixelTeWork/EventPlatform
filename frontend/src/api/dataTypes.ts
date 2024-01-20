@@ -10,6 +10,7 @@ export interface User
 {
 	auth: boolean,
 	id: number,
+	balance: number,
 	name: string,
 	login: string,
 	roles: string[],

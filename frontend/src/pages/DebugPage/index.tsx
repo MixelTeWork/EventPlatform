@@ -11,7 +11,7 @@ export default function DebugPage()
 	const refLog = useRef<HTMLPreElement>(null);
 
 	return (
-		<Layout centered gap="1rem">
+		<Layout centered gap="1rem" styles={{ fontFamily: "'PT Sans', Arial" }}>
 			<Link to="/users">Users</Link>
 			<Link to="/log">Log</Link>
 			<button onClick={async () =>

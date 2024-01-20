@@ -18,6 +18,7 @@ class User(SqlAlchemyBase, SerializerMixin):
     login    = Column(String(128), index=True, unique=True, nullable=False)
     name     = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
+    balance  = Column(Integer, nullable=False)
 
     roles = orm.relationship("UserRole")
 
@@ -26,7 +27,7 @@ class User(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def new(db_sess: Session, actor: User, login: str, password: str, name: str, roles: list[int]):
-        user = User(login=login, name=name)
+        user = User(login=login, name=name, balance=0)
         user.set_password(password)
         db_sess.add(user)
 
@@ -145,6 +146,7 @@ class User(SqlAlchemyBase, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "login": self.login,
+            "balance": self.balance,
             "roles": self.get_roles(),
             "operations": self.get_operations(),
         }
@@ -154,6 +156,7 @@ class User(SqlAlchemyBase, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "login": self.login,
+            "balance": self.balance,
             "roles": self.get_roles(),
             "deleted": self.deleted,
             "operations": self.get_operations(),

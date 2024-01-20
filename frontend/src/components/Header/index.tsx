@@ -1,38 +1,33 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css"
-import logo from "./logo64.png"
 import { useMutationLogout } from "../../api/auth";
 import useUser from "../../api/user";
 import Spinner from "../Spinner";
 import { useState } from "react";
 import classNames from "../../utils/classNames";
+import hasPermission from "../../api/operations";
 
-export default function Header({ backLink }: HeaderProps)
+export default function Header()
 {
 	const [menuOpen, setMenuOpen] = useState(false);
-	const location = useLocation();
 	const navigate = useNavigate();
 	const mutation = useMutationLogout();
 	const user = useUser();
 
 	return (
 		<div className={styles.root}>
+			<Link to={"/"} className={styles.home}></Link>
 			<span className={styles.block}>
-				<Link to="/" className={styles.home}>
-					<img src={logo} alt="На главную" />
-				</Link>
-				{backLink && <Link to={backLink}><button className="button button_light">Назад</button></Link>}
-				{location.pathname != "/" && !backLink && <button onClick={() => backLink ? navigate(backLink) : navigate(-1)} className="button button_light">Назад</button>}
-			</span>
-			<span className={styles.block}>
-				<button onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/auth")} className="button button_light">
+				<div className={styles.balance}>{user.data?.balance || 0} G</div>
+				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/auth")}>
 					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
 				</button>
 				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)}>
-					<button onClick={() => navigate("/profile")} className="button button_light">
+					<button onClick={() => navigate("/profile")}>
 						Профиль
 					</button>
-					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle"} className="button button_light">
+					{hasPermission(user, "page_debug") && <Link to="/debug">{`</>`}</Link>}
+					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle"}>
 						Выйти
 					</button>
 				</div>
@@ -40,9 +35,4 @@ export default function Header({ backLink }: HeaderProps)
 			{mutation.status != "idle" && <Spinner />}
 		</div>
 	);
-}
-
-interface HeaderProps
-{
-	backLink?: string,
 }

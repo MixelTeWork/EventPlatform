@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom";
-import hasPermission from "../../api/operations";
-import useUser from "../../api/user";
+import styles from "./styles.module.css"
+import map from "./map.png";
 import Layout from "../../components/Layout";
+import Footer from "../../components/Footer";
 
 export default function IndexPage()
 {
-	const user = useUser();
-
 	return (
-		<Layout centered gap="1em">
-			{hasPermission(user, "page_debug") && <Link to="/debug">{`</>`}</Link>}
+		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="map" />}>
+			<h1 className={styles.title}>Underparty</h1>
+			<div className={styles.map}>
+				<img src={map} alt="Карта" />
+			</div>
 		</Layout>
 	);
 }

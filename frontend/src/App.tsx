@@ -14,6 +14,9 @@ import DebugPage from "./pages/DebugPage";
 import UsersPage from "./pages/UsersPage";
 import LogPage from "./pages/LogPage";
 import ProfilePage from "./pages/ProfilePage";
+import TimetablePage from "./pages/TimetablePage";
+import QuestPage from "./pages/QuestPage";
+import StorePage from "./pages/StorePage";
 
 export default function App()
 {
@@ -38,6 +41,10 @@ export default function App()
 			<Routes>
 				<Route path="/auth" element={!user.data?.auth ? <AuthPage /> : <Navigate to="/" />} />
 				<Route path="/" element={<IndexPage />} />
+				<Route path="/timetable" element={<TimetablePage />} />
+				<Route path="/quest" element={<QuestPage />} />
+				<Route path="/store" element={<StorePage />} />
+				{/* <Route path="/race" element={<RacePage />} /> */}
 				{ProtectedRoute(null, "/profile", <ProfilePage />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
 				{ProtectedRoute("page_debug", "/log", <LogPage />)}
