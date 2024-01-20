@@ -49,9 +49,6 @@ def init_values(dev=False, cmd=False):
             db_sess.add(Permission(roleId=Roles.admin, operationId=operation[0]))
 
         user_admin = User.new(db_sess, User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin])
-        user_admin.set_password("admin")
-        db_sess.add(user_admin)
-        db_sess.commit()
 
         log_changes(db_sess, user_admin, roles)
 
@@ -100,6 +97,9 @@ def init_values(dev=False, cmd=False):
             item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50)
             log(Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
+
+        User.new(db_sess, user_admin, "manager", "manager", "Организатор", [Roles.manager])
+        User.new(db_sess, user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
 
         db_sess.commit()
 

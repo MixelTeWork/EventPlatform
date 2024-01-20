@@ -2,23 +2,36 @@
 	position: fixed;
 	inset: 0;
 	background-color: rgba(0, 0, 0, 0.3);
+	display: flex;
 	align-items: center;
 	justify-content: center;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 250ms;
+	z-index: 15;
+}
+.hidden {
 	display: none;
-	z-index: 10;
 }
 .open {
-	display: flex;
+	pointer-events: all;
+	opacity: 1;
 }
 
 .popup {
-	background-color: #fff;
+	background: linear-gradient(114deg, #88c2f3, #2c86d1);
+	box-shadow: 0 10px 20px #000d4b;
 	padding: 1rem;
 	border-radius: 0.5rem;
 	max-height: 100dvh;
 	max-width: 100dvw;
 	display: flex;
 	flex-direction: column;
+	transition: transform 250ms;
+	transform: translateY(1rem);
+}
+.open .popup {
+	transform: translateY(0);
 }
 
 .header {
@@ -27,12 +40,15 @@
 	justify-content: space-between;
 	gap: 1rem;
 }
+.header > :first-child {
+	align-self: center;
+}
 
 .close {
-	background-color: #eee;
+	position: relative;
+	background-color: rgb(52, 52, 231);
 	border: none;
 	border-radius: 0.25rem;
-	color: tomato;
 	font-size: 1rem;
 	width: 1.5rem;
 	height: 1.5rem;
@@ -40,6 +56,22 @@
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+}
+
+.close::before,
+.close::after {
+	content: "";
+	position: absolute;
+	background-color: tomato;
+	width: 0.8rem;
+	height: 2px;
+	border-radius: 4px;
+}
+.close::before {
+	transform: rotate(45deg);
+}
+.close::after {
+	transform: rotate(-45deg);
 }
 
 .body {

@@ -11,7 +11,10 @@ export default function Header()
 {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
-	const mutation = useMutationLogout();
+	const mutation = useMutationLogout(() =>
+	{
+		setMenuOpen(false);
+	});
 	const user = useUser();
 
 	return (
@@ -32,7 +35,7 @@ export default function Header()
 					</button>
 				</div>
 			</span>
-			{mutation.status != "idle" && <Spinner />}
+			{mutation.status == "loading" && <Spinner />}
 		</div>
 	);
 }

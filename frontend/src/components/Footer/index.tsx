@@ -7,7 +7,7 @@ export default function Footer({ curPage }: FooterProps)
 		<div className={styles.root}>
 			{curPage != "map" && <Link to={"/"}>Карта</Link>}
 			{curPage != "timetable" && <Link to={"/timetable"}>Расписание</Link>}
-			{curPage != "quest" && <Link to={"/quest"}>Квест</Link>}
+			{curPage != "quest" && <Link to={"/quest"}>Квесты</Link>}
 			{curPage != "store" && <Link to={"/store"}>Магазин</Link>}
 			{/* {curPage != "race" && <Link to={"/race"}>Гонки</Link>} */}
 		</div>

@@ -41,7 +41,7 @@ interface AuthData
 	password: string,
 }
 
-export function useMutationLogout()
+export function useMutationLogout(onSuccess?: () => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
@@ -49,6 +49,7 @@ export function useMutationLogout()
 		onSuccess: () =>
 		{
 			queryClient.invalidateQueries("user");
+			onSuccess?.();
 		}
 	});
 	return mutation;
