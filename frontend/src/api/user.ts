@@ -1,6 +1,35 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiError, ResponseMsg, User, UserFull } from "./dataTypes";
-import { fetchPost } from "../utils/fetch";
+import { ApiError, ResponseMsg } from "./dataTypes";
+import { fetchJsonGet, fetchPost } from "../utils/fetch";
+
+export interface User
+{
+	auth: boolean;
+	id: number;
+	balance: number;
+	name: string;
+	login: string;
+	roles: string[];
+	operations: string[];
+}
+
+export interface UserFull
+{
+	id: number;
+	name: string;
+	login: string;
+	roles: string[];
+	bossId: number | null;
+	deleted: boolean;
+	access: string[];
+	operations: string[];
+}
+
+export interface UserWithPwd extends User
+{
+	password: string;
+}
+
 
 export default function useUser()
 {
@@ -22,32 +51,21 @@ async function getUser(): Promise<User>
 
 export function useUsers()
 {
-	return useQuery("users", getUsers);
-}
-
-async function getUsers(): Promise<UserFull[]>
-{
-	const res = await fetch("/api/users");
-	const data = await res.json();
-	if (!res.ok) throw new ApiError((data as ResponseMsg).msg);
-
-	return data as UserFull[];
+	return useQuery("users", async () =>
+		await fetchJsonGet<UserFull[]>("/api/users")
+	);
 }
 
 export function useMutationChangePassword(onSuccess?: () => void)
 {
 	const mutation = useMutation({
-		mutationFn: postChangePassword,
+		mutationFn: async (data: ChangePasswordData) =>
+			await fetchPost("/api/user/change_password", data),
 		onSuccess: onSuccess,
 	});
 	return mutation;
 }
 
-async function postChangePassword(data: ChangePasswordData)
-{
-	const res = await fetchPost("/api/user/change_password", data);
-	if (!res.ok) throw new ApiError((await res.json() as ResponseMsg).msg);
-}
 
 interface ChangePasswordData
 {
@@ -58,7 +76,11 @@ export function useMutationChangeName(onSuccess?: () => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: postChangeName,
+		mutationFn: async (data: ChangeName) =>
+		{
+			await fetchPost("/api/user/change_name", data);
+			return data;
+		},
 		onSuccess: (data: ChangeName) =>
 		{
 			if (queryClient.getQueryState("user")?.status == "success")
@@ -67,13 +89,6 @@ export function useMutationChangeName(onSuccess?: () => void)
 		},
 	});
 	return mutation;
-}
-
-async function postChangeName(data: ChangeName)
-{
-	const res = await fetchPost("/api/user/change_name", data);
-	if (!res.ok) throw new ApiError((await res.json() as ResponseMsg).msg);
-	return data;
 }
 
 interface ChangeName

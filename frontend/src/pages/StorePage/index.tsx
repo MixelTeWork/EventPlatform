@@ -8,7 +8,7 @@ import displayError from "../../utils/displayError";
 import styles from "./styles.module.css"
 import QrCode from "../../components/QrCode";
 import Popup from "../../components/Popup";
-import { StoreItem } from "../../api/dataTypes";
+import { StoreItem } from "../../api/storeItem";
 
 export default function StorePage()
 {

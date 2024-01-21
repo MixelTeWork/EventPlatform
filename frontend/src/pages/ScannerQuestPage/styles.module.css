@@ -1,3 +1,17 @@
 .root {
-	
+	display: grid;
+	grid-template-rows: max-content auto max-content;
+	align-items: center;
+}
+
+.title {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	align-items: center;
+	padding-inline: 1rem;
+}
+
+.bottom {
+	padding-inline: 1rem;
 }

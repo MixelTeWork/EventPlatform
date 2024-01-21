@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
 from data.log import Actions, Log, Tables
-from data.user import User
-from utils import get_datetime_now
+from data.get_datetime_now import get_datetime_now
 from .db_session import SqlAlchemyBase
 
 
@@ -20,7 +19,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         return f"<Quest> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor: User, name: str, reward: int):
+    def new(db_sess: Session, actor, name: str, reward: int):
         quest = Quest(name=name, reward=reward)
         db_sess.add(quest)
 
@@ -56,7 +55,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             items = items.filter(Quest.deleted == False)
         return items.all()
 
-    def delete(self, db_sess: Session, actor: User):
+    def delete(self, actor):
+        db_sess = Session.object_session(self)
         self.deleted = True
 
         db_sess.add(Log(

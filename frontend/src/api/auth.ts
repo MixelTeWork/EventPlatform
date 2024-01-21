@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
-import { fetchPost } from "../utils/fetch"
-import { ApiError, ResponseMsg, User } from "./dataTypes";
+import { fetchJsonPost, fetchPost } from "../utils/fetch"
+import { ApiError } from "./dataTypes";
+import { User } from "./user";
 
 export function useMutationAuth(onError?: (msg: string) => void)
 {
@@ -21,18 +22,9 @@ export function useMutationAuth(onError?: (msg: string) => void)
 
 async function postAuth(authData: AuthData)
 {
-	const res = await fetchPost("/api/auth", authData);
-	const data = await res.json();
-	if (!res.ok) throw new ApiError((data as ResponseMsg).msg);
-
-	const user = data as User;
+	const user = await fetchJsonPost<User>("/api/auth", authData);
 	user.auth = true;
 	return user;
-}
-
-export async function postLogout()
-{
-	await fetchPost("/api/logout");
 }
 
 interface AuthData
@@ -40,6 +32,7 @@ interface AuthData
 	login: string,
 	password: string,
 }
+
 
 export function useMutationLogout(onSuccess?: () => void)
 {
@@ -53,4 +46,9 @@ export function useMutationLogout(onSuccess?: () => void)
 		}
 	});
 	return mutation;
+}
+
+export async function postLogout()
+{
+	await fetchPost("/api/logout");
 }

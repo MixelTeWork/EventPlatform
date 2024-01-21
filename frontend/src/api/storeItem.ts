@@ -1,16 +1,17 @@
 import { useQuery } from "react-query";
-import { ApiError, ResponseMsg, StoreItem } from "./dataTypes";
+import { fetchJsonGet } from "../utils/fetch";
+
+export interface StoreItem
+{
+	id: number;
+	name: string;
+	price: number;
+}
+
 
 export default function useStoreItems()
 {
-	return useQuery("storeItems", getStoreItems);
-}
-
-async function getStoreItems(): Promise<StoreItem[]>
-{
-	const res = await fetch("/api/store_items");
-	const data = await res.json();
-	if (!res.ok) throw new ApiError((data as ResponseMsg).msg);
-
-	return data as StoreItem[];
+	return useQuery("storeItems", async () =>
+		await fetchJsonGet<StoreItem[]>("/api/store_items")
+	);
 }

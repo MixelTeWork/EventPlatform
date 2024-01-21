@@ -20,6 +20,7 @@ import QuestPage from "./pages/QuestPage";
 import StorePage from "./pages/StorePage";
 import ScannerQuestPage from "./pages/ScannerQuestPage";
 import WorkerPage from "./pages/WorkerPage";
+import ScannerSelectQuestPage from "./pages/ScannerSelectQuestPage";
 
 export default function App()
 {
@@ -51,7 +52,8 @@ export default function App()
 				{/* <Route path="/race" element={<RacePage />} /> */}
 				{ProtectedRoute(null, "/profile", <ProfilePage />)}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
-				{ProtectedRoute("page_scanner_quest", "/scanner_quest", <ScannerQuestPage />)}
+				{ProtectedRoute("page_scanner_quest", "/scanner_quest", <ScannerSelectQuestPage />)}
+				{ProtectedRoute("page_scanner_quest", "/scanner_quest/:questId", <ScannerQuestPage />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
 				{ProtectedRoute("page_debug", "/log", <LogPage />)}
 				{ProtectedRoute("page_users", "/users", <UsersPage />)}

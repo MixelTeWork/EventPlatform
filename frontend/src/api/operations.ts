@@ -1,5 +1,5 @@
 import { UseQueryResult } from "react-query";
-import { User } from "./dataTypes";
+import { User } from "./user";
 import useUser from "./user";
 
 const Operations = {

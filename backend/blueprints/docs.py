@@ -46,6 +46,16 @@ def docs():
             "__desc__": "Get quests",
             "response": "Quest[]",
         },
+        "/api/quest_complete": {
+            "__desc__": "Mark quest as completed for user",
+            "request": {
+                "questId": "number",
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'already_done'"
+            },
+        },
         "/api/store_items": {
             "__desc__": "Get store items",
             "response": "StoreItem[]",
@@ -55,6 +65,7 @@ def docs():
             "name": "string",
             "login": "string",
             "balance": "number",
+            "complited_quests": "number[]",
             "roles": "string[]",
             "operations": "string[]",
         },
@@ -63,6 +74,7 @@ def docs():
             "name": "string",
             "login": "string",
             "balance": "number",
+            "complited_quests": "number[]",
             "roles": "string[]",
             "deleted": "bool",
             "operations": "string[]",

@@ -9,7 +9,7 @@ let onError = () => { };
 let error = false;
 let scannerEl: HTMLDivElement | null = null;
 let scanner: QrScanner | null = null;
-
+// disable option
 export default function useScanner(afterScanTimeout = 500)
 {
 	if (!scanner)
@@ -33,13 +33,15 @@ export default function useScanner(afterScanTimeout = 500)
 
 	useEffect(() =>
 	{
-		scanner?.start().catch(() =>
-		{
-			setTimeout(() =>
+		setTimeout(() =>
+			scanner?.start().catch(() =>
 			{
-				scanner?.start().catch(() => onError());
-			}, 250)
-		});
+				setTimeout(() =>
+				{
+					scanner?.start().catch(() => onError());
+				}, 250)
+			}).then(() => console.log("started"))
+			, 100)
 		return () =>
 		{
 			scanner?.stop();

@@ -22,7 +22,7 @@ def init_values(dev=False, cmd=False):
     from data.user import User
     from data.quest import Quest
     from data.store_items import StoreItem
-    from utils import get_datetime_now
+    from data.get_datetime_now import get_datetime_now
 
     def init():
         db_session.global_init("dev" in sys.argv)

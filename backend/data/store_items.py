@@ -4,7 +4,7 @@ from sqlalchemy_serializer import SerializerMixin
 
 from data.log import Actions, Log, Tables
 from data.user import User
-from utils import get_datetime_now
+from data.get_datetime_now import get_datetime_now
 from .db_session import SqlAlchemyBase
 
 
@@ -56,7 +56,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             items = items.filter(StoreItem.deleted == False)
         return items.all()
 
-    def delete(self, db_sess: Session, actor: User):
+    def delete(self, actor: User):
+        db_sess = Session.object_session(self)
         self.deleted = True
 
         db_sess.add(Log(

@@ -1,16 +1,38 @@
-import { useQuery } from "react-query";
-import { ApiError, Quest, ResponseMsg } from "./dataTypes";
+import { useMutation, useQuery } from "react-query";
+import { fetchJsonGet, fetchJsonPost } from "../utils/fetch";
+
+export interface Quest
+{
+	id: number;
+	name: string;
+	reward: number;
+}
+
 
 export default function useQuests()
 {
-	return useQuery("quests", getQuests);
+	return useQuery("quests", async () =>
+		await fetchJsonGet<Quest[]>("/api/quests")
+	);
 }
 
-async function getQuests(): Promise<Quest[]>
+export function useMutationCompleteQuest(onSuccess?: (data: CompleteQuestRes) => void)
 {
-	const res = await fetch("/api/quests");
-	const data = await res.json();
-	if (!res.ok) throw new ApiError((data as ResponseMsg).msg);
+	const mutation = useMutation({
+		mutationFn: async (completeQuestData: CompleteQuestData) =>
+			await fetchJsonPost<CompleteQuestRes>("/api/quest_complete", completeQuestData),
+		onSuccess: onSuccess,
+	});
+	return mutation;
+}
 
-	return data as Quest[];
+export interface CompleteQuestData
+{
+	questId: number,
+	userId: number,
+}
+
+export interface CompleteQuestRes
+{
+	res: "ok" | "already_done",
 }

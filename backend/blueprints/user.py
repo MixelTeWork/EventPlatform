@@ -1,10 +1,11 @@
-from flask import Blueprint, g, jsonify
+from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from data.log import Actions, Log, Tables
 from data.operation import Operations
 from data.user import User
-from utils import get_datetime_now, get_json_values, jsonify_list, permission_required, use_db_session, use_user
+from data.get_datetime_now import get_datetime_now
+from utils import get_json_values_from_req, jsonify_list, permission_required, use_db_session, use_user
 
 
 blueprint = Blueprint("user", __name__)
@@ -16,7 +17,7 @@ blueprint = Blueprint("user", __name__)
 @use_user()
 @permission_required(Operations.page_users)
 def users(db_sess: Session, user: User):
-    users = db_sess.query(User).all()
+    users = User.all(db_sess, True)
     return jsonify_list(users, "get_dict_full"), 200
 
 
@@ -25,14 +26,9 @@ def users(db_sess: Session, user: User):
 @use_db_session()
 @use_user()
 def change_password(db_sess: Session, user: User):
-    data, is_json = g.json
-    if not is_json:
-        return jsonify({"msg": "body is not json"}), 415
-
-    (password, ), values_error = get_json_values(data, "password")
-
-    if values_error:
-        return jsonify({"msg": values_error}), 400
+    (password, ), errorRes = get_json_values_from_req("password")
+    if errorRes:
+        return errorRes
 
     user.set_password(password)
 
@@ -55,14 +51,9 @@ def change_password(db_sess: Session, user: User):
 @use_db_session()
 @use_user()
 def change_name(db_sess: Session, user: User):
-    data, is_json = g.json
-    if not is_json:
-        return jsonify({"msg": "body is not json"}), 415
-
-    (name, ), values_error = get_json_values(data, "name")
-
-    if values_error:
-        return jsonify({"msg": values_error}), 400
+    (name, ), errorRes = get_json_values_from_req("name")
+    if errorRes:
+        return errorRes
 
     pastName = user.name
     user.name = name
