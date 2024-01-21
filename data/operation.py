@@ -20,6 +20,9 @@ class Operations:
     # pages
     page_users = ("page_users", "Страница пользователей")
     page_debug = ("page_debug", "Страница отладки")
+    page_worker = ("page_worker", "Страница для персонала")
+    page_scanner_quest = ("page_scanner_quest", "Страница сканирования квестов")
+    page_scanner_store = ("page_scanner_store", "Страница сканирования товаров")
 
     # get
 

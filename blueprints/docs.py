@@ -38,10 +38,34 @@ def docs():
                 "name": "string",
             },
         },
+        "/api/debug/log": {
+            "__desc__": "Get log",
+            "response": "Log[]",
+        },
+        "/api/quests": {
+            "__desc__": "Get quests",
+            "response": "Quest[]",
+        },
+        "/api/quest_complete": {
+            "__desc__": "Mark quest as completed for user",
+            "request": {
+                "questId": "number",
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'already_done'"
+            },
+        },
+        "/api/store_items": {
+            "__desc__": "Get store items",
+            "response": "StoreItem[]",
+        },
         "User": {
             "id": "number",
             "name": "string",
             "login": "string",
+            "balance": "number",
+            "complited_quests": "number[]",
             "roles": "string[]",
             "operations": "string[]",
         },
@@ -49,10 +73,39 @@ def docs():
             "id": "number",
             "name": "string",
             "login": "string",
+            "balance": "number",
+            "complited_quests": "number[]",
             "roles": "string[]",
-            "bossId": "number",
             "deleted": "bool",
-            "access": "string[]",
             "operations": "string[]",
+        },
+        "Log": {
+            "id": "number",
+            "date": "datetime",
+            "actionCode": "string",
+            "userId": "number",
+            "userName": "number",
+            "tableName": "string",
+            "recordId": "number",
+            "changes": "string",
+        },
+        "Quest": {
+            "id": "number",
+            "name": "string",
+            "reward": "number",
+        },
+        "StoreItem": {
+            "id": "number",
+            "name": "string",
+            "price": "number",
+        },
+        "Transaction": {
+            "id": "number",
+            "date": "datetime",
+            "fromId": "number",
+            "toId": "number",
+            "value": "number",
+            "action": "string",
+            "itemId": "number",
         },
     }), 200

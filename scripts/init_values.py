@@ -20,7 +20,9 @@ def init_values(dev=False, cmd=False):
     from utils.randstr import randstr
     from data.role import Role, Roles, ROLES
     from data.user import User
-    from utils import get_datetime_now
+    from data.quest import Quest
+    from data.store_items import StoreItem
+    from data.get_datetime_now import get_datetime_now
 
     def init():
         db_session.global_init("dev" in sys.argv)
@@ -47,9 +49,6 @@ def init_values(dev=False, cmd=False):
             db_sess.add(Permission(roleId=Roles.admin, operationId=operation[0]))
 
         user_admin = User.new(db_sess, User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin])
-        user_admin.set_password("admin")
-        db_sess.add(user_admin)
-        db_sess.commit()
 
         log_changes(db_sess, user_admin, roles)
 
@@ -76,7 +75,34 @@ def init_values(dev=False, cmd=False):
         db_sess.commit()
 
     def init_values_dev(db_sess, user_admin):
-        pass
+        now = get_datetime_now()
+        user_admin.balance = 100
+
+        def log(tableName, recordId, changes):
+            db_sess.add(Log(
+                date=now,
+                actionCode=Actions.added,
+                userId=user_admin.id,
+                userName=user_admin.name,
+                tableName=tableName,
+                recordId=recordId,
+                changes=changes
+            ))
+
+        for i in range(15):
+            quest = Quest(id=i, name=f"Квест {i + 1}", reward=(i + 1) * 5234 % 150 + 50)
+            log(Tables.Quest, i, quest.get_creation_changes())
+            db_sess.add(quest)
+
+        for i in range(15):
+            item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50)
+            log(Tables.StoreItem, i, item.get_creation_changes())
+            db_sess.add(item)
+
+        User.new(db_sess, user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
+        User.new(db_sess, user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
+
+        db_sess.commit()
 
     init()
 

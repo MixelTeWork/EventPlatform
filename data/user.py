@@ -1,32 +1,35 @@
 from __future__ import annotations
-from datetime import datetime, timedelta, timezone
-from sqlalchemy import DefaultClause, orm, Column, Integer, String, Boolean
+from sqlalchemy import DefaultClause, Column, Integer, String, Boolean
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from data.log import Actions, Log, Tables
+from data.permission import Permission
+from data.quest import Quest
+from data.role import Role
+from data.user_quest import UserQuest
 from data.user_role import UserRole
+from data.get_datetime_now import get_datetime_now
 from .db_session import SqlAlchemyBase
 
 
 class User(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "User"
 
-    id       = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    deleted  = Column(Boolean, DefaultClause("0"), nullable=False)
-    login    = Column(String(128), index=True, unique=True, nullable=False)
-    name     = Column(String(128), nullable=False)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    deleted = Column(Boolean, DefaultClause("0"), nullable=False)
+    login = Column(String(128), index=True, unique=True, nullable=False)
+    name = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
-
-    roles = orm.relationship("UserRole")
+    balance = Column(Integer, nullable=False)
 
     def __repr__(self):
         return f"<User> [{self.id} {self.login}] {self.name}"
 
     @staticmethod
     def new(db_sess: Session, actor: User, login: str, password: str, name: str, roles: list[int]):
-        user = User(login=login, name=name)
+        user = User(login=login, name=name, balance=0)
         user.set_password(password)
         db_sess.add(user)
 
@@ -63,7 +66,22 @@ class User(SqlAlchemyBase, SerializerMixin):
 
         return user
 
-    def delete(self, db_sess: Session, actor: User):
+    @staticmethod
+    def get(db_sess: Session, id: int, includeDeleted=False):
+        item = db_sess.get(User, id)
+        if item is None or (not includeDeleted and item.deleted):
+            return None
+        return item
+
+    @staticmethod
+    def all(db_sess: Session, includeDeleted=False):
+        items = db_sess.query(User)
+        if not includeDeleted:
+            items = items.filter(User.deleted == False)
+        return items.all()
+
+    def delete(self, actor: User):
+        db_sess = Session.object_session(self)
         self.deleted = True
 
         db_sess.add(Log(
@@ -86,7 +104,8 @@ class User(SqlAlchemyBase, SerializerMixin):
     def check_permission(self, operation: str):
         return operation in self.get_operations()
 
-    def add_role(self, db_sess: Session, actor: User, roleId: int):
+    def add_role(self, actor: User, roleId: int):
+        db_sess = Session.object_session(self)
         existing = db_sess.query(UserRole).filter(UserRole.userId == self.id, UserRole.roleId == roleId).first()
         if existing:
             return False
@@ -105,7 +124,8 @@ class User(SqlAlchemyBase, SerializerMixin):
         db_sess.commit()
         return True
 
-    def remove_role(self, db_sess: Session, actor: User, roleId: int):
+    def remove_role(self, actor: User, roleId: int):
+        db_sess = Session.object_session(self)
         user_role: UserRole = db_sess.query(UserRole).filter(UserRole.userId == self.id, UserRole.roleId == roleId).first()
         if not user_role:
             return False
@@ -131,20 +151,54 @@ class User(SqlAlchemyBase, SerializerMixin):
         ]
 
     def get_roles(self):
-        return list(map(lambda v: v.role.name, self.roles))
+        db_sess = Session.object_session(self)
+        roles = db_sess\
+            .query(Role)\
+            .join(UserRole, UserRole.roleId == Role.id)\
+            .filter(UserRole.userId == self.id)\
+            .values(Role.name)
+
+        return list(map(lambda v: v[0], roles))
 
     def get_operations(self):
-        operations = []
-        for user_role in self.roles:
-            for p in user_role.role.permissions:
-                operations.append(p.operation.id)
-        return operations
+        db_sess = Session.object_session(self)
+        operations = db_sess\
+            .query(Permission)\
+            .join(Role, Permission.roleId == Role.id)\
+            .join(UserRole, UserRole.roleId == Role.id)\
+            .filter(UserRole.userId == self.id)\
+            .values(Permission.operationId)
+
+        return list(map(lambda v: v[0], operations))
+
+    def get_complited_quests(self):
+        db_sess = Session.object_session(self)
+        quests = db_sess\
+            .query(Quest)\
+            .join(UserQuest, UserQuest.questId == Quest.id)\
+            .join(User, UserQuest.userId == User.id)\
+            .filter(User.id == self.id)\
+            .all()
+
+        return quests
+
+    def get_complited_quest_ids(self):
+        db_sess = Session.object_session(self)
+        quests = db_sess\
+            .query(UserQuest)\
+            .join(User, UserQuest.userId == User.id)\
+            .filter(User.id == self.id)\
+            .values(UserQuest.questId)
+
+        return list(map(lambda v: v[0], quests))
 
     def get_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "login": self.login,
+            "balance": self.balance,
+            "complited_quests": self.get_complited_quest_ids(),
             "roles": self.get_roles(),
             "operations": self.get_operations(),
         }
@@ -154,11 +208,9 @@ class User(SqlAlchemyBase, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "login": self.login,
+            "balance": self.balance,
+            "complited_quests": self.get_complited_quest_ids(),
             "roles": self.get_roles(),
             "deleted": self.deleted,
             "operations": self.get_operations(),
         }
-
-
-def get_datetime_now():
-    return datetime.now(timezone.utc) + timedelta(hours=3)
