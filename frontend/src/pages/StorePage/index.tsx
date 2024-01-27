@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStoreItems } from "../../api/store";
-import useUser from "../../api/user";
+import useUser, { useUpdateUser } from "../../api/user";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
@@ -13,6 +13,7 @@ import { StoreItem } from "../../api/store";
 export default function StorePage()
 {
 	const user = useUser();
+	const updateUser = useUpdateUser();
 	const [popupIsOpen, setPopupIsOpen] = useState(false);
 	const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
 	const items = useStoreItems()
@@ -39,7 +40,12 @@ export default function StorePage()
 					</button>
 				)}
 			</div>
-			<Popup title="Покупка товара" open={popupIsOpen} close={() => setPopupIsOpen(false)}>
+			<Popup title="Покупка товара" open={popupIsOpen} close={() =>
+			{
+				setPopupIsOpen(false);
+				if (!user.data?.auth || user.data.balance < (selectedItem?.price || 0)) return;
+				updateUser();
+			}}>
 				{user?.data?.auth ?
 					<>
 						{user.data.balance < (selectedItem?.price || 0) ?
@@ -61,6 +67,7 @@ export default function StorePage()
 									<span>{selectedItem?.price} G</span>
 								</h2>
 								<h3>Покажите qr-код продавцу</h3>
+								<h4>Если баланс не обновился через пару секунд - перезагрузите страницу</h4>
 							</>
 						}
 					</> : <>

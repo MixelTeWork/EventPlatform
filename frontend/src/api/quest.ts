@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { fetchJsonGet, fetchJsonPost } from "../utils/fetch";
 
 export interface Quest
@@ -9,6 +9,11 @@ export interface Quest
 	completed: boolean,
 }
 
+export function useUpdateQuests()
+{
+	const queryClient = useQueryClient();
+	return () => queryClient.invalidateQueries("quests");
+}
 
 export function useQuests()
 {

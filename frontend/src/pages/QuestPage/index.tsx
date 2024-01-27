@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuests } from "../../api/quest";
+import { useQuests, useUpdateQuests } from "../../api/quest";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
@@ -12,12 +12,13 @@ import QrCode from "../../components/QrCode";
 export default function QuestPage()
 {
 	const user = useUser();
+	const updateQuests = useUpdateQuests();
 	const [popupIsOpen, setPopupIsOpen] = useState(false);
 	const quests = useQuests();
 
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="quest" />}>
-			{quests.isLoading && <Spinner />}
+			{quests.isFetching && <Spinner />}
 			<div className={styles.body}>
 				<h1 className={styles.title}>Underparty</h1>
 				<div className={styles.quests}>
@@ -42,7 +43,11 @@ export default function QuestPage()
 					Завершить квест!
 				</button>
 			</div>
-			<Popup title="Завершение квеста" open={popupIsOpen} close={() => setPopupIsOpen(false)}>
+			<Popup title="Завершение квеста" open={popupIsOpen} close={() =>
+			{
+				setPopupIsOpen(false);
+				updateQuests();
+			}}>
 				{user?.data?.auth ?
 					<>
 						<QrCode code={`user_${user.data.id}`} colorBg="#ffffff00" scale={13} />

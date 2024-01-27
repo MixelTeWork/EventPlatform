@@ -35,6 +35,12 @@ export function createEmptyUser(): User
 	return { auth: false, id: -1, balance: 0, login: "", roles: [], name: "", operations: [] };
 }
 
+export function useUpdateUser()
+{
+	const queryClient = useQueryClient();
+	return () => queryClient.invalidateQueries("user");
+}
+
 export default function useUser()
 {
 	return useQuery("user", getUser);
