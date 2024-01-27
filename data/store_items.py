@@ -82,4 +82,5 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "price": self.price,
+            "img": "https://ipsumimg.dakovdev.com/512x512",
         }

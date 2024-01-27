@@ -2,7 +2,6 @@ from sqlalchemy import Column, DateTime, ForeignKey, Integer
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 from data.log import Actions, Log, Tables
-from data.quest import Quest
 
 from data.get_datetime_now import get_datetime_now
 from .db_session import SqlAlchemyBase
@@ -16,7 +15,7 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
     date    = Column(DateTime, nullable=False)
 
     @staticmethod
-    def new(db_sess: Session, actor, user, quest: Quest):
+    def new(db_sess: Session, actor, user, quest):
         now = get_datetime_now()
         userQuest = UserQuest(userId=user.id, questId=quest.id, date=now)
         db_sess.add(userQuest)

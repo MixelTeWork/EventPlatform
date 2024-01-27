@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
 from data.user import User
-from utils import get_datetime_now
+from data.get_datetime_now import get_datetime_now
 from .db_session import SqlAlchemyBase
 
 

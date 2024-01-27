@@ -4,16 +4,17 @@ from sqlalchemy_serializer import SerializerMixin
 
 from data.log import Actions, Log, Tables
 from data.get_datetime_now import get_datetime_now
+from data.user_quest import UserQuest
 from .db_session import SqlAlchemyBase
 
 
 class Quest(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "Quest"
 
-    id      = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     deleted = Column(Boolean, DefaultClause("0"), nullable=False)
-    name    = Column(String(128), nullable=False)
-    reward  = Column(Integer, nullable=False)
+    name = Column(String(128), nullable=False)
+    reward = Column(Integer, nullable=False)
 
     def __repr__(self):
         return f"<Quest> [{self.id}] {self.name}"
@@ -54,6 +55,21 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         if not includeDeleted:
             items = items.filter(Quest.deleted == False)
         return items.all()
+
+    @staticmethod
+    def all_for_user(user):
+        db_sess = Session.object_session(user)
+        quests = db_sess\
+            .query(Quest)\
+            .join(UserQuest, UserQuest.questId == Quest.id, isouter=True)\
+            .filter((UserQuest.userId == user.id) | (UserQuest.userId == None))\
+            .values(Quest.id, Quest.name, Quest.reward, UserQuest.userId)
+        return list(map(lambda v: {
+            "id": v[0],
+            "name": v[1],
+            "reward": v[2],
+            "completed": v[3] is not None,
+        }, quests))
 
     def delete(self, actor):
         db_sess = Session.object_session(self)
