@@ -1,12 +1,19 @@
 ---- Deploy ----
-wsgi.py: 
-from main import app as application
---------
 pip3.9 install --user sqlalchemy_serializer
 pip3.9 install --user flask_jwt_extended
+pip3.9 install --user pymysql
 // git clone -b gh-pages https://github.com/MixelTeWork/EventPlatform.git
 git clone -b gh-pages --single-branch https://github.com/MixelTeWork/EventPlatform.git --depth 1
+python3.9 -m alembic upgrade head
+python3.9 scripts/init_values.py
 python3.9 scripts/change_user_password.py admin
+---
+Source code: /home/platformevent/EventPlatform
+Working directory: /home/platformevent/EventPlatform
+wsgi.py: 
+from main import app as application
+
+Go to directory
 ---------
 ---- /Deploy ----
 
