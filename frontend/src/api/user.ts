@@ -30,6 +30,10 @@ export interface UserWithPwd extends User
 	password: string;
 }
 
+export function createEmptyUser(): User
+{
+	return { auth: false, id: -1, balance: 0, login: "", roles: [], name: "", operations: [] };
+}
 
 export default function useUser()
 {
@@ -41,7 +45,7 @@ async function getUser(): Promise<User>
 	const res = await fetch("/api/user");
 	const data = await res.json();
 
-	if (res.status == 401) return { auth: false, id: -1, balance: 0, login: "", roles: [], name: "", operations: [] };
+	if (res.status == 401) return createEmptyUser();
 	if (!res.ok) throw new ApiError((data as ResponseMsg).msg);
 
 	const user = data as User;
