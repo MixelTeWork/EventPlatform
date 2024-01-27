@@ -36,6 +36,6 @@ export interface CompleteQuestData
 
 export interface CompleteQuestRes
 {
-	res: "ok" | "already_done",
+	res: "ok" | "already_done" | "no_player",
 	player: string,
 }

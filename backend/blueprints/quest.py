@@ -39,7 +39,7 @@ def quest_complete(db_sess: Session, user: User):
     if quest is None:
         return response_not_found("quest", questId)
     if player is None:
-        return response_not_found("user", userId)
+        return jsonify({"res": "no_player", "player": userId}), 200
 
     completed = player.get_complited_quest_ids()
     if quest.id in completed:
