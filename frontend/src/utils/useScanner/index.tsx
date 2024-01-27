@@ -9,8 +9,8 @@ let onError = () => { };
 let error = false;
 let scannerEl: HTMLDivElement | null = null;
 let scanner: QrScanner | null = null;
-// disable option
-export default function useScanner(afterScanTimeout = 500)
+
+export default function useScanner(pause = false, afterScanTimeout = 500)
 {
 	if (!scanner)
 	{
@@ -40,8 +40,7 @@ export default function useScanner(afterScanTimeout = 500)
 				{
 					scanner?.start().catch(() => onError());
 				}, 250)
-			}).then(() => console.log("started"))
-			, 100)
+			}), 100)
 		return () =>
 		{
 			scanner?.stop();
@@ -55,7 +54,7 @@ export default function useScanner(afterScanTimeout = 500)
 
 	onScan = (r: string) =>
 	{
-		if (isTimeout) return;
+		if (isTimeout || pause) return;
 		setScanned(r);
 		setIsTimeout(true);
 		playBeep();
