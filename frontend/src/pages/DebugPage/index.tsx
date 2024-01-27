@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import styles from "./styles.module.css"
 import Layout from "../../components/Layout"
 import Popup from "../../components/Popup";
 import { Link } from "react-router-dom";
@@ -11,7 +12,7 @@ export default function DebugPage()
 	const refLog = useRef<HTMLPreElement>(null);
 
 	return (
-		<Layout centered gap="1rem" styles={{ fontFamily: "'PT Sans', Arial" }}>
+		<Layout centered gap="1rem" className={styles.root}>
 			<Link to="/users">Users</Link>
 			<Link to="/log">Log</Link>
 			<button onClick={async () =>

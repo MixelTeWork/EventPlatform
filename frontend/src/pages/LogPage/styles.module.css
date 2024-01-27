@@ -6,6 +6,9 @@
 	vertical-align: top;
 }
 
+.table tr:nth-child(2n - 1) td {
+	background-color: #fff;
+}
 .table tr:nth-child(2n) td {
 	background-color: #f6f6f6;
 }
