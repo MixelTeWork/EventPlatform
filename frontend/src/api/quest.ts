@@ -6,6 +6,7 @@ export interface Quest
 	id: number;
 	name: string;
 	reward: number;
+	completed: boolean,
 }
 
 
@@ -36,4 +37,5 @@ export interface CompleteQuestData
 export interface CompleteQuestRes
 {
 	res: "ok" | "already_done",
+	player: string,
 }

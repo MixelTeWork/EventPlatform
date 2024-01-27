@@ -53,7 +53,8 @@ def docs():
                 "userId": "number",
             },
             "response": {
-                "res": "'ok' | 'already_done'"
+                "res": "'ok' | 'already_done'",
+                "player": "string",
             },
         },
         "/api/store_items": {

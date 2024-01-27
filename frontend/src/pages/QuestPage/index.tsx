@@ -25,7 +25,7 @@ export default function QuestPage()
 					{quests?.data?.map(quest =>
 						<div className={styles.quest} key={quest.id}>
 							<span>{quest.name}</span>
-							{false ?
+							{quest.completed ?
 								<span className="material_symbols">done</span>
 								:
 								<span>{quest.reward}G</span>

@@ -33,7 +33,7 @@ export default function ScannerQuestPage()
 						return null;
 					return { userId, questId };
 				}}
-				formatMsg={r => r.res == "ok" ? "Квест зачтён!" : "Посетитель уже прошёл этот квест"}
+				formatMsg={r => r.res == "ok" ? `Квест зачтён для ${r.player}` : `${r.player} уже проходил этот квест`}
 			/>
 		</Layout>
 	);
