@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout"
 import styles from "./styles.module.css"
 import { useParams } from "react-router-dom";
-import useQuests, { useMutationCompleteQuest } from "../../api/quest";
+import { useQuests, useMutationCompleteQuest } from "../../api/quest";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import Scanner from "../../components/Scanner";

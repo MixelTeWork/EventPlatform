@@ -6,7 +6,7 @@ import { formatError } from "../../utils/displayError";
 import Spinner from "../Spinner";
 import classNames from "../../utils/classNames";
 
-export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg, className }: ScannerProps<Res, Data>)
+export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg,onRes, className, pause }: ScannerProps<Res, Data>)
 {
 	const [msg, setMsg] = useState("");
 	const [err, setErr] = useState("");
@@ -15,19 +15,19 @@ export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg, cla
 	{
 		setMsg(formatMsg(r));
 		setErr("");
-		setTimeout(() => mutation.reset(), 1000);
-		setBar();
+		onMutated();
+		onRes?.(r);
 	}, err =>
 	{
 		setMsg("");
 		setErr(formatError(err));
-		setTimeout(() => mutation.reset(), 1000);
-		setBar();
+		onMutated();
 	});
-	const { scanned, scanner } = useScanner(!mutation.isIdle);
+	const { scanned, scanner } = useScanner(!mutation.isIdle || pause);
 
-	function setBar()
+	function onMutated()
 	{
+		setTimeout(() => mutation.reset(), 1000);
 		barRef.current?.classList.add(styles.bar_full);
 		setTimeout(() => barRef.current?.classList.remove(styles.bar_full), 100);
 	}
@@ -59,6 +59,8 @@ interface ScannerProps<Res, Data>
 {
 	useMutation: (onSuccess: (data: Res) => void, onError: (err: any) => void) => UseMutationResult<Res, any, Data, unknown>,
 	onScan: (scanned: string) => Data | null,
+	onRes?: (res: Res) => void,
 	formatMsg: (res: Res) => string,
 	className?: string,
+	pause?: boolean,
 }

@@ -61,6 +61,30 @@ def docs():
             "__desc__": "Get store items",
             "response": "StoreItem[]",
         },
+        "/api/store_sell_check": {
+            "__desc__": "Check if item can be sold to user",
+            "request": {
+                "itemId": "number",
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'no_item' | 'no_player' | 'no_money'",
+                "item": "StoreItem",
+                "player": "string",
+            },
+        },
+        "/api/store_sell": {
+            "__desc__": "Sell item to user",
+            "request": {
+                "itemId": "number",
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'no_money'",
+                "item": "string",
+                "player": "string",
+            },
+        },
         "User": {
             "id": "number",
             "name": "string",
@@ -99,6 +123,7 @@ def docs():
             "id": "number",
             "name": "string",
             "price": "number",
+            "img": "string",
         },
         "Transaction": {
             "id": "number",

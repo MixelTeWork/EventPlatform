@@ -10,7 +10,7 @@ export interface Quest
 }
 
 
-export default function useQuests()
+export function useQuests()
 {
 	return useQuery("quests", async () =>
 		await fetchJsonGet<Quest[]>("/api/quests")

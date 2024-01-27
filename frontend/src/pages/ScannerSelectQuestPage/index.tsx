@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useQuests from "../../api/quest";
+import { useQuests } from "../../api/quest";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";

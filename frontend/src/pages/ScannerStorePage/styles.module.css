@@ -1,0 +1,98 @@
+.root {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.title {
+	--w: 0.5rem;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	margin-inline: var(--w);
+	border-radius: 0 0 0.5rem 0.5rem;
+	gap: 0.5rem;
+	align-items: center;
+	padding: 0 1rem 0.5rem 1rem;
+	z-index: 2;
+	background-color: #9124a4;
+	color: #06f210;
+}
+
+.title::before,
+.title::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	width: var(--w);
+	height: var(--w);
+}
+.title::before {
+	left: calc(var(--w) * -1);
+	background: radial-gradient(circle at 0% 100%, transparent var(--w), #9124a4 var(--w));
+}
+.title::after {
+	right: calc(var(--w) * -1);
+	background: radial-gradient(circle at 100% 100%, transparent var(--w), #9124a4 var(--w));
+}
+
+.item {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0.5rem;
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	font-size: 1.2rem;
+	margin-block: 1rem;
+}
+
+.item__img {
+	width: 100%;
+	max-width: 300px;
+	aspect-ratio: 1;
+}
+
+.item__img img {
+	width: 100%;
+	height: 100%;
+	border-radius: 1rem;
+}
+
+.item__desc {
+	display: flex;
+	justify-content: space-between;
+}
+
+.item__desc > :last-child {
+	color: gold;
+}
+
+.btns {
+	display: flex;
+	gap: 1rem;
+}
+
+.btns > button {
+    padding: 0.5rem;
+    border: 2px solid black;
+    flex-grow: 1;
+    font-size: 1.2rem;
+    border-radius: 0.5rem;
+}
+.btns > button:hover {
+	filter: brightness(0.9);
+}
+.btns > button:active {
+	filter: brightness(0.8);
+}
+
+.btns > .btn_deny {
+	background-color: #ffcbc1;
+	border-color: tomato;
+}
+.btns > .btn_ok {
+	background-color: #adffad;
+	border-color: green;
+}

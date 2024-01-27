@@ -21,6 +21,7 @@ import StorePage from "./pages/StorePage";
 import ScannerQuestPage from "./pages/ScannerQuestPage";
 import WorkerPage from "./pages/WorkerPage";
 import ScannerSelectQuestPage from "./pages/ScannerSelectQuestPage";
+import ScannerStorePage from "./pages/ScannerStorePage";
 
 export default function App()
 {
@@ -54,6 +55,7 @@ export default function App()
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("page_scanner_quest", "/scanner_quest", <ScannerSelectQuestPage />)}
 				{ProtectedRoute("page_scanner_quest", "/scanner_quest/:questId", <ScannerQuestPage />)}
+				{ProtectedRoute("page_scanner_store", "/scanner_store", <ScannerStorePage />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
 				{ProtectedRoute("page_debug", "/log", <LogPage />)}
 				{ProtectedRoute("page_users", "/users", <UsersPage />)}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useStoreItems from "../../api/storeItem";
+import { useStoreItems } from "../../api/store";
 import useUser from "../../api/user";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
@@ -8,7 +8,7 @@ import displayError from "../../utils/displayError";
 import styles from "./styles.module.css"
 import QrCode from "../../components/QrCode";
 import Popup from "../../components/Popup";
-import { StoreItem } from "../../api/storeItem";
+import { StoreItem } from "../../api/store";
 
 export default function StorePage()
 {
@@ -30,7 +30,7 @@ export default function StorePage()
 						setPopupIsOpen(true);
 					}}>
 						<div className={styles.item__img}>
-							<img src="https://ipsumimg.dakovdev.com/512x512" alt="Товар" />
+							<img src={item.img} alt="Товар" />
 						</div>
 						<div className={styles.item__desc}>
 							<span>{item.name}</span>
@@ -55,7 +55,7 @@ export default function StorePage()
 								</h2>
 								<h3>Выполняйте квесты и разбогатеете!</h3>
 							</> : <>
-								<QrCode code={`item_${selectedItem?.id}`} colorBg="#ffffff00" scale={13} />
+								<QrCode code={`user_${user.data?.id};item_${selectedItem?.id}`} colorBg="#ffffff00" scale={13} />
 								<h2 className={styles.item__desc}>
 									<span>{selectedItem?.name}</span>
 									<span>{selectedItem?.price} G</span>

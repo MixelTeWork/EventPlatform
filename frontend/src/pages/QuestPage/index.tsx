@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useQuests from "../../api/quest";
+import { useQuests } from "../../api/quest";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
