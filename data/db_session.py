@@ -25,7 +25,7 @@ def global_init(dev):
     if dev:
         conn_str = 'sqlite:///db/EventPlatform.db?check_same_thread=False'
     else:
-        conn_str = "ToDo" if True else 'mysql+pymysql://eventplatform:UR2hqJDbSfQ@eventplatform.mysql.pythonanywhere-services.com/eventplatform$default?charset=UTF8mb4'
+        conn_str = 'mysql+pymysql://platformevent:UR2hqJDbSfQ@platformevent.mysql.pythonanywhere-services.com/platformevent$default?charset=UTF8mb4'
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False, pool_pre_ping=True)
