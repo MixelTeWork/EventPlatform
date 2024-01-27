@@ -4,8 +4,8 @@ from main import app as application
 --------
 pip3.9 install --user sqlalchemy_serializer
 pip3.9 install --user flask_jwt_extended
-// git clone -b gh-pages https://github.com/MixelTeWork/TicketSystem.git
-git clone -b gh-pages --single-branch https://github.com/MixelTeWork/TicketSystem.git --depth 1
+// git clone -b gh-pages https://github.com/MixelTeWork/EventPlatform.git
+git clone -b gh-pages --single-branch https://github.com/MixelTeWork/EventPlatform.git --depth 1
 python3.9 scripts/change_user_password.py admin
 ---------
 ---- /Deploy ----
@@ -18,7 +18,7 @@ create backup:
 zip -r images.zip images
 zip -r fonts.zip fonts
 
-cd TicketSystem
+cd EventPlatform
 git restore .
 git pull
 
@@ -27,7 +27,7 @@ python3.9 -m alembic upgrade head
 ---- /Update ----
 
 backup db
-mysqldump -u ticketsystem -h ticketsystem.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces 'ticketsystem$default'  > db-backup.sql
+mysqldump -u platformevent -h platformevent.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces 'platformevent$default'  > db-backup.sql
 
 restore db
 source db-backup.sql
