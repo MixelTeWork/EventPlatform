@@ -6,7 +6,6 @@ from data.log import Actions, Log, Tables
 
 from data.operation import Operation, Operations
 from data.permission import Permission
-from data.user_role import UserRole
 from .db_session import SqlAlchemyBase
 
 
@@ -97,7 +96,7 @@ class Role(SqlAlchemyBase, SerializerMixin):
 
         now = get_datetime_now()
         from data.user import User
-        user_admin = db_sess.query(User).join(UserRole).where(UserRole.roleId == Roles.admin).first()
+        user_admin = User.get_admin(db_sess)
 
         def log(tableName, actionCode, recordId, changes):
             db_sess.add(Log(
@@ -122,14 +121,20 @@ class Role(SqlAlchemyBase, SerializerMixin):
 
 class Roles:
     admin = 1
+    boss = 2
     manager = 2
     worker = 3
-    user = 4
+    visitor = 4
 
 
 ROLES = {
-    Roles.manager: {
+    Roles.boss: {
         "name": "Организатор",
+        "operations": [
+        ]
+    },
+    Roles.manager: {
+        "name": "Управляющий",
         "operations": [
         ]
     },
@@ -141,8 +146,8 @@ ROLES = {
             Operations.page_scanner_store,
         ]
     },
-    Roles.user: {
-        "name": "Пользователь",
+    Roles.visitor: {
+        "name": "Посетитель",
         "operations": []
     },
 }

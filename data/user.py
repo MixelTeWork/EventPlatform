@@ -1,4 +1,6 @@
 from __future__ import annotations
+from random import choices
+import string
 from sqlalchemy import DefaultClause, Column, Integer, String, Boolean
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
@@ -7,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from data.log import Actions, Log, Tables
 from data.permission import Permission
 from data.quest import Quest
-from data.role import Role
+from data.role import Role, Roles
 from data.user_quest import UserQuest
 from data.user_role import UserRole
 from data.get_datetime_now import get_datetime_now
@@ -17,12 +19,16 @@ from .db_session import SqlAlchemyBase
 class User(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "User"
 
-    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    deleted = Column(Boolean, DefaultClause("0"), nullable=False)
-    login = Column(String(128), index=True, unique=True, nullable=False)
-    name = Column(String(128), nullable=False)
+    id       = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    id_vk    = Column(Integer, unique=True, nullable=True)
+    id_big   = Column(String(8), unique=True, nullable=False)
+    deleted  = Column(Boolean, DefaultClause("0"), nullable=False)
+    login    = Column(String(128), index=True, unique=True, nullable=False)
     password = Column(String(128), nullable=False)
-    balance = Column(Integer, nullable=False)
+    name     = Column(String(128), nullable=False)
+    lastName = Column(String(128), nullable=True)
+    imageUrl = Column(String(256), nullable=True)
+    balance  = Column(Integer, nullable=False)
 
     def __repr__(self):
         return f"<User> [{self.id} {self.login}] {self.name}"
@@ -31,6 +37,13 @@ class User(SqlAlchemyBase, SerializerMixin):
     def new(db_sess: Session, actor: User, login: str, password: str, name: str, roles: list[int]):
         user = User(login=login, name=name, balance=0)
         user.set_password(password)
+
+        u = user
+        while u is not None:
+            id_big = randstr(8)
+            u = db_sess.query(User).filter(User.id_big == id_big).first()
+        user.id_big = id_big
+
         db_sess.add(user)
 
         now = get_datetime_now()
@@ -72,6 +85,11 @@ class User(SqlAlchemyBase, SerializerMixin):
         if item is None or (not includeDeleted and item.deleted):
             return None
         return item
+
+    @staticmethod
+    def get_admin(db_sess: Session):
+        admin = db_sess.query(User).join(UserRole).where(UserRole.roleId == Roles.admin).first()
+        return admin
 
     @staticmethod
     def all(db_sess: Session, includeDeleted=False):
@@ -194,9 +212,10 @@ class User(SqlAlchemyBase, SerializerMixin):
 
     def get_dict(self):
         return {
-            "id": self.id,
+            "id": self.id_big,
             "name": self.name,
-            "login": self.login,
+            "last_name": self.lastName,
+            "photo": self.imageUrl,
             "balance": self.balance,
             "complited_quests": self.get_complited_quest_ids(),
             "roles": self.get_roles(),
@@ -206,11 +225,19 @@ class User(SqlAlchemyBase, SerializerMixin):
     def get_dict_full(self):
         return {
             "id": self.id,
-            "name": self.name,
+            "id_vk": self.id_vk,
+            "id_big": self.id_big,
             "login": self.login,
+            "name": self.name,
+            "last_name": self.lastName,
+            "photo": self.imageUrl,
             "balance": self.balance,
             "complited_quests": self.get_complited_quest_ids(),
             "roles": self.get_roles(),
             "deleted": self.deleted,
             "operations": self.get_operations(),
         }
+
+
+def randstr(N: int):
+    return ''.join(choices(string.ascii_letters + string.digits, k=N))

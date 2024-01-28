@@ -1,8 +1,8 @@
 """v1
 
-Revision ID: c47a13116367
+Revision ID: 0be7a34cc832
 Revises: 
-Create Date: 2024-01-27 20:31:21.414594
+Create Date: 2024-01-28 12:42:40.873948
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'c47a13116367'
+revision: str = '0be7a34cc832'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -51,13 +51,19 @@ def upgrade() -> None:
     )
     op.create_table('User',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id_vk', sa.Integer(), nullable=True),
+    sa.Column('id_big', sa.String(length=8), nullable=False),
     sa.Column('deleted', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('login', sa.String(length=128), nullable=False),
-    sa.Column('name', sa.String(length=128), nullable=False),
     sa.Column('password', sa.String(length=128), nullable=False),
+    sa.Column('name', sa.String(length=128), nullable=False),
+    sa.Column('lastName', sa.String(length=128), nullable=True),
+    sa.Column('imageUrl', sa.String(length=256), nullable=True),
     sa.Column('balance', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_User')),
-    sa.UniqueConstraint('id', name=op.f('uq_User_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_User_id')),
+    sa.UniqueConstraint('id_big', name=op.f('uq_User_id_big')),
+    sa.UniqueConstraint('id_vk', name=op.f('uq_User_id_vk'))
     )
     op.create_index(op.f('ix_User_login'), 'User', ['login'], unique=True)
     op.create_table('Log',
