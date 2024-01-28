@@ -53,7 +53,7 @@ def store_sell(db_sess: Session, user: User):
         return errorRes
 
     item = StoreItem.get(db_sess, itemId)
-    visitor = User.get(db_sess, userId)
+    visitor = User.get_by_big_id(db_sess, userId)
 
     if item is None:
         return response_not_found("item", itemId)

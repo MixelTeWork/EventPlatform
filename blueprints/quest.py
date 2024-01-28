@@ -30,7 +30,7 @@ def quest_complete(db_sess: Session, user: User):
         return errorRes
 
     quest = Quest.get(db_sess, questId)
-    visitor = User.get(db_sess, userId)
+    visitor = User.get_by_big_id(db_sess, userId)
 
     if quest is None:
         return response_not_found("quest", questId)
