@@ -29,17 +29,17 @@ def quest_complete(db_sess: Session, user: User):
         return errorRes
 
     quest = Quest.get(db_sess, questId)
-    player = User.get(db_sess, userId)
+    visitor = User.get(db_sess, userId)
 
     if quest is None:
         return response_not_found("quest", questId)
-    if player is None:
+    if visitor is None:
         return jsonify({"res": "no_player", "player": userId}), 200
 
-    completed = player.get_complited_quest_ids()
+    completed = visitor.get_complited_quest_ids()
     if quest.id in completed:
-        return jsonify({"res": "already_done", "player": player.name}), 200
+        return jsonify({"res": "already_done", "player": visitor.name}), 200
 
-    UserQuest.new(db_sess, user, player, quest)
+    UserQuest.new(db_sess, user, visitor, quest)
 
-    return jsonify({"res": "ok", "player": player.name}), 200
+    return jsonify({"res": "ok", "player": visitor.name}), 200

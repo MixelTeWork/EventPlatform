@@ -29,17 +29,17 @@ def store_sell_check(db_sess: Session, user: User):
         return errorRes
 
     item = StoreItem.get(db_sess, itemId)
-    player = User.get(db_sess, userId)
+    visitor = User.get(db_sess, userId)
 
     if item is None:
         return jsonify({"res": "no_item", "item": itemId, "player": None}), 200
-    if player is None:
+    if visitor is None:
         return jsonify({"res": "no_player", "item": item.get_dict(), "player": userId}), 200
 
-    if player.balance < item.price:
-        return jsonify({"res": "no_money", "item": item.get_dict(), "player": player.name}), 200
+    if visitor.balance < item.price:
+        return jsonify({"res": "no_money", "item": item.get_dict(), "player": visitor.name}), 200
 
-    return jsonify({"res": "ok", "item": item.get_dict(), "player": player.name}), 200
+    return jsonify({"res": "ok", "item": item.get_dict(), "player": visitor.name}), 200
 
 
 @blueprint.route("/api/store_sell", methods=["POST"])
@@ -53,17 +53,17 @@ def store_sell(db_sess: Session, user: User):
         return errorRes
 
     item = StoreItem.get(db_sess, itemId)
-    player = User.get(db_sess, userId)
+    visitor = User.get(db_sess, userId)
 
     if item is None:
         return response_not_found("item", itemId)
-    if player is None:
+    if visitor is None:
         return response_not_found("user", userId)
 
-    if player.balance < item.price:
-        return jsonify({"res": "no_money", "item": item.name, "player": player.name}), 200
+    if visitor.balance < item.price:
+        return jsonify({"res": "no_money", "item": item.name, "player": visitor.name}), 200
 
-    player.balance -= item.price
-    Transaction.new(db_sess, player, user, item.price, Actions.buyItem, item.id)
+    visitor.balance -= item.price
+    Transaction.new(db_sess, visitor, user, item.price, Actions.buyItem, item.id)
 
-    return jsonify({"res": "ok", "item": item.name, "player": player.name}), 200
+    return jsonify({"res": "ok", "item": item.name, "player": visitor.name}), 200
