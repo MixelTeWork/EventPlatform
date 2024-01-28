@@ -42,6 +42,7 @@ export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg,onRe
 			mutation.mutate(data);
 		else
 			setErr("Не опознано");
+		// eslint-disable-next-line
 	}, [scanned])
 
 	return <div className={classNames(styles.root, className)}>

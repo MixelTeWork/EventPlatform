@@ -53,8 +53,8 @@ def docs():
                 "userId": "number",
             },
             "response": {
-                "res": "'ok' | 'already_done'",
-                "player": "string",
+                "res": "'ok' | 'already_done' | 'no_visitor'",
+                "visitor": "string",
             },
         },
         "/api/store_items": {
@@ -68,9 +68,9 @@ def docs():
                 "userId": "number",
             },
             "response": {
-                "res": "'ok' | 'no_item' | 'no_player' | 'no_money'",
+                "res": "'ok' | 'no_item' | 'no_visitor' | 'no_money'",
                 "item": "StoreItem",
-                "player": "string",
+                "visitor": "string",
             },
         },
         "/api/store_sell": {
@@ -82,7 +82,7 @@ def docs():
             "response": {
                 "res": "'ok' | 'no_money'",
                 "item": "string",
-                "player": "string",
+                "visitor": "string",
             },
         },
         "User": {

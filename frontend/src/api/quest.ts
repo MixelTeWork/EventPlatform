@@ -29,11 +29,11 @@ export function useMutationCompleteQuest(onSuccess?: (data: CompleteQuestRes) =>
 export interface CompleteQuestData
 {
 	questId: number,
-	userId: number,
+	userId: string,
 }
 
 export interface CompleteQuestRes
 {
-	res: "ok" | "already_done" | "no_player",
-	player: string,
+	res: "ok" | "already_done" | "no_visitor",
+	visitor: string,
 }

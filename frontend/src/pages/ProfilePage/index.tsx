@@ -18,7 +18,7 @@ export default function ProfilePage()
 				{displayError(nameMutation)}
 				{nameMutation.isLoading && <Spinner />}
 				<div>
-					<img className={styles.img} src={user.data?.photo} />
+					<img className={styles.img} src={user.data?.photo} alt="avatar" />
 					<h3>Имя</h3>
 					<div>
 						<input type="text" ref={nameRef} defaultValue={user.data?.name} disabled={!userNameEditing} className={styles.input} />

@@ -47,17 +47,17 @@ export default function ScannerStorePage()
 					const [user, item] = values;
 					if (!user.startsWith("user_") || !item.startsWith("item_"))
 						return null;
-					const userId = parseInt(user.slice("user_".length), 10);
+					const userId = user.slice("user_".length);
 					const itemId = parseInt(item.slice("item_".length), 10);
-					if (isNaN(userId) || isNaN(itemId))
+					if (isNaN(itemId))
 						return null;
 					return { userId, itemId };
 				}}
 				formatMsg={r => ({
 					"ok": "",
 					"no_item": `Товар не найден`,
-					"no_player": `Покупатель не найден`,
-					"no_money": `У ${r.player} не хватает средств`,
+					"no_visitor": `Покупатель не найден`,
+					"no_money": `У ${r.visitor} не хватает средств`,
 				}[r.res] ?? r.res)}
 				onRes={r =>
 				{
@@ -68,7 +68,7 @@ export default function ScannerStorePage()
 				}}
 			/>
 			<Popup title="Продажа товара" open={popupOpened} closeOnOutclick={false} close={cancelSell}>
-				<h3>{sellData?.player} хочет купить:</h3>
+				<h3>{sellData?.visitor} хочет купить:</h3>
 				<div className={styles.item}>
 					<div className={styles.item__img}>
 						<img src={sellData?.item.img} alt="Товар" />
@@ -85,7 +85,7 @@ export default function ScannerStorePage()
 					</button>
 					<button className={styles.btn_ok} onClick={() =>
 					{
-						sellMutation.mutate({ userId: sellData!.playerId, itemId: sellData!.itemId });
+						sellMutation.mutate({ userId: sellData!.visitorId, itemId: sellData!.itemId });
 					}}>
 						Подтвердить
 					</button>
@@ -93,9 +93,9 @@ export default function ScannerStorePage()
 			</Popup>
 			<Popup title="Продажа товара" open={sellMutation.isSuccess || sellMutation.isError} close={onSellDone}>
 				{sellMutation.isSuccess && (sellMutation.data.res == "ok" ?
-					<h2>Товар {sellMutation.data.item} успешно продан посетителю {sellMutation.data.player}</h2>
+					<h2>Товар {sellMutation.data.item} успешно продан посетителю {sellMutation.data.visitor}</h2>
 					:
-					<h2>У {sellMutation.data.player} не хватает средств на покупку {sellMutation.data.item}</h2>
+					<h2>У {sellMutation.data.visitor} не хватает средств на покупку {sellMutation.data.item}</h2>
 				)}
 				{displayError(sellMutation)}
 			</Popup>

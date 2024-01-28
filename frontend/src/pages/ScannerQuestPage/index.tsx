@@ -28,15 +28,13 @@ export default function ScannerQuestPage()
 				{
 					if (!scanned.startsWith("user_"))
 						return null;
-					const userId = parseInt(scanned.slice("user_".length), 10);
-					if (isNaN(userId))
-						return null;
+					const userId = scanned.slice("user_".length);
 					return { userId, questId };
 				}}
 				formatMsg={r => ({
-					"ok": `Квест зачтён для ${r.player}`,
-					"already_done": `${r.player} уже проходил этот квест`,
-					"no_player": "Посетитель не найден",
+					"ok": `Квест зачтён для ${r.visitor}`,
+					"already_done": `${r.visitor} уже проходил этот квест`,
+					"no_visitor": "Посетитель не найден",
 				}[r.res] || r.res)}
 			/>
 		</Layout>

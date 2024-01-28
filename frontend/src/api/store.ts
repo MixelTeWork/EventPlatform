@@ -20,7 +20,7 @@ export function useStoreItems()
 
 export interface SellData
 {
-	userId: number,
+	userId: string,
 	itemId: number,
 }
 
@@ -32,7 +32,7 @@ export function useMutationSellItemCheck(onSuccess?: (data: SellCheckRes) => voi
 		onSuccess: (res, data) =>
 		{
 			res.itemId = data.itemId;
-			res.playerId = data.userId;
+			res.visitorId = data.userId;
 			onSuccess?.(res);
 		},
 		onError: onError,
@@ -42,11 +42,11 @@ export function useMutationSellItemCheck(onSuccess?: (data: SellCheckRes) => voi
 
 export interface SellCheckRes
 {
-	res: "ok" | "no_item" | "no_player" | "no_money",
+	res: "ok" | "no_item" | "no_visitor" | "no_money",
 	item: StoreItem,
-	player: string,
+	visitor: string,
 	itemId: number,
-	playerId: number,
+	visitorId: string,
 }
 
 export function useMutationSellItem(onSuccess?: (data: SellItemRes) => void, onError?: (err: any) => void)
@@ -64,5 +64,5 @@ export interface SellItemRes
 {
 	res: "ok" | "no_money",
 	item: string,
-	player: string,
+	visitor: string,
 }
