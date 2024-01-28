@@ -81,10 +81,15 @@ class User(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def get(db_sess: Session, id: int, includeDeleted=False):
-        item = db_sess.get(User, id)
-        if item is None or (not includeDeleted and item.deleted):
+        user = db_sess.get(User, id)
+        if user is None or (not includeDeleted and user.deleted):
             return None
-        return item
+        return user
+
+    @staticmethod
+    def get_by_big_id(db_sess: Session, big_id: int):
+        user = db_sess.query(User).filter(User.deleted == False, User.id_big == big_id).first()
+        return user
 
     @staticmethod
     def get_admin(db_sess: Session):
