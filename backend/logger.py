@@ -21,7 +21,11 @@ class RequestFormatter(logging.Formatter):
 
     def format(self, record):
         if has_request_context():
-            record.url = request.url[request.url.index("/api"):]
+            url_start = request.url.find("/api")
+            if url_start >= 0:
+                record.url = request.url[url_start:]
+            else:
+                record.url = request.url
             record.method = request.method
             record.remote_addr = request.remote_addr
             record.req_id = g.req_id
@@ -55,7 +59,7 @@ def setLogging():
     logging.getLogger().handlers.clear()
     logging.Formatter.converter = customTime
 
-    formatter_error = RequestFormatter("[%(asctime)s] (%(req_id)s) %(method)-6s %(url)-40s | %(levelname)s in %(module)s (%(name)s):\nReq json: %(json)s\n%(message)s")
+    formatter_error = RequestFormatter("[%(asctime)s] (%(req_id)s) %(method)-6s %(url)-40s | %(levelname)s in %(module)s (%(name)s):\nReq json: %(json)s\n%(message)s\n")
     formatter_info = RequestFormatter("%(req_id)s;%(asctime)s;%(method)s;%(url)s;%(levelname)s;%(message)s")
     formatter_info.max_msg_len = 512
 

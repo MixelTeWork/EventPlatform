@@ -6,12 +6,11 @@ def add_user(login, password, name, roleId):
     add_parent_to_path()
     from data import db_session
     from data.user import User
-    from data.role import Role, Roles
-    from data.user_role import UserRole
+    from data.role import Role
 
     db_session.global_init("dev" in sys.argv)
     session = db_session.create_session()
-    user_admin = session.query(User).join(UserRole).where(UserRole.roleId == Roles.admin).first()
+    user_admin = User.get_admin(session)
     existing = session.query(User).filter(User.login == login).first()
     if existing:
         print(f"User with login [{login}] already exist")

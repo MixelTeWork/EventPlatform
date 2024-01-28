@@ -4,6 +4,7 @@ import traceback
 import os
 import sys
 import time
+from datetime import timedelta
 from flask import Flask, Response, abort, g, jsonify, make_response, redirect, request, send_from_directory
 from flask_jwt_extended import JWTManager
 from blueprints.register_blueprints import register_blueprints
@@ -18,7 +19,7 @@ FRONTEND_FOLDER = "build"
 app = Flask(__name__, static_folder=None)
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_SECRET_KEY"] = get_jwt_secret_key()
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 MESSAGE_TO_FRONTEND = ""
 
@@ -104,7 +105,7 @@ def frontend(path):
     if path != "" and os.path.exists(FRONTEND_FOLDER + "/" + path):
         res = send_from_directory(FRONTEND_FOLDER, path)
         if request.path.startswith("/static") or request.path.startswith("/fonts"):
-            res.headers.set("Cache-Control", "public,max-age=31536000,immutable")
+            res.headers.set("Cache-Control", "public,max-age=604800,immutable")
         else:
             res.headers.set("Cache-Control", "no_cache")
         return res

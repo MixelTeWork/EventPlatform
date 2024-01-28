@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "react-query";
 import { fetchJsonPost, fetchPost } from "../utils/fetch"
 import { ApiError } from "./dataTypes";
 import { User, createEmptyUser } from "./user";
-import { Quest } from "./quest";
 
 export function useMutationAuth(onError?: (msg: string) => void)
 {
@@ -12,7 +11,6 @@ export function useMutationAuth(onError?: (msg: string) => void)
 		onSuccess: (data) =>
 		{
 			queryClient.setQueryData("user", () => data);
-			queryClient.invalidateQueries("quests");
 		},
 		onError: (error) =>
 		{
@@ -44,11 +42,6 @@ export function useMutationLogout(onSuccess?: () => void)
 		onSuccess: () =>
 		{
 			queryClient.setQueryData("user", (_?: User) => createEmptyUser());
-			queryClient.setQueryData("quests", (quests?: Quest[]) =>
-			{
-				quests?.forEach(q => q.completed = false)
-				return quests || [];
-			});
 			onSuccess?.();
 		}
 	});

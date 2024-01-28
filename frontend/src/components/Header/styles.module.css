@@ -42,6 +42,11 @@
 	text-decoration: none;
 }
 
+.img {
+	height: 1.5rem;
+	border-radius: 0.25rem;
+}
+
 .menu {
 	position: absolute;
 	display: none;

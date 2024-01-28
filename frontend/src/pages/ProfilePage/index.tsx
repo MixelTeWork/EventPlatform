@@ -18,6 +18,7 @@ export default function ProfilePage()
 				{displayError(nameMutation)}
 				{nameMutation.isLoading && <Spinner />}
 				<div>
+					<img className={styles.img} src={user.data?.photo} />
 					<h3>Имя</h3>
 					<div>
 						<input type="text" ref={nameRef} defaultValue={user.data?.name} disabled={!userNameEditing} className={styles.input} />
@@ -48,8 +49,8 @@ export default function ProfilePage()
 					</div>
 				</div>
 				<div>
-					<h3>Логин</h3>
-					{user.data?.login}
+					<h3>Фамилия</h3>
+					{user.data?.last_name}
 				</div>
 				<div>
 					<h3>Роли</h3>

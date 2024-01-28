@@ -5,10 +5,12 @@ import { fetchJsonGet, fetchPost } from "../utils/fetch";
 export interface User
 {
 	auth: boolean;
-	id: number;
-	balance: number;
+	id: string;
 	name: string;
-	login: string;
+	last_name: string;
+	photo: string;
+	balance: number;
+	complited_quests: number[];
 	roles: string[];
 	operations: string[];
 }
@@ -16,12 +18,16 @@ export interface User
 export interface UserFull
 {
 	id: number;
-	name: string;
+	id_vk: number;
+	id_big: string;
 	login: string;
+	name: string;
+	last_name: string;
+	photo: string;
+	balance: number;
+	complited_quests: number[];
 	roles: string[];
-	bossId: number | null;
 	deleted: boolean;
-	access: string[];
 	operations: string[];
 }
 
@@ -32,7 +38,7 @@ export interface UserWithPwd extends User
 
 export function createEmptyUser(): User
 {
-	return { auth: false, id: -1, balance: 0, login: "", roles: [], name: "", operations: [] };
+	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", complited_quests: [], operations: [] };
 }
 
 export function useUpdateUser()
