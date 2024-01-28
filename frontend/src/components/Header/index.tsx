@@ -25,7 +25,7 @@ export default function Header()
 				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/login")}>
 					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
 				</button>
-				{user.data?.auth && <img className={styles.img} src={user.data.photo} alt="avatar" />}
+				{user.data?.photo && <img className={styles.img} src={user.data.photo} alt="avatar" />}
 				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)}>
 					<button onClick={() => navigate("/profile")}>
 						Профиль
