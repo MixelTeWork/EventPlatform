@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from data.operation import Operations
 from data.quest import Quest
+from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
 from utils import get_json_values_from_req, jsonify_list, permission_required, response_not_found, use_db_session, use_user
@@ -41,5 +42,7 @@ def quest_complete(db_sess: Session, user: User):
         return jsonify({"res": "already_done", "visitor": visitor.name}), 200
 
     UserQuest.new(db_sess, user, visitor, quest)
+    visitor.balance += quest.reward
+    Transaction.new(db_sess, user, visitor, quest.reward, Actions.endQuest, quest.id)
 
     return jsonify({"res": "ok", "visitor": visitor.name}), 200
