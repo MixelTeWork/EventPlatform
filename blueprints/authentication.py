@@ -44,7 +44,7 @@ def logout():
 def auth_vk(db_sess: Session):
     vk_user = get_vk_user()
     if vk_user is None:
-        redirect("/auth_error")
+        return redirect("/auth_error")
     user_id, access_token = vk_user
 
     user: User = db_sess.query(User).filter(User.id_vk == user_id).first()
@@ -53,7 +53,7 @@ def auth_vk(db_sess: Session):
         user = create_vk_user(db_sess, user_id, access_token)
 
     if user is None:
-        redirect("/auth_error")
+        return redirect("/auth_error")
 
     if user.deleted:
         user.deleted = False
@@ -70,7 +70,7 @@ def get_vk_user():
     error = request.args.get("error", "")
     error_description = request.args.get("error_description", "")
     if code == "" or error != "":
-        logging.warning(f"auth_error: {error}; {error_description}")
+        logging.warning(f"auth_error_1: {error}; {error_description}")
         return None
 
     res = requests.get("https://oauth.vk.com/access_token", {
@@ -80,7 +80,7 @@ def get_vk_user():
         "code": code,
     })
     if not res.ok:
-        logging.warning(f"auth_error: {res.status_code}; {res.content}")
+        logging.warning(f"auth_error_2: {res.status_code}; {res.content}")
         return None
 
     data = res.json()
@@ -88,7 +88,7 @@ def get_vk_user():
     user_id = data.get("user_id", None)
 
     if user_id is None:
-        logging.warning(f"auth_error: {data.get('error', None)}; {data.get('error_description', None)}")
+        logging.warning(f"auth_error_3: {data.get('error', None)}; {data.get('error_description', None)}")
         return None
 
     return user_id, access_token
@@ -100,7 +100,7 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
         "v": "5.199",
     })
     if not res.ok:
-        logging.warning(f"auth_error: {res.status_code}; {res.content}")
+        logging.warning(f"auth_error_4: {res.status_code}; {res.content}")
         return None
 
     data = res.json()
@@ -108,7 +108,7 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
     error = data.get("error", {})
 
     if response is None:
-        logging.warning(f"auth_error: {error.get('error_code', None)}; {error.get('error_msg', None)}")
+        logging.warning(f"auth_error_5: {error.get('error_code', None)}; {error.get('error_msg', None)}")
         return None
 
     photo = response.get("photo_200", None)
