@@ -1,4 +1,6 @@
-from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
+from typing import Union
+from flask import url_for
+from sqlalchemy import Boolean, Column, DefaultClause, orm, ForeignKey, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
@@ -15,13 +17,17 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
     deleted = Column(Boolean, DefaultClause("0"), nullable=False)
     name    = Column(String(128), nullable=False)
     price   = Column(Integer, nullable=False)
+    count   = Column(Integer, nullable=False)
+    imgId   = Column(Integer, ForeignKey("Image.id"), nullable=True)
+
+    image = orm.relationship("Image")
 
     def __repr__(self):
         return f"<StoreItem> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor: User, name: str, price: int):
-        item = StoreItem(name=name, price=price)
+    def new(db_sess: Session, actor: User, name: str, price: int, count: int, imgId: Union[int, None]):
+        item = StoreItem(name=name, price=price, count=count, imgId=imgId)
         db_sess.add(item)
 
         now = get_datetime_now()
@@ -75,6 +81,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         return [
             ("name", None, self.name),
             ("price", None, self.price),
+            ("count", None, self.count),
+            ("imgId", None, self.imgId),
         ]
 
     def get_dict(self):
@@ -82,5 +90,6 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "price": self.price,
-            "img": "https://ipsumimg.dakovdev.com/512x512",
+            "count": self.count,
+            "img": None if self.imgId is None else url_for("/img/" + self.imgId, _external=True),
         }

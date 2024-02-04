@@ -38,6 +38,19 @@ def docs():
                 "name": "string",
             },
         },
+        "/api/img/<int:imageId>": {
+            "__desc__": "Get image",
+            "response": "binary image data",
+        },
+        "/api/img POST": {
+            "__desc__": "Add image",
+            "request": {
+                "img": "Image",
+            },
+            "response": {
+                "id": "number",
+            },
+        },
         "/api/debug/log": {
             "__desc__": "Get log",
             "response": "Log[]",
@@ -105,6 +118,32 @@ def docs():
                 "user": "string",
             },
         },
+        "/api/store_item POST": {
+            "__desc__": "",
+            "request": {
+                "name": "string",
+                "price": "number",
+                "count": "number",
+                "img": "?Image",
+            },
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId> POST": {
+            "__desc__": "",
+            "request": {
+                "name": "string",
+                "price": "number",
+                "count": "number",
+                "img": "?Image",
+            },
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId> DELETE": {
+            "__desc__": "",
+            "request": {
+
+            },
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -129,6 +168,10 @@ def docs():
             "deleted": "bool",
             "operations": "string[]",
         },
+        "Image": {
+            "data": "string",
+            "name": "string",
+        },
         "Log": {
             "id": "number",
             "date": "datetime",
@@ -148,7 +191,7 @@ def docs():
             "id": "number",
             "name": "string",
             "price": "number",
-            "img": "string",
+            "img": "string | null",
         },
         "Transaction": {
             "id": "number",

@@ -1,5 +1,5 @@
 from utils.get_json import get_json
-from utils.reponse_msg import reponse_msg
+from utils.reponse_msg import response_msg
 from utils.get_json_values import get_json_values
 from utils.get_jwt_secret_key import get_jwt_secret_key
 from utils.get_vk_secret_key import get_vk_secret_key

@@ -34,6 +34,7 @@ class Actions:
 class Tables:
     User = "User"
     Role = "Role"
+    Image = "Image"
     UserRole = "UserRole"
     Quest = "Quest"
     UserQuest = "UserQuest"

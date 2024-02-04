@@ -5,7 +5,7 @@ import requests
 from sqlalchemy.orm import Session
 from data.role import Roles
 from data.user import User
-from utils import get_json_values_from_req, get_vk_secret_key, randstr, reponse_msg, use_db_session
+from utils import get_json_values_from_req, get_vk_secret_key, randstr, response_msg, use_db_session
 
 
 blueprint = Blueprint("authentication", __name__)
@@ -24,7 +24,7 @@ def login(db_sess: Session):
     user: User = db_sess.query(User).filter(User.login == login, User.deleted == False).first()
 
     if not user or not user.check_password(password):
-        return reponse_msg("Неправильный логин или пароль"), 400
+        return response_msg("Неправильный логин или пароль"), 400
 
     response = jsonify(user.get_dict())
     access_token = create_access_token(identity=[user.id, user.password])
@@ -34,7 +34,7 @@ def login(db_sess: Session):
 
 @blueprint.route("/api/logout", methods=["POST"])
 def logout():
-    response = reponse_msg("logout successful")
+    response = response_msg("logout successful")
     unset_jwt_cookies(response)
     return response
 

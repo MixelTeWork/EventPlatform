@@ -1,11 +1,12 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
+from data.image import Image
 from data.operation import Operations
-from data.store_items import StoreItem
+from data.store_item import StoreItem
 from data.transaction import Actions, Transaction
 from data.user import User
-from utils import get_json_values_from_req, jsonify_list, permission_required, response_not_found, use_db_session, use_user
+from utils import get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
 
 
 blueprint = Blueprint("store", __name__)
@@ -67,3 +68,84 @@ def store_sell(db_sess: Session, user: User):
     Transaction.new(db_sess, visitor, user, item.price, Actions.buyItem, item.id)
 
     return jsonify({"res": "ok", "item": item.name, "visitor": visitor.name}), 200
+
+
+@blueprint.route("/api/store_item", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_store)
+def store_item_add(db_sess: Session, user: User):
+    (name, price, count, img_data), errorRes = get_json_values_from_req("name", "price", "count", ("img", None))
+    if errorRes:
+        return errorRes
+
+    if img_data is not None:
+        img, image_error = Image.new(db_sess, user, img_data)
+        if image_error:
+            return response_msg(image_error), 400
+
+    item = StoreItem.new(db_sess, user, name, price, count, img.id if img_data is not None else None)
+
+    return jsonify(item.get_dict()), 200
+
+
+@blueprint.route("/api/store_item/<int:itemId>", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_store)
+def store_item_patch(itemId, db_sess: Session, user: User):
+    (name, price, count, img_data), errorRes = get_json_values_from_req(("name", None), ("price", None), ("count", None), ("img", None))
+    if errorRes:
+        return errorRes
+
+    item = StoreItem.get(db_sess, itemId)
+    if item is None:
+        return response_not_found("item", itemId)
+
+    changes = []
+
+    if img_data is not None:
+        img, image_error = Image.new(db_sess, user, img_data)
+        if image_error:
+            return response_msg(image_error), 400
+
+        old_img: Image = item.image
+        if old_img is not None:
+            old_img.delete(db_sess, user)
+            changes.append(("imageId", old_img.id, img.id))
+        item.image = img
+
+    if name is not None:
+        changes.append(("name", item.name, name))
+        item.name = name
+    if price is not None:
+        changes.append(("price", item.price, price))
+        item.price = price
+    if count is not None:
+        changes.append(("count", item.count, count))
+        item.count = count
+
+    db_sess.commit()
+
+    return jsonify(item.get_dict()), 200
+
+
+@blueprint.route("/api/store_item/<int:itemId>", methods=["DELETE"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_store)
+def store_item_delete(itemId, db_sess: Session, user: User):
+    item = StoreItem.get(db_sess, itemId)
+    if item is None:
+        return response_not_found("item", itemId)
+
+    image: Image = item.image
+    if image is not None:
+        image.delete(user)
+
+    item.delete(user)
+
+    return response_msg("ok"), 200

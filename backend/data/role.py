@@ -132,6 +132,8 @@ ROLES = {
         "name": "Организатор",
         "operations": [
             Operations.promote_manager,
+            Operations.manage_store,
+            Operations.manage_quest,
         ]
     },
     Roles.manager: {

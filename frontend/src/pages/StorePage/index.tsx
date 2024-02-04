@@ -31,7 +31,7 @@ export default function StorePage()
 						setPopupIsOpen(true);
 					}}>
 						<div className={styles.item__img}>
-							<img src={item.img} alt="Товар" />
+							{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
 						</div>
 						<div className={styles.item__desc}>
 							<span>{item.name}</span>

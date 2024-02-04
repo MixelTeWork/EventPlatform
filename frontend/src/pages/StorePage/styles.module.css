@@ -37,10 +37,19 @@
 	aspect-ratio: 1;
 }
 
+.item__img div,
 .item__img img {
 	width: 100%;
 	height: 100%;
 	border-radius: 1rem;
+}
+
+.item__img div {
+	background:
+		radial-gradient(circle at 50% 10%, purple, transparent 50%),
+		radial-gradient(circle at 90% 90%, blue, transparent 50%),
+		radial-gradient(circle at 30% 90%, azure, transparent 50%),
+		radial-gradient(circle at 50% 50%, lightblue, violet);
 }
 
 .item__desc {
