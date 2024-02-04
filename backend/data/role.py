@@ -122,20 +122,22 @@ class Role(SqlAlchemyBase, SerializerMixin):
 class Roles:
     admin = 1
     boss = 2
-    manager = 2
-    worker = 3
-    visitor = 4
+    manager = 3
+    worker = 4
+    visitor = 5
 
 
 ROLES = {
     Roles.boss: {
         "name": "Организатор",
         "operations": [
+            Operations.promote_manager,
         ]
     },
     Roles.manager: {
         "name": "Управляющий",
         "operations": [
+            Operations.promote_worker,
         ]
     },
     Roles.worker: {

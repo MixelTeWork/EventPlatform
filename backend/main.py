@@ -155,7 +155,7 @@ def unauthorized(error):
 
 
 @jwt_manager.expired_token_loader
-def expired_token_loader():
+def expired_token_loader(jwt_header, jwt_data):
     return jsonify({"msg": "The JWT has expired"}), 401
 
 

@@ -22,6 +22,7 @@ import ScannerQuestPage from "./pages/ScannerQuestPage";
 import WorkerPage from "./pages/WorkerPage";
 import ScannerSelectQuestPage from "./pages/ScannerSelectQuestPage";
 import ScannerStorePage from "./pages/ScannerStorePage";
+import PromotePage from "./pages/PromotePage";
 
 export default function App()
 {
@@ -30,7 +31,7 @@ export default function App()
 	function ProtectedRoute(permission: Operation | null, path: string, element: JSX.Element)
 	{
 		return <Route path={path} element={
-			!user.data?.auth ? <Navigate to="/auth" /> : (
+			!user.data?.auth ? <Navigate to="/login" /> : (
 				permission == null || hasPermission(user, permission) ? element : <NoPermissionPage />
 			)
 		} />
@@ -56,6 +57,8 @@ export default function App()
 				{ProtectedRoute("page_scanner_quest", "/scanner_quest", <ScannerSelectQuestPage />)}
 				{ProtectedRoute("page_scanner_quest", "/scanner_quest/:questId", <ScannerQuestPage />)}
 				{ProtectedRoute("page_scanner_store", "/scanner_store", <ScannerStorePage />)}
+				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}
+				{ProtectedRoute("promote_manager", "/promote_manager", <PromotePage role="manager" />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
 				{ProtectedRoute("page_debug", "/log", <LogPage />)}
 				{ProtectedRoute("page_users", "/users", <UsersPage />)}

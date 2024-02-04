@@ -85,6 +85,26 @@ def docs():
                 "visitor": "string",
             },
         },
+        "/api/promote_worker": {
+            "__desc__": "Promote user to worker",
+            "request": {
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'no_user' | 'already_has'",
+                "user": "string",
+            },
+        },
+        "/api/promote_manager": {
+            "__desc__": "Promote user to manager",
+            "request": {
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'no_user' | 'already_has'",
+                "user": "string",
+            },
+        },
         "User": {
             "id": "string",
             "name": "string",

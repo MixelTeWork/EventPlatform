@@ -24,6 +24,9 @@ class Operations:
     page_scanner_quest = ("page_scanner_quest", "Страница сканирования квестов")
     page_scanner_store = ("page_scanner_store", "Страница сканирования товаров")
 
+    promote_worker = ("promote_worker", "Повысить до волонтёра")
+    promote_manager = ("promote_manager", "Повысить до управляющего")
+
     # get
 
     # add

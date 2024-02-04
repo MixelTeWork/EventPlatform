@@ -9,7 +9,7 @@ from utils import get_json_values_from_req, get_vk_secret_key, randstr, reponse_
 
 
 blueprint = Blueprint("authentication", __name__)
-CLIENT_ID = "51843506"
+CLIENT_ID = "51848582"
 CLIENT_SECRET = get_vk_secret_key()
 REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
 
