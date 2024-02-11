@@ -24,13 +24,13 @@ class Operations:
     page_scanner_quest = ("page_scanner_quest", "Страница сканирования квестов")
     page_scanner_store = ("page_scanner_store", "Страница сканирования товаров")
 
-    # get
+    promote_worker = ("promote_worker", "Повысить до волонтёра")
+    promote_manager = ("promote_manager", "Повысить до управляющего")
 
-    # add
+    manage_store = ("manage_store", "Управление товарами")
+    manage_quest = ("manage_quest", "Управление квестами")
 
-    # change
-
-    # delete
+    add_any_image = ("add_any_image", "Добавление картинок")
 
     @staticmethod
     def get_all():

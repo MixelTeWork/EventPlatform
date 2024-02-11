@@ -38,6 +38,19 @@ def docs():
                 "name": "string",
             },
         },
+        "/api/img/<int:imageId>": {
+            "__desc__": "Get image",
+            "response": "binary image data",
+        },
+        "/api/img POST": {
+            "__desc__": "Add image",
+            "request": {
+                "img": "Image",
+            },
+            "response": {
+                "id": "number",
+            },
+        },
         "/api/debug/log": {
             "__desc__": "Get log",
             "response": "Log[]",
@@ -85,6 +98,53 @@ def docs():
                 "visitor": "string",
             },
         },
+        "/api/promote_worker": {
+            "__desc__": "Promote user to worker",
+            "request": {
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'no_user' | 'already_has'",
+                "user": "string",
+            },
+        },
+        "/api/promote_manager": {
+            "__desc__": "Promote user to manager",
+            "request": {
+                "userId": "number",
+            },
+            "response": {
+                "res": "'ok' | 'no_user' | 'already_has'",
+                "user": "string",
+            },
+        },
+        "/api/store_item POST": {
+            "__desc__": "Add item to store",
+            "request": {
+                "name": "string",
+                "price": "number",
+                "count": "number",
+                "img": "?Image",
+            },
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId> POST": {
+            "__desc__": "Edit store item",
+            "request": {
+                "name": "string",
+                "price": "number",
+                "count": "number",
+                "img": "?Image",
+            },
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId>/decrease POST": {
+            "__desc__": "Decrease item count by one",
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId> DELETE": {
+            "__desc__": "Delete store item",
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -109,6 +169,10 @@ def docs():
             "deleted": "bool",
             "operations": "string[]",
         },
+        "Image": {
+            "data": "string",
+            "name": "string",
+        },
         "Log": {
             "id": "number",
             "date": "datetime",
@@ -128,7 +192,7 @@ def docs():
             "id": "number",
             "name": "string",
             "price": "number",
-            "img": "string",
+            "img": "string | null",
         },
         "Transaction": {
             "id": "number",

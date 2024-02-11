@@ -3,7 +3,7 @@ from flask import abort
 from data.user import User
 
 
-def permission_required(operation: str):
+def permission_required(operation: tuple[str, str]):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):

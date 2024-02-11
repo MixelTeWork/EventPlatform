@@ -21,7 +21,7 @@ def init_values(dev=False, cmd=False):
     from data.role import Role, Roles, ROLES
     from data.user import User
     from data.quest import Quest
-    from data.store_items import StoreItem
+    from data.store_item import StoreItem
     from data.get_datetime_now import get_datetime_now
 
     def init():
@@ -95,7 +95,7 @@ def init_values(dev=False, cmd=False):
             db_sess.add(quest)
 
         for i in range(15):
-            item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50)
+            item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50)
             log(Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
 

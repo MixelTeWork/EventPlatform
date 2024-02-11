@@ -17,6 +17,7 @@ from logger import setLogging
 setLogging()
 FRONTEND_FOLDER = "build"
 app = Flask(__name__, static_folder=None)
+app.config["IMAGES_FOLDER"] = "images"
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_SECRET_KEY"] = get_jwt_secret_key()
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
@@ -35,6 +36,9 @@ def main():
             init_values(True)
 
     db_session.global_init("dev" in sys.argv)
+
+    if not os.path.exists(app.config["IMAGES_FOLDER"]):
+        os.makedirs(app.config["IMAGES_FOLDER"])
 
     if "dev" not in sys.argv:
         check_is_admin_default()
@@ -155,7 +159,7 @@ def unauthorized(error):
 
 
 @jwt_manager.expired_token_loader
-def expired_token_loader():
+def expired_token_loader(jwt_header, jwt_data):
     return jsonify({"msg": "The JWT has expired"}), 401
 
 
