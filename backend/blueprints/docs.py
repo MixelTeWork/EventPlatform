@@ -59,6 +59,25 @@ def docs():
             "__desc__": "Get quests",
             "response": "Quest[]",
         },
+        "/api/quest POST": {
+            "__desc__": "Add quest to store",
+            "request": {
+                "name": "string",
+                "reward": "number",
+            },
+            "response": "Quest",
+        },
+        "/api/quest/<int:questId> POST": {
+            "__desc__": "Edit quest",
+            "request": {
+                "name": "?string",
+                "reward": "?number",
+            },
+            "response": "Quest",
+        },
+        "/api/quest/<int:questId> DELETE": {
+            "__desc__": "Delete quest",
+        },
         "/api/quest_complete": {
             "__desc__": "Mark quest as completed for user",
             "request": {
@@ -73,6 +92,33 @@ def docs():
         "/api/store_items": {
             "__desc__": "Get store items",
             "response": "StoreItem[]",
+        },
+        "/api/store_item POST": {
+            "__desc__": "Add item to store",
+            "request": {
+                "name": "string",
+                "price": "number",
+                "count": "number",
+                "img": "?Image",
+            },
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId> POST": {
+            "__desc__": "Edit store item",
+            "request": {
+                "name": "?string",
+                "price": "?number",
+                "count": "?number",
+                "img": "?Image",
+            },
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId>/decrease POST": {
+            "__desc__": "Decrease item count by one",
+            "response": "StoreItem",
+        },
+        "/api/store_item/<int:itemId> DELETE": {
+            "__desc__": "Delete store item",
         },
         "/api/store_sell_check": {
             "__desc__": "Check if item can be sold to user",
@@ -117,33 +163,6 @@ def docs():
                 "res": "'ok' | 'no_user' | 'already_has'",
                 "user": "string",
             },
-        },
-        "/api/store_item POST": {
-            "__desc__": "Add item to store",
-            "request": {
-                "name": "string",
-                "price": "number",
-                "count": "number",
-                "img": "?Image",
-            },
-            "response": "StoreItem",
-        },
-        "/api/store_item/<int:itemId> POST": {
-            "__desc__": "Edit store item",
-            "request": {
-                "name": "string",
-                "price": "number",
-                "count": "number",
-                "img": "?Image",
-            },
-            "response": "StoreItem",
-        },
-        "/api/store_item/<int:itemId>/decrease POST": {
-            "__desc__": "Decrease item count by one",
-            "response": "StoreItem",
-        },
-        "/api/store_item/<int:itemId> DELETE": {
-            "__desc__": "Delete store item",
         },
         "User": {
             "id": "string",

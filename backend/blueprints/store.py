@@ -107,39 +107,13 @@ def store_item_patch(itemId, db_sess: Session, user: User):
     if item is None:
         return response_not_found("item", itemId)
 
-    changes = []
-
+    img = None
     if img_data is not None:
         img, image_error = Image.new(db_sess, user, img_data)
         if image_error:
             return response_msg(image_error), 400
 
-        old_img: Image = item.image
-        if old_img is not None:
-            old_img.delete(user)
-            changes.append(("imageId", old_img.id, img.id))
-        item.image = img
-
-    if name is not None:
-        changes.append(("name", item.name, name))
-        item.name = name
-    if price is not None:
-        changes.append(("price", item.price, price))
-        item.price = price
-    if count is not None:
-        changes.append(("count", item.count, count))
-        item.count = count
-
-    db_sess.add(Log(
-        date=get_datetime_now(),
-        actionCode=LogActions.updated,
-        userId=user.id,
-        userName=user.name,
-        tableName=Tables.StoreItem,
-        recordId=item.id,
-        changes=changes
-    ))
-    db_sess.commit()
+    item.update(user, name, price, count, img)
 
     return jsonify(item.get_dict()), 200
 

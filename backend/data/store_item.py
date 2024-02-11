@@ -3,6 +3,7 @@ from flask import url_for
 from sqlalchemy import Boolean, Column, DefaultClause, orm, ForeignKey, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
+from data.image import Image
 
 from data.log import Actions, Log, Tables
 from data.user import User
@@ -61,6 +62,38 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         if not includeDeleted:
             items = items.filter(StoreItem.deleted == False)
         return items.all()
+
+    def update(self, actor: User, name: Union[str, None], price: Union[int, None], count: Union[int, None], img: Union[Image, None]):
+        db_sess = Session.object_session(self)
+        changes = []
+
+        if img is not None:
+            old_img: Image = self.image
+            if old_img is not None:
+                old_img.delete(actor)
+                changes.append(("imageId", old_img.id, img.id))
+            self.image = img
+
+        if name is not None:
+            changes.append(("name", self.name, name))
+            self.name = name
+        if price is not None:
+            changes.append(("price", self.price, price))
+            self.price = price
+        if count is not None:
+            changes.append(("count", self.count, count))
+            self.count = count
+
+        db_sess.add(Log(
+            date=get_datetime_now(),
+            actionCode=Actions.updated,
+            userId=actor.id,
+            userName=actor.name,
+            tableName=Tables.StoreItem,
+            recordId=self.id,
+            changes=changes
+        ))
+        db_sess.commit()
 
     def delete(self, actor: User):
         db_sess = Session.object_session(self)

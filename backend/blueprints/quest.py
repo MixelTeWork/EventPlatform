@@ -6,7 +6,7 @@ from data.quest import Quest
 from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
-from utils import get_json_values_from_req, jsonify_list, permission_required, response_not_found, use_db_session, use_user
+from utils import get_json_values_from_req, jsonify_list, permission_required, reponse_msg, response_not_found, use_db_session, use_user
 
 
 blueprint = Blueprint("quest", __name__)
@@ -46,3 +46,52 @@ def quest_complete(db_sess: Session, user: User):
     Transaction.new(db_sess, user, visitor, quest.reward, Actions.endQuest, quest.id)
 
     return jsonify({"res": "ok", "visitor": visitor.name}), 200
+
+
+@blueprint.route("/api/quest", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def quest_add(db_sess: Session, user: User):
+    (name, reward), errorRes = get_json_values_from_req("name", "reward")
+    if errorRes:
+        return errorRes
+
+    quest = Quest.new(db_sess, user, name, reward)
+
+    return jsonify(quest.get_dict()), 200
+
+
+@blueprint.route("/api/quest/<int:questId>", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def quest_edit(questId, db_sess: Session, user: User):
+    (name, reward), errorRes = get_json_values_from_req(("name", None), ("reward", None))
+    if errorRes:
+        return errorRes
+
+    quest = Quest.get(db_sess, questId)
+    if quest is None:
+        return response_not_found("quest", questId)
+
+    quest.update(user, name, reward)
+
+    return jsonify(quest.get_dict()), 200
+
+
+@blueprint.route("/api/quest/<int:questId>", methods=["DELETE"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def quest_delete(questId, db_sess: Session, user: User):
+    quest = Quest.get(db_sess, questId)
+    if quest is None:
+        return response_not_found("quest", questId)
+
+    quest.delete(user)
+
+    return reponse_msg("ok"), 200

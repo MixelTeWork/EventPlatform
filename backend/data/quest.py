@@ -1,3 +1,4 @@
+from typing import Union
 from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
@@ -70,6 +71,28 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             "reward": v[2],
             "completed": v[3] is not None,
         }, quests))
+
+    def update(self, actor, name: Union[str, None], reward: Union[int, None]):
+        db_sess = Session.object_session(self)
+        changes = []
+
+        if name is not None:
+            changes.append(("name", self.name, name))
+            self.name = name
+        if reward is not None:
+            changes.append(("reward", self.reward, reward))
+            self.reward = reward
+
+        db_sess.add(Log(
+            date=get_datetime_now(),
+            actionCode=Actions.updated,
+            userId=actor.id,
+            userName=actor.name,
+            tableName=Tables.StoreItem,
+            recordId=self.id,
+            changes=changes
+        ))
+        db_sess.commit()
 
     def delete(self, actor):
         db_sess = Session.object_session(self)
