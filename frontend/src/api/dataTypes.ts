@@ -5,3 +5,9 @@ export interface ResponseMsg
 {
 	msg: string,
 }
+
+export interface ImgData
+{
+	data: string,
+	name: string,
+}

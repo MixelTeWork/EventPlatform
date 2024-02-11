@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
+from data.get_datetime_now import get_datetime_now
 from data.image import Image
+from data.log import Log, Actions as LogActions, Tables
 from data.operation import Operations
 from data.store_item import StoreItem
 from data.transaction import Actions, Transaction
@@ -66,6 +68,7 @@ def store_sell(db_sess: Session, user: User):
 
     visitor.balance -= item.price
     Transaction.new(db_sess, visitor, user, item.price, Actions.buyItem, item.id)
+    item.decrease(user)
 
     return jsonify({"res": "ok", "item": item.name, "visitor": visitor.name}), 200
 
@@ -113,7 +116,7 @@ def store_item_patch(itemId, db_sess: Session, user: User):
 
         old_img: Image = item.image
         if old_img is not None:
-            old_img.delete(db_sess, user)
+            old_img.delete(user)
             changes.append(("imageId", old_img.id, img.id))
         item.image = img
 
@@ -127,7 +130,31 @@ def store_item_patch(itemId, db_sess: Session, user: User):
         changes.append(("count", item.count, count))
         item.count = count
 
+    db_sess.add(Log(
+        date=get_datetime_now(),
+        actionCode=LogActions.updated,
+        userId=user.id,
+        userName=user.name,
+        tableName=Tables.StoreItem,
+        recordId=item.id,
+        changes=changes
+    ))
     db_sess.commit()
+
+    return jsonify(item.get_dict()), 200
+
+
+@blueprint.route("/api/store_item/<int:itemId>/decrease", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_store)
+def store_item_decrease(itemId, db_sess: Session, user: User):
+    item: StoreItem = StoreItem.get(db_sess, itemId)
+    if item is None:
+        return response_not_found("item", itemId)
+
+    item.decrease(user)
 
     return jsonify(item.get_dict()), 200
 

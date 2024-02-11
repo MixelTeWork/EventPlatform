@@ -1,5 +1,6 @@
-import { useMutation, useQuery } from "react-query";
-import { fetchJsonGet, fetchJsonPost } from "../utils/fetch";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { fetchDelete, fetchJsonGet, fetchJsonPost } from "../utils/fetch";
+import type { ImgData } from "./dataTypes";
 
 export interface StoreItem
 {
@@ -66,4 +67,89 @@ export interface SellItemRes
 	res: "ok" | "no_money",
 	item: string,
 	visitor: string,
+}
+
+export function useMutationAddItem(onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (itemData: ItemData) =>
+			await fetchJsonPost<StoreItem>("/api/store_item", itemData),
+		onSuccess: (data: StoreItem) =>
+		{
+			if (queryClient.getQueryState("storeItems")?.status == "success")
+				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items ? [...items, data] : [data]);
+
+			onSuccess?.(data);
+		},
+		onError: onError,
+	});
+	return mutation;
+}
+
+export interface ItemData
+{
+	name: string,
+	price: number,
+	count: number,
+	img?: ImgData,
+}
+
+export function useMutationEditItem(onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (itemData: ItemDataWithId) =>
+			await fetchJsonPost<StoreItem>(`/api/store_item/${itemData.id}`, itemData),
+		onSuccess: (data: StoreItem) =>
+		{
+			if (queryClient.getQueryState("storeItems")?.status == "success")
+				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items?.map(v => v.id == data.id ? data : v) || []);
+
+			onSuccess?.(data);
+		},
+		onError: onError,
+	});
+	return mutation;
+}
+
+export interface ItemDataWithId extends ItemData
+{
+	id: number,
+}
+
+export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async () =>
+			await fetchJsonPost<StoreItem>(`/api/store_item/${itemId}/decrease`),
+		onSuccess: (data: StoreItem) =>
+		{
+			if (queryClient.getQueryState("storeItems")?.status == "success")
+				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items?.map(v => v.id == data.id ? data : v) || []);
+
+			onSuccess?.(data);
+		},
+		onError: onError,
+	});
+	return mutation;
+}
+
+export function useMutationDeleteItem(itemId: number, onSuccess?: () => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async () =>
+			await fetchDelete(`/api/store_item/${itemId}`),
+		onSuccess: () =>
+		{
+			if (queryClient.getQueryState("storeItems")?.status == "success")
+				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items?.filter(v => v.id != itemId) || []);
+
+			onSuccess?.();
+		},
+		onError: onError,
+	});
+	return mutation;
 }

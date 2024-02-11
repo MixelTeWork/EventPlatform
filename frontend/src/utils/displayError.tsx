@@ -13,7 +13,7 @@ export default function displayError(requestRes: UseMutationResult<any, any, any
 {
 	if (!requestRes.isError) return null;
 
-	const msg = formatError(requestRes, messageFormater);
+	const msg = formatError(requestRes.error, messageFormater);
 	const renderer = render || defaultRender;
 	return renderer(msg);
 }

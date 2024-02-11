@@ -10,6 +10,8 @@ const Operations = {
 	page_scanner_store: "page_scanner_store",
 	promote_worker: "promote_worker",
 	promote_manager: "promote_manager",
+	manage_store: "manage_store",
+	manage_quest: "manage_quest",
 }
 
 export type Operation = keyof typeof Operations;

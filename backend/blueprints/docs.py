@@ -119,7 +119,7 @@ def docs():
             },
         },
         "/api/store_item POST": {
-            "__desc__": "",
+            "__desc__": "Add item to store",
             "request": {
                 "name": "string",
                 "price": "number",
@@ -129,7 +129,7 @@ def docs():
             "response": "StoreItem",
         },
         "/api/store_item/<int:itemId> POST": {
-            "__desc__": "",
+            "__desc__": "Edit store item",
             "request": {
                 "name": "string",
                 "price": "number",
@@ -138,11 +138,12 @@ def docs():
             },
             "response": "StoreItem",
         },
+        "/api/store_item/<int:itemId>/decrease POST": {
+            "__desc__": "Decrease item count by one",
+            "response": "StoreItem",
+        },
         "/api/store_item/<int:itemId> DELETE": {
-            "__desc__": "",
-            "request": {
-
-            },
+            "__desc__": "Delete store item",
         },
         "User": {
             "id": "string",

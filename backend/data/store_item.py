@@ -77,6 +77,22 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         ))
         db_sess.commit()
 
+    def decrease(self, actor: User, v=1):
+        db_sess = Session.object_session(self)
+        count = self.count
+        self.count = count - v
+
+        db_sess.add(Log(
+            date=get_datetime_now(),
+            actionCode=Actions.updated,
+            userId=actor.id,
+            userName=actor.name,
+            tableName=Tables.StoreItem,
+            recordId=self.id,
+            changes=[("count", count, count - v)]
+        ))
+        db_sess.commit()
+
     def get_creation_changes(self):
         return [
             ("name", None, self.name),
@@ -91,5 +107,5 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             "name": self.name,
             "price": self.price,
             "count": self.count,
-            "img": None if self.imgId is None else url_for("/img/" + self.imgId, _external=True),
+            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId, _external=True),
         }
