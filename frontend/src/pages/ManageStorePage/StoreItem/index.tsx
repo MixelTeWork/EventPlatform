@@ -20,7 +20,7 @@ export default function StoreItem({ item }: StoreItemProps)
 	const count = useStateObj(item.count, changed.setT);
 	const price = useStateObj(item.price, changed.setT);
 
-	const mutationEdit = useMutationEditItem(reset, () => reset());
+	const mutationEdit = useMutationEditItem(item.id, reset, () => reset());
 
 	function reset(newitem?: StoreItem)
 	{
@@ -69,7 +69,6 @@ export default function StoreItem({ item }: StoreItemProps)
 					onClick={() =>
 					{
 						mutationEdit.mutate({
-							id: item.id,
 							name: name.v,
 							count: count.v,
 							price: price.v,

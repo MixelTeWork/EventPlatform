@@ -6,7 +6,7 @@ from data.quest import Quest
 from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
-from utils import get_json_values_from_req, jsonify_list, permission_required, reponse_msg, response_not_found, use_db_session, use_user
+from utils import get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
 
 
 blueprint = Blueprint("quest", __name__)
@@ -94,4 +94,4 @@ def quest_delete(questId, db_sess: Session, user: User):
 
     quest.delete(user)
 
-    return reponse_msg("ok"), 200
+    return response_msg("ok"), 200

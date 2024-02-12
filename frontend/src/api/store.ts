@@ -95,12 +95,12 @@ export interface ItemData
 	img?: ImgData,
 }
 
-export function useMutationEditItem(onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: async (itemData: ItemDataWithId) =>
-			await fetchJsonPost<StoreItem>(`/api/store_item/${itemData.id}`, itemData),
+		mutationFn: async (itemData: ItemData) =>
+			await fetchJsonPost<StoreItem>(`/api/store_item/${itemId}`, itemData),
 		onSuccess: (data: StoreItem) =>
 		{
 			if (queryClient.getQueryState("storeItems")?.status == "success")
@@ -111,11 +111,6 @@ export function useMutationEditItem(onSuccess?: (data: StoreItem) => void, onErr
 		onError: onError,
 	});
 	return mutation;
-}
-
-export interface ItemDataWithId extends ItemData
-{
-	id: number,
 }
 
 export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)

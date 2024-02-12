@@ -1,9 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.get_datetime_now import get_datetime_now
 from data.image import Image
-from data.log import Log, Actions as LogActions, Tables
 from data.operation import Operations
 from data.store_item import StoreItem
 from data.transaction import Actions, Transaction
