@@ -3,7 +3,7 @@ from flask import abort
 from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from sqlalchemy.orm import Session
 from data.user import User
-from utils.reponse_msg import response_msg
+from utils.response_msg import response_msg
 
 
 def use_user():
