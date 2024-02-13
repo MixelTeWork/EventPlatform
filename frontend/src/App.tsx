@@ -8,23 +8,25 @@ import MessageFromBackend from "./components/MessageFromBackend";
 
 import NotFoundPage from "./pages/NotFoundPage";
 import NoPermissionPage from "./pages/NoPermissionPage";
+
 import AuthPage from "./pages/AuthPage";
-import IndexPage from "./pages/IndexPage";
 import DebugPage from "./pages/DebugPage";
-import UsersPage from "./pages/UsersPage";
+import IndexPage from "./pages/IndexPage";
 import LogPage from "./pages/LogPage";
 import LoginPage from "./pages/LoginPage";
+import ManageQuestPage from "./pages/ManageQuestPage";
+import ManageStorePage from "./pages/ManageStorePage";
+import MapPage from "./pages/IndexPage";
 import ProfilePage from "./pages/ProfilePage";
-import TimetablePage from "./pages/TimetablePage";
+import PromotePage from "./pages/PromotePage";
 import QuestPage from "./pages/QuestPage";
-import StorePage from "./pages/StorePage";
 import ScannerQuestPage from "./pages/ScannerQuestPage";
-import WorkerPage from "./pages/WorkerPage";
 import ScannerSelectQuestPage from "./pages/ScannerSelectQuestPage";
 import ScannerStorePage from "./pages/ScannerStorePage";
-import PromotePage from "./pages/PromotePage";
-import ManageStorePage from "./pages/ManageStorePage";
-import ManageQuestPage from "./pages/ManageQuestPage";
+import StorePage from "./pages/StorePage";
+import TimetablePage from "./pages/TimetablePage";
+import UsersPage from "./pages/UsersPage";
+import WorkerPage from "./pages/WorkerPage";
 
 export default function App()
 {
@@ -53,6 +55,7 @@ export default function App()
 				<Route path="/timetable" element={<TimetablePage />} />
 				<Route path="/quest" element={<QuestPage />} />
 				<Route path="/store" element={<StorePage />} />
+				<Route path="/map" element={<MapPage />} />
 				{/* <Route path="/race" element={<RacePage />} /> */}
 				{ProtectedRoute(null, "/profile", <ProfilePage />)}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}

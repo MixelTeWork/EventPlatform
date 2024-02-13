@@ -3,7 +3,7 @@ import map from "./map.png";
 import Layout from "../../components/Layout";
 import Footer from "../../components/Footer";
 
-export default function MapPage()
+export default function IndexPage()
 {
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="map" />}>
