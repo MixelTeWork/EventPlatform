@@ -5,14 +5,48 @@
 .title {
 	font-size: 3rem;
 	text-transform: uppercase;
+	font-weight: normal;
 }
 
 .map {
 	overflow: auto;
-	margin-block: auto;
+	margin-top: 1rem;
 }
 .map img {
 	display: block;
 	width: 100%;
 	height: auto;
+}
+
+.map div {
+	display: flex;
+	justify-content: center;
+	gap: 0.8rem;
+}
+
+.map button {
+	text-decoration: none;
+	text-transform: lowercase;
+	background-color: black;
+	color: white;
+	border: 2px solid white;
+	border-radius: 0;
+	font-size: 1rem;
+	line-height: 1rem;
+	padding: 0.3rem 0.5rem;
+}
+
+.map .active {
+	color: yellow;
+}
+
+.background {
+	position: fixed;
+	z-index: -1;
+	inset: 0;
+	background-image: url(./castle.png), url(./stars.png);
+	background-size: 100% auto;
+	background-repeat: no-repeat, repeat;
+	background-position: bottom, bottom;
+	image-rendering: pixelated;
 }

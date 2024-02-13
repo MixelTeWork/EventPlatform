@@ -5,14 +5,62 @@
 .title {
 	font-size: 3rem;
 	text-transform: uppercase;
+	font-weight: normal;
 }
 
-.map {
-	overflow: auto;
-	margin-block: auto;
+.body {
+	margin-bottom: 2rem;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
 }
-.map img {
-	display: block;
-	width: 100%;
-	height: auto;
+
+
+.list {
+	margin: 1rem;
+}
+
+.items {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.items > * {
+	border: 2px solid white;
+	padding: 1rem;
+	font-size: 1.3rem;
+}
+
+.body .btns {
+	display: flex;
+	justify-content: center;
+	gap: 0.8rem;
+}
+
+.btns button {
+	text-decoration: none;
+	text-transform: lowercase;
+	background-color: black;
+	color: white;
+	border: 2px solid white;
+	border-radius: 0;
+	font-size: 1rem;
+	line-height: 1rem;
+	padding: 0.3rem 0.5rem;
+}
+
+.btns .active {
+	color: yellow;
+}
+
+.background {
+	position: fixed;
+	z-index: -1;
+	inset: 0;
+	background-image: url(./background.png);
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+	background-position: bottom;
+	image-rendering: pixelated;
 }

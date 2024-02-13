@@ -2,9 +2,9 @@ import classNames from "../../utils/classNames";
 import Header from "../Header";
 import styles from "./styles.module.css"
 
-export default function Layout({ children, className, styles: el_styles, centered = false, centeredPage = false, height100 = false, gap = 0, header, footer }: LayoutProps)
+export default function Layout({ children, className, headerColor, styles: el_styles, centered = false, centeredPage = false, height100 = false, gap = 0, header, footer }: LayoutProps)
 {
-	if (header === undefined) header = <Header />
+	if (header === undefined) header = <Header color={headerColor} />
 
 	return (
 		<div className={classNames(styles.root, !!footer && styles.hasFooter)} style={{ ...el_styles, maxHeight: height100 ? "100dvh" : "" }}>
@@ -34,4 +34,6 @@ interface LayoutProps extends React.PropsWithChildren
 	header?: React.ReactNode,
 	footer?: React.ReactNode,
 	styles?: React.CSSProperties,
+
+	headerColor?: string,
 }

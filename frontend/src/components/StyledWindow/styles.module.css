@@ -1,0 +1,77 @@
+.root {
+	border: 3px solid white;
+	border-top: none;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	background: black;
+}
+
+.header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	background-color: white;
+	color: black;
+	height: 20px;
+	padding-left: 0.5rem;
+	font-size: 0.9rem;
+}
+
+.header button {
+	border: none;
+	background-color: transparent;
+	padding: 0;
+	height: 20px;
+}
+
+.header img {
+	height: 20px;
+}
+
+.body {
+	position: relative;
+	min-height: 300px;
+	display: flex;
+	padding-right: 0.7rem;
+	padding-bottom: 0.7rem;
+}
+
+.body > div {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding: 1.2rem 0.7rem;
+	padding-bottom: 0;
+}
+
+.body::before,
+.body::after {
+	content: "";
+	position: absolute;
+	right: calc(0.7rem - 4px);
+	width: 24px;
+	height: 34px;
+	background: url(./arrow.png), linear-gradient(0deg, black 24px, transparent 20px);
+	background-size: 24px;
+	background-repeat: no-repeat;
+	pointer-events: none;
+}
+.body::before {
+	top: 0;
+	transform: rotate(180deg);
+}
+.body::after {
+	bottom: 0;
+}
+
+.body > div::-webkit-scrollbar {
+	width: 16px;
+}
+.body > div::-webkit-scrollbar-thumb {
+	background: #444;
+	background: linear-gradient(90deg, black 2px, #444 2px, #444 14px, black 14px);
+}
+
+.footer {
+	padding-bottom: 0.7rem;
+}

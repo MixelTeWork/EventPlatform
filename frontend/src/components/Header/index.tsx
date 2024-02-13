@@ -7,7 +7,7 @@ import { useState } from "react";
 import classNames from "../../utils/classNames";
 import hasPermission from "../../api/operations";
 
-export default function Header()
+export default function Header({ color = "#042e40" }: HeaderProps)
 {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
@@ -18,20 +18,20 @@ export default function Header()
 	const user = useUser();
 
 	return (
-		<div className={styles.root}>
-			<Link to={"/"} className={classNames(styles.home, "material_symbols")}>home</Link>
+		<div className={styles.root} style={{ background: color }}>
+			<Link to={"/"} className={styles.home}></Link>
 			<span className={styles.block}>
 				<div className={styles.balance}>{user.data?.balance || 0} G</div>
-				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/login")}>
+				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/")}>
 					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
 				</button>
 				{user.data?.photo && <img className={styles.img} src={user.data.photo} alt="avatar" />}
-				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)}>
-					<button onClick={() => navigate("/profile")}>
+				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)} style={{ background: color }}>
+					{/* <button onClick={() => navigate("/profile")}>
 						Профиль
-					</button>
+					</button> */}
 					{hasPermission(user, "page_debug") && <Link to="/debug">{`</>`}</Link>}
-					{hasPermission(user, "page_worker") && <Link to="/worker" className="material_symbols">deployed_code</Link>}
+					{hasPermission(user, "page_worker") && <Link to="/worker">[-^-]</Link>}
 					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle"}>
 						Выйти
 					</button>
@@ -40,4 +40,9 @@ export default function Header()
 			{mutation.status == "loading" && <Spinner />}
 		</div>
 	);
+}
+
+interface HeaderProps
+{
+	color?: string,
 }

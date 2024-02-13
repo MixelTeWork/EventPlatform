@@ -16,7 +16,7 @@ import LogPage from "./pages/LogPage";
 import LoginPage from "./pages/LoginPage";
 import ManageQuestPage from "./pages/ManageQuestPage";
 import ManageStorePage from "./pages/ManageStorePage";
-import MapPage from "./pages/IndexPage";
+import MapPage from "./pages/MapPage";
 import ProfilePage from "./pages/ProfilePage";
 import PromotePage from "./pages/PromotePage";
 import QuestPage from "./pages/QuestPage";
@@ -49,15 +49,16 @@ export default function App()
 		{displayError(user)}
 		{user.isSuccess &&
 			<Routes>
-				<Route path="/" element={<IndexPage />} />
-				<Route path="/login" element={!user.data?.auth ? <LoginPage /> : <Navigate to="/" />} />
+				{/* <Route path="/" element={<IndexPage />} /> */}
+				<Route path="/" element={!user.data?.auth ? <IndexPage /> : <Navigate to="/map" />} />
+				{/* <Route path="/login" element={!user.data?.auth ? <LoginPage /> : <Navigate to="/" />} /> */}
 				<Route path="/auth" element={!user.data?.auth ? <AuthPage /> : <Navigate to="/" />} />
 				<Route path="/timetable" element={<TimetablePage />} />
 				<Route path="/quest" element={<QuestPage />} />
 				<Route path="/store" element={<StorePage />} />
 				<Route path="/map" element={<MapPage />} />
 				{/* <Route path="/race" element={<RacePage />} /> */}
-				{ProtectedRoute(null, "/profile", <ProfilePage />)}
+				{/* {ProtectedRoute(null, "/profile", <ProfilePage />)} */}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}
 				{ProtectedRoute("manage_quest", "/manage_quest", <ManageQuestPage />)}
