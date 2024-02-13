@@ -30,11 +30,15 @@
 }
 
 .user {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 	background-color: transparent;
 	border: none;
 	font-size: 1.4rem;
 	color: white;
 	cursor: pointer;
+	padding: 0;
 }
 
 .img {

@@ -24,8 +24,8 @@ export default function Header({ color = "#042e40" }: HeaderProps)
 				<div className={styles.balance}>{user.data?.balance || 0} G</div>
 				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/")}>
 					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
+					{user.data?.photo && <img className={styles.img} src={user.data.photo} alt="avatar" />}
 				</button>
-				{user.data?.photo && <img className={styles.img} src={user.data.photo} alt="avatar" />}
 				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)} style={{ background: color }}>
 					{/* <button onClick={() => navigate("/profile")}>
 						Профиль
