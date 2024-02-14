@@ -17,13 +17,13 @@
 	height: auto;
 }
 
-.map div {
+.btns {
 	display: flex;
 	justify-content: center;
 	gap: 0.8rem;
 }
 
-.map button {
+.btns button {
 	text-decoration: none;
 	text-transform: lowercase;
 	background-color: black;
@@ -35,7 +35,7 @@
 	padding: 0.3rem 0.5rem;
 }
 
-.map .active {
+.btns .active {
 	color: yellow;
 }
 

@@ -15,10 +15,10 @@ export default function MapPage()
 			<h1 className={styles.title}>Underparty</h1>
 			<div className={styles.map}>
 				<img src={firstMap.v ? map1 : map2} alt="Карта" />
-				<div>
-					<button onClick={firstMap.setT} className={firstMap.v ? styles.active : ""}>Этаж 1</button>
-					<button onClick={firstMap.setF} className={!firstMap.v ? styles.active : ""}>Этаж 2</button>
-				</div>
+			</div>
+			<div className={styles.btns}>
+				<button onClick={firstMap.setT} className={firstMap.v ? styles.active : ""}>Этаж 1</button>
+				<button onClick={firstMap.setF} className={!firstMap.v ? styles.active : ""}>Этаж 2</button>
 			</div>
 		</Layout>
 	);

@@ -52,11 +52,16 @@ export default function AddStoreItem()
 					<div className={styles.img}>
 						{imgData.v && <img src={imgData.v.data} alt="Изображение" />}
 					</div>
-					<input type="file" style={{ display: "none" }} onChange={async e =>
-					{
-						imgData.set({ data: "", name: "" });
-						imgData.set(await imagefileToData(e.target?.files?.[0]!, ""));
-					}} />
+					<input
+						type="file"
+						accept="image/png, image/jpeg, image/gif"
+						style={{ display: "none" }}
+						onChange={async e =>
+						{
+							imgData.set({ data: "", name: "" });
+							imgData.set(await imagefileToData(e.target?.files?.[0]!, ""));
+						}}
+					/>
 				</FormField>
 				<FormField label="Название">
 					<input ref={nameRef} required type="text" />
