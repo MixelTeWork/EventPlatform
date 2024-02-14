@@ -8,9 +8,11 @@ import Popup from "../../components/Popup";
 import QrCode from "../../components/QrCode";
 import useStateObj from "../../utils/useStateObj";
 import useStateBool from "../../utils/useStateBool";
+import { useTitle } from "../../utils/useTtile";
 
 export default function WorkerQuestPage()
 {
+	useTitle("Qr Квесты");
 	const quests = useQuests();
 	const popupOpen = useStateBool(false);
 	const selectedQuest = useStateObj<Quest | null>(null, popupOpen.setT);

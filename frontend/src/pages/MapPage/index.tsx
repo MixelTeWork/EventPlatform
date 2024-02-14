@@ -5,9 +5,11 @@ import map3 from "./map3.png";
 import Layout from "../../components/Layout";
 import Footer from "../../components/Footer";
 import useStateObj from "../../utils/useStateObj";
+import { useTitle } from "../../utils/useTtile";
 
 export default function MapPage()
 {
+	useTitle("Карта");
 	const map = useStateObj(0);
 
 	return (

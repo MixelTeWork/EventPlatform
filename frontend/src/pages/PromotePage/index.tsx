@@ -1,9 +1,11 @@
 import Layout from "../../components/Layout";
 import QrCode from "../../components/QrCode";
+import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
 
 export default function PromotePage({ role }: PromoteProps)
 {
+	useTitle("Повышение");
 	const roleText = {
 		"worker": "волонтёра",
 		"manager": "управляющего",

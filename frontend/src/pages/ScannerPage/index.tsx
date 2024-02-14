@@ -3,10 +3,12 @@ import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Scanner from "../../components/Scanner";
 import StyledWindow from "../../components/StyledWindow";
+import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
 
 export default function ScannerPage()
 {
+	useTitle("Сканер");
 	return (
 		<Layout centeredPage headerColor="#51185b" gap="1em" className={styles.root} footer={<Footer />}>
 			<div className={styles.background}></div>
@@ -24,7 +26,7 @@ export default function ScannerPage()
 					}[r.res] ?? r.res)}
 					onRes={res =>
 					{
-						
+
 					}}
 				/>
 			</StyledWindow>

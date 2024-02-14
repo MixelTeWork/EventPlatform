@@ -13,9 +13,11 @@ import QrCode from "../../components/QrCode";
 import StyledWindow from "../../components/StyledWindow";
 import useStateObj from "../../utils/useStateObj";
 import { Link } from "react-router-dom";
+import { useTitle } from "../../utils/useTtile";
 
 export default function QuestPage()
 {
+	useTitle("Квесты");
 	const user = useUser();
 	const updateUser = useUpdateUser();
 	const openQuest = useStateObj<Quest | null>(null);

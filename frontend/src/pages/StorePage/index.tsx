@@ -8,9 +8,11 @@ import styles from "./styles.module.css"
 import StyledWindow from "../../components/StyledWindow";
 import { Link } from "react-router-dom";
 import classNames from "../../utils/classNames";
+import { useTitle } from "../../utils/useTtile";
 
 export default function StorePage()
 {
+	useTitle("Магазин");
 	const items = useStoreItems()
 
 	return (

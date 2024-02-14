@@ -3,9 +3,11 @@ import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import useStateBool from "../../utils/useStateBool";
 import StyledWindow from "../../components/StyledWindow";
+import { useTitle } from "../../utils/useTtile";
 
 export default function TimetablePage()
 {
+	useTitle("Расписание");
 	const showTimetable = useStateBool(true);
 	const showTimetableFirst = useStateBool(true);
 	const showTurnamentFirst = useStateBool(true);

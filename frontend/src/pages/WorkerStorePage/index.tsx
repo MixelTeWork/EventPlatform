@@ -7,9 +7,11 @@ import Popup from "../../components/Popup";
 import useStateBool from "../../utils/useStateBool";
 import useStateObj from "../../utils/useStateObj";
 import QrCode from "../../components/QrCode";
+import { useTitle } from "../../utils/useTtile";
 
 export default function WorkerStorePage()
 {
+	useTitle("Qr Товары");
 	const items = useStoreItems()
 	const popupOpen = useStateBool(false);
 	const selectedItem = useStateObj<StoreItem | null>(null, popupOpen.setT);
@@ -20,17 +22,17 @@ export default function WorkerStorePage()
 			{items.isLoading && <Spinner />}
 			{displayError(items)}
 			<div className={styles.items}>
-					{items?.data?.map(item =>
-						<button className={styles.item} key={item.id} onClick={() => selectedItem.set(item)}>
-							<div className={styles.item__img}>
-								{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
-							</div>
-							<div className={styles.item__desc}>
-								<span>{item.name}</span>
-								<span>{item.price} G</span>
-							</div>
-						</button>
-					)}
+				{items?.data?.map(item =>
+					<button className={styles.item} key={item.id} onClick={() => selectedItem.set(item)}>
+						<div className={styles.item__img}>
+							{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
+						</div>
+						<div className={styles.item__desc}>
+							<span>{item.name}</span>
+							<span>{item.price} G</span>
+						</div>
+					</button>
+				)}
 			</div>
 			<Popup title="Код товара" open={popupOpen.v} close={popupOpen.setF}>
 				<div className={styles.qr}>

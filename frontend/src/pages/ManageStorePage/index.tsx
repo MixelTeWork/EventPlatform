@@ -2,12 +2,14 @@ import { useStoreItems } from "../../api/store";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
+import { useTitle } from "../../utils/useTtile";
 import AddStoreItem from "./AddStoreItem";
 import StoreItem from "./StoreItem";
 import styles from "./styles.module.css"
 
 export default function ManageStorePage()
 {
+	useTitle("Товары");
 	const items = useStoreItems();
 
 	return (
@@ -15,7 +17,7 @@ export default function ManageStorePage()
 			{items.isLoading && <Spinner />}
 			{displayError(items)}
 
-			<h1>Управление магазином</h1>
+			<h1>Управление товарами</h1>
 
 			<AddStoreItem />
 

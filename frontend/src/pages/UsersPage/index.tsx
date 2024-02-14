@@ -6,7 +6,7 @@ import styles from "./styles.module.css"
 
 export default function UsersPage()
 {
-	useTitle("Пользователи");
+	useTitle("Users");
 	const users = useUsers()
 
 	return (
