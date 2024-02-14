@@ -77,3 +77,20 @@
 .body {
 	overflow: auto;
 }
+
+
+.popup {
+	background: black;
+	border: 2px solid white;
+	box-shadow: 0 5px 20px -5px white;
+	border-radius: 0;
+}
+
+.close {
+	background-color: white;
+	border-radius: 0;
+}
+.close::before,
+.close::after {
+	background-color: black;
+}

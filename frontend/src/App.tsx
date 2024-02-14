@@ -27,6 +27,7 @@ import StorePage from "./pages/StorePage";
 import TimetablePage from "./pages/TimetablePage";
 import UsersPage from "./pages/UsersPage";
 import WorkerPage from "./pages/WorkerPage";
+import ScannerPage from "./pages/ScannerPage";
 
 export default function App()
 {
@@ -35,7 +36,7 @@ export default function App()
 	function ProtectedRoute(permission: Operation | null, path: string, element: JSX.Element)
 	{
 		return <Route path={path} element={
-			!user.data?.auth ? <Navigate to="/login" /> : (
+			!user.data?.auth ? <Navigate to="/" /> : (
 				permission == null || hasPermission(user, permission) ? element : <NoPermissionPage />
 			)
 		} />
@@ -58,6 +59,7 @@ export default function App()
 				<Route path="/store" element={<StorePage />} />
 				<Route path="/map" element={<MapPage />} />
 				{/* <Route path="/race" element={<RacePage />} /> */}
+				{ProtectedRoute(null, "/scanner", <ScannerPage />)}
 				{/* {ProtectedRoute(null, "/profile", <ProfilePage />)} */}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}

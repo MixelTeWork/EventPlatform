@@ -7,6 +7,9 @@ import useStateBool from "../../../utils/useStateBool";
 import useStateObj from "../../../utils/useStateObj";
 import styles from "./styles.module.css"
 import { useMutationEditQuest, type Quest, useMutationDeleteQuest } from "../../../api/quest";
+import IconDelete from "../../../icons/delete";
+import IconSave from "../../../icons/save";
+import IconCancel from "../../../icons/cancel";
 
 export default function Quest({ quest }: QuestProps)
 {
@@ -42,7 +45,7 @@ export default function Quest({ quest }: QuestProps)
 				<input type="number" value={reward.v} onChange={inp => reward.set(inp.target.valueAsNumber)} />
 			</div>
 			<div className={classNames("material_symbols", styles.buttons)}>
-				{!changed.v && <button onClick={deleting.setT}>delete</button>}
+				{!changed.v && <button onClick={deleting.setT}><IconDelete/></button>}
 				{changed.v && <button
 
 					onClick={() =>
@@ -53,9 +56,9 @@ export default function Quest({ quest }: QuestProps)
 						});
 					}}
 				>
-					save
+					<IconSave/>
 				</button>}
-				{changed.v && <button onClick={() => reset()}>cancel</button>}
+				{changed.v && <button onClick={() => reset()}><IconCancel/></button>}
 			</div>
 		</div>
 	);

@@ -1,0 +1,22 @@
+.root {}
+
+.background {
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	background-color: #000000;
+	opacity: 1;
+	background: linear-gradient(135deg, #51185b55 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(225deg, #51185b 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(315deg, #51185b55 25%, transparent 25%) 0px 0/ 80px 80px, linear-gradient(45deg, #51185b 25%, #000000 25%) 0px 0/ 80px 80px;
+	animation: anim-background 10s linear infinite alternate;
+}
+
+@keyframes anim-background {
+	to {
+		background-position: 100% 0;
+	}
+}
+
+.body {
+	height: 100%;
+	margin-bottom: 1rem;
+}

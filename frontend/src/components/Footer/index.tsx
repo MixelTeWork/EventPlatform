@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css"
 
-export default function Footer({ curPage }: FooterProps)
+export default function Footer({ curPage = "" }: FooterProps)
 {
 	return (
 		<div className={styles.root}>
@@ -18,5 +18,5 @@ export default function Footer({ curPage }: FooterProps)
 
 interface FooterProps
 {
-	curPage?: "map" | "timetable" | "quest" | "store" | "race"
+	curPage?: "map" | "timetable" | "quest" | "store" | "race" | ""
 }

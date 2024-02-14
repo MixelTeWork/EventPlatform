@@ -89,4 +89,5 @@
 
 .item__desc > :last-child {
 	color: yellow;
+	flex-shrink: 0;
 }

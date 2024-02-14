@@ -11,6 +11,7 @@ import QrCode from "../../components/QrCode";
 import Popup from "../../components/Popup";
 import { StoreItem } from "../../api/store";
 import StyledWindow from "../../components/StyledWindow";
+import { Link } from "react-router-dom";
 
 export default function StorePage()
 {
@@ -42,9 +43,9 @@ export default function StorePage()
 						)}
 					</div>
 				</StyledWindow>
-				<button className={styles.btn}>
+				<Link to="/scanner" className={styles.btn}>
 					<img src={btn} alt="Купить" />
-				</button>
+				</Link>
 			</div>
 			<Popup title="Покупка товара" open={popupIsOpen} close={() =>
 			{

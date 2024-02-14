@@ -9,6 +9,9 @@ import useStateObj from "../../../utils/useStateObj";
 import styles from "./styles.module.css"
 import type { ImgData } from "../../../api/dataTypes";
 import imagefileToData from "../../../utils/imagefileToData";
+import IconDelete from "../../../icons/delete";
+import IconCancel from "../../../icons/cancel";
+import IconSave from "../../../icons/save";
 
 export default function StoreItem({ item }: StoreItemProps)
 {
@@ -61,8 +64,8 @@ export default function StoreItem({ item }: StoreItemProps)
 				<div>Количество</div>
 				<input type="number" value={count.v} onChange={inp => count.set(inp.target.valueAsNumber)} />
 			</div>
-			<div className={classNames("material_symbols", styles.buttons)}>
-				{!changed.v && <button onClick={deleting.setT}>delete</button>}
+			<div className={styles.buttons}>
+				{!changed.v && <button onClick={deleting.setT}><IconDelete /></button>}
 				{!changed.v && <button className={styles.btnMinus} onClick={decreasing.setT}>-1</button>}
 				{changed.v && <button
 
@@ -76,9 +79,9 @@ export default function StoreItem({ item }: StoreItemProps)
 						});
 					}}
 				>
-					save
+					<IconSave />
 				</button>}
-				{changed.v && <button onClick={() => reset()}>cancel</button>}
+				{changed.v && <button onClick={() => reset()}><IconCancel /></button>}
 			</div>
 		</div>
 	);

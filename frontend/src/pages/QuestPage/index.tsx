@@ -12,6 +12,7 @@ import Popup from "../../components/Popup";
 import QrCode from "../../components/QrCode";
 import StyledWindow from "../../components/StyledWindow";
 import useStateObj from "../../utils/useStateObj";
+import { Link } from "react-router-dom";
 
 export default function QuestPage()
 {
@@ -35,7 +36,7 @@ export default function QuestPage()
 			>
 				{openQuest.v ?
 					<div className={styles.questDescription}>
-						<div className={styles.quest} key={openQuest.v.id} onClick={() => openQuest.set(null)}>
+						<div className={styles.quest} onClick={() => openQuest.set(null)}>
 							<span>{openQuest.v.name}</span>
 							{user.data?.complited_quests.includes(openQuest.v.id) ?
 								<span className="material_symbols">done</span>
@@ -44,9 +45,9 @@ export default function QuestPage()
 							}
 						</div>
 						<div>{openQuest.v.description || "Нет описания"}</div>
-						<button className={styles.btn}>
+						<Link to="/scanner" className={styles.btn}>
 							<img src={btn} alt="Сдать" />
-						</button>
+						</Link>
 					</div>
 					:
 					<div className={styles.quests}>

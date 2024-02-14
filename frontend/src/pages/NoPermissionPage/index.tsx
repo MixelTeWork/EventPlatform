@@ -5,7 +5,7 @@ export default function NoPermissionPage()
 {
 	return (
 		<Layout centered header={<HeaderBack />}>
-			У вас недостатточно прав на просмотр этой страницы
+			У вас недостаточно прав на просмотр этой страницы
 		</Layout>
 	);
 }

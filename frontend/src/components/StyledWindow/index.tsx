@@ -4,7 +4,7 @@ import classNames from "../../utils/classNames";
 import { useEffect, useRef } from "react";
 import useStateBool from "../../utils/useStateBool";
 
-export default function StyledWindow({ children, title = "Underparty", footer, className, onClose }: StyledWindowProps)
+export default function StyledWindow({ children, title = "Underparty", footer, className, disableScroll = false, onClose }: StyledWindowProps)
 {
 	const contentRef = useRef<HTMLDivElement>(null);
 	const showArrows = useStateBool(true);
@@ -23,7 +23,7 @@ export default function StyledWindow({ children, title = "Underparty", footer, c
 					<img src={buttons} alt="close" />
 				</button>
 			</div>
-			<div className={classNames(styles.body, showArrows.v && styles.body_arrows)}>
+			<div className={classNames(styles.body, !disableScroll && styles.body_scroll, (showArrows.v && !disableScroll) && styles.body_arrows)}>
 				<div ref={contentRef}>
 					{children}
 				</div>
@@ -40,5 +40,6 @@ interface StyledWindowProps extends React.PropsWithChildren
 	title?: string,
 	footer?: React.ReactNode,
 	className?: string,
+	disableScroll?: boolean,
 	onClose?: () => void,
 }
