@@ -20,14 +20,13 @@ import MapPage from "./pages/MapPage";
 import ProfilePage from "./pages/ProfilePage";
 import PromotePage from "./pages/PromotePage";
 import QuestPage from "./pages/QuestPage";
-import ScannerQuestPage from "./pages/ScannerQuestPage";
-import ScannerSelectQuestPage from "./pages/ScannerSelectQuestPage";
-import ScannerStorePage from "./pages/ScannerStorePage";
+import ScannerPage from "./pages/ScannerPage";
 import StorePage from "./pages/StorePage";
 import TimetablePage from "./pages/TimetablePage";
 import UsersPage from "./pages/UsersPage";
 import WorkerPage from "./pages/WorkerPage";
-import ScannerPage from "./pages/ScannerPage";
+import WorkerQuestPage from "./pages/WorkerQuestPage";
+import WorkerStorePage from "./pages/WorkerStorePage";
 
 export default function App()
 {
@@ -64,9 +63,8 @@ export default function App()
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}
 				{ProtectedRoute("manage_quest", "/manage_quest", <ManageQuestPage />)}
-				{ProtectedRoute("page_scanner_quest", "/scanner_quest", <ScannerSelectQuestPage />)}
-				{ProtectedRoute("page_scanner_quest", "/scanner_quest/:questId", <ScannerQuestPage />)}
-				{ProtectedRoute("page_scanner_store", "/scanner_store", <ScannerStorePage />)}
+				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
+				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}
 				{ProtectedRoute("promote_manager", "/promote_manager", <PromotePage role="manager" />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}

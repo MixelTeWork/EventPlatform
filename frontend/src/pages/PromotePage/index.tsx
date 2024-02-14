@@ -1,6 +1,5 @@
-import { useMutationPromoteManager, useMutationPromoteWorker } from "../../api/promote";
 import Layout from "../../components/Layout";
-import Scanner from "../../components/Scanner";
+import QrCode from "../../components/QrCode";
 import styles from "./styles.module.css"
 
 export default function PromotePage({ role }: PromoteProps)
@@ -10,37 +9,18 @@ export default function PromotePage({ role }: PromoteProps)
 		"manager": "управляющего",
 	}[role];
 	const roleText2 = {
-		"worker": "волонтёр",
-		"manager": "управляющий",
+		"worker": "волонтёром",
+		"manager": "управляющим",
 	}[role];
 	if (!roleText) return <Layout>Ошибка!</Layout>;
 
 	return (
-		<Layout className={styles.root}>
-			<div className={styles.title}>
-				<h3>
-					Просканируйте qr-код человек, чтобы повысить его до {roleText}.
-				</h3>
+		<Layout centered gap="1rem" height100 className={styles.root}>
+			<h1>Повышение до {roleText}</h1>
+			<div className={styles.qr}>
+				<QrCode code={`promote_${role}`} colorBg="#ffffff00" scale={13} />
 			</div>
-
-			<Scanner
-				useMutation={{
-					"worker": useMutationPromoteWorker,
-					"manager": useMutationPromoteManager,
-				}[role]}
-				onScan={scanned =>
-				{
-					if (!scanned.startsWith("user_"))
-						return null;
-					const userId = scanned.slice("user_".length);
-					return { userId };
-				}}
-				formatMsg={r => ({
-					"ok": `${r.user} повышен до ${roleText}`,
-					"already_has": `${r.user} уже ${roleText2}`,
-					"no_user": "Человек не найден",
-				}[r.res] || r.res)}
-			/>
+			<h3>После сканирования посетитель становиться {roleText2}</h3>
 		</Layout>
 	);
 }

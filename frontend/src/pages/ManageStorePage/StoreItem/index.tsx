@@ -49,12 +49,17 @@ export default function StoreItem({ item }: StoreItemProps)
 			<div className={styles.id}>{item.id}</div>
 			<label className={styles.img}>
 				{(item.img || imgData.v) && <img src={imgData.v?.data || item.img} alt="Картинка" />}
-				<input type="file" style={{ display: "none" }} onChange={async e =>
-				{
-					imgData.set({ data: "", name: "" });
-					imgData.set(await imagefileToData(e.target?.files?.[0]!, ""));
-					e.target.value = "";
-				}} />
+				<input
+					type="file"
+					style={{ display: "none" }}
+					accept="image/png, image/jpeg, image/gif"
+					onChange={async e =>
+					{
+						imgData.set({ data: "", name: "" });
+						imgData.set(await imagefileToData(e.target?.files?.[0]!, ""));
+						e.target.value = "";
+					}}
+				/>
 			</label>
 			<div className={styles.inputs}>
 				<div>Название</div>

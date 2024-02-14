@@ -23,7 +23,7 @@ def quests(db_sess: Session):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_scanner_quest)
+@permission_required(Operations.page_worker_quest)
 def quest_complete(db_sess: Session, user: User):
     (questId, userId), errorRes = get_json_values_from_req("questId", "userId")
     if errorRes:

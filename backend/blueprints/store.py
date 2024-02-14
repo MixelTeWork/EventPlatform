@@ -23,7 +23,7 @@ def store_items(db_sess: Session):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_scanner_store)
+@permission_required(Operations.page_worker_store)
 def store_sell_check(db_sess: Session, user: User):
     (itemId, userId), errorRes = get_json_values_from_req("itemId", "userId")
     if errorRes:
@@ -47,7 +47,7 @@ def store_sell_check(db_sess: Session, user: User):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_scanner_store)
+@permission_required(Operations.page_worker_store)
 def store_sell(db_sess: Session, user: User):
     (itemId, userId), errorRes = get_json_values_from_req("itemId", "userId")
     if errorRes:

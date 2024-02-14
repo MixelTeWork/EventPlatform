@@ -1,0 +1,35 @@
+.root {
+	padding: 1rem;
+}
+
+.quests {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 500px;
+	gap: 0.5rem;
+	overflow: auto;
+}
+
+.quests button {
+	background-color: white;
+	color: black;
+	font-size: 1.3rem;
+	padding: 1rem;
+}
+
+.qr {
+	background-color: white;
+}
+
+.quest {
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.6rem;
+	margin-block: 0.5rem;
+}
+
+.quest > :last-child {
+	color: yellow;
+	flex-shrink: 0;
+}
