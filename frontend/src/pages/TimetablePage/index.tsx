@@ -18,6 +18,7 @@ export default function TimetablePage()
 				{showTimetable.v ?
 					<StyledWindow
 						className={styles.list}
+						title={"Расписание | " + (showTimetableFirst.v ? "Главная" : "Вторая") + " сцена"}
 						footer={
 							<div className={styles.btns}>
 								<button onClick={showTimetableFirst.setT} className={showTimetableFirst.v ? styles.active : ""}>Главная</button>
@@ -33,6 +34,7 @@ export default function TimetablePage()
 					:
 					<StyledWindow
 						className={styles.list}
+						title={"Турниры | " + (showTurnamentFirst.v ? "Under" : "Ретро")}
 						footer={
 							<div className={styles.btns}>
 								<button onClick={showTurnamentFirst.setT} className={showTurnamentFirst.v ? styles.active : ""}>Under</button>

@@ -5,10 +5,12 @@ import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
+import btn from "./btn.png"
 import styles from "./styles.module.css"
 import QrCode from "../../components/QrCode";
 import Popup from "../../components/Popup";
 import { StoreItem } from "../../api/store";
+import StyledWindow from "../../components/StyledWindow";
 
 export default function StorePage()
 {
@@ -19,26 +21,30 @@ export default function StorePage()
 	const items = useStoreItems()
 
 	return (
-		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
+		<Layout centeredPage headerColor="#0a424c" gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
 			{items.isLoading && <Spinner />}
+			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
-			<div className={styles.items}>
-				{displayError(items)}
-				{items?.data?.map(item =>
-					<button className={styles.item} key={item.id} onClick={() =>
-					{
-						setSelectedItem(item);
-						setPopupIsOpen(true);
-					}}>
-						<div className={styles.item__img}>
-							{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
-						</div>
-						<div className={styles.item__desc}>
-							<span>{item.name}</span>
-							<span>{item.price} G</span>
-						</div>
-					</button>
-				)}
+			<div className={styles.body}>
+				<StyledWindow title="Магазин" className={styles.list}>
+					<div className={styles.items}>
+						{displayError(items)}
+						{items?.data?.map(item =>
+							<div className={styles.item} key={item.id}>
+								<div className={styles.item__img}>
+									{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
+								</div>
+								<div className={styles.item__desc}>
+									<span>{item.name}</span>
+									<span>{item.price} G</span>
+								</div>
+							</div>
+						)}
+					</div>
+				</StyledWindow>
+				<button className={styles.btn}>
+					<img src={btn} alt="Купить" />
+				</button>
 			</div>
 			<Popup title="Покупка товара" open={popupIsOpen} close={() =>
 			{

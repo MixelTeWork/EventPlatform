@@ -3,6 +3,7 @@
 	justify-content: center;
 	padding-block: 0.4rem;
 	margin-bottom: 3rem;
+	z-index: 2;
 }
 
 .root > * {
@@ -30,6 +31,17 @@
 
 	.root > * > * {
 		padding: 0.3rem 0.4rem;
+	}
+}
+
+@media screen and (min-width: 600px) {
+	.root > * {
+		gap: 1rem;
+	}
+
+	.root > * > * {
+		font-size: 1.2rem;
+		padding: 0.4rem 0.7rem;
 	}
 }
 
