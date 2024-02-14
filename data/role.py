@@ -146,8 +146,8 @@ ROLES = {
         "name": "Персонал",
         "operations": [
             Operations.page_worker,
-            Operations.page_scanner_quest,
-            Operations.page_scanner_store,
+            Operations.page_worker_quest,
+            Operations.page_worker_store,
         ]
     },
     Roles.visitor: {
