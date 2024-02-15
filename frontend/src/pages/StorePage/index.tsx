@@ -25,7 +25,7 @@ export default function StorePage()
 					<div className={styles.items}>
 						{displayError(items)}
 						{items?.data?.map(item =>
-							<div className={classNames(styles.item, (item.count <= 15 && item.count > 0) && styles.item_few, (item.count == 0) && styles.item_ended)} key={item.id}>
+							<div className={classNames(styles.item, item.count == "few" && styles.item_few, item.count == "no" && styles.item_ended)} key={item.id}>
 								<div className={styles.item__img}>
 									{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
 								</div>

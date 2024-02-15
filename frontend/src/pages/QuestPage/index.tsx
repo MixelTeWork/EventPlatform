@@ -14,6 +14,7 @@ import StyledWindow from "../../components/StyledWindow";
 import useStateObj from "../../utils/useStateObj";
 import { Link } from "react-router-dom";
 import { useTitle } from "../../utils/useTtile";
+import classNames from "../../utils/classNames";
 
 export default function QuestPage()
 {
@@ -38,14 +39,14 @@ export default function QuestPage()
 			>
 				{openQuest.v ?
 					<div className={styles.questDescription}>
-						<div className={styles.quest} onClick={() => openQuest.set(null)}>
+						<button
+							className={classNames(styles.quest, user.data?.complited_quests.includes(openQuest.v.id) && styles.quest_completed)}
+							key={openQuest.v.id}
+							onClick={() => openQuest.set(null)}
+						>
 							<span>{openQuest.v.name}</span>
-							{user.data?.complited_quests.includes(openQuest.v.id) ?
-								<span className="material_symbols">done</span>
-								:
-								<span>{openQuest.v.reward}G</span>
-							}
-						</div>
+							<span>{renderReward(openQuest.v.reward)}</span>
+						</button>
 						<div className={styles.questDescription__body}>{openQuest.v.description || "Нет описания"}</div>
 						<Link to="/scanner" className={styles.btn}>
 							<img src={btn} alt="Сдать" />
@@ -54,14 +55,14 @@ export default function QuestPage()
 					:
 					<div className={styles.quests}>
 						{displayError(quests)}
-						{quests.data?.map(quest =>
-							<button className={styles.quest} key={quest.id} onClick={() => openQuest.set(quest)}>
+						{quests.data && (fakeQuests.concat(quests.data)).map(quest =>
+							<button
+								className={classNames(styles.quest, user.data?.complited_quests.includes(quest.id) && styles.quest_completed)}
+								key={quest.id}
+								onClick={() => openQuest.set(quest)}
+							>
 								<span>{quest.name}</span>
-								{user.data?.complited_quests.includes(quest.id) ?
-									<span className="material_symbols">done</span>
-									:
-									<span>{quest.reward}G</span>
-								}
+								<span>{renderReward(quest.reward)}</span>
 							</button>
 						)}
 					</div>}
@@ -84,4 +85,19 @@ export default function QuestPage()
 			</Popup>
 		</Layout>
 	);
+}
+
+const fakeQuests: Quest[] = [
+	{
+		id: -1,
+		name: "Барахолка",
+		description: "Сдайте одно [БАРАХЛО], чтобы обменять его на другое [БАРАХЛО] или виртуальную валюту GGG!",
+		reward: Infinity,
+	}
+]
+
+function renderReward(reward: number)
+{
+	if (!isFinite(reward)) return "∞";
+	return reward + "G";
 }

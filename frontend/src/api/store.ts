@@ -7,6 +7,16 @@ export interface StoreItem
 	id: number;
 	name: string;
 	price: number;
+	count: "many" | "few" | "no";
+	img?: string;
+}
+
+export interface StoreItemFull
+{
+	id: number;
+	id_big: string;
+	name: string;
+	price: number;
 	count: number;
 	img?: string;
 }
@@ -16,6 +26,13 @@ export function useStoreItems()
 {
 	return useQuery("storeItems", async () =>
 		await fetchJsonGet<StoreItem[]>("/api/store_items")
+	);
+}
+
+export function useStoreItemsFull()
+{
+	return useQuery("storeItemsFull", async () =>
+		await fetchJsonGet<StoreItemFull[]>("/api/store_items_full")
 	);
 }
 
@@ -69,16 +86,19 @@ export interface SellItemRes
 	visitor: string,
 }
 
-export function useMutationAddItem(onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+export function useMutationAddItem(onSuccess?: (data: StoreItemFull) => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (itemData: ItemData) =>
-			await fetchJsonPost<StoreItem>("/api/store_item", itemData),
-		onSuccess: (data: StoreItem) =>
+			await fetchJsonPost<StoreItemFull>("/api/store_item", itemData),
+		onSuccess: (data: StoreItemFull) =>
 		{
+			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
+				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items ? [...items, data] : [data]);
+
 			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items ? [...items, data] : [data]);
+				queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -95,16 +115,19 @@ export interface ItemData
 	img?: ImgData,
 }
 
-export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItemFull) => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (itemData: ItemData) =>
-			await fetchJsonPost<StoreItem>(`/api/store_item/${itemId}`, itemData),
-		onSuccess: (data: StoreItem) =>
+			await fetchJsonPost<StoreItemFull>(`/api/store_item/${itemId}`, itemData),
+		onSuccess: (data: StoreItemFull) =>
 		{
+			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
+				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.map(v => v.id == data.id ? data : v) || []);
+
 			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items?.map(v => v.id == data.id ? data : v) || []);
+				queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -113,16 +136,19 @@ export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItem
 	return mutation;
 }
 
-export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: StoreItem) => void, onError?: (err: any) => void)
+export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: StoreItemFull) => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () =>
-			await fetchJsonPost<StoreItem>(`/api/store_item/${itemId}/decrease`),
-		onSuccess: (data: StoreItem) =>
+			await fetchJsonPost<StoreItemFull>(`/api/store_item/${itemId}/decrease`),
+		onSuccess: (data: StoreItemFull) =>
 		{
+			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
+				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.map(v => v.id == data.id ? data : v) || []);
+
 			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items?.map(v => v.id == data.id ? data : v) || []);
+				queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -139,8 +165,11 @@ export function useMutationDeleteItem(itemId: number, onSuccess?: () => void, on
 			await fetchDelete(`/api/store_item/${itemId}`),
 		onSuccess: () =>
 		{
+			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
+				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.filter(v => v.id != itemId) || []);
+
 			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.setQueryData("storeItems", (items?: StoreItem[]) => items?.filter(v => v.id != itemId) || []);
+				queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.();
 		},

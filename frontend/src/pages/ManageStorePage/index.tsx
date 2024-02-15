@@ -1,4 +1,4 @@
-import { useStoreItems } from "../../api/store";
+import { useStoreItemsFull } from "../../api/store";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
@@ -10,7 +10,7 @@ import styles from "./styles.module.css"
 export default function ManageStorePage()
 {
 	useTitle("Товары");
-	const items = useStoreItems();
+	const items = useStoreItemsFull();
 
 	return (
 		<Layout centeredPage gap="0.5rem">

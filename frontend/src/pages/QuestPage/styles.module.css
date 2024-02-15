@@ -50,6 +50,10 @@
 	padding: 0;
 	padding-left: 1rem;
 }
+.quest_completed {
+	color: yellow;
+}
+
 .quest > * {
 	padding-block: 0.8rem;
 }

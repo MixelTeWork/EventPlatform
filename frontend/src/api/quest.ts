@@ -12,6 +12,7 @@ export interface Quest
 export interface QuestFull
 {
 	id: number,
+	id_big: string,
 	name: string,
 	description: string,
 	reward: number,

@@ -91,12 +91,13 @@ def init_values(dev=False, cmd=False):
 
         for i in range(15):
             description = f"Описание квеста №{i + 1}\nLorem, ipsum dolor sit amet consectetur adipisicing elit."
-            quest = Quest(id=i, name=f"Квест {i + 1}", description=description, reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0)
+            quest = Quest(id=i, name=f"Квест {i + 1}", description=description,
+                          reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0, id_big=randstr(8))
             log(Tables.Quest, i, quest.get_creation_changes())
             db_sess.add(quest)
 
         for i in range(15):
-            item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50)
+            item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50, id_big=randstr(8))
             log(Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
 

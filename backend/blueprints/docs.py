@@ -101,6 +101,10 @@ def docs():
             "__desc__": "Get store items",
             "response": "StoreItem[]",
         },
+        "/api/store_items_full": {
+            "__desc__": "Get full store items",
+            "response": "StoreItemFull[]",
+        },
         "/api/store_item POST": {
             "__desc__": "Add item to store",
             "request": {
@@ -109,7 +113,7 @@ def docs():
                 "count": "number",
                 "img": "?Image",
             },
-            "response": "StoreItem",
+            "response": "StoreItemFull",
         },
         "/api/store_item/<int:itemId> POST": {
             "__desc__": "Edit store item",
@@ -119,11 +123,11 @@ def docs():
                 "count": "?number",
                 "img": "?Image",
             },
-            "response": "StoreItem",
+            "response": "StoreItemFull",
         },
         "/api/store_item/<int:itemId>/decrease POST": {
             "__desc__": "Decrease item count by one",
-            "response": "StoreItem",
+            "response": "StoreItemFull",
         },
         "/api/store_item/<int:itemId> DELETE": {
             "__desc__": "Delete store item",
@@ -150,6 +154,19 @@ def docs():
                 "res": "'ok' | 'no_money'",
                 "item": "string",
                 "visitor": "string",
+            },
+        },
+        "/api/scanner": {
+            "__desc__": "Use scanned code",
+            "request": {
+                "code": "string",
+            },
+            "response": {
+                "res": "'ok' | 'wrong' | 'error'",
+                "action": "'quest' | 'store' | 'send' | 'promote'",
+                "value": "number",
+                "msg": "string",
+                "user": "User",
             },
         },
         "/api/promote_worker": {
@@ -218,6 +235,7 @@ def docs():
         },
         "QuestFull": {
             "id": "number",
+            "id_big": "string",
             "name": "string",
             "description": "string",
             "reward": "number",
@@ -225,6 +243,13 @@ def docs():
         },
         "StoreItem": {
             "id": "number",
+            "name": "string",
+            "price": "'many' | 'few' | 'no'",
+            "img": "string | null",
+        },
+        "StoreItemFull": {
+            "id": "number",
+            "id_big": "string",
             "name": "string",
             "price": "number",
             "img": "string | null",

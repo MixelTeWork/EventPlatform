@@ -1,4 +1,4 @@
-import { type Quest, useQuestsFull } from "../../api/quest";
+import { useQuestsFull, type QuestFull } from "../../api/quest";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
@@ -15,7 +15,7 @@ export default function WorkerQuestPage()
 	useTitle("Qr Квесты");
 	const quests = useQuestsFull();
 	const popupOpen = useStateBool(false);
-	const selectedQuest = useStateObj<Quest | null>(null, popupOpen.setT);
+	const selectedQuest = useStateObj<QuestFull | null>(null, popupOpen.setT);
 
 	return (
 		<Layout centered gap="1rem" height100 className={styles.root}>
@@ -31,7 +31,7 @@ export default function WorkerQuestPage()
 			</div>
 			<Popup title="Код квеста" open={popupOpen.v} close={popupOpen.setF}>
 				<div className={styles.qr}>
-					<QrCode code={`quest_${selectedQuest.v?.id}`} colorBg="#ffffff00" scale={13} />
+					<QrCode code={`quest_${selectedQuest.v?.id_big}`} colorBg="#ffffff00" scale={13} />
 				</div>
 				<div className={styles.questCard}>
 					<div>{selectedQuest.v?.name}</div>

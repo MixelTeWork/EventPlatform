@@ -5,6 +5,7 @@ from sqlalchemy_serializer import SerializerMixin
 
 from data.log import Actions, Log, Tables
 from data.get_datetime_now import get_datetime_now
+from data.randstr import randstr
 from data.user_quest import UserQuest
 from .db_session import SqlAlchemyBase
 
@@ -13,6 +14,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "Quest"
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    id_big = Column(String(8), unique=True, nullable=False)
     deleted = Column(Boolean, DefaultClause("0"), nullable=False)
     name = Column(String(128), nullable=False)
     description = Column(String(256), nullable=False)
@@ -26,6 +28,12 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     def new(db_sess: Session, actor, name: str, description: str, reward: int, hidden: bool):
         quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
         db_sess.add(quest)
+
+        q = quest
+        while q is not None:
+            id_big = randstr(8)
+            q = db_sess.query(Quest).filter(Quest.id_big == id_big).first()
+        quest.id_big = id_big
 
         now = get_datetime_now()
         log = Log(
@@ -50,6 +58,11 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         quest = db_sess.get(Quest, id)
         if quest is None or (not includeDeleted and quest.deleted):
             return None
+        return quest
+
+    @staticmethod
+    def get_by_big_id(db_sess: Session, big_id: int):
+        quest = db_sess.query(Quest).filter(Quest.deleted == False, Quest.id_big == big_id).first()
         return quest
 
     @staticmethod
@@ -135,6 +148,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     def get_dict_full(self):
         return {
             "id": self.id,
+            "id_big": self.id_big,
             "name": self.name,
             "description": self.description,
             "reward": self.reward,

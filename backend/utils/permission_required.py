@@ -14,7 +14,7 @@ def permission_required(*operations: tuple[str, str]):
                 abort(500, "permission_required: no user")
 
             for operation in operations:
-                if not user.check_permission(operation[0]):
+                if not user.check_permission(operation):
                     abort(403)
 
             return fn(*args, **kwargs)
@@ -36,7 +36,7 @@ def permission_required_any(*operations: tuple[str, str]):
 
             passed = False
             for operation in operations:
-                if user.check_permission(operation[0]):
+                if user.check_permission(operation):
                     passed = True
                     break
 

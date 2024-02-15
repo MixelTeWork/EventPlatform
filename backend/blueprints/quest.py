@@ -54,7 +54,7 @@ def quest_complete(db_sess: Session, user: User):
 
     UserQuest.new(db_sess, user, visitor, quest)
     visitor.balance += quest.reward
-    Transaction.new(db_sess, user, visitor, quest.reward, Actions.endQuest, quest.id)
+    Transaction.new(db_sess, user.id, visitor.id, quest.reward, Actions.endQuest, quest.id)
 
     return jsonify({"res": "ok", "visitor": visitor.name}), 200
 

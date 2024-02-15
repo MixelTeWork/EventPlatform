@@ -6,7 +6,7 @@ import displayError from "../../../utils/displayError";
 import useStateBool from "../../../utils/useStateBool";
 import useStateObj from "../../../utils/useStateObj";
 import styles from "./styles.module.css"
-import { useMutationEditQuest, type Quest, useMutationDeleteQuest, type QuestFull } from "../../../api/quest";
+import { useMutationEditQuest, useMutationDeleteQuest, type QuestFull } from "../../../api/quest";
 import IconDelete from "../../../icons/delete";
 import IconSave from "../../../icons/save";
 import IconCancel from "../../../icons/cancel";
@@ -33,6 +33,7 @@ export default function Quest({ quest }: QuestProps)
 		changed.setF();
 	}
 
+	// eslint-disable-next-line
 	useEffect(reset, [quest])
 
 	return (

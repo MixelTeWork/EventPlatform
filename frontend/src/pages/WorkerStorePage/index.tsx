@@ -1,6 +1,6 @@
 import Layout from "../../components/Layout"
 import styles from "./styles.module.css"
-import { useStoreItems, type StoreItem } from "../../api/store";
+import { useStoreItemsFull, type StoreItemFull } from "../../api/store";
 import displayError from "../../utils/displayError";
 import Spinner from "../../components/Spinner";
 import Popup from "../../components/Popup";
@@ -12,9 +12,9 @@ import { useTitle } from "../../utils/useTtile";
 export default function WorkerStorePage()
 {
 	useTitle("Qr Товары");
-	const items = useStoreItems()
+	const items = useStoreItemsFull()
 	const popupOpen = useStateBool(false);
-	const selectedItem = useStateObj<StoreItem | null>(null, popupOpen.setT);
+	const selectedItem = useStateObj<StoreItemFull | null>(null, popupOpen.setT);
 
 	return (
 		<Layout centeredPage gap="1rem" height100>
@@ -36,7 +36,7 @@ export default function WorkerStorePage()
 			</div>
 			<Popup title="Код товара" open={popupOpen.v} close={popupOpen.setF}>
 				<div className={styles.qr}>
-					<QrCode code={`item_${selectedItem.v?.id}`} colorBg="#ffffff00" scale={13} />
+					<QrCode code={`item_${selectedItem.v?.id_big}`} colorBg="#ffffff00" scale={13} />
 				</div>
 				<div className={styles.item_small}>
 					<div className={styles.item__img}>

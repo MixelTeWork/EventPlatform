@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMutationEditItem, type StoreItem, useMutationDeleteItem, useMutationDecreaseItem } from "../../../api/store";
+import { useMutationEditItem, useMutationDeleteItem, useMutationDecreaseItem, type StoreItemFull } from "../../../api/store";
 import PopupConfirm from "../../../components/PopupConfirm";
 import Spinner from "../../../components/Spinner";
 import classNames from "../../../utils/classNames";
@@ -25,7 +25,7 @@ export default function StoreItem({ item }: StoreItemProps)
 
 	const mutationEdit = useMutationEditItem(item.id, reset, () => reset());
 
-	function reset(newitem?: StoreItem)
+	function reset(newitem?: StoreItemFull)
 	{
 		imgData.set(null);
 		name.set(newitem?.name || item.name);
@@ -34,6 +34,7 @@ export default function StoreItem({ item }: StoreItemProps)
 		changed.setF();
 	}
 
+	// eslint-disable-next-line
 	useEffect(reset, [item])
 
 	return (
@@ -94,5 +95,5 @@ export default function StoreItem({ item }: StoreItemProps)
 
 interface StoreItemProps
 {
-	item: StoreItem
+	item: StoreItemFull
 }

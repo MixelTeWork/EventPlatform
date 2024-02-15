@@ -1,6 +1,4 @@
 from __future__ import annotations
-from random import choices
-import string
 from sqlalchemy import DefaultClause, Column, Integer, String, Boolean
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
@@ -9,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from data.log import Actions, Log, Tables
 from data.permission import Permission
 from data.quest import Quest
+from data.randstr import randstr
 from data.role import Role, Roles
 from data.user_quest import UserQuest
 from data.user_role import UserRole
@@ -124,8 +123,8 @@ class User(SqlAlchemyBase, SerializerMixin):
     def check_password(self, password: str):
         return check_password_hash(self.password, password)
 
-    def check_permission(self, operation: str):
-        return operation in self.get_operations()
+    def check_permission(self, operation: tuple[str, str]):
+        return operation[0] in self.get_operations()
 
     def add_role(self, actor: User, roleId: int):
         db_sess = Session.object_session(self)
@@ -242,7 +241,3 @@ class User(SqlAlchemyBase, SerializerMixin):
             "deleted": self.deleted,
             "operations": self.get_operations(),
         }
-
-
-def randstr(N: int):
-    return ''.join(choices(string.ascii_letters + string.digits, k=N))

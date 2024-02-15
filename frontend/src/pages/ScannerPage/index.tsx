@@ -17,6 +17,10 @@ export default function ScannerPage()
 					useMutation={useMutationScanner}
 					onScan={scanned =>
 					{
+						const actions = ["quest_", "item_", "send_", "promote_"];
+						for (const action of actions)
+							if (scanned.startsWith(action))
+								return { code: scanned };
 						return null;
 					}}
 					formatMsg={r => ({
