@@ -59,21 +59,29 @@ def docs():
             "__desc__": "Get quests",
             "response": "Quest[]",
         },
+        "/api/quests_full": {
+            "__desc__": "Get full quests",
+            "response": "QuestFull[]",
+        },
         "/api/quest POST": {
             "__desc__": "Add quest to store",
             "request": {
                 "name": "string",
+                "description": "string",
                 "reward": "number",
+                "hidden": "bool",
             },
-            "response": "Quest",
+            "response": "QuestFull",
         },
         "/api/quest/<int:questId> POST": {
             "__desc__": "Edit quest",
             "request": {
                 "name": "?string",
+                "description": "?string",
                 "reward": "?number",
+                "hidden": "?bool",
             },
-            "response": "Quest",
+            "response": "QuestFull",
         },
         "/api/quest/<int:questId> DELETE": {
             "__desc__": "Delete quest",
@@ -205,7 +213,15 @@ def docs():
         "Quest": {
             "id": "number",
             "name": "string",
+            "description": "string",
             "reward": "number",
+        },
+        "QuestFull": {
+            "id": "number",
+            "name": "string",
+            "description": "string",
+            "reward": "number",
+            "hidden": "bool",
         },
         "StoreItem": {
             "id": "number",

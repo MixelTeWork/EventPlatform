@@ -3,8 +3,9 @@ import { useState } from "react";
 export default function useStateBool(initialState: boolean | (() => boolean), onSet?: () => void)
 {
 	let [v, set] = useState(initialState)
+	let setFn = set;
 	if (onSet)
-		set = (v: boolean | ((prevState: boolean) => boolean)) =>
+		setFn = (v: boolean | ((prevState: boolean) => boolean)) =>
 		{
 			set(v);
 			onSet();
@@ -12,7 +13,7 @@ export default function useStateBool(initialState: boolean | (() => boolean), on
 
 	return {
 		v,
-		set,
+		set: setFn,
 		setT: () => set(true),
 		setF: () => set(false),
 	};

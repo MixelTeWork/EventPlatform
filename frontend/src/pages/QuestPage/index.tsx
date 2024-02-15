@@ -46,7 +46,7 @@ export default function QuestPage()
 								<span>{openQuest.v.reward}G</span>
 							}
 						</div>
-						<div>{openQuest.v.description || "Нет описания"}</div>
+						<div className={styles.questDescription__body}>{openQuest.v.description || "Нет описания"}</div>
 						<Link to="/scanner" className={styles.btn}>
 							<img src={btn} alt="Сдать" />
 						</Link>

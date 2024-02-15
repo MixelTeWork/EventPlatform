@@ -11,25 +11,39 @@
 	overflow: auto;
 }
 
-.quests button {
+.quest {
 	background-color: white;
+	border: none;
 	color: black;
 	font-size: 1.3rem;
 	padding: 1rem;
+}
+.quest_hidden {
+	position: relative;
+}
+.quest_hidden::before {
+	content: "Скрытый";
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: black;
+	color: white;
+	font-size: 1rem;
+	padding: 0.2em;
 }
 
 .qr {
 	background-color: white;
 }
 
-.quest {
+.questCard {
 	display: flex;
 	justify-content: space-between;
 	font-size: 1.6rem;
 	margin-block: 0.5rem;
 }
 
-.quest > :last-child {
+.questCard > :last-child {
 	color: yellow;
 	flex-shrink: 0;
 }

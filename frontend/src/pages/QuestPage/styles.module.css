@@ -68,6 +68,10 @@
 	font-size: 1.2rem;
 }
 
+.questDescription__body {
+	white-space-collapse: preserve;
+}
+
 .btn {
 	background-color: transparent;
 	border: none;

@@ -6,6 +6,7 @@ from utils.get_vk_secret_key import get_vk_secret_key
 from utils.use_db_session import use_db_session
 from utils.use_user_try import use_user_try
 from utils.permission_required import permission_required
+from utils.permission_required import permission_required_any
 from utils.randstr import randstr
 from utils.parse_date import parse_date
 from utils.jsonify_list import jsonify_list

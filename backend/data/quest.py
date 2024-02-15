@@ -15,14 +15,16 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     deleted = Column(Boolean, DefaultClause("0"), nullable=False)
     name = Column(String(128), nullable=False)
+    description = Column(String(256), nullable=False)
     reward = Column(Integer, nullable=False)
+    hidden = Column(Boolean, nullable=False)
 
     def __repr__(self):
         return f"<Quest> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor, name: str, reward: int):
-        quest = Quest(name=name, reward=reward)
+    def new(db_sess: Session, actor, name: str, description: str, reward: int, hidden: bool):
+        quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
         db_sess.add(quest)
 
         now = get_datetime_now()
@@ -45,17 +47,19 @@ class Quest(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def get(db_sess: Session, id: int, includeDeleted=False):
-        item = db_sess.get(Quest, id)
-        if item is None or (not includeDeleted and item.deleted):
+        quest = db_sess.get(Quest, id)
+        if quest is None or (not includeDeleted and quest.deleted):
             return None
-        return item
+        return quest
 
     @staticmethod
-    def all(db_sess: Session, includeDeleted=False):
-        items = db_sess.query(Quest)
+    def all(db_sess: Session, includeHidden=False, includeDeleted=False):
+        quests = db_sess.query(Quest)
         if not includeDeleted:
-            items = items.filter(Quest.deleted == False)
-        return items.all()
+            quests = quests.filter(Quest.deleted == False)
+        if not includeHidden:
+            quests = quests.filter(Quest.hidden == False)
+        return quests.all()
 
     @staticmethod
     def all_for_user(user):
@@ -72,16 +76,20 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             "completed": v[3] is not None,
         }, quests))
 
-    def update(self, actor, name: Union[str, None], reward: Union[int, None]):
+    def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None], hidden: Union[bool, None]):
         db_sess = Session.object_session(self)
         changes = []
 
-        if name is not None:
-            changes.append(("name", self.name, name))
-            self.name = name
-        if reward is not None:
-            changes.append(("reward", self.reward, reward))
-            self.reward = reward
+        def updateField(field: str, value, changes: list):
+            cur = getattr(self, field)
+            if value is not None and cur != value:
+                changes.append(("name", cur, value))
+                setattr(self, field, value)
+
+        updateField("name", name, changes)
+        updateField("description", description, changes)
+        updateField("reward", reward, changes)
+        updateField("hidden", hidden, changes)
 
         db_sess.add(Log(
             date=get_datetime_now(),
@@ -113,11 +121,22 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         return [
             ("name", None, self.name),
             ("reward", None, self.reward),
+            ("hidden", None, self.hidden),
         ]
 
     def get_dict(self):
         return {
             "id": self.id,
             "name": self.name,
+            "description": self.description,
             "reward": self.reward,
+        }
+
+    def get_dict_full(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "reward": self.reward,
+            "hidden": self.hidden,
         }

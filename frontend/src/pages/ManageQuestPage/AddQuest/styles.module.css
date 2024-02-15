@@ -31,3 +31,18 @@
 	object-fit: cover;
 	border-radius: 0.5rem;
 }
+
+.textarea {
+	min-height: 5rem;
+	min-width: 20rem;
+	margin-block: 1rem;
+	font-size: 1.1rem;
+}
+
+.description_count {
+	display: flex;
+	justify-content: flex-end;
+}
+.description_count_too_many {
+	color: tomato;
+}

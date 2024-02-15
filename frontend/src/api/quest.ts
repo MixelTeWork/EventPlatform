@@ -3,16 +3,32 @@ import { fetchDelete, fetchJsonGet, fetchJsonPost } from "../utils/fetch";
 
 export interface Quest
 {
-	id: number;
-	name: string;
-	description: string;
-	reward: number;
+	id: number,
+	name: string,
+	description: string,
+	reward: number,
+}
+
+export interface QuestFull
+{
+	id: number,
+	name: string,
+	description: string,
+	reward: number,
+	hidden: boolean,
 }
 
 export function useQuests()
 {
 	return useQuery("quests", async () =>
 		await fetchJsonGet<Quest[]>("/api/quests")
+	);
+}
+
+export function useQuestsFull()
+{
+	return useQuery("quests_full", async () =>
+		await fetchJsonGet<QuestFull[]>("/api/quests_full")
 	);
 }
 
@@ -40,16 +56,22 @@ export interface CompleteQuestRes
 }
 
 
-export function useMutationAddQuest(onSuccess?: (data: Quest) => void, onError?: (err: any) => void)
+export function useMutationAddQuest(onSuccess?: (data: QuestFull) => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (questData: QuestData) =>
-			await fetchJsonPost<Quest>("/api/quest", questData),
-		onSuccess: (data: Quest) =>
+			await fetchJsonPost<QuestFull>("/api/quest", questData),
+		onSuccess: (data: QuestFull) =>
 		{
+			if (queryClient.getQueryState("quests_full")?.status == "success")
+				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests ? [...quests, data] : [data]);
+
 			if (queryClient.getQueryState("quests")?.status == "success")
-				queryClient.setQueryData("quests", (quests?: Quest[]) => quests ? [...quests, data] : [data]);
+			{
+				console.log("some log for testing");
+				queryClient.invalidateQueries("quests", { exact: true });
+			}
 
 			onSuccess?.(data);
 		},
@@ -61,19 +83,24 @@ export function useMutationAddQuest(onSuccess?: (data: Quest) => void, onError?:
 export interface QuestData
 {
 	name: string,
+	description: string,
 	reward: number,
+	hidden: boolean,
 }
 
-export function useMutationEditQuest(questId: number, onSuccess?: (data: Quest) => void, onError?: (err: any) => void)
+export function useMutationEditQuest(questId: number, onSuccess?: (data: QuestFull) => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (questData: QuestData) =>
-			await fetchJsonPost<Quest>(`/api/quest/${questId}`, questData),
-		onSuccess: (data: Quest) =>
+			await fetchJsonPost<QuestFull>(`/api/quest/${questId}`, questData),
+		onSuccess: (data: QuestFull) =>
 		{
+			if (queryClient.getQueryState("quests_full")?.status == "success")
+				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests?.map(v => v.id == data.id ? data : v) || []);
+
 			if (queryClient.getQueryState("quests")?.status == "success")
-				queryClient.setQueryData("quests", (quests?: Quest[]) => quests?.map(v => v.id == data.id ? data : v) || []);
+				queryClient.invalidateQueries("quests", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -90,8 +117,11 @@ export function useMutationDeleteQuest(questId: number, onSuccess?: () => void, 
 			await fetchDelete(`/api/quest/${questId}`),
 		onSuccess: () =>
 		{
+			if (queryClient.getQueryState("quests_full")?.status == "success")
+				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests?.filter(v => v.id != questId) || []);
+
 			if (queryClient.getQueryState("quests")?.status == "success")
-				queryClient.setQueryData("quests", (quests?: Quest[]) => quests?.filter(v => v.id != questId) || []);
+				queryClient.invalidateQueries("quests", { exact: true });
 
 			onSuccess?.();
 		},

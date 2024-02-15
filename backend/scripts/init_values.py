@@ -90,7 +90,8 @@ def init_values(dev=False, cmd=False):
             ))
 
         for i in range(15):
-            quest = Quest(id=i, name=f"Квест {i + 1}", reward=(i + 1) * 5234 % 150 + 50)
+            description = f"Описание квеста №{i + 1}\nLorem, ipsum dolor sit amet consectetur adipisicing elit."
+            quest = Quest(id=i, name=f"Квест {i + 1}", description=description, reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0)
             log(Tables.Quest, i, quest.get_creation_changes())
             db_sess.add(quest)
 
