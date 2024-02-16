@@ -30,18 +30,15 @@
 	gap: 0.5rem;
 }
 
-.action > label > span {
+.action > * {
 	display: block;
 	padding: 0.5rem;
-	border: 1px solid azure;
+	background: transparent;
+	border: 1px solid violet;
+	color: azure;
 	border-radius: 0.25rem;
 	text-align: center;
 	font-size: 1rem;
-}
-.action > label > input:checked ~ span {
-	border: 1px solid aquamarine;
-	box-shadow: 0 0 10px aquamarine;
-	color: aquamarine;
 }
 
 .action input {
@@ -89,15 +86,6 @@
 .checkbox input:checked ~ span {
 	background-color: rgba(0, 255, 0, 0.7);
 	left: 1.2rem;
-}
-
-.btn {
-	background: transparent;
-	color: white;
-	padding: 0.5rem;
-	border: 1px solid violet;
-	border-radius: 0.25rem;
-	font-size: 1rem;
 }
 
 .qr {
