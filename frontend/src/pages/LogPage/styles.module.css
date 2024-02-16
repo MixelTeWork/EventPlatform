@@ -1,6 +1,8 @@
 .table {
 	border-collapse: collapse;
 	color: black;
+	background-color: #1e1e1e;
+	color: #d4d4d4;
 }
 
 .table td {
@@ -8,10 +10,10 @@
 }
 
 .table tr:nth-child(2n - 1) td {
-	background-color: #fff;
+	background-color: #181818;
 }
 .table tr:nth-child(2n) td {
-	background-color: #f6f6f6;
+	background-color: #1e1e1e;
 }
 
 .changesCell {
@@ -49,7 +51,8 @@
 }
 
 .btn {
-	background-color: #eee;
+	background-color: #444;
+	color: #d4d4d4;
 	border: none;
 	border-radius: 4px;
 	padding: 2px 4px;
