@@ -11,7 +11,8 @@ from utils import get_json_values_from_req, get_vk_secret_key, randstr, response
 blueprint = Blueprint("authentication", __name__)
 CLIENT_ID = "51848582"
 CLIENT_SECRET = get_vk_secret_key()
-REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
+# REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
+REDIRECT_URI = "https://www.underparty.fun/auth_vk"
 
 
 @blueprint.route("/api/auth", methods=["POST"])
