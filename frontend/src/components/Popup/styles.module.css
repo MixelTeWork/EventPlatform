@@ -82,7 +82,7 @@
 .popup {
 	background: black;
 	border: 2px solid white;
-	box-shadow: 0 5px 20px -5px white;
+	box-shadow: none;
 	border-radius: 0;
 }
 

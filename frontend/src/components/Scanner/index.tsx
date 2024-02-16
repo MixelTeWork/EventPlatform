@@ -6,7 +6,7 @@ import { formatError } from "../../utils/displayError";
 import Spinner from "../Spinner";
 import classNames from "../../utils/classNames";
 
-export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg,onRes, className, pause }: ScannerProps<Res, Data>)
+export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg, onRes, className, pause }: ScannerProps<Res, Data>)
 {
 	const [msg, setMsg] = useState("");
 	const [err, setErr] = useState("");

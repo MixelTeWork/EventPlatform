@@ -14,6 +14,8 @@ export default function useMutationScanner(onSuccess?: (data: ScannerRes) => voi
 			{
 				user = user || createEmptyUser();
 				user.balance = res.balance;
+				if (res.res == "ok" && res.action == "promote")
+					queryClient.invalidateQueries("user");
 				return user;
 			});
 			return res;
@@ -29,7 +31,7 @@ interface ScannerData
 	code: string,
 }
 
-interface ScannerRes
+export interface ScannerRes
 {
 	res: "ok" | "wrong" | "error",
 	action: "quest" | "store" | "send" | "promote",
