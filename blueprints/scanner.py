@@ -43,7 +43,7 @@ def scanner_quest(db_sess: Session, user: User, code: str):
 
     UserQuest.new(db_sess, user, user, quest)
     user.balance += quest.reward
-    Transaction.new(db_sess, 0, user.id, quest.reward, Actions.endQuest, quest.id)
+    Transaction.new(db_sess, 1, user.id, quest.reward, Actions.endQuest, quest.id)
 
     return respose_ok(user, "quest", quest.name, quest.reward)
 
@@ -57,7 +57,7 @@ def scanner_item(db_sess: Session, user: User, code: str):
         return respose_error(user, "store", f"Маловато средств для покупки {item.name}", item.price)
 
     user.balance -= item.price
-    Transaction.new(db_sess, user.id, 0, item.price, Actions.buyItem, item.id)
+    Transaction.new(db_sess, user.id, 1, item.price, Actions.buyItem, item.id)
     item.decrease()
 
     return respose_ok(user, "store", item.name, item.price)
@@ -78,12 +78,12 @@ def scanner_send(db_sess: Session, user: User, code: str):
 
     if send.positive:
         user.balance += send.value
-        Transaction.new(db_sess, 0, user.id, send.value, Actions.send, send.id)
+        Transaction.new(db_sess, 1, user.id, send.value, Actions.send, send.id)
     else:
         if user.balance < send.value:
             return respose_error(user, "send", "Маловато средств", send.value)
         user.balance -= send.value
-        Transaction.new(db_sess, user.id, 0, send.value, Actions.send, send.id)
+        Transaction.new(db_sess, user.id, 1, send.value, Actions.send, send.id)
 
     if send.reusable:
         UserSend.new(db_sess, user, send)
