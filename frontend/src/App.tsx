@@ -28,6 +28,7 @@ import UsersPage from "./pages/UsersPage";
 import WorkerPage from "./pages/WorkerPage";
 import WorkerQuestPage from "./pages/WorkerQuestPage";
 import WorkerStorePage from "./pages/WorkerStorePage";
+import RacePage from "./pages/RacePage";
 
 export default function App()
 {
@@ -58,7 +59,7 @@ export default function App()
 				<Route path="/quest" element={<QuestPage />} />
 				<Route path="/store" element={<StorePage />} />
 				<Route path="/map" element={<MapPage />} />
-				{/* <Route path="/race" element={<RacePage />} /> */}
+				<Route path="/race" element={<RacePage />} />
 				{ProtectedRoute(null, "/scanner", <ScannerPage />)}
 				{/* {ProtectedRoute(null, "/profile", <ProfilePage />)} */}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
