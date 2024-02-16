@@ -159,7 +159,7 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             "name": self.name,
             "price": self.price,
             "count": count,
-            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId, _external=True),
+            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId),
         }
 
     def get_dict_full(self):
@@ -169,5 +169,5 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             "name": self.name,
             "price": self.price,
             "count": self.count,
-            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId, _external=True),
+            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId),
         }

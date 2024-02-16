@@ -29,7 +29,7 @@ export default function AddQuest()
 
 	return <>
 		<button className={styles.root} onClick={popupOpen.setT}>Добавить</button>
-		<Popup title="Добавление квеста" open={popupOpen.v} close={popupOpen.setF} closeOnOutclick={false}>
+		<Popup title="Добавление квеста" open={popupOpen.v} close={popupOpen.setF}>
 			{mutationAdd.isLoading && <Spinner />}
 			{displayError(mutationAdd)}
 			<Form onSubmit={() =>

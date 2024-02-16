@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import classNames from "../../utils/classNames";
 import styles from "./styles.module.css"
 
-export default function Popup({ children, open = false, close, title = "", closeOnOutclick=true }: CustomPopupProps)
+export default function Popup({ children, open = false, close, title = "", closeOnOutclick = false }: CustomPopupProps)
 {
 	const ref = useRef<HTMLDivElement>(null)
 	const [isOpen, setIsOpen] = useState(open);

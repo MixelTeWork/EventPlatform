@@ -31,7 +31,7 @@ export default function AddStoreItem()
 
 	return <>
 		<button className={styles.root} onClick={popupOpen.setT}>Добавить</button>
-		<Popup title="Добавление товара" open={popupOpen.v} close={popupOpen.setF} closeOnOutclick={false}>
+		<Popup title="Добавление товара" open={popupOpen.v} close={popupOpen.setF}>
 			{mutationAdd.isLoading && <Spinner />}
 			{displayError(mutationAdd)}
 			{imgData.v?.data == "" && <Spinner />}
