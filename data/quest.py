@@ -27,13 +27,14 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     @staticmethod
     def new(db_sess: Session, actor, name: str, description: str, reward: int, hidden: bool):
         quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
-        db_sess.add(quest)
 
         q = quest
         while q is not None:
             id_big = randstr(8)
             q = db_sess.query(Quest).filter(Quest.id_big == id_big).first()
         quest.id_big = id_big
+
+        db_sess.add(quest)
 
         now = get_datetime_now()
         log = Log(
