@@ -1,6 +1,7 @@
 import styles from "./styles.module.css"
 import city from "./city.png";
 import { Link } from "react-router-dom";
+import { authLink } from "../../utils/authLink";
 
 export default function IndexPage()
 {
@@ -14,7 +15,7 @@ export default function IndexPage()
 					<h2>18.02.24</h2>
 				</div>
 			</div>
-			<a className={styles.btn} href="https://oauth.vk.com/authorize?client_id=51848582&redirect_uri=https://platformevent.pythonanywhere.com/auth_vk&display=page&response_type=code">
+			<a className={styles.btn} href={authLink}>
 				Вход
 			</a>
 		</div>

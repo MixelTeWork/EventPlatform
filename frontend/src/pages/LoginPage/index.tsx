@@ -4,6 +4,7 @@ import Layout from "../../components/Layout";
 import { useTitle } from "../../utils/useTtile";
 import { Link } from "react-router-dom";
 import classNames from "../../utils/classNames";
+import { authLink } from "../../utils/authLink";
 
 export default function LoginPage()
 {
@@ -14,7 +15,7 @@ export default function LoginPage()
 			<Link to="/" className={classNames(styles.back, "material_symbols")}>arrow_back</Link>
 			<Link to="/auth" className={styles.auth} />
 			<h1>Underparty</h1>
-			<a className={styles.login} href="https://oauth.vk.com/authorize?client_id=51848582&redirect_uri=https://platformevent.pythonanywhere.com/auth_vk&display=page&response_type=code">
+			<a className={styles.login} href={authLink}>
 				<span>Войти через</span>
 				<img src={vk} alt="VK" />
 			</a>
