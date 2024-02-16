@@ -86,17 +86,6 @@ def docs():
         "/api/quest/<int:questId> DELETE": {
             "__desc__": "Delete quest",
         },
-        "/api/quest_complete": {
-            "__desc__": "Mark quest as completed for user",
-            "request": {
-                "questId": "number",
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'already_done' | 'no_visitor'",
-                "visitor": "string",
-            },
-        },
         "/api/store_items": {
             "__desc__": "Get store items",
             "response": "StoreItem[]",
@@ -132,30 +121,6 @@ def docs():
         "/api/store_item/<int:itemId> DELETE": {
             "__desc__": "Delete store item",
         },
-        "/api/store_sell_check": {
-            "__desc__": "Check if item can be sold to user",
-            "request": {
-                "itemId": "number",
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'no_item' | 'no_visitor' | 'no_money'",
-                "item": "StoreItem",
-                "visitor": "string",
-            },
-        },
-        "/api/store_sell": {
-            "__desc__": "Sell item to user",
-            "request": {
-                "itemId": "number",
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'no_money'",
-                "item": "string",
-                "visitor": "string",
-            },
-        },
         "/api/scanner": {
             "__desc__": "Use scanned code",
             "request": {
@@ -167,26 +132,6 @@ def docs():
                 "value": "number",
                 "msg": "string",
                 "balance": "number",
-            },
-        },
-        "/api/promote_worker": {
-            "__desc__": "Promote user to worker",
-            "request": {
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'no_user' | 'already_has'",
-                "user": "string",
-            },
-        },
-        "/api/promote_manager": {
-            "__desc__": "Promote user to manager",
-            "request": {
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'no_user' | 'already_has'",
-                "user": "string",
             },
         },
         "User": {

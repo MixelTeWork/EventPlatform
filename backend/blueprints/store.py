@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from data.image import Image
 from data.operation import Operations
 from data.store_item import StoreItem
-from data.transaction import Actions, Transaction
 from data.user import User
 from utils import (get_json_values_from_req, jsonify_list, permission_required,
                    permission_required_any, response_msg, response_not_found, use_db_session, use_user)
@@ -28,58 +27,6 @@ def store_items(db_sess: Session):
 def store_items_full(db_sess: Session, user: User):
     items = StoreItem.all(db_sess)
     return jsonify_list(items, "get_dict_full"), 200
-
-
-@blueprint.route("/api/store_sell_check", methods=["POST"])
-@jwt_required()
-@use_db_session()
-@use_user()
-@permission_required(Operations.page_worker_store)
-def store_sell_check(db_sess: Session, user: User):
-    (itemId, userId), errorRes = get_json_values_from_req("itemId", "userId")
-    if errorRes:
-        return errorRes
-
-    item = StoreItem.get(db_sess, itemId)
-    visitor = User.get_by_big_id(db_sess, userId)
-
-    if item is None:
-        return jsonify({"res": "no_item", "item": itemId, "visitor": None}), 200
-    if visitor is None:
-        return jsonify({"res": "no_visitor", "item": item.get_dict(), "visitor": userId}), 200
-
-    if visitor.balance < item.price:
-        return jsonify({"res": "no_money", "item": item.get_dict(), "visitor": visitor.name}), 200
-
-    return jsonify({"res": "ok", "item": item.get_dict(), "visitor": visitor.name}), 200
-
-
-@blueprint.route("/api/store_sell", methods=["POST"])
-@jwt_required()
-@use_db_session()
-@use_user()
-@permission_required(Operations.page_worker_store)
-def store_sell(db_sess: Session, user: User):
-    (itemId, userId), errorRes = get_json_values_from_req("itemId", "userId")
-    if errorRes:
-        return errorRes
-
-    item = StoreItem.get(db_sess, itemId)
-    visitor = User.get_by_big_id(db_sess, userId)
-
-    if item is None:
-        return response_not_found("item", itemId)
-    if visitor is None:
-        return response_not_found("user", userId)
-
-    if visitor.balance < item.price:
-        return jsonify({"res": "no_money", "item": item.name, "visitor": visitor.name}), 200
-
-    visitor.balance -= item.price
-    Transaction.new(db_sess, visitor.id, user.id, item.price, Actions.buyItem, item.id)
-    item.decrease(user)
-
-    return jsonify({"res": "ok", "item": item.name, "visitor": visitor.name}), 200
 
 
 @blueprint.route("/api/store_item", methods=["POST"])

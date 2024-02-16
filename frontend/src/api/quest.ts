@@ -34,29 +34,6 @@ export function useQuestsFull()
 	);
 }
 
-export function useMutationCompleteQuest(onSuccess?: (data: CompleteQuestRes) => void, onError?: (err: any) => void)
-{
-	const mutation = useMutation({
-		mutationFn: async (completeQuestData: CompleteQuestData) =>
-			await fetchJsonPost<CompleteQuestRes>("/api/quest_complete", completeQuestData),
-		onSuccess: onSuccess,
-		onError: onError,
-	});
-	return mutation;
-}
-
-export interface CompleteQuestData
-{
-	questId: number,
-	userId: string,
-}
-
-export interface CompleteQuestRes
-{
-	res: "ok" | "already_done" | "no_visitor",
-	visitor: string,
-}
-
 
 export function useMutationAddQuest(onSuccess?: (data: QuestFull) => void, onError?: (err: any) => void)
 {
