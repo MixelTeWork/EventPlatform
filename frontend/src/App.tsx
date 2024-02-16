@@ -21,6 +21,7 @@ import ProfilePage from "./pages/ProfilePage";
 import PromotePage from "./pages/PromotePage";
 import QuestPage from "./pages/QuestPage";
 import ScannerPage from "./pages/ScannerPage";
+import SendPage from "./pages/SendPage";
 import StorePage from "./pages/StorePage";
 import TimetablePage from "./pages/TimetablePage";
 import UsersPage from "./pages/UsersPage";
@@ -67,6 +68,7 @@ export default function App()
 				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}
 				{ProtectedRoute("promote_manager", "/promote_manager", <PromotePage role="manager" />)}
+				{ProtectedRoute("send_any", "/send", <SendPage />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
 				{ProtectedRoute("page_debug", "/log", <LogPage />)}
 				{ProtectedRoute("page_users", "/users", <UsersPage />)}

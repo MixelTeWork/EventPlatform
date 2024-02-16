@@ -21,5 +21,5 @@ def get_json_values(d: dict, *field_names: Union[field_name, tuple[field_name, d
         elif have_default:
             r.append(default_value)
         else:
-            return list(map(lambda x: None, field_names)), f"{field_name} is undefined"
+            return list(map(lambda _: None, field_names)), f"{field_name} is undefined"
     return r, None

@@ -1,16 +1,23 @@
+import { useRef } from "react";
 import classNames from "../../utils/classNames";
 import styles from "./styles.module.css"
 
 export function Form({ className, style, onSubmit, children }: FormProps)
 {
+	const formRef = useRef<HTMLFormElement>(null);
+
 	return (
 		<form
 			className={classNames(styles.form, className)}
 			style={style}
+			ref={formRef}
 			onSubmit={e =>
 			{
 				e.preventDefault();
-				onSubmit();
+				if (!formRef.current) return;
+
+				const data = new FormData(formRef.current);
+				onSubmit(data);
 			}}
 		>
 			{children}
@@ -20,7 +27,7 @@ export function Form({ className, style, onSubmit, children }: FormProps)
 
 interface FormProps extends React.PropsWithChildren
 {
-	onSubmit: () => void,
+	onSubmit: (data: FormData) => void,
 	className?: string,
 	style?: React.StyleHTMLAttributes<HTMLFormElement>,
 }

@@ -69,7 +69,7 @@ def docs():
                 "name": "string",
                 "description": "string",
                 "reward": "number",
-                "hidden": "bool",
+                "hidden": "boolean",
             },
             "response": "QuestFull",
         },
@@ -79,7 +79,7 @@ def docs():
                 "name": "?string",
                 "description": "?string",
                 "reward": "?number",
-                "hidden": "?bool",
+                "hidden": "?boolean",
             },
             "response": "QuestFull",
         },
@@ -134,6 +134,29 @@ def docs():
                 "balance": "number",
             },
         },
+        "/api/send": {
+            "__desc__": "Create send operation",
+            "request": {
+                "value": "number",
+                "positive": "boolean",
+                "reusable": "boolean",
+            },
+            "response": {
+                "id": "string",
+                "value": "number",
+                "positive": "boolean",
+                "reusable": "boolean",
+            },
+        },
+        "/api/send_check": {
+            "__desc__": "Check if send is successful",
+            "request": {
+                "id": "string",
+            },
+            "response": {
+                "successful": "boolean",
+            },
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -153,7 +176,7 @@ def docs():
             "photo": "string | null",
             "balance": "number",
             "roles": "string[]",
-            "deleted": "bool",
+            "deleted": "boolean",
             "operations": "string[]",
         },
         "Image": {
@@ -175,7 +198,7 @@ def docs():
             "name": "string",
             "description": "string",
             "reward": "number",
-            "completed": "bool",
+            "completed": "boolean",
         },
         "QuestFull": {
             "id": "number",
@@ -183,7 +206,7 @@ def docs():
             "name": "string",
             "description": "string",
             "reward": "number",
-            "hidden": "bool",
+            "hidden": "boolean",
         },
         "StoreItem": {
             "id": "number",

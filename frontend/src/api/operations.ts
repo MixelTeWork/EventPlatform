@@ -12,6 +12,7 @@ const Operations = {
 	promote_manager: "promote_manager",
 	manage_store: "manage_store",
 	manage_quest: "manage_quest",
+	send_any: "send_any",
 }
 
 export type Operation = keyof typeof Operations;

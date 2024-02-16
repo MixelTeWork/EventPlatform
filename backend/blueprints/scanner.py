@@ -9,6 +9,7 @@ from data.store_item import StoreItem
 from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
+from data.user_send import UserSend
 from utils import get_json_values_from_req, use_db_session, use_user
 
 
@@ -68,18 +69,27 @@ def scanner_send(db_sess: Session, user: User, code: str):
         return respose_wrong(user, "send")
 
     if send.used:
-        return respose_wrong(user, "send_0")
+        return respose_error(user, "send", "Код уже использован")
+
+    if send.reusable:
+        used = send.check_used_by(user)
+        if used:
+            return respose_error(user, "send", "Код уже вами использован")
 
     if send.positive:
         user.balance += send.value
-        send.used = True
-        Transaction.new(db_sess, send.creatorId, user.id, send.value, Actions.send, send.id)
+        Transaction.new(db_sess, 0, user.id, send.value, Actions.send, send.id)
     else:
         if user.balance < send.value:
             return respose_error(user, "send", "Маловато средств", send.value)
         user.balance -= send.value
+        Transaction.new(db_sess, user.id, 0, send.value, Actions.send, send.id)
+
+    if send.reusable:
+        UserSend.new(db_sess, user, send)
+    else:
         send.used = True
-        Transaction.new(db_sess, user.id, send.creatorId, send.value, Actions.send, send.id)
+        db_sess.commit()
 
     return respose_ok(user, "send", "", send.value * (1 if send.positive else -1))
 
