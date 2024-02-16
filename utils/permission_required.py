@@ -3,7 +3,7 @@ from flask import abort
 from data.user import User
 
 
-def permission_required(operation: tuple[str, str]):
+def permission_required(*operations: tuple[str, str]):
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
@@ -13,7 +13,34 @@ def permission_required(operation: tuple[str, str]):
             else:
                 abort(500, "permission_required: no user")
 
-            if not user.check_permission(operation[0]):
+            for operation in operations:
+                if not user.check_permission(operation):
+                    abort(403)
+
+            return fn(*args, **kwargs)
+
+        return decorator
+
+    return wrapper
+
+
+def permission_required_any(*operations: tuple[str, str]):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            user = None
+            if "user" in kwargs:
+                user: User = kwargs["user"]
+            else:
+                abort(500, "permission_required: no user")
+
+            passed = False
+            for operation in operations:
+                if user.check_permission(operation):
+                    passed = True
+                    break
+
+            if not passed:
                 abort(403)
 
             return fn(*args, **kwargs)

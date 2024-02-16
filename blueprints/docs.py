@@ -59,39 +59,40 @@ def docs():
             "__desc__": "Get quests",
             "response": "Quest[]",
         },
+        "/api/quests_full": {
+            "__desc__": "Get full quests",
+            "response": "QuestFull[]",
+        },
         "/api/quest POST": {
             "__desc__": "Add quest to store",
             "request": {
                 "name": "string",
+                "description": "string",
                 "reward": "number",
+                "hidden": "boolean",
             },
-            "response": "Quest",
+            "response": "QuestFull",
         },
         "/api/quest/<int:questId> POST": {
             "__desc__": "Edit quest",
             "request": {
                 "name": "?string",
+                "description": "?string",
                 "reward": "?number",
+                "hidden": "?boolean",
             },
-            "response": "Quest",
+            "response": "QuestFull",
         },
         "/api/quest/<int:questId> DELETE": {
             "__desc__": "Delete quest",
         },
-        "/api/quest_complete": {
-            "__desc__": "Mark quest as completed for user",
-            "request": {
-                "questId": "number",
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'already_done' | 'no_visitor'",
-                "visitor": "string",
-            },
-        },
         "/api/store_items": {
             "__desc__": "Get store items",
             "response": "StoreItem[]",
+        },
+        "/api/store_items_full": {
+            "__desc__": "Get full store items",
+            "response": "StoreItemFull[]",
         },
         "/api/store_item POST": {
             "__desc__": "Add item to store",
@@ -101,7 +102,7 @@ def docs():
                 "count": "number",
                 "img": "?Image",
             },
-            "response": "StoreItem",
+            "response": "StoreItemFull",
         },
         "/api/store_item/<int:itemId> POST": {
             "__desc__": "Edit store item",
@@ -111,57 +112,49 @@ def docs():
                 "count": "?number",
                 "img": "?Image",
             },
-            "response": "StoreItem",
+            "response": "StoreItemFull",
         },
         "/api/store_item/<int:itemId>/decrease POST": {
             "__desc__": "Decrease item count by one",
-            "response": "StoreItem",
+            "response": "StoreItemFull",
         },
         "/api/store_item/<int:itemId> DELETE": {
             "__desc__": "Delete store item",
         },
-        "/api/store_sell_check": {
-            "__desc__": "Check if item can be sold to user",
+        "/api/scanner": {
+            "__desc__": "Use scanned code",
             "request": {
-                "itemId": "number",
-                "userId": "number",
+                "code": "string",
             },
             "response": {
-                "res": "'ok' | 'no_item' | 'no_visitor' | 'no_money'",
-                "item": "StoreItem",
-                "visitor": "string",
+                "res": "'ok' | 'wrong' | 'error'",
+                "action": "'quest' | 'store' | 'send' | 'promote'",
+                "value": "number",
+                "msg": "string",
+                "balance": "number",
             },
         },
-        "/api/store_sell": {
-            "__desc__": "Sell item to user",
+        "/api/send": {
+            "__desc__": "Create send operation",
             "request": {
-                "itemId": "number",
-                "userId": "number",
+                "value": "number",
+                "positive": "boolean",
+                "reusable": "boolean",
             },
             "response": {
-                "res": "'ok' | 'no_money'",
-                "item": "string",
-                "visitor": "string",
+                "id": "string",
+                "value": "number",
+                "positive": "boolean",
+                "reusable": "boolean",
             },
         },
-        "/api/promote_worker": {
-            "__desc__": "Promote user to worker",
+        "/api/send_check": {
+            "__desc__": "Check if send is successful",
             "request": {
-                "userId": "number",
+                "id": "string",
             },
             "response": {
-                "res": "'ok' | 'no_user' | 'already_has'",
-                "user": "string",
-            },
-        },
-        "/api/promote_manager": {
-            "__desc__": "Promote user to manager",
-            "request": {
-                "userId": "number",
-            },
-            "response": {
-                "res": "'ok' | 'no_user' | 'already_has'",
-                "user": "string",
+                "successful": "boolean",
             },
         },
         "User": {
@@ -170,7 +163,6 @@ def docs():
             "last_name": "string",
             "photo": "string",
             "balance": "number",
-            "complited_quests": "number[]",
             "roles": "string[]",
             "operations": "string[]",
         },
@@ -183,9 +175,8 @@ def docs():
             "last_name": "string | null",
             "photo": "string | null",
             "balance": "number",
-            "complited_quests": "number[]",
             "roles": "string[]",
-            "deleted": "bool",
+            "deleted": "boolean",
             "operations": "string[]",
         },
         "Image": {
@@ -205,10 +196,27 @@ def docs():
         "Quest": {
             "id": "number",
             "name": "string",
+            "description": "string",
             "reward": "number",
+            "completed": "boolean",
+        },
+        "QuestFull": {
+            "id": "number",
+            "id_big": "string",
+            "name": "string",
+            "description": "string",
+            "reward": "number",
+            "hidden": "boolean",
         },
         "StoreItem": {
             "id": "number",
+            "name": "string",
+            "price": "'many' | 'few' | 'no'",
+            "img": "string | null",
+        },
+        "StoreItemFull": {
+            "id": "number",
+            "id_big": "string",
             "name": "string",
             "price": "number",
             "img": "string | null",

@@ -6,6 +6,7 @@ from sqlalchemy_serializer import SerializerMixin
 from data.image import Image
 
 from data.log import Actions, Log, Tables
+from data.randstr import randstr
 from data.user import User
 from data.get_datetime_now import get_datetime_now
 from .db_session import SqlAlchemyBase
@@ -15,6 +16,7 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "StoreItem"
 
     id      = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    id_big  = Column(String(8), unique=True, nullable=False)
     deleted = Column(Boolean, DefaultClause("0"), nullable=False)
     name    = Column(String(128), nullable=False)
     price   = Column(Integer, nullable=False)
@@ -30,6 +32,12 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
     def new(db_sess: Session, actor: User, name: str, price: int, count: int, imgId: Union[int, None]):
         item = StoreItem(name=name, price=price, count=count, imgId=imgId)
         db_sess.add(item)
+
+        t = item
+        while t is not None:
+            id_big = randstr(8)
+            t = db_sess.query(StoreItem).filter(StoreItem.id_big == id_big).first()
+        item.id_big = id_big
 
         now = get_datetime_now()
         log = Log(
@@ -54,6 +62,11 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         item = db_sess.get(StoreItem, id)
         if item is None or (not includeDeleted and item.deleted):
             return None
+        return item
+
+    @staticmethod
+    def get_by_big_id(db_sess: Session, big_id: int):
+        item = db_sess.query(StoreItem).filter(StoreItem.deleted == False, StoreItem.id_big == big_id).first()
         return item
 
     @staticmethod
@@ -110,7 +123,7 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         ))
         db_sess.commit()
 
-    def decrease(self, actor: User, v=1):
+    def decrease(self, actor: User = None, v=1):
         db_sess = Session.object_session(self)
         count = self.count
         self.count = count - v
@@ -118,8 +131,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         db_sess.add(Log(
             date=get_datetime_now(),
             actionCode=Actions.updated,
-            userId=actor.id,
-            userName=actor.name,
+            userId=actor.id if actor else 0,
+            userName=actor.name if actor else "system",
             tableName=Tables.StoreItem,
             recordId=self.id,
             changes=[("count", count, count - v)]
@@ -135,10 +148,26 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         ]
 
     def get_dict(self):
+        count = "many"
+        if self.count <= 15:
+            count = "few"
+        if self.count <= 0:
+            count = "no"
+
         return {
             "id": self.id,
             "name": self.name,
             "price": self.price,
+            "count": count,
+            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId),
+        }
+
+    def get_dict_full(self):
+        return {
+            "id": self.id,
+            "id_big": self.id_big,
+            "name": self.name,
+            "price": self.price,
             "count": self.count,
-            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId, _external=True),
+            "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId),
         }
