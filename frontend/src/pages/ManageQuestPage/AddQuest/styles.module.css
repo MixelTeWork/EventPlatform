@@ -34,9 +34,17 @@
 
 .textarea {
 	min-height: 5rem;
-	min-width: 20rem;
+	min-width: 15rem;
 	margin-block: 1rem;
 	font-size: 1.1rem;
+	background-color: black;
+	color: white;
+	border: 1px solid aquamarine;
+	border-radius: 0.25rem;
+	outline: none;
+}
+.textarea:focus-visible {
+	border: 1px solid aquamarine;
 }
 
 .description_count {
@@ -45,4 +53,26 @@
 }
 .description_count_too_many {
 	color: tomato;
+}
+
+.form input {
+	background-color: black;
+	color: white;
+	outline: none;
+	border: 1px solid transparent;
+	border-bottom: 1px solid aquamarine;
+	border-radius: 0.25rem;
+	outline: none;
+}
+.form input:focus-visible {
+	border: 1px solid aquamarine;
+}
+
+.form button {
+	background-color: black;
+	color: white;
+	outline: none;
+	border: 1px solid violet;
+	border-radius: 0.25rem;
+	outline: none;
 }

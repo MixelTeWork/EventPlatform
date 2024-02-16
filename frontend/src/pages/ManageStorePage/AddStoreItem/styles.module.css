@@ -31,3 +31,25 @@
 	object-fit: cover;
 	border-radius: 0.5rem;
 }
+
+.form input {
+	background-color: black;
+	color: white;
+	outline: none;
+	border: 1px solid transparent;
+	border-bottom: 1px solid aquamarine;
+	border-radius: 0.25rem;
+	outline: none;
+}
+.form input:focus-visible {
+	border: 1px solid aquamarine;
+}
+
+.form button {
+	background-color: black;
+	color: white;
+	outline: none;
+	border: 1px solid violet;
+	border-radius: 0.25rem;
+	outline: none;
+}

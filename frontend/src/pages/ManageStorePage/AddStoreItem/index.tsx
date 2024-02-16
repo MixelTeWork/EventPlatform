@@ -35,19 +35,22 @@ export default function AddStoreItem()
 			{mutationAdd.isLoading && <Spinner />}
 			{displayError(mutationAdd)}
 			{imgData.v?.data == "" && <Spinner />}
-			<Form onSubmit={() =>
-			{
-				const name = nameRef.current?.value;
-				const count = countRef.current?.valueAsNumber;
-				const price = priceRef.current?.valueAsNumber;
-				if (count && name && price)
-					mutationAdd.mutate({
-						count,
-						name,
-						price,
-						img: imgData.v || undefined,
-					})
-			}}>
+			<Form
+				className={styles.form}
+				onSubmit={() =>
+				{
+					const name = nameRef.current?.value;
+					const count = countRef.current?.valueAsNumber;
+					const price = priceRef.current?.valueAsNumber;
+					if (count && name && price)
+						mutationAdd.mutate({
+							count,
+							name,
+							price,
+							img: imgData.v || undefined,
+						})
+				}}
+			>
 				<FormField label="Изображение">
 					<div className={styles.img}>
 						{imgData.v && <img src={imgData.v.data} alt="Изображение" />}

@@ -32,19 +32,22 @@ export default function AddQuest()
 		<Popup title="Добавление квеста" open={popupOpen.v} close={popupOpen.setF}>
 			{mutationAdd.isLoading && <Spinner />}
 			{displayError(mutationAdd)}
-			<Form onSubmit={() =>
-			{
-				const name = nameRef.current?.value;
-				const reward = rewardRef.current?.valueAsNumber;
-				const hidden = hiddenRef.current?.checked;
-				if (name && reward !== undefined && hidden !== undefined)
-					mutationAdd.mutate({
-						name,
-						reward,
-						hidden,
-						description: description.v,
-					})
-			}}>
+			<Form
+				className={styles.form}
+				onSubmit={() =>
+				{
+					const name = nameRef.current?.value;
+					const reward = rewardRef.current?.valueAsNumber;
+					const hidden = hiddenRef.current?.checked;
+					if (name && reward !== undefined && hidden !== undefined)
+						mutationAdd.mutate({
+							name,
+							reward,
+							hidden,
+							description: description.v,
+						})
+				}}
+			>
 				<FormField label="Название">
 					<input ref={nameRef} required type="text" />
 				</FormField>
