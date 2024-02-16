@@ -1,5 +1,4 @@
 import { useMutationSend, type Send, useMutationCheckSend } from "../../api/send";
-import { Form, FormField } from "../../components/Form";
 import Layout from "../../components/Layout";
 import Popup from "../../components/Popup";
 import QrCode from "../../components/QrCode";
@@ -7,10 +6,12 @@ import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import useStateBool from "../../utils/useStateBool";
 import useStateObj from "../../utils/useStateObj";
+import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
 
 export default function SendPage()
 {
+	useTitle("Казначейство");
 	const popupOpen = useStateBool(false);
 	const send = useStateObj<Send | null>(null, popupOpen.setT);
 	const mutation = useMutationSend(send.set);
