@@ -10,7 +10,6 @@ export interface User
 	last_name: string;
 	photo: string;
 	balance: number;
-	complited_quests: number[];
 	roles: string[];
 	operations: string[];
 }
@@ -25,7 +24,6 @@ export interface UserFull
 	last_name: string;
 	photo: string;
 	balance: number;
-	complited_quests: number[];
 	roles: string[];
 	deleted: boolean;
 	operations: string[];
@@ -38,7 +36,7 @@ export interface UserWithPwd extends User
 
 export function createEmptyUser(): User
 {
-	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", complited_quests: [], operations: [] };
+	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [] };
 }
 
 export function useUpdateUser()

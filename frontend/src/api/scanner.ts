@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
 import { fetchJsonPost } from "../utils/fetch";
-import type { User } from "./user";
+import { createEmptyUser, type User } from "./user";
 
 
 export default function useMutationScanner(onSuccess?: (data: ScannerRes) => void, onError?: (err: any) => void)
@@ -10,8 +10,12 @@ export default function useMutationScanner(onSuccess?: (data: ScannerRes) => voi
 		mutationFn: async (scannerData: ScannerData) =>
 		{
 			const res = await fetchJsonPost<ScannerRes>("/api/scanner", scannerData)
-			res.user.auth = true;
-			queryClient.setQueryData("user", res.user);
+			queryClient.setQueryData<User>("user", user =>
+			{
+				user = user || createEmptyUser();
+				user.balance = res.balance;
+				return user;
+			});
 			return res;
 		},
 		onSuccess: onSuccess,
@@ -31,5 +35,5 @@ interface ScannerRes
 	action: "quest" | "store" | "send" | "promote",
 	value: number,
 	msg: string,
-	user: User,
+	balance: number,
 }

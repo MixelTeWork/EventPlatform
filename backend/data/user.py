@@ -198,8 +198,7 @@ class User(SqlAlchemyBase, SerializerMixin):
         quests = db_sess\
             .query(Quest)\
             .join(UserQuest, UserQuest.questId == Quest.id)\
-            .join(User, UserQuest.userId == User.id)\
-            .filter(User.id == self.id)\
+            .filter(UserQuest.userId == self.id)\
             .all()
 
         return quests
@@ -208,8 +207,7 @@ class User(SqlAlchemyBase, SerializerMixin):
         db_sess = Session.object_session(self)
         quests = db_sess\
             .query(UserQuest)\
-            .join(User, UserQuest.userId == User.id)\
-            .filter(User.id == self.id)\
+            .filter(UserQuest.userId == self.id)\
             .values(UserQuest.questId)
 
         return list(map(lambda v: v[0], quests))
@@ -221,7 +219,6 @@ class User(SqlAlchemyBase, SerializerMixin):
             "last_name": self.lastName,
             "photo": self.imageUrl,
             "balance": self.balance,
-            "complited_quests": self.get_complited_quest_ids(),
             "roles": self.get_roles(),
             "operations": self.get_operations(),
         }
@@ -236,7 +233,6 @@ class User(SqlAlchemyBase, SerializerMixin):
             "last_name": self.lastName,
             "photo": self.imageUrl,
             "balance": self.balance,
-            "complited_quests": self.get_complited_quest_ids(),
             "roles": self.get_roles(),
             "deleted": self.deleted,
             "operations": self.get_operations(),

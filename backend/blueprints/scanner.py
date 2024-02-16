@@ -127,7 +127,7 @@ def respose_ok(user: User, action: str, msg: str, value=0):
         "action": action,
         "value": value,
         "msg": msg,
-        "user": user.get_dict(),
+        "balance": user.balance,
     }), 200
 
 
@@ -137,7 +137,7 @@ def respose_wrong(user: User, msg: str):
         "action": "",
         "value": 0,
         "msg": msg,
-        "user": user.get_dict(),
+        "balance": user.balance,
     }), 200
 
 
@@ -147,7 +147,7 @@ def respose_error(user: User, action: str, msg: str, value=0):
         "action": action,
         "value": value,
         "msg": msg,
-        "user": user.get_dict(),
+        "balance": user.balance,
     }), 200
 
 

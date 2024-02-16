@@ -7,7 +7,7 @@ from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
 from utils import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any,
-                   response_msg, response_not_found, use_db_session, use_user)
+                   response_msg, response_not_found, use_db_session, use_user, use_user_try)
 
 
 blueprint = Blueprint("quest", __name__)
@@ -15,9 +15,10 @@ blueprint = Blueprint("quest", __name__)
 
 @blueprint.route("/api/quests")
 @use_db_session()
-def quests(db_sess: Session):
-    quests = Quest.all(db_sess)
-    return jsonify_list(quests), 200
+@use_user_try()
+def quests(db_sess: Session, user: User):
+    quests = Quest.all_for_user(db_sess, user)
+    return jsonify(quests), 200
 
 
 @blueprint.route("/api/quests_full")

@@ -166,7 +166,7 @@ def docs():
                 "action": "'quest' | 'store' | 'send' | 'promote'",
                 "value": "number",
                 "msg": "string",
-                "user": "User",
+                "balance": "number",
             },
         },
         "/api/promote_worker": {
@@ -195,7 +195,6 @@ def docs():
             "last_name": "string",
             "photo": "string",
             "balance": "number",
-            "complited_quests": "number[]",
             "roles": "string[]",
             "operations": "string[]",
         },
@@ -208,7 +207,6 @@ def docs():
             "last_name": "string | null",
             "photo": "string | null",
             "balance": "number",
-            "complited_quests": "number[]",
             "roles": "string[]",
             "deleted": "bool",
             "operations": "string[]",
@@ -232,6 +230,7 @@ def docs():
             "name": "string",
             "description": "string",
             "reward": "number",
+            "completed": "bool",
         },
         "QuestFull": {
             "id": "number",

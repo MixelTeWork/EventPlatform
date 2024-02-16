@@ -7,6 +7,7 @@ export interface Quest
 	name: string,
 	description: string,
 	reward: number,
+	completed: boolean,
 }
 
 export interface QuestFull

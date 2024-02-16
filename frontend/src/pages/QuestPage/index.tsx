@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQuests, type Quest } from "../../api/quest";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
@@ -7,9 +6,6 @@ import displayError from "../../utils/displayError";
 import items from "./items.png"
 import btn from "./btn.png"
 import styles from "./styles.module.css"
-import useUser, { useUpdateUser } from "../../api/user";
-import Popup from "../../components/Popup";
-import QrCode from "../../components/QrCode";
 import StyledWindow from "../../components/StyledWindow";
 import useStateObj from "../../utils/useStateObj";
 import { Link } from "react-router-dom";
@@ -19,10 +15,7 @@ import classNames from "../../utils/classNames";
 export default function QuestPage()
 {
 	useTitle("Квесты");
-	const user = useUser();
-	const updateUser = useUpdateUser();
 	const openQuest = useStateObj<Quest | null>(null);
-	const [popupIsOpen, setPopupIsOpen] = useState(false);
 	const quests = useQuests();
 
 	return (
@@ -30,7 +23,6 @@ export default function QuestPage()
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			{quests.isLoading && <Spinner />}
-			{user.isFetching && <Spinner />}
 			<StyledWindow
 				className={styles.body}
 				title="Квесты"
@@ -40,7 +32,7 @@ export default function QuestPage()
 				{openQuest.v ?
 					<div className={styles.questDescription}>
 						<button
-							className={classNames(styles.quest, user.data?.complited_quests.includes(openQuest.v.id) && styles.quest_completed)}
+							className={classNames(styles.quest, openQuest.v.completed && styles.quest_completed)}
 							key={openQuest.v.id}
 							onClick={() => openQuest.set(null)}
 						>
@@ -57,7 +49,7 @@ export default function QuestPage()
 						{displayError(quests)}
 						{quests.data && (fakeQuests.concat(quests.data)).map(quest =>
 							<button
-								className={classNames(styles.quest, user.data?.complited_quests.includes(quest.id) && styles.quest_completed)}
+								className={classNames(styles.quest, quest.completed && styles.quest_completed)}
 								key={quest.id}
 								onClick={() => openQuest.set(quest)}
 							>
@@ -67,22 +59,6 @@ export default function QuestPage()
 						)}
 					</div>}
 			</StyledWindow>
-			<Popup title="Завершение квеста" open={popupIsOpen} close={() =>
-			{
-				setPopupIsOpen(false);
-				if (user.data?.auth)
-					updateUser();
-			}}>
-				{user?.data?.auth ?
-					<>
-						<QrCode code={`user_${user.data.id}`} colorBg="#ffffff00" scale={13} />
-						<h3>Покажите qr-код квестовику</h3>
-					</> : <>
-						<p>Для прохождения квестов необходимо войти в систему.</p>
-						<p>Кнопка входа находиться в правом верхнем углу.</p>
-					</>
-				}
-			</Popup>
 		</Layout>
 	);
 }
@@ -93,6 +69,7 @@ const fakeQuests: Quest[] = [
 		name: "Барахолка",
 		description: "Сдайте одно [БАРАХЛО], чтобы обменять его на другое [БАРАХЛО] или виртуальную валюту GGG!",
 		reward: Infinity,
+		completed: false,
 	}
 ]
 

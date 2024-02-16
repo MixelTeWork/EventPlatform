@@ -75,18 +75,19 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         return quests.all()
 
     @staticmethod
-    def all_for_user(user):
-        db_sess = Session.object_session(user)
+    def all_for_user(db_sess: Session, user):
+        userId = user.id if user else -1
         quests = db_sess\
             .query(Quest)\
             .join(UserQuest, UserQuest.questId == Quest.id, isouter=True)\
-            .filter((UserQuest.userId == user.id) | (UserQuest.userId == None))\
-            .values(Quest.id, Quest.name, Quest.reward, UserQuest.userId)
+            .filter((UserQuest.userId == userId) | ((UserQuest.userId == None) & (Quest.hidden == False)))\
+            .values(Quest.id, Quest.name, Quest.description, Quest.reward, UserQuest.userId)
         return list(map(lambda v: {
             "id": v[0],
             "name": v[1],
-            "reward": v[2],
-            "completed": v[3] is not None,
+            "description": v[2],
+            "reward": v[3],
+            "completed": v[4] is not None,
         }, quests))
 
     def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None], hidden: Union[bool, None]):
