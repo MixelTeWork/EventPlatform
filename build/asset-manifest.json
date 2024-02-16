@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "https://www.underparty.fun/static/css/main.b3b5c9c0.css",
-    "main.js": "https://www.underparty.fun/static/js/main.89b8324d.js",
-    "static/css/859.cdbafd42.chunk.css": "https://www.underparty.fun/static/css/859.cdbafd42.chunk.css",
-    "static/js/859.6b4f5627.chunk.js": "https://www.underparty.fun/static/js/859.6b4f5627.chunk.js",
+    "main.js": "https://www.underparty.fun/static/js/main.f0b6b776.js",
+    "static/css/719.0d406cdd.chunk.css": "https://www.underparty.fun/static/css/719.0d406cdd.chunk.css",
+    "static/js/719.8a0641a2.chunk.js": "https://www.underparty.fun/static/js/719.8a0641a2.chunk.js",
     "static/js/684.f12b0026.chunk.js": "https://www.underparty.fun/static/js/684.f12b0026.chunk.js",
     "static/js/32.f00e6356.chunk.js": "https://www.underparty.fun/static/js/32.f00e6356.chunk.js",
     "static/media/map3.png": "https://www.underparty.fun/static/media/map3.8a733cb476e5d20c9a65.png",
@@ -17,14 +17,14 @@
     "static/media/beep.mp3": "https://www.underparty.fun/static/media/beep.38f199e084efe5461ffd.mp3",
     "index.html": "https://www.underparty.fun/index.html",
     "main.b3b5c9c0.css.map": "https://www.underparty.fun/static/css/main.b3b5c9c0.css.map",
-    "main.89b8324d.js.map": "https://www.underparty.fun/static/js/main.89b8324d.js.map",
-    "859.cdbafd42.chunk.css.map": "https://www.underparty.fun/static/css/859.cdbafd42.chunk.css.map",
-    "859.6b4f5627.chunk.js.map": "https://www.underparty.fun/static/js/859.6b4f5627.chunk.js.map",
+    "main.f0b6b776.js.map": "https://www.underparty.fun/static/js/main.f0b6b776.js.map",
+    "719.0d406cdd.chunk.css.map": "https://www.underparty.fun/static/css/719.0d406cdd.chunk.css.map",
+    "719.8a0641a2.chunk.js.map": "https://www.underparty.fun/static/js/719.8a0641a2.chunk.js.map",
     "684.f12b0026.chunk.js.map": "https://www.underparty.fun/static/js/684.f12b0026.chunk.js.map",
     "32.f00e6356.chunk.js.map": "https://www.underparty.fun/static/js/32.f00e6356.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b3b5c9c0.css",
-    "static/js/main.89b8324d.js"
+    "static/js/main.f0b6b776.js"
   ]
 }
