@@ -18,7 +18,7 @@ export default function WorkerQuestPage()
 	const selectedQuest = useStateObj<QuestFull | null>(null, popupOpen.setT);
 
 	return (
-		<Layout centered gap="1rem" height100 className={styles.root}>
+		<Layout centered homeBtn gap="1rem" height100 className={styles.root}>
 			{quests.isLoading && <Spinner />}
 			{displayError(quests)}
 			<h2>Какой квест вы проводите?</h2>

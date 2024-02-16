@@ -17,7 +17,7 @@ export default function SendPage()
 	const mutationCheck = useMutationCheckSend();
 
 	return (
-		<Layout centered>
+		<Layout centered homeBtn>
 			<h2>Казначейство</h2>
 			{mutation.isLoading && <Spinner />}
 			{mutationCheck.isLoading && <Spinner />}

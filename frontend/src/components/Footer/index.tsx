@@ -6,7 +6,7 @@ export default function Footer({ curPage = "" }: FooterProps)
 	return (
 		<div className={styles.root}>
 			<div>
-				<Link className={curPage == "map" ? styles.active : ""} to={"/"}>Карта</Link>
+				<Link className={curPage == "map" ? styles.active : ""} to={"/map"}>Карта</Link>
 				<Link className={curPage == "timetable" ? styles.active : ""} to={"/timetable"}>План</Link>
 				<Link className={curPage == "quest" ? styles.active : ""} to={"/quest"}>Квест</Link>
 				<Link className={curPage == "store" ? styles.active : ""} to={"/store"}>Магаз</Link>

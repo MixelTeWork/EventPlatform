@@ -6,7 +6,7 @@ import { useHasPermission } from "../../api/operations";
 export default function WorkerPage()
 {
 	return (
-		<Layout centered gap="1rem">
+		<Layout centered homeBtn gap="1rem">
 			{useHasPermission("manage_store") && <Link to={"/manage_store"} className={styles.btn}>Управление магазином</Link>}
 			{useHasPermission("manage_quest") && <Link to={"/manage_quest"} className={styles.btn}>Управление квестами</Link>}
 			{useHasPermission("page_worker_quest") && <Link to={"/worker_quest"} className={styles.btn}>Для квестовиков</Link>}

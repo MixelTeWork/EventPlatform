@@ -10,7 +10,7 @@ export default function LogPage()
 	useTitle("Log");
 	const log = useLog();
 
-	return <Layout centeredPage styles={{ fontFamily: "'PT Sans', Arial" }}>
+	return <Layout centeredPage styles={{ fontFamily: "'PT Sans', Arial" }} homeBtn>
 		{log.isFetching && <h3>Загрузка</h3>}
 		{displayError(log)}
 		{!log.isFetching && <button className={styles.btn} onClick={() => log.refetch()}>Update</button>}

@@ -16,7 +16,7 @@ export default function ScannerPage()
 	const res = useStateObj<ScannerRes | null>(null, popupOpen.setT);
 
 	return (
-		<Layout centeredPage headerColor="#51185b" gap="1em" className={styles.root} footer={<Footer />}>
+		<Layout centeredPage headerColor="#51185b" gap="1em" className={styles.root} footer={<Footer />} homeBtn>
 			<div className={styles.background}></div>
 			<StyledWindow title="QR-Активатор" disableScroll className={styles.body}>
 				<Scanner

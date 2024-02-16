@@ -13,7 +13,7 @@ export default function ManageQuestPage()
 	const quests = useQuestsFull();
 
 	return (
-		<Layout centeredPage gap="0.5rem">
+		<Layout centeredPage gap="0.5rem" homeBtn>
 			{quests.isLoading && <Spinner />}
 			{displayError(quests)}
 

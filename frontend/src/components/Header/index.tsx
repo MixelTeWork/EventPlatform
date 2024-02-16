@@ -6,8 +6,9 @@ import Spinner from "../Spinner";
 import { useState } from "react";
 import classNames from "../../utils/classNames";
 import hasPermission from "../../api/operations";
+import IconHome from "../../icons/home";
 
-export default function Header({ color = "#042e40" }: HeaderProps)
+export default function Header({ color = "#042e40", homeBtn = false }: HeaderProps)
 {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
@@ -19,7 +20,9 @@ export default function Header({ color = "#042e40" }: HeaderProps)
 
 	return (
 		<div className={styles.root} style={{ background: color }}>
-			<Link to={"/"} className={styles.home}></Link>
+			<Link to={"/"} className={styles.home}>
+				{homeBtn && <IconHome />}
+			</Link>
 			<span className={styles.block}>
 				<div className={styles.balance}>{user.data?.balance || 0} G</div>
 				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/")}>
@@ -45,4 +48,5 @@ export default function Header({ color = "#042e40" }: HeaderProps)
 interface HeaderProps
 {
 	color?: string,
+	homeBtn?: boolean
 }

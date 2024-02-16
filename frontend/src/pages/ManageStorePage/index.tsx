@@ -13,7 +13,7 @@ export default function ManageStorePage()
 	const items = useStoreItemsFull();
 
 	return (
-		<Layout centeredPage gap="0.5rem">
+		<Layout centeredPage gap="0.5rem" homeBtn>
 			{items.isLoading && <Spinner />}
 			{displayError(items)}
 
