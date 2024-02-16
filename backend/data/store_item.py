@@ -31,13 +31,14 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
     @staticmethod
     def new(db_sess: Session, actor: User, name: str, price: int, count: int, imgId: Union[int, None]):
         item = StoreItem(name=name, price=price, count=count, imgId=imgId)
-        db_sess.add(item)
 
         t = item
         while t is not None:
             id_big = randstr(8)
             t = db_sess.query(StoreItem).filter(StoreItem.id_big == id_big).first()
         item.id_big = id_big
+
+        db_sess.add(item)
 
         now = get_datetime_now()
         log = Log(
