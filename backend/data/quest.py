@@ -78,18 +78,39 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     @staticmethod
     def all_for_user(db_sess: Session, user):
         userId = user.id if user else -1
-        quests = db_sess\
+        all_quests = db_sess\
             .query(Quest)\
-            .join(UserQuest, UserQuest.questId == Quest.id, isouter=True)\
-            .filter((UserQuest.userId == userId) | ((UserQuest.userId == None) & (Quest.hidden == False)))\
-            .values(Quest.id, Quest.name, Quest.description, Quest.reward, UserQuest.userId)
-        return list(map(lambda v: {
-            "id": v[0],
-            "name": v[1],
-            "description": v[2],
-            "reward": v[3],
-            "completed": v[4] is not None,
-        }, quests))
+            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden)
+        completed_quests = db_sess\
+            .query(Quest)\
+            .join(UserQuest, UserQuest.questId == Quest.id)\
+            .filter(UserQuest.userId == userId)\
+            .values(Quest.id)
+
+        completed_quests = list(map(lambda x: x[0], completed_quests))
+
+        quests = []
+        for v in list(all_quests):
+            id = v[0]
+            name = v[1]
+            description = v[2]
+            reward = v[3]
+            hidden = v[4]
+
+            completed = False
+            if v[0] in completed_quests:
+                completed = True
+
+            if not hidden or completed:
+                quests.append({
+                    "id": id,
+                    "name": name,
+                    "description": description,
+                    "reward": reward,
+                    "completed": completed,
+                })
+
+        return quests
 
     def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None], hidden: Union[bool, None]):
         db_sess = Session.object_session(self)
