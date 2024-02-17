@@ -85,6 +85,7 @@
 	justify-content: space-between;
 	border-top: 2px solid white;
 	padding: 0.2rem;
+	word-break: break-all;
 }
 
 .item__desc > :last-child {
