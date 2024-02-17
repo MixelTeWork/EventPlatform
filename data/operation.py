@@ -29,6 +29,7 @@ class Operations:
 
     manage_store = ("manage_store", "Управление товарами")
     manage_quest = ("manage_quest", "Управление квестами")
+    manage_games = ("manage_games", "Управление играми")
 
     add_any_image = ("add_any_image", "Добавление картинок")
     send_any = ("send_any", "Любые пересылки")

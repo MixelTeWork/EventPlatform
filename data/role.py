@@ -149,6 +149,7 @@ ROLES = {
             Operations.page_worker_quest,
             Operations.page_worker_store,
             Operations.send_any,
+            Operations.manage_games,
         ]
     },
     Roles.visitor: {
