@@ -21,7 +21,7 @@ def img(db_sess: Session, imgId):
     response = send_file(path)
     response.headers.set("Content-Type", f"image/{img.type}")
     response.headers.set("Content-Disposition", "inline", filename=filename)
-    response.headers.set("Cache-Control", "public,max-age=31536000,immutable")
+    response.headers.set("Cache-Control", "public,max-age=604800,immutable")
     return response
 
 
