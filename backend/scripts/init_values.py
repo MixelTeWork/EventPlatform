@@ -21,6 +21,7 @@ def init_values(dev=False, cmd=False):
     from data.role import Role, Roles, ROLES
     from data.user import User
     from data.quest import Quest
+    from data.race import Race
     from data.store_item import StoreItem
     from data.get_datetime_now import get_datetime_now
 
@@ -51,6 +52,8 @@ def init_values(dev=False, cmd=False):
         user_admin = User.new(db_sess, User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin])
 
         log_changes(db_sess, user_admin, roles)
+
+        Race.init(db_sess)
 
         if dev:
             init_values_dev(db_sess, user_admin)

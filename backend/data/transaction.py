@@ -24,7 +24,7 @@ class Transaction(SqlAlchemyBase, SerializerMixin):
         return f"<Transaction> [{self.id}] {self.action}"
 
     @staticmethod
-    def new(db_sess: Session, userFromId: int, userToId: int, value: int, action: str, itemId: int = -1):
+    def new(db_sess: Session, userFromId: int, userToId: int, value: int, action: str, itemId: int = -1, no_commit=False):
         now = get_datetime_now()
         item = Transaction(
             date=now,
@@ -35,7 +35,8 @@ class Transaction(SqlAlchemyBase, SerializerMixin):
             itemId=itemId,
         )
         db_sess.add(item)
-        db_sess.commit()
+        if not no_commit:
+            db_sess.commit()
 
         return item
 
@@ -55,3 +56,5 @@ class Actions:
     buyItem = "buyItem"
     endQuest = "endQuest"
     send = "sendMoney"
+    raceJoin = "raceJoin"
+    raceWin = "raceWin"
