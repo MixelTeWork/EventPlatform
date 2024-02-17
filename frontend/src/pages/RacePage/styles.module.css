@@ -185,13 +185,48 @@
 	margin-block: 1rem;
 }
 
-.join__btns img {
+.join__btns div {
+	position: relative;
 	grid-column: 2/3;
 	grid-row: 1/3;
+	display: flex;
+	justify-self: center;
+	align-self: center;
+	width: fit-content;
+	height: fit-content;
+	mask-image: url(./ghost2.png);
+	mask-size: 100%;
+	mask-position: center;
+	mask-repeat: no-repeat;
+	image-rendering: pixelated;
+}
+
+.join__btns img {
 	width: 4rem;
 	height: auto;
 	image-rendering: pixelated;
-	justify-self: center;
+	z-index: 2;
+	mix-blend-mode: multiply;
+}
+
+.join__btns div::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: white;
+}
+
+.join__btns div[color="blue"]::after {
+	background-color: #6868ff;
+}
+.join__btns div[color="red"]::after {
+	background-color: red;
+}
+.join__btns div[color="yellow"]::after {
+	background-color: yellow;
+}
+.join__btns div[color="green"]::after {
+	background-color: #00af00;
 }
 
 .join__btns button {
@@ -253,6 +288,10 @@
 	width: 2.4rem;
 	height: 1.6rem;
 	background-image: url(./snail7.png);
+}
+
+.join__btns .selectedTeam {
+	outline: 2px solid white;
 }
 
 .joinBtn {

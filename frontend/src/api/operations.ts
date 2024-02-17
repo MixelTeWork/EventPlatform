@@ -12,6 +12,7 @@ const Operations = {
 	promote_manager: "promote_manager",
 	manage_store: "manage_store",
 	manage_quest: "manage_quest",
+	manage_games: "manage_games",
 	send_any: "send_any",
 }
 

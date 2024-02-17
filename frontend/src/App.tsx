@@ -29,6 +29,8 @@ import WorkerPage from "./pages/WorkerPage";
 import WorkerQuestPage from "./pages/WorkerQuestPage";
 import WorkerStorePage from "./pages/WorkerStorePage";
 import RacePage from "./pages/RacePage";
+import RaceSettingsPage from "./pages/RaceSettingsPage";
+import RaceScreenPage from "./pages/RaceScreenPage";
 
 export default function App()
 {
@@ -65,6 +67,8 @@ export default function App()
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}
 				{ProtectedRoute("manage_quest", "/manage_quest", <ManageQuestPage />)}
+				{ProtectedRoute("manage_games", "/race_settings", <RaceSettingsPage />)}
+				{ProtectedRoute("manage_games", "/race_screen", <RaceScreenPage />)}
 				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
 				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}

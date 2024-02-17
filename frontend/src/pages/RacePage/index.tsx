@@ -6,13 +6,17 @@ import styles from "./styles.module.css"
 import banner from "./banner.png"
 import ghost2 from "./ghost2.png"
 import press from "./press.png"
+import useStateObj from "../../utils/useStateObj";
 
+type Team = "blue" | "yellow" | "green" | "red";
 type State = "title" | "wait" | "join" | "play" | "won" | "loss";
 
 export default function RacePage()
 {
 	useTitle("Гонки");
-	const state = "title" as State;
+	const selectedTeam = useStateObj<Team | "">("");
+
+	const state = "join" as State;
 
 	return (
 		<Layout centeredPage headerColor="#512d00" gap="1em" className={styles.root} footer={<Footer curPage="race" />}>
@@ -56,11 +60,33 @@ export default function RacePage()
 					<h2 className={styles.subtitle}>Участие</h2>
 					<h2 className={classNames(styles.subtitle, styles.yellow)}>10G</h2>
 					<div className={styles.join__btns}>
-						<button className={styles.btn_blue}>Синий</button>
-						<button className={styles.btn_red}>Красный</button>
-						<img src={ghost2} alt="Призрак" />
-						<button className={styles.btn_yellow}>Жёлтый</button>
-						<button className={styles.btn_green}>Зелёный</button>
+						<button
+							className={classNames(styles.btn_blue, selectedTeam.v == "blue" && styles.selectedTeam)}
+							onClick={() => selectedTeam.set("blue")}
+						>
+							Синий
+						</button>
+						<button
+							className={classNames(styles.btn_red, selectedTeam.v == "red" && styles.selectedTeam)}
+							onClick={() => selectedTeam.set("red")}
+						>
+							Красный
+						</button>
+						<div color={selectedTeam.v}>
+							<img src={ghost2} alt="Призрак" />
+						</div>
+						<button
+							className={classNames(styles.btn_yellow, selectedTeam.v == "yellow" && styles.selectedTeam)}
+							onClick={() => selectedTeam.set("yellow")}
+						>
+							Жёлтый
+						</button>
+						<button
+							className={classNames(styles.btn_green, selectedTeam.v == "green" && styles.selectedTeam)}
+							onClick={() => selectedTeam.set("green")}
+						>
+							Зелёный
+						</button>
 					</div>
 					<button className={styles.joinBtn}>Принять участие</button>
 				</div>

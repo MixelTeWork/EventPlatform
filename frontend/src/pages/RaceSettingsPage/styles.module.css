@@ -1,0 +1,56 @@
+.input {
+	display: grid;
+	grid-template-columns: auto 3rem 2rem 2rem;
+	gap: 0.2rem;
+}
+
+.input input {
+	background-color: black;
+	color: white;
+	border: 1px solid transparent;
+	border-bottom: 1px solid aquamarine;
+	border-radius: 0.25rem;
+	font-size: 1rem;
+	outline: none;
+}
+.input input:focus-visible {
+	border: 1px solid aquamarine;
+}
+
+.input button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	color: white;
+	border: 1px solid violet;
+	border-radius: 0.25rem;
+	padding: 0;
+	font-size: 1rem;
+}
+
+.openScreen {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	color: white;
+	border: 1px solid aquamarine;
+	border-radius: 0.25rem;
+	padding: 0.4rem;
+	font-size: 1rem;
+	text-decoration: none;
+}
+
+.start {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	color: white;
+	border: 1px solid violet;
+	border-radius: 0.25rem;
+	padding: 0.4rem;
+	font-size: 1rem;
+	text-decoration: none;
+}
