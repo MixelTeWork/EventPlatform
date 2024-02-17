@@ -77,17 +77,20 @@ class Quest(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def all_for_user(db_sess: Session, user):
-        userId = user.id if user else -1
+        if user:
+            completed_quests = db_sess\
+                .query(Quest)\
+                .join(UserQuest, UserQuest.questId == Quest.id)\
+                .filter(UserQuest.userId == user.id)\
+                .values(Quest.id)
+
+            completed_quests = list(map(lambda x: x[0], completed_quests))
+        else:
+            completed_quests = []
+
         all_quests = db_sess\
             .query(Quest)\
             .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden)
-        completed_quests = db_sess\
-            .query(Quest)\
-            .join(UserQuest, UserQuest.questId == Quest.id)\
-            .filter(UserQuest.userId == userId)\
-            .values(Quest.id)
-
-        completed_quests = list(map(lambda x: x[0], completed_quests))
 
         quests = []
         for v in list(all_quests):
@@ -98,7 +101,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             hidden = v[4]
 
             completed = False
-            if v[0] in completed_quests:
+            if id in completed_quests:
                 completed = True
 
             if not hidden or completed:
