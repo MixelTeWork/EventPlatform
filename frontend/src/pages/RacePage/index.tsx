@@ -16,7 +16,7 @@ export default function RacePage()
 					<span>Для участия в гонке приходите на </span>
 					<span className={styles.yellow}>Главную&nbsp;&nbsp;сцену</span>
 					<span> в </span>
-					<span className={styles.yellow}>13:00</span>
+					<span className={styles.yellow}>16:30</span>
 				</div>
 			</div>
 		</Layout>
