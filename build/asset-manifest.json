@@ -1,11 +1,12 @@
 {
   "files": {
     "main.css": "https://www.underparty.fun/static/css/main.b3b5c9c0.css",
-    "main.js": "https://www.underparty.fun/static/js/main.ee95deae.js",
-    "static/css/313.9690b46a.chunk.css": "https://www.underparty.fun/static/css/313.9690b46a.chunk.css",
-    "static/js/313.ecdead09.chunk.js": "https://www.underparty.fun/static/js/313.ecdead09.chunk.js",
+    "main.js": "https://www.underparty.fun/static/js/main.911fca1a.js",
+    "static/css/658.da0b3269.chunk.css": "https://www.underparty.fun/static/css/658.da0b3269.chunk.css",
+    "static/js/658.06cb42a5.chunk.js": "https://www.underparty.fun/static/js/658.06cb42a5.chunk.js",
     "static/js/684.f12b0026.chunk.js": "https://www.underparty.fun/static/js/684.f12b0026.chunk.js",
     "static/js/32.f00e6356.chunk.js": "https://www.underparty.fun/static/js/32.f00e6356.chunk.js",
+    "static/media/ost.mp3": "https://www.underparty.fun/static/media/ost.03d920d73af9d5efa36e.mp3",
     "static/media/map3.png": "https://www.underparty.fun/static/media/map3.8a733cb476e5d20c9a65.png",
     "static/media/stars.png": "https://www.underparty.fun/static/media/stars.4057d5f6ab8a728769b5.png",
     "static/media/map1.png": "https://www.underparty.fun/static/media/map1.f12554b9054ea5e2c850.png",
@@ -13,20 +14,19 @@
     "static/media/castle.png": "https://www.underparty.fun/static/media/castle.e17b66363788b65205f3.png",
     "static/media/background.png": "https://www.underparty.fun/static/media/background.5ec93f34cef4231609b6.png",
     "static/media/city.png": "https://www.underparty.fun/static/media/city.10ddee993980b103bc6c.png",
-    "static/media/ost_.mp3": "https://www.underparty.fun/static/media/ost_.6a8d179e31141dec3e8a.mp3",
     "static/media/logo.png": "https://www.underparty.fun/static/media/logo.9eedfd50187f5fda6d18.png",
     "static/media/banner.png": "https://www.underparty.fun/static/media/banner.35e275b252c8f3a946d0.png",
     "static/media/beep.mp3": "https://www.underparty.fun/static/media/beep.38f199e084efe5461ffd.mp3",
     "index.html": "https://www.underparty.fun/index.html",
     "main.b3b5c9c0.css.map": "https://www.underparty.fun/static/css/main.b3b5c9c0.css.map",
-    "main.ee95deae.js.map": "https://www.underparty.fun/static/js/main.ee95deae.js.map",
-    "313.9690b46a.chunk.css.map": "https://www.underparty.fun/static/css/313.9690b46a.chunk.css.map",
-    "313.ecdead09.chunk.js.map": "https://www.underparty.fun/static/js/313.ecdead09.chunk.js.map",
+    "main.911fca1a.js.map": "https://www.underparty.fun/static/js/main.911fca1a.js.map",
+    "658.da0b3269.chunk.css.map": "https://www.underparty.fun/static/css/658.da0b3269.chunk.css.map",
+    "658.06cb42a5.chunk.js.map": "https://www.underparty.fun/static/js/658.06cb42a5.chunk.js.map",
     "684.f12b0026.chunk.js.map": "https://www.underparty.fun/static/js/684.f12b0026.chunk.js.map",
     "32.f00e6356.chunk.js.map": "https://www.underparty.fun/static/js/32.f00e6356.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b3b5c9c0.css",
-    "static/js/main.ee95deae.js"
+    "static/js/main.911fca1a.js"
   ]
 }
