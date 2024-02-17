@@ -16,7 +16,7 @@ export default function RacePage()
 	useTitle("Гонки");
 	const selectedTeam = useStateObj<Team | "">("");
 
-	const state = "join" as State;
+	const state = "title" as State;
 
 	return (
 		<Layout centeredPage headerColor="#512d00" gap="1em" className={styles.root} footer={<Footer curPage="race" />}>
