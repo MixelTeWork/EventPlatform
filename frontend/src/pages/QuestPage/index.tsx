@@ -23,42 +23,47 @@ export default function QuestPage()
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			{quests.isLoading && <Spinner />}
-			<StyledWindow
-				className={styles.body}
-				title="Квесты"
-				footer={<img className={styles.items} src={items} alt="" />}
-				onClose={() => openQuest.set(null)}
-			>
-				{openQuest.v ?
-					<div className={styles.questDescription}>
-						<button
-							className={classNames(styles.quest, openQuest.v.completed && styles.quest_completed)}
-							key={openQuest.v.id}
-							onClick={() => openQuest.set(null)}
-						>
-							<span>{openQuest.v.name}</span>
-							<span>{renderReward(openQuest.v.reward)}</span>
-						</button>
-						<div className={styles.questDescription__body}>{openQuest.v.description || "Нет описания"}</div>
-						<Link to="/scanner" className={styles.btn}>
-							<img src={btn} alt="Сдать" />
-						</Link>
-					</div>
-					:
-					<div className={styles.quests}>
-						{displayError(quests)}
-						{quests.data && (fakeQuests.concat(quests.data)).map(quest =>
+			<div className={styles.body}>
+				<StyledWindow
+					className={styles.window}
+					title="Квесты"
+					footer={<img className={styles.items} src={items} alt="" />}
+					onClose={() => openQuest.set(null)}
+				>
+					{openQuest.v ?
+						<div className={styles.questDescription}>
 							<button
-								className={classNames(styles.quest, quest.completed && styles.quest_completed)}
-								key={quest.id}
-								onClick={() => openQuest.set(quest)}
+								className={classNames(styles.quest, openQuest.v.completed && styles.quest_completed)}
+								key={openQuest.v.id}
+								onClick={() => openQuest.set(null)}
 							>
-								<span>{quest.name}</span>
-								<span>{renderReward(quest.reward)}</span>
+								<span>{openQuest.v.name}</span>
+								<span>{renderReward(openQuest.v.reward)}</span>
 							</button>
-						)}
-					</div>}
-			</StyledWindow>
+							<div className={styles.questDescription__body}>{openQuest.v.description || "Нет описания"}</div>
+							<Link to="/scanner" className={styles.btn}>
+								<img src={btn} alt="Сдать" />
+							</Link>
+						</div>
+						:
+						<div className={styles.quests}>
+							{displayError(quests)}
+							{quests.data && (fakeQuests.concat(quests.data)).map(quest =>
+								<button
+									className={classNames(styles.quest, quest.completed && styles.quest_completed)}
+									key={quest.id}
+									onClick={() => openQuest.set(quest)}
+								>
+									<span>{quest.name}</span>
+									<span>{renderReward(quest.reward)}</span>
+								</button>
+							)}
+						</div>}
+				</StyledWindow>
+				<Link to="/scanner" className={styles.btn}>
+					<img src={btn} alt="Купить" />
+				</Link>
+			</div>
 		</Layout>
 	);
 }

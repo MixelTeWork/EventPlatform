@@ -11,25 +11,40 @@
 	image-rendering: pixelated;
 }
 
+.body {
+	margin-bottom: 1.5rem;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.window {
+	position: relative;
+}
+
 .title {
 	font-size: 3rem;
 	text-transform: uppercase;
 }
 
-.body {
-	position: relative;
-	margin-bottom: 6rem;
-	height: 100%;
+.btn {
+	background-color: transparent;
+	border: none;
+	display: flex;
+	justify-content: center;
+	margin-top: 1rem;
 }
 
 .items {
 	position: absolute;
-	bottom: -2px;
+	bottom: -4px;
 	left: 0;
 	width: 100%;
 	height: auto;
 	transform: translateY(100%);
-	z-index: -1;
+	pointer-events: none;
+	z-index: 1;
 }
 
 .quests {
