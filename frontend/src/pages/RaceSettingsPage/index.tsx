@@ -47,6 +47,8 @@ export default function RaceSettingsPage()
 			{raceCounter.isLoading && <Spinner />}
 			{mutateDuration.isLoading && <Spinner />}
 			{mutateCounter.isLoading && <Spinner />}
+			{mutatePrice.isLoading && <Spinner />}
+			{mutateStartStr.isLoading && <Spinner />}
 			{raceReset.isLoading && <Spinner />}
 			{racePrice.isLoading && <Spinner />}
 			{raceStartStr.isLoading && <Spinner />}

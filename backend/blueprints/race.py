@@ -5,7 +5,7 @@ from data.operation import Operations
 from data.race import Race
 from data.transaction import Actions, Transaction
 from data.user_race import UserRace
-from utils import get_json_values_from_req, permission_required, response_msg, use_db_session, use_user
+from utils import get_json_values_from_req, permission_required, response_msg, use_db_session, use_user, use_user_try
 from data.user import User
 
 
@@ -150,9 +150,8 @@ def finish(db_sess: Session, user: User):
 
 
 @blueprint.route("/api/race/state")
-@jwt_required()
 @use_db_session()
-@use_user()
+@use_user_try()
 def state(db_sess: Session, user: User):
     return jsonify(Race.get_state(db_sess, user)), 200
 
