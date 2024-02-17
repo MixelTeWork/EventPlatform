@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "https://www.underparty.fun/static/css/main.b3b5c9c0.css",
-    "main.js": "https://www.underparty.fun/static/js/main.fcfaf724.js",
+    "main.js": "https://www.underparty.fun/static/js/main.ee95deae.js",
     "static/css/313.9690b46a.chunk.css": "https://www.underparty.fun/static/css/313.9690b46a.chunk.css",
-    "static/js/313.a61fe454.chunk.js": "https://www.underparty.fun/static/js/313.a61fe454.chunk.js",
+    "static/js/313.ecdead09.chunk.js": "https://www.underparty.fun/static/js/313.ecdead09.chunk.js",
     "static/js/684.f12b0026.chunk.js": "https://www.underparty.fun/static/js/684.f12b0026.chunk.js",
     "static/js/32.f00e6356.chunk.js": "https://www.underparty.fun/static/js/32.f00e6356.chunk.js",
     "static/media/map3.png": "https://www.underparty.fun/static/media/map3.8a733cb476e5d20c9a65.png",
@@ -19,14 +19,14 @@
     "static/media/beep.mp3": "https://www.underparty.fun/static/media/beep.38f199e084efe5461ffd.mp3",
     "index.html": "https://www.underparty.fun/index.html",
     "main.b3b5c9c0.css.map": "https://www.underparty.fun/static/css/main.b3b5c9c0.css.map",
-    "main.fcfaf724.js.map": "https://www.underparty.fun/static/js/main.fcfaf724.js.map",
+    "main.ee95deae.js.map": "https://www.underparty.fun/static/js/main.ee95deae.js.map",
     "313.9690b46a.chunk.css.map": "https://www.underparty.fun/static/css/313.9690b46a.chunk.css.map",
-    "313.a61fe454.chunk.js.map": "https://www.underparty.fun/static/js/313.a61fe454.chunk.js.map",
+    "313.ecdead09.chunk.js.map": "https://www.underparty.fun/static/js/313.ecdead09.chunk.js.map",
     "684.f12b0026.chunk.js.map": "https://www.underparty.fun/static/js/684.f12b0026.chunk.js.map",
     "32.f00e6356.chunk.js.map": "https://www.underparty.fun/static/js/32.f00e6356.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b3b5c9c0.css",
-    "static/js/main.fcfaf724.js"
+    "static/js/main.ee95deae.js"
   ]
 }
