@@ -132,7 +132,7 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         db_sess.add(Log(
             date=get_datetime_now(),
             actionCode=Actions.updated,
-            userId=actor.id if actor else 0,
+            userId=actor.id if actor else 1,
             userName=actor.name if actor else "system",
             tableName=Tables.StoreItem,
             recordId=self.id,
