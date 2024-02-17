@@ -43,8 +43,11 @@ class Race(SqlAlchemyBase, SerializerMixin):
     @staticmethod
     def get_state(db_sess: Session, user):
         race = Race.get(db_sess)
-        ur = db_sess.query(UserRace).filter(UserRace.userId == user.id).first()
-        team = ur.team if ur is not None else ""
+        if user is not None:
+            ur = db_sess.query(UserRace).filter(UserRace.userId == user.id).first()
+            team = ur.team if ur is not None else ""
+        else:
+            team = ""
 
         if race.winner is not None:
             if team == "":
