@@ -60,9 +60,12 @@ export default function QuestPage()
 							)}
 						</div>}
 				</StyledWindow>
-				<Link to="/scanner" className={styles.btn}>
-					<img src={btn} alt="Купить" />
-				</Link>
+				{!openQuest.v ?
+					<Link to="/scanner" className={styles.btn}>
+						<img src={btn} alt="Купить" />
+					</Link>
+					: <div className={styles.btn_empty}></div>
+				}
 			</div>
 		</Layout>
 	);
