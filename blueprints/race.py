@@ -177,6 +177,8 @@ def join(db_sess: Session, user: User):
     ur = db_sess.query(UserRace).filter(UserRace.userId == user.id).first()
     balance = user.balance
     if ur is None:
+        if balance < race.price:
+            return response_msg("Не хватает средств!"), 400
         user.balance = balance - race.price
         balance = user.balance
         Transaction.new(db_sess, user.id, 1, race.price, Actions.raceJoin, 1, True)
@@ -185,7 +187,4 @@ def join(db_sess: Session, user: User):
         ur.team = team
         db_sess.commit()
 
-    return jsonify({
-        "state": Race.get_state(db_sess, user),
-        "balance": balance,
-    }), 200
+    return jsonify(Race.get_state(db_sess, user)), 200
