@@ -46,8 +46,10 @@ class Race(SqlAlchemyBase, SerializerMixin):
         if user is not None:
             ur = db_sess.query(UserRace).filter(UserRace.userId == user.id).first()
             team = ur.team if ur is not None else ""
+            balance = user.balance
         else:
             team = ""
+            balance = 0
 
         if race.winner is not None:
             if team == "":
@@ -58,6 +60,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                     "counter": 0,
                     "price": race.price,
                     "start": race.startStr,
+                    "balance": balance,
                 }
             return {
                 "state": "won" if team == race.winner else "loss",
@@ -66,6 +69,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                 "counter": 0,
                 "price": race.price,
                 "start": race.startStr,
+                "balance": balance,
             }
 
         if race.startTime is None:
@@ -76,6 +80,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                 "counter": 0,
                 "price": race.price,
                 "start": race.startStr,
+                "balance": balance,
             }
 
         now = get_datetime_now().replace(tzinfo=None)
@@ -88,6 +93,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                 "counter": 0,
                 "price": race.price,
                 "start": race.startStr,
+                "balance": balance,
             }
         return {
             "state": "join" if team == "" else "wait",
@@ -96,6 +102,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
             "counter": race.counter - dt.seconds,
             "price": race.price,
             "start": race.startStr,
+            "balance": balance,
         }
 
     @staticmethod
@@ -104,8 +111,11 @@ class Race(SqlAlchemyBase, SerializerMixin):
         race.winner = team
         players = db_sess.query(User).join(UserRace, UserRace.userId == User.id).count()
         winners = list(db_sess.query(User).join(UserRace, UserRace.userId == User.id).filter(UserRace.team == team).all())
+        winners_count = len(winners)
+        if winners_count == 0:
+            winners_count = 1
         all_value = race.price * players
-        reward = all_value / len(winners) / 2
+        reward = all_value / winners_count / 2
         reward = math.floor(reward) + 10
         for winner in winners:
             winner.balance += reward

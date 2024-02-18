@@ -13,6 +13,7 @@ export interface RaceState
 	counter: number,
 	price: number,
 	start: string,
+	balance: number,
 }
 export interface RaceDuration
 {
@@ -33,9 +34,13 @@ export interface RaceStartStr
 
 export function useRaceState()
 {
+	const queryClient = useQueryClient();
 	return useQuery("raceState", async () =>
-		await fetchJsonGet<RaceState>("/api/race/state")
-	);
+	{
+		const r = await fetchJsonGet<RaceState>("/api/race/state")
+		queryClient.setQueryData<User>("user", user => ({ ...user!, balance: r.balance }));
+		return r;
+	});
 }
 
 export function useRaceDuration()
@@ -112,11 +117,11 @@ export function useMutationRaceJoin(onSuccess?: () => void, onError?: (err: any)
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (team: Team) =>
-			await fetchJsonPost<RaceJoin>("/api/race/join", { team }),
-		onSuccess: (res: RaceJoin) =>
+			await fetchJsonPost<RaceState>("/api/race/join", { team }),
+		onSuccess: (state: RaceState) =>
 		{
-			queryClient.setQueryData("raceState", res.state);
-			queryClient.setQueryData<User>("user", user => ({ ...user!, balance: res.balance }));
+			queryClient.setQueryData("raceState", state);
+			queryClient.setQueryData<User>("user", user => ({ ...user!, balance: state.balance }));
 			onSuccess?.();
 		},
 		onError,
@@ -124,11 +129,6 @@ export function useMutationRaceJoin(onSuccess?: () => void, onError?: (err: any)
 	return mutation;
 }
 
-interface RaceJoin
-{
-	state: RaceState,
-	balance: number,
-}
 
 export function useMutationRaceDuration(onSuccess?: (data: RaceDuration) => void, onError?: (err: any) => void)
 {
