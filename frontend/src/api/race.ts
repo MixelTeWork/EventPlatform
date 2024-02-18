@@ -14,6 +14,7 @@ export interface RaceState
 	price: number,
 	start: string,
 	balance: number,
+	reward: number | null,
 }
 export interface RaceDuration
 {

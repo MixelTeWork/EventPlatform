@@ -17,6 +17,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     winner = Column(String(8), nullable=True)
     startTime = Column(DateTime, nullable=True)
+    reward = Column(Integer, nullable=True)
     startStr = Column(String(8), nullable=False)
     price = Column(Integer, nullable=False)
     duration = Column(Integer, nullable=False)
@@ -61,6 +62,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                     "price": race.price,
                     "start": race.startStr,
                     "balance": balance,
+                    "reward": race.reward,
                 }
             return {
                 "state": "won" if team == race.winner else "loss",
@@ -70,6 +72,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                 "price": race.price,
                 "start": race.startStr,
                 "balance": balance,
+                "reward": race.reward,
             }
 
         if race.startTime is None:
@@ -81,6 +84,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                 "price": race.price,
                 "start": race.startStr,
                 "balance": balance,
+                "reward": race.reward,
             }
 
         now = get_datetime_now().replace(tzinfo=None)
@@ -94,6 +98,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
                 "price": race.price,
                 "start": race.startStr,
                 "balance": balance,
+                "reward": race.reward,
             }
         return {
             "state": "join" if team == "" else "wait",
@@ -103,6 +108,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
             "price": race.price,
             "start": race.startStr,
             "balance": balance,
+            "reward": race.reward,
         }
 
     @staticmethod
@@ -117,6 +123,7 @@ class Race(SqlAlchemyBase, SerializerMixin):
         all_value = race.price * players
         reward = all_value / winners_count / 2
         reward = math.floor(reward) + 10
+        race.reward = reward
         for winner in winners:
             winner.balance += reward
             Transaction.new(db_sess, 1, winner.id, reward, Actions.raceWin, 1, True)

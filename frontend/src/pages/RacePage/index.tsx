@@ -171,7 +171,7 @@ export default function RacePage()
 				<h1 className={styles.title}>Победа!</h1>
 				<div>
 					<h2 className={styles.subtitle}>Вы выиграли:</h2>
-					<h2 className={classNames(styles.subtitle, styles.yellow)}>10G</h2>
+					<h2 className={classNames(styles.subtitle, styles.yellow)}>{state.data.reward || 10}G</h2>
 				</div>
 				<div className={styles.snails}>
 					<span></span>
