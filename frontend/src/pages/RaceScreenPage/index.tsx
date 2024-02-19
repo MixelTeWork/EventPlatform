@@ -11,6 +11,7 @@ import classNames from "../../utils/classNames";
 import { useTitle } from "../../utils/useTtile";
 
 const aspect = 472 / 629;
+// [!] Sometimes finish dont work
 
 export default function RaceScreenPage()
 {
