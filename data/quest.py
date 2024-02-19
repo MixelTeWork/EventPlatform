@@ -122,7 +122,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         def updateField(field: str, value, changes: list):
             cur = getattr(self, field)
             if value is not None and cur != value:
-                changes.append(("name", cur, value))
+                changes.append((field, cur, value))
                 setattr(self, field, value)
 
         updateField("name", name, changes)
