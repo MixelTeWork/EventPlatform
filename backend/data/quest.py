@@ -135,7 +135,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             actionCode=Actions.updated,
             userId=actor.id,
             userName=actor.name,
-            tableName=Tables.StoreItem,
+            tableName=Tables.Quest,
             recordId=self.id,
             changes=changes
         ))
