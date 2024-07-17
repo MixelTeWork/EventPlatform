@@ -1,4 +1,5 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer
+from typing import Any, Callable
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 from data.log import Actions, Log, Tables
@@ -10,58 +11,84 @@ from .db_session import SqlAlchemyBase
 class UserQuest(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "UserQuest"
 
-    userId  = Column(Integer, ForeignKey("User.id"), primary_key=True)
+    userId = Column(Integer, ForeignKey("User.id"), primary_key=True)
     questId = Column(Integer, ForeignKey("Quest.id"), primary_key=True)
-    date    = Column(DateTime, nullable=False)
+    openDate = Column(DateTime, nullable=True)
+    completeDate = Column(DateTime, nullable=True)
 
     @staticmethod
-    def new(db_sess: Session, actor, user, quest):
+    def get_or_create(db_sess: Session, actor, user, quest, fn: Callable[["UserQuest", DateTime], tuple[list, Any]]):
+        userQuest = db_sess.query(UserQuest).filter(UserQuest.userId == user.id, UserQuest.questId == quest.id).first()
         now = get_datetime_now()
-        userQuest = UserQuest(userId=user.id, questId=quest.id, date=now)
-        db_sess.add(userQuest)
 
-        log = Log(
+        new = False
+        if userQuest is None:
+            userQuest = UserQuest(userId=user.id, questId=quest.id)
+            db_sess.add(userQuest)
+            new = True
+
+        changes, r = fn(userQuest, now)
+
+        db_sess.add(Log(
             date=now,
-            actionCode=Actions.added,
+            actionCode=Actions.added if new else Actions.updated,
             userId=actor.id,
             userName=actor.name,
             tableName=Tables.UserQuest,
             recordId=-1,
-            changes=userQuest.get_creation_changes()
-        )
-        db_sess.add(log)
+            changes=[
+                *([("userId", None, userQuest.userId),
+                   ("questId", None, userQuest.questId)] if new else []),
+                *changes,
+            ]
+        ))
         db_sess.commit()
 
-        return userQuest
+        return r
+
+    @staticmethod
+    def open_quest(db_sess: Session, actor, user, quest) -> bool:
+        """returns False if already opened"""
+        def fn(userQuest: UserQuest, now: DateTime):
+            r = False
+            if userQuest.openDate == None:
+                userQuest.openDate = now
+                r = True
+            return ("openDate", None, userQuest.openDate.isoformat()), r
+
+        return UserQuest.get_or_create(db_sess, actor, user, quest, fn)
+
+    @staticmethod
+    def complete_quest(db_sess: Session, actor, user, quest) -> bool:
+        """returns False if already completed"""
+        def fn(userQuest: UserQuest, now: DateTime):
+            r = False
+            if userQuest.completeDate == None:
+                userQuest.completeDate = now
+                r = True
+            return ("completeDate", None, userQuest.completeDate.isoformat()), r
+
+        return UserQuest.get_or_create(db_sess, actor, user, quest, fn)
 
     def delete(self, actor):
         db_sess = Session.object_session(self)
         db_sess.delete(self)
 
-        now = get_datetime_now()
-        log = Log(
-            date=now,
+        db_sess.add(Log(
+            date=get_datetime_now(),
             actionCode=Actions.deleted,
             userId=actor.id,
             userName=actor.name,
             tableName=Tables.UserQuest,
             recordId=-1,
-            changes=self.get_deletion_changes()
-        )
-        db_sess.add(log)
+            changes=[
+                ("userId", self.userId, None),
+                ("questId", self.questId, None),
+                ("openDate", self.openDate, None),
+                ("completeDate", self.completeDate, None),
+            ]
+        ))
         db_sess.commit()
 
     def __repr__(self):
         return f"<UserQuest> user: {self.userId} quest: {self.questId}"
-
-    def get_creation_changes(self):
-        return [
-            ("userId", None, self.userId),
-            ("questId", None, self.questId),
-        ]
-
-    def get_deletion_changes(self):
-        return [
-            ("userId", self.userId, None),
-            ("questId", self.questId, None),
-        ]

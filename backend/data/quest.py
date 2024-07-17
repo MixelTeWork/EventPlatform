@@ -1,5 +1,5 @@
 from typing import Union
-from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
+from sqlalchemy import Boolean, Column, DefaultClause, ForeignKey, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
@@ -20,6 +20,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     description = Column(String(256), nullable=False)
     reward = Column(Integer, nullable=False)
     hidden = Column(Boolean, nullable=False)
+    dialog1Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
+    dialog2Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
 
     def __repr__(self):
         return f"<Quest> [{self.id}] {self.name}"
@@ -78,19 +80,21 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     @staticmethod
     def all_for_user(db_sess: Session, user):
         if user:
-            completed_quests = db_sess\
-                .query(Quest)\
-                .join(UserQuest, UserQuest.questId == Quest.id)\
-                .filter(UserQuest.userId == user.id)\
-                .values(Quest.id)
-
-            completed_quests = list(map(lambda x: x[0], completed_quests))
+            userQuests = db_sess.query(UserQuest).filter(UserQuest.userId == user.id)
+            opened_quests = []
+            completed_quests = []
+            for userQuest in userQuests:
+                if userQuest.openDate != None:
+                    opened_quests.append(userQuest.questId)
+                if userQuest.completeDate != None:
+                    completed_quests.append(userQuest.questId)
         else:
+            opened_quests = []
             completed_quests = []
 
         all_quests = db_sess\
             .query(Quest)\
-            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden)
+            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, Quest.dialog1Id)  # select dialog by user team
 
         quests = []
         for v in list(all_quests):
@@ -99,6 +103,11 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             description = v[2]
             reward = v[3]
             hidden = v[4]
+            dialog = v[5]
+
+            opened = False
+            if id in opened_quests:
+                opened = True
 
             completed = False
             if id in completed_quests:
@@ -111,6 +120,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
                     "description": description,
                     "reward": reward,
                     "completed": completed,
+                    "dialogId": dialog,
+                    "opened": opened,
                 })
 
         return quests
@@ -179,4 +190,6 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             "description": self.description,
             "reward": self.reward,
             "hidden": self.hidden,
+            "dialog1Id": self.dialog1Id,
+            "dialog2Id": self.dialog2Id,
         }

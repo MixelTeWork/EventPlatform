@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import useMutationScanner, { type ScannerRes } from "../../api/scanner";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
@@ -14,11 +15,12 @@ export default function ScannerPage()
 	useTitle("Сканер");
 	const popupOpen = useStateBool(false);
 	const res = useStateObj<ScannerRes | null>(null, popupOpen.setT);
+	const navigate = useNavigate();
 
 	return (
 		<Layout centeredPage headerColor="#51185b" gap="1em" className={styles.root} footer={<Footer />} homeBtn>
 			<div className={styles.background}></div>
-			<StyledWindow title="QR-Активатор" disableScroll className={styles.body}>
+			<StyledWindow title="QR-Активатор" disableScroll className={styles.body} onClose={() => navigate(-1)}>
 				<Scanner
 					useMutation={useMutationScanner}
 					pause={popupOpen.v}

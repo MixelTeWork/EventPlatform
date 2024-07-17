@@ -157,6 +157,10 @@ def docs():
                 "successful": "boolean",
             },
         },
+        "/api/dialog/<int:dialogId>": {
+            "__desc__": "Get dialog",
+            "response": "Dialog",
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -199,6 +203,8 @@ def docs():
             "description": "string",
             "reward": "number",
             "completed": "boolean",
+            "dialogId": "number | null",
+            "opened": "boolean",
         },
         "QuestFull": {
             "id": "number",
@@ -207,6 +213,8 @@ def docs():
             "description": "string",
             "reward": "number",
             "hidden": "boolean",
+            "dialog1Id": "number | null",
+            "dialog2Id": "number | null",
         },
         "StoreItem": {
             "id": "number",
@@ -229,5 +237,9 @@ def docs():
             "value": "number",
             "action": "string",
             "itemId": "number",
+        },
+        "Dialog": {
+            "id": "number",
+            "data": "dialog.ts:GameDialogData",
         },
     }), 200

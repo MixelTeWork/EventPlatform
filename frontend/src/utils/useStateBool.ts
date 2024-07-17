@@ -16,5 +16,6 @@ export default function useStateBool(initialState: boolean | (() => boolean), on
 		set: setFn,
 		setT: () => set(true),
 		setF: () => set(false),
+		toggle: () => set(v => !v),
 	};
 }

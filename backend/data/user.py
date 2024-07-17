@@ -198,7 +198,7 @@ class User(SqlAlchemyBase, SerializerMixin):
         quests = db_sess\
             .query(Quest)\
             .join(UserQuest, UserQuest.questId == Quest.id)\
-            .filter(UserQuest.userId == self.id)\
+            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
             .all()
 
         return quests
@@ -207,7 +207,7 @@ class User(SqlAlchemyBase, SerializerMixin):
         db_sess = Session.object_session(self)
         quests = db_sess\
             .query(UserQuest)\
-            .filter(UserQuest.userId == self.id)\
+            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
             .values(UserQuest.questId)
 
         return list(map(lambda v: v[0], quests))

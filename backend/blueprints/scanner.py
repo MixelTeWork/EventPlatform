@@ -37,11 +37,10 @@ def scanner_quest(db_sess: Session, user: User, code: str):
     if quest is None:
         return respose_wrong(user, "quest")
 
-    already_completed = db_sess.query(UserQuest).filter(UserQuest.userId == user.id, UserQuest.questId == quest.id).first()
-    if already_completed is not None:
+    completed = UserQuest.complete_quest(db_sess, user, user, quest)
+    if not completed:
         return respose_error(user, "quest", f"Квест {quest.name} уже завершён")
 
-    UserQuest.new(db_sess, user, user, quest)
     user.balance += quest.reward
     Transaction.new(db_sess, 1, user.id, quest.reward, Actions.endQuest, quest.id)
 

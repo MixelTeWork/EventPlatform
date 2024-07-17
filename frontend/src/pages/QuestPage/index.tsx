@@ -11,15 +11,22 @@ import useStateObj from "../../utils/useStateObj";
 import { Link } from "react-router-dom";
 import { useTitle } from "../../utils/useTtile";
 import classNames from "../../utils/classNames";
+import useGameDialog from "../../components/GameDialog";
 
 export default function QuestPage()
 {
 	useTitle("Квесты");
-	const openQuest = useStateObj<Quest | null>(null);
+	const dialog = useGameDialog();
+	const openQuest = useStateObj<Quest | null>(null, v =>
+	{
+		if (v && v.dialogId != null && !v.opened)
+			dialog.run(v.dialogId, () => v.opened = true);
+	});
 	const quests = useQuests();
 
 	return (
 		<Layout centeredPage headerColor="#545f82" gap="1em" className={styles.root} footer={<Footer curPage="quest" />}>
+			{dialog.el()}
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			{quests.isLoading && <Spinner />}
@@ -78,6 +85,8 @@ const fakeQuests: Quest[] = [
 		description: "Сдайте одно [БАРАХЛО], чтобы обменять его на другое [БАРАХЛО] или виртуальную валюту GGG!",
 		reward: Infinity,
 		completed: false,
+		dialogId: -1,
+		opened: false,
 	}
 ]
 

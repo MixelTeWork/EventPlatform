@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { fetchDelete, fetchJsonGet, fetchJsonPost } from "../utils/fetch";
+import { fetchDelete, fetchJsonGet, fetchJsonPost, fetchPost } from "../utils/fetch";
 
 export interface Quest
 {
@@ -8,6 +8,8 @@ export interface Quest
 	description: string,
 	reward: number,
 	completed: boolean,
+	dialogId: number | null,
+	opened: boolean,
 }
 
 export interface QuestFull
@@ -18,6 +20,8 @@ export interface QuestFull
 	description: string,
 	reward: number,
 	hidden: boolean,
+	dialog1Id: number | null,
+	dialog2Id: number | null,
 }
 
 export function useQuests()
@@ -47,10 +51,7 @@ export function useMutationAddQuest(onSuccess?: (data: QuestFull) => void, onErr
 				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests ? [...quests, data] : [data]);
 
 			if (queryClient.getQueryState("quests")?.status == "success")
-			{
-				console.log("some log for testing");
 				queryClient.invalidateQueries("quests", { exact: true });
-			}
 
 			onSuccess?.(data);
 		},
@@ -105,6 +106,18 @@ export function useMutationDeleteQuest(questId: number, onSuccess?: () => void, 
 			onSuccess?.();
 		},
 		onError: onError,
+	});
+	return mutation;
+}
+
+
+export function useMutationOpenQuest(onSuccess?: () => void, onError?: (err: any) => void)
+{
+	const mutation = useMutation({
+		mutationFn: async (questId: number) =>
+			await fetchPost(`/api/quest/${questId}/open`),
+		onSuccess,
+		onError,
 	});
 	return mutation;
 }

@@ -23,6 +23,7 @@ def init_values(dev=False, cmd=False):
     from data.quest import Quest
     from data.race import Race
     from data.store_item import StoreItem
+    from data.dialog import Dialog
     from data.get_datetime_now import get_datetime_now
 
     def init():
@@ -92,10 +93,26 @@ def init_values(dev=False, cmd=False):
                 changes=changes
             ))
 
+        dialog = Dialog.new(db_sess, user_admin, {
+            "nodes": [
+                {
+                    "title": "Ярик Всемогущий",
+                    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus, officiis assumenda consequatur unde perspiciatis error quos laudantium laborum. Totam tenetur alias reiciendis voluptatibus.",  # noqa: E501
+                    "img": "https://image.winudf.com/v2/image1/Y29tLmJ1ZmZzdHVkaW8uc2V2ZW5kYXlzX2ZyZWVfc2NyZWVuXzBfMTU1NDY0OTg0OF8wMDg/screen-0.jpg?fakeurl=1&type=.jpg"  # noqa: E501
+                },
+                {
+                    "title": "Альвер Шухтен",
+                    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus.",
+                    "img": "https://cdn.novelupdates.com/images/2024/03/Became-a-Medieval-Fantasy-Wizard.png"
+                }
+            ]})
+
         for i in range(15):
             description = f"Описание квеста №{i + 1}\nLorem, ipsum dolor sit amet consectetur adipisicing elit."
             quest = Quest(id=i, name=f"Квест {i + 1}", description=description,
                           reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0, id_big=randstr(8))
+            if i == 1:
+                quest.dialog1Id = dialog.id
             log(Tables.Quest, i, quest.get_creation_changes())
             db_sess.add(quest)
 

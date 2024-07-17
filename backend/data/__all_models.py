@@ -13,3 +13,4 @@ from . import store_item
 from . import transaction
 from . import send
 from . import race
+from . import dialog

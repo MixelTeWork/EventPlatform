@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from data.operation import Operations
 from data.quest import Quest
 from data.user import User
+from data.user_quest import UserQuest
 from utils import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any,
                    response_msg, response_not_found, use_db_session, use_user, use_user_try)
 
@@ -75,5 +76,19 @@ def quest_delete(questId, db_sess: Session, user: User):
         return response_not_found("quest", questId)
 
     quest.delete(user)
+
+    return response_msg("ok"), 200
+
+
+@blueprint.route("/api/quest/<int:questId>/open", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+def quest_open(questId, db_sess: Session, user: User):
+    quest = Quest.get(db_sess, questId)
+    if quest is None:
+        return response_not_found("quest", questId)
+
+    UserQuest.open_quest(db_sess, user, user, quest)
 
     return response_msg("ok"), 200
