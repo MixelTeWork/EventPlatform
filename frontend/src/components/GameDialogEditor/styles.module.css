@@ -1,3 +1,11 @@
 .root {
-	
+	position: fixed;
+	inset: 0;
+	display: flex;
+	background-color: black;
+	z-index: 100;
+	justify-content: center;
+}
+*:has(.root) {
+	overflow: hidden;
 }

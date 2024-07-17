@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { fetchJsonGet } from "../utils/fetch";
 
-interface Dialog
+export interface Dialog
 {
 	id: number;
 	data: GameDialogData;
@@ -19,10 +19,17 @@ interface GameDialogNode
 	img: string;
 }
 
-export function useDialog(dialogId: number)
+export function createEmptyDialog(): GameDialogData
+{
+	return {
+		nodes: [],
+	}
+}
+
+export function useDialog(dialogId: number, autoEnabled = true)
 {
 	return useQuery(["dialogs", `${dialogId}`], async () =>
 		await fetchJsonGet<Dialog>(`/api/dialog/${dialogId}`),
-		{ enabled: dialogId >= 0 }
+		{ enabled: autoEnabled && dialogId >= 0 }
 	);
 }

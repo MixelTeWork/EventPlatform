@@ -1,13 +1,13 @@
 .root {
 	position: fixed;
 	inset: 0;
-	background-color: black;
-	z-index: 10;
-	justify-content: center;
-	display: none;
-}
-.root_open {
 	display: flex;
+	background-color: black;
+	z-index: 100;
+	justify-content: center;
+}
+*:has(.root) {
+	overflow: hidden;
 }
 
 .img {

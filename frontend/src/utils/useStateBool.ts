@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useStateBool(initialState: boolean | (() => boolean), onSet?: () => void)
+export default function useStateBool(initialState: boolean | (() => boolean), onSet?: () => void): StateBool
 {
 	let [v, set] = useState(initialState)
 	let setFn = set;
@@ -18,4 +18,13 @@ export default function useStateBool(initialState: boolean | (() => boolean), on
 		setF: () => set(false),
 		toggle: () => set(v => !v),
 	};
+}
+
+export interface StateBool
+{
+	v: boolean;
+    set: React.Dispatch<React.SetStateAction<boolean>>;
+    setT: () => void;
+    setF: () => void;
+    toggle: () => void;
 }

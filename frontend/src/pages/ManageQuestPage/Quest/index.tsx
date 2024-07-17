@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import PopupConfirm from "../../../components/PopupConfirm";
 import Spinner from "../../../components/Spinner";
 import classNames from "../../../utils/classNames";
 import displayError from "../../../utils/displayError";
 import useStateBool from "../../../utils/useStateBool";
-import useStateObj from "../../../utils/useStateObj";
+import useStateObj, { type StateObj } from "../../../utils/useStateObj";
 import styles from "./styles.module.css"
 import { useMutationEditQuest, useMutationDeleteQuest, type QuestFull } from "../../../api/quest";
 import IconDelete from "../../../icons/delete";
@@ -14,6 +14,10 @@ import Popup from "../../../components/Popup";
 import IconEdit from "../../../icons/edit";
 import IconView from "../../../icons/view";
 import useGameDialog from "../../../components/GameDialog";
+import IconReload from "../../../icons/reload";
+import { createEmptyDialog, useDialog, type Dialog, type GameDialogData } from "../../../api/dialog";
+import useGameDialogEditor from "../../../components/GameDialogEditor";
+import type { UseQueryResult } from "react-query";
 
 export default function Quest({ quest }: QuestProps)
 {
@@ -24,10 +28,16 @@ export default function Quest({ quest }: QuestProps)
 	const reward = useStateObj(quest.reward, changed.setT);
 	const hidden = useStateBool(quest.hidden, changed.setT);
 	const description = useStateObj(quest.description, changed.setT);
+
 	const dialog1Id = useStateObj(quest.dialog1Id, changed.setT);
 	const dialog2Id = useStateObj(quest.dialog2Id, changed.setT);
+	const dialog1DataQuery = useDialog(dialog1Id.v ?? -1, false);
+	const dialog2DataQuery = useDialog(dialog2Id.v ?? -1, false);
+	const dialog1Data = useStateObj<GameDialogData | null>(null, changed.setT);
+	const dialog2Data = useStateObj<GameDialogData | null>(null, changed.setT);
 
 	const dialog = useGameDialog();
+	const editor = useGameDialogEditor();
 	const mutationEdit = useMutationEditQuest(quest.id, reset, () => reset());
 
 	function reset(newQuest?: QuestFull)
@@ -39,7 +49,28 @@ export default function Quest({ quest }: QuestProps)
 		description.set(data.description);
 		dialog1Id.set(data.dialog1Id);
 		dialog2Id.set(data.dialog2Id);
+		dialog1Data.set(null);
+		dialog2Data.set(null);
 		changed.setF();
+	}
+
+	async function getDialog(state: StateObj<GameDialogData | null>, query: UseQueryResult<Dialog, unknown>, fn: (dialog: GameDialogData) => void)
+	{
+		if (state.v) fn(state.v);
+		else if (query.isSuccess)
+		{
+			state.set(query.data.data)
+			fn(query.data.data);
+		}
+		else if (query.isIdle || query.isError)
+		{
+			const d = await query.refetch();
+			if (d.isSuccess)
+			{
+				state.set(d.data.data)
+				fn(d.data.data);
+			}
+		}
 	}
 
 	// eslint-disable-next-line
@@ -48,7 +79,10 @@ export default function Quest({ quest }: QuestProps)
 	return (
 		<div className={classNames(styles.root, changed.v && styles.changed)}>
 			{dialog.el()}
+			{editor.el()}
 			{mutationEdit.isLoading && <Spinner block r="0.5rem" />}
+			{dialog1DataQuery.isLoading && <Spinner block r="0.5rem" />}
+			{dialog2DataQuery.isLoading && <Spinner block r="0.5rem" />}
 			{displayError(mutationEdit, err => <div className={styles.error}>
 				<div>{err}</div>
 				<button onClick={() => mutationEdit.reset()}>ОК</button>
@@ -72,28 +106,30 @@ export default function Quest({ quest }: QuestProps)
 				>
 					{description.v}
 				</button>
-				<div>Диалог 1</div>
-				<div className={classNames(styles.buttons, styles.dialogBtns)}>
-					{dialog1Id.v == null ?
-						<button>+</button>
-						: <>
-							<button onClick={() => dialog1Id.v != null && dialog.run(dialog1Id.v)}><IconView /></button>
-							<button><IconEdit /></button>
-							<button onClick={() => dialog1Id.set(null)}><IconDelete /></button>
-						</>
-					}
-				</div>
-				<div>Диалог 2</div>
-				<div className={classNames(styles.buttons, styles.dialogBtns)}>
-					{dialog2Id.v == null ?
-						<button>+</button>
-						: <>
-							<button onClick={() => dialog2Id.v != null && dialog.run(dialog2Id.v)}><IconView /></button>
-							<button><IconEdit /></button>
-							<button onClick={() => dialog2Id.set(null)}><IconDelete /></button>
-						</>
-					}
-				</div>
+				{[
+					{ n: 1, questId: quest.dialog1Id, id: dialog1Id, data: dialog1Data, query: dialog1DataQuery },
+					{ n: 2, questId: quest.dialog2Id, id: dialog2Id, data: dialog2Data, query: dialog2DataQuery },
+				].map(({ n, questId, id, data, query }) => <Fragment key={n}>
+					<div>Диалог {n}</div>
+					<div className={classNames(styles.buttons, styles.dialogBtns)}>
+						{id.v == null ? <>
+							{!data.v && questId == null ?
+								<button onClick={() =>
+								{
+									id.set(-1);
+									data.set(createEmptyDialog());
+								}}>+</button>
+								:
+								<button onClick={() => id.set(questId ?? -1)}><IconReload /></button>
+							}
+						</> : <>
+							<button onClick={() => getDialog(data, query, dialog.runLocal)}><IconView /></button>
+							<button onClick={() => getDialog(data, query, editor.open)}><IconEdit /></button>
+							<button onClick={() => id.set(null)}><IconDelete /></button>
+						</>}
+						{query.isError && <div style={{ color: "tomato" }}>Ошибка</div>}
+					</div>
+				</Fragment>)}
 			</div>
 			<div className={classNames("material_symbols", styles.buttons)}>
 				{!changed.v && <button onClick={deleting.setT}><IconDelete /></button>}

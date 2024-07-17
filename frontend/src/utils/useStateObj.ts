@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useStateObj<S>(initialState: S | (() => S), onSet?: () => void)
+export default function useStateObj<S>(initialState: S | (() => S), onSet?: () => void): StateObj<S>
 {
 	const [v, set] = useState(initialState)
 	if (onSet)
@@ -12,6 +12,12 @@ export default function useStateObj<S>(initialState: S | (() => S), onSet?: () =
 			}
 		};
 	return { v, set };
+}
+
+export interface StateObj<S>
+{
+	v: S;
+	set: React.Dispatch<React.SetStateAction<S>>;
 }
 
 export function useStateObjExt<S>(initialState: S | (() => S), onSet?: (v: S, pv: S) => void)

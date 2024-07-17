@@ -1,86 +1,107 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.css"
-import classNames from "../../utils/classNames";
-import { useDialog } from "../../api/dialog";
+import { useDialog, type GameDialogData } from "../../api/dialog";
 import Spinner from "../Spinner";
 import displayError from "../../utils/displayError";
 import useStateObj from "../../utils/useStateObj";
 import useStateBool from "../../utils/useStateBool";
-import { useMutationOpenQuest } from "../../api/quest";
 
 export default function useGameDialog()
 {
-	const mutationOpen = useMutationOpenQuest();
 	const update = useStateBool(false);
 	const dialog = useStateObj({
+		data: null as GameDialogData | null,
 		dialogId: -1,
-		onClose: () => {},
-		el: () => <GameDialog dialogId={dialog.v.dialogId} close={dialog.v.close} />,
-		run: (dialogId: number, onClose?: () => void) =>
+		onClose: undefined as ((dialogId: number) => void) | undefined,
+		el: () => dialog.v.data ?
+			<GameDialog data={dialog.v.data} close={dialog.v.close} /> :
+			dialog.v.dialogId >= 0 ?
+				<GameDialogWithLoader dialogId={dialog.v.dialogId} close={dialog.v.close} /> :
+				<></>,
+		run: (dialogId: number, onClose?: (dialogId: number) => void) =>
 			dialog.set(v =>
 			{
 				v.dialogId = dialogId;
-				v.onClose = onClose || (() => {});
-				update.toggle();
+				v.onClose = onClose;
+				return v;
+			}),
+		runLocal: (data: GameDialogData, onClose?: () => void) =>
+			dialog.set(v =>
+			{
+				v.data = data;
+				v.onClose = onClose;
 				return v;
 			}),
 		close: () =>
 			dialog.set(v =>
 			{
-				if (v.dialogId < 0) return v;
-
-				mutationOpen.mutate(v.dialogId);
+				if (v.dialogId < 0 && !v.data) return v;
+				v.onClose?.(v.dialogId);
+				v.onClose = undefined;
 				v.dialogId = -1;
-				v.onClose();
-				update.toggle();
+				v.data = null;
 				return v;
 			}),
-	});
+	}, update.toggle);
 
 	return dialog.v;
 }
 
-function GameDialog({ dialogId, close }: GameDialogProps)
+function GameDialogWithLoader({ dialogId, close }: GameDialogWithLoaderProps)
 {
 	const dialog = useDialog(dialogId);
-	const [nodeI, setNodeI] = useState(0);
-	const node = dialog.data?.data.nodes[nodeI];
-	const open = dialogId >= 0;
 
-	useEffect(() => setNodeI(0), [dialogId]);
-
-	return (
-		<div className={classNames(styles.root, open && styles.root_open)}>
+	return dialog.isSuccess ?
+		<GameDialog data={dialog.data.data} close={close} />
+		:
+		<div className={styles.root}>
 			{dialog.isLoading && <Spinner />}
 			{displayError(dialog)}
-			{dialog.isSuccess && <>
-				<img className={styles.img} src={node?.img} alt={node?.title} />
-				<div className={styles.dialog_container}>
-					<div className={styles.dialog}>
-						<div className={styles.dialog__title}>{node?.title}</div>
-						<div className={styles.dialog__body}>
-							<p className={styles.dialog__text}>{node?.text}</p>
-							<div className={styles.dialog__btns}>
-								{nodeI > 0 ?
-									<button className={styles.dialog__prev} onClick={() => setNodeI(v => v - 1)}>&lt;-</button>
-									: <div></div>
-								}
-								{nodeI < dialog.data?.data.nodes.length - 1 ?
-									<button className={styles.dialog__next} onClick={() => setNodeI(v => v + 1)}>Далее</button>
-									:
-									<button className={styles.dialog__next} onClick={close}>Конец</button>
-								}
-							</div>
+		</div>
+		;
+}
+
+interface GameDialogWithLoaderProps
+{
+	dialogId: number;
+	close: () => void;
+}
+
+function GameDialog({ data, close }: GameDialogProps)
+{
+	const [nodeI, setNodeI] = useState(0);
+	const node = data.nodes[nodeI];
+
+	useEffect(() => setNodeI(0), [data]);
+
+	return (
+		<div className={styles.root}>
+			<img className={styles.img} src={node?.img} alt={node?.title} />
+			<div className={styles.dialog_container}>
+				<div className={styles.dialog}>
+					<div className={styles.dialog__title}>{node?.title}</div>
+					<div className={styles.dialog__body}>
+						<p className={styles.dialog__text}>{node?.text}</p>
+						<div className={styles.dialog__btns}>
+							{nodeI > 0 ?
+								<button className={styles.dialog__prev} onClick={() => setNodeI(v => v - 1)}>&lt;-</button>
+								: <div></div>
+							}
+							{nodeI < data.nodes.length - 1 ?
+								<button className={styles.dialog__next} onClick={() => setNodeI(v => v + 1)}>Далее</button>
+								:
+								<button className={styles.dialog__next} onClick={close}>Конец</button>
+							}
 						</div>
 					</div>
 				</div>
-			</>}
+			</div>
 		</div>
 	);
 }
 
 interface GameDialogProps
 {
-	dialogId: number;
+	data: GameDialogData;
 	close: () => void;
 }

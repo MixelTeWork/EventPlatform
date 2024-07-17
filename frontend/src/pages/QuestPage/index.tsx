@@ -1,4 +1,4 @@
-import { useQuests, type Quest } from "../../api/quest";
+import { useMutationOpenQuest, useQuests, type Quest } from "../../api/quest";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
@@ -17,10 +17,15 @@ export default function QuestPage()
 {
 	useTitle("Квесты");
 	const dialog = useGameDialog();
+	const mutationOpen = useMutationOpenQuest();
 	const openQuest = useStateObjExt<Quest | null>(null, v =>
 	{
 		if (v && v.dialogId != null && !v.opened)
-			dialog.run(v.dialogId, () => v.opened = true);
+			dialog.run(v.dialogId, (dialogId) =>
+			{
+				mutationOpen.mutate(dialogId);
+				v.opened = true;
+			});
 	});
 	const quests = useQuests();
 
