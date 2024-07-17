@@ -16,11 +16,11 @@ export default function useGameDialog()
 		dialogId: -1,
 		onClose: () => {},
 		el: () => <GameDialog dialogId={dialog.v.dialogId} close={dialog.v.close} />,
-		run: (dialogId: number, onClose: () => void) =>
+		run: (dialogId: number, onClose?: () => void) =>
 			dialog.set(v =>
 			{
 				v.dialogId = dialogId;
-				v.onClose = onClose;
+				v.onClose = onClose || (() => {});
 				update.toggle();
 				return v;
 			}),

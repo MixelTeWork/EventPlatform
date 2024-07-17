@@ -7,7 +7,7 @@ interface Dialog
 	data: GameDialogData;
 }
 
-interface GameDialogData
+export interface GameDialogData
 {
 	nodes: GameDialogNode[];
 }

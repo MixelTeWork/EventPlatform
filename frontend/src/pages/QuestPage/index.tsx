@@ -7,7 +7,7 @@ import items from "./items.png"
 import btn from "./btn.png"
 import styles from "./styles.module.css"
 import StyledWindow from "../../components/StyledWindow";
-import useStateObj from "../../utils/useStateObj";
+import { useStateObjExt } from "../../utils/useStateObj";
 import { Link } from "react-router-dom";
 import { useTitle } from "../../utils/useTtile";
 import classNames from "../../utils/classNames";
@@ -17,7 +17,7 @@ export default function QuestPage()
 {
 	useTitle("Квесты");
 	const dialog = useGameDialog();
-	const openQuest = useStateObj<Quest | null>(null, v =>
+	const openQuest = useStateObjExt<Quest | null>(null, v =>
 	{
 		if (v && v.dialogId != null && !v.opened)
 			dialog.run(v.dialogId, () => v.opened = true);

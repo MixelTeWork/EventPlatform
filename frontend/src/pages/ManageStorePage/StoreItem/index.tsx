@@ -28,9 +28,10 @@ export default function StoreItem({ item }: StoreItemProps)
 	function reset(newitem?: StoreItemFull)
 	{
 		imgData.set(null);
-		name.set(newitem?.name || item.name);
-		count.set(newitem?.count || item.count);
-		price.set(newitem?.price || item.price);
+		const data = newitem || item;
+		name.set(data.name);
+		count.set(data.count);
+		price.set(data.price);
 		changed.setF();
 	}
 

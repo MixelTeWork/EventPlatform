@@ -11,6 +11,9 @@ import IconDelete from "../../../icons/delete";
 import IconSave from "../../../icons/save";
 import IconCancel from "../../../icons/cancel";
 import Popup from "../../../components/Popup";
+import IconEdit from "../../../icons/edit";
+import IconView from "../../../icons/view";
+import useGameDialog from "../../../components/GameDialog";
 
 export default function Quest({ quest }: QuestProps)
 {
@@ -21,15 +24,21 @@ export default function Quest({ quest }: QuestProps)
 	const reward = useStateObj(quest.reward, changed.setT);
 	const hidden = useStateBool(quest.hidden, changed.setT);
 	const description = useStateObj(quest.description, changed.setT);
+	const dialog1Id = useStateObj(quest.dialog1Id, changed.setT);
+	const dialog2Id = useStateObj(quest.dialog2Id, changed.setT);
 
+	const dialog = useGameDialog();
 	const mutationEdit = useMutationEditQuest(quest.id, reset, () => reset());
 
 	function reset(newQuest?: QuestFull)
 	{
-		name.set(newQuest?.name || quest.name);
-		reward.set(newQuest?.reward || quest.reward);
-		hidden.set(newQuest?.hidden || quest.hidden);
-		description.set(newQuest?.description || quest.description);
+		const data = newQuest || quest;
+		name.set(data.name);
+		reward.set(data.reward);
+		hidden.set(data.hidden);
+		description.set(data.description);
+		dialog1Id.set(data.dialog1Id);
+		dialog2Id.set(data.dialog2Id);
 		changed.setF();
 	}
 
@@ -38,12 +47,13 @@ export default function Quest({ quest }: QuestProps)
 
 	return (
 		<div className={classNames(styles.root, changed.v && styles.changed)}>
+			{dialog.el()}
 			{mutationEdit.isLoading && <Spinner block r="0.5rem" />}
 			{displayError(mutationEdit, err => <div className={styles.error}>
 				<div>{err}</div>
 				<button onClick={() => mutationEdit.reset()}>ОК</button>
 			</div>)}
-			<PopupConfirm title={"Удалить товар: " + name.v} itemId={quest.id} mutationFn={useMutationDeleteQuest} open={deleting.v} close={deleting.setF} />
+			<PopupConfirm title={"Удалить квест: " + name.v} itemId={quest.id} mutationFn={useMutationDeleteQuest} open={deleting.v} close={deleting.setF} />
 			<div className={styles.id}>{quest.id}</div>
 			<div className={styles.inputs}>
 				<div>Название</div>
@@ -62,6 +72,28 @@ export default function Quest({ quest }: QuestProps)
 				>
 					{description.v}
 				</button>
+				<div>Диалог 1</div>
+				<div className={classNames(styles.buttons, styles.dialogBtns)}>
+					{dialog1Id.v == null ?
+						<button>+</button>
+						: <>
+							<button onClick={() => dialog1Id.v != null && dialog.run(dialog1Id.v)}><IconView /></button>
+							<button><IconEdit /></button>
+							<button onClick={() => dialog1Id.set(null)}><IconDelete /></button>
+						</>
+					}
+				</div>
+				<div>Диалог 2</div>
+				<div className={classNames(styles.buttons, styles.dialogBtns)}>
+					{dialog2Id.v == null ?
+						<button>+</button>
+						: <>
+							<button onClick={() => dialog2Id.v != null && dialog.run(dialog2Id.v)}><IconView /></button>
+							<button><IconEdit /></button>
+							<button onClick={() => dialog2Id.set(null)}><IconDelete /></button>
+						</>
+					}
+				</div>
 			</div>
 			<div className={classNames("material_symbols", styles.buttons)}>
 				{!changed.v && <button onClick={deleting.setT}><IconDelete /></button>}
@@ -82,7 +114,7 @@ export default function Quest({ quest }: QuestProps)
 				{changed.v && <button onClick={() => reset()}><IconCancel /></button>}
 			</div>
 			<Popup title="Редактирование квеста" open={popupOpen.v} close={popupOpen.setF}>
-				<h2>Описание квеста {name.v}</h2>
+				<h2>Описание квеста "{name.v}"</h2>
 				<textarea
 					className={styles.textarea}
 					cols={40}
