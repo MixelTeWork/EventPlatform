@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
+from data.dialog_character import DialogCharacter
 from data.operation import Operations
 from data.dialog import Dialog
 from data.user import User
@@ -19,3 +20,10 @@ def dialog(dialogId, db_sess: Session):
         return response_not_found("dialog", dialogId)
 
     return jsonify(dialog.get_dict()), 200
+
+
+@blueprint.route("/api/dialog/characters")
+@use_db_session()
+def characters(db_sess: Session):
+    items = DialogCharacter.all(db_sess)
+    return jsonify_list(items), 200

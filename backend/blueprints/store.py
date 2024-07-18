@@ -80,7 +80,7 @@ def store_item_patch(itemId, db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_store)
 def store_item_decrease(itemId, db_sess: Session, user: User):
-    item: StoreItem = StoreItem.get(db_sess, itemId)
+    item = StoreItem.get(db_sess, itemId)
     if item is None:
         return response_not_found("item", itemId)
 
@@ -98,10 +98,6 @@ def store_item_delete(itemId, db_sess: Session, user: User):
     item = StoreItem.get(db_sess, itemId)
     if item is None:
         return response_not_found("item", itemId)
-
-    image: Image = item.image
-    if image is not None:
-        image.delete(user)
 
     item.delete(user)
 

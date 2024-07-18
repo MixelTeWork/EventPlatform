@@ -161,6 +161,10 @@ def docs():
             "__desc__": "Get dialog",
             "response": "Dialog",
         },
+        "/api/dialog/characters": {
+            "__desc__": "Get all dialog characters",
+            "response": "DialogCharacter[]",
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -241,5 +245,10 @@ def docs():
         "Dialog": {
             "id": "number",
             "data": "dialog.ts:GameDialogData",
+        },
+        "DialogCharacter": {
+            "id": "number",
+            "name": "string",
+            "img": "string",
         },
     }), 200

@@ -6,16 +6,20 @@ export interface Dialog
 	id: number;
 	data: GameDialogData;
 }
-
 export interface GameDialogData
 {
 	nodes: GameDialogNode[];
 }
-
 interface GameDialogNode
 {
-	title: string;
+	characterId: number;
 	text: string;
+}
+
+export interface GameDialogCharacter
+{
+	id: number;
+	name: string;
 	img: string;
 }
 
@@ -32,4 +36,15 @@ export function useDialog(dialogId: number, autoEnabled = true)
 		await fetchJsonGet<Dialog>(`/api/dialog/${dialogId}`),
 		{ enabled: autoEnabled && dialogId >= 0 }
 	);
+}
+
+export function useDialogCharacters()
+{
+	return useQuery(["dialogCharacters"], async () =>
+	{
+		const data = await fetchJsonGet<GameDialogCharacter[]>(`/api/dialog/characters`);
+		const characters = {} as { [id: number]: GameDialogCharacter };
+		data.forEach(v => characters[v.id] = v);
+		return characters;
+	});
 }

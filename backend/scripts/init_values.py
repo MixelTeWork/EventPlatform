@@ -11,20 +11,14 @@ def init_values(dev=False, cmd=False):
     else:
         add_parent_to_path()
 
-    from datetime import timedelta
-    from random import randint, choice
     from data import db_session
-    from data.log import Actions, Log, Tables
+    from data.get_datetime_now import get_datetime_now
     from data.operation import Operation, Operations
     from data.permission import Permission
-    from utils.randstr import randstr
     from data.role import Role, Roles, ROLES
-    from data.user import User
-    from data.quest import Quest
     from data.race import Race
-    from data.store_item import StoreItem
-    from data.dialog import Dialog
-    from data.get_datetime_now import get_datetime_now
+    from data.log import Actions, Log, Tables
+    from data.user import User
 
     def init():
         db_session.global_init("dev" in sys.argv)
@@ -79,6 +73,16 @@ def init_values(dev=False, cmd=False):
         db_sess.commit()
 
     def init_values_dev(db_sess, user_admin):
+        from datetime import timedelta
+        from random import randint, choice
+        import shutil
+        from utils.randstr import randstr
+        from data.quest import Quest
+        from data.store_item import StoreItem
+        from data.dialog import Dialog
+        from data.image import Image
+        from data.dialog_character import DialogCharacter
+
         now = get_datetime_now()
         user_admin.balance = 100
 
@@ -93,17 +97,25 @@ def init_values(dev=False, cmd=False):
                 changes=changes
             ))
 
+        shutil.copy("scripts/dev_init_data/1.jpeg", "images/1.jpeg")
+        shutil.copy("scripts/dev_init_data/2.jpeg", "images/2.jpeg")
+        img1 = Image(id=1, name="img1", type="jpeg")
+        img2 = Image(id=2, name="img2", type="jpeg")
+        db_sess.add(img1)
+        db_sess.add(img2)
+
+        character1 = DialogCharacter.new(db_sess, user_admin, "Ярик Всемогущий", 1)
+        character2 = DialogCharacter.new(db_sess, user_admin, "Альвер Шухтен", 2)
+
         dialog = Dialog.new(db_sess, user_admin, {
             "nodes": [
                 {
-                    "title": "Ярик Всемогущий",
+                    "characterId": character1.id,
                     "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus, officiis assumenda consequatur unde perspiciatis error quos laudantium laborum. Totam tenetur alias reiciendis voluptatibus.",  # noqa: E501
-                    "img": "https://image.winudf.com/v2/image1/Y29tLmJ1ZmZzdHVkaW8uc2V2ZW5kYXlzX2ZyZWVfc2NyZWVuXzBfMTU1NDY0OTg0OF8wMDg/screen-0.jpg?fakeurl=1&type=.jpg"  # noqa: E501
                 },
                 {
-                    "title": "Альвер Шухтен",
+                    "characterId": character2.id,
                     "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus.",
-                    "img": "https://cdn.novelupdates.com/images/2024/03/Became-a-Medieval-Fantasy-Wizard.png"
                 }
             ]})
 
@@ -133,6 +145,11 @@ def add_parent_to_path():
     current = os.path.dirname(os.path.realpath(__file__))
     parent = os.path.dirname(current)
     sys.path.append(parent)
+
+
+def read_file(path):
+    with open(path) as f:
+        return f.read()
 
 
 if __name__ == "__main__":

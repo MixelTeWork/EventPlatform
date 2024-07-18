@@ -14,3 +14,4 @@ from . import transaction
 from . import send
 from . import race
 from . import dialog
+from . import dialog_character

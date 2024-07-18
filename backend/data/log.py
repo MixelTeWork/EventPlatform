@@ -40,3 +40,4 @@ class Tables:
     UserQuest = "UserQuest"
     StoreItem = "StoreItem"
     Dialog = "Dialog"
+    DialogCharacter = "DialogCharacter"

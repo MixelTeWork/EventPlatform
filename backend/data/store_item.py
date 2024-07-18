@@ -82,10 +82,12 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         changes = []
 
         if img is not None:
-            old_img: Image = self.image
-            if old_img is not None:
+            old_img: Union[Image, None] = self.image
+            if old_img is None:
+                changes.append(("imgId", None, img.id))
+            else:
                 old_img.delete(actor)
-                changes.append(("imageId", old_img.id, img.id))
+                changes.append(("imgId", self.imgId, img.id))
             self.image = img
 
         if name is not None:
@@ -112,6 +114,10 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
     def delete(self, actor: User):
         db_sess = Session.object_session(self)
         self.deleted = True
+
+        image: Image = self.image
+        if image is not None:
+            image.delete(actor)
 
         db_sess.add(Log(
             date=get_datetime_now(),
