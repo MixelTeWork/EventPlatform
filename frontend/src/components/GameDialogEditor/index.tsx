@@ -1,6 +1,7 @@
 import type { GameDialogData } from "../../api/dialog";
 import useStateBool from "../../utils/useStateBool";
 import useStateObj from "../../utils/useStateObj";
+import ManageCharacters from "./ManageCharacters";
 import styles from "./styles.module.css"
 
 export default function useGameDialogEditor()
@@ -36,11 +37,20 @@ function GameDialogEditor({ data, close }: GameDialogEditorProps)
 {
 	return (
 		<div className={styles.root}>
-			<button onClick={close}>close</button>
-			<h2>GameDialogEditor</h2>
-			<ol>
-				{data.nodes.map(v => <li key={v.title}>{v.title}</li>)}
-			</ol>
+			<button className={styles.close} onClick={close}></button>
+			<div className={styles.body}>
+				<h1>Редактирование диалога</h1>
+				<ManageCharacters />
+				<div className={styles.nodes}>
+					{data.nodes.map(v => <div key={v.title} className={styles.node}>
+						<img src={v.img} alt={v.title} />
+						<div>
+							<h3>{v.title}</h3>
+							<div>{v.text}</div>
+						</div>
+					</div>)}
+				</div>
+			</div>
 		</div>
 	);
 }

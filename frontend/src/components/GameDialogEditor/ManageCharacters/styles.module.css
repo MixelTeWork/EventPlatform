@@ -1,0 +1,11 @@
+.root {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(238, 130, 238, 0.2);
+	border: 1px solid violet;
+	color: aquamarine;
+	border-radius: 0.25rem;
+	font-size: 1rem;
+	cursor: pointer;
+}
