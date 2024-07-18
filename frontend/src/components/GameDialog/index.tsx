@@ -10,36 +10,36 @@ export default function useGameDialog()
 {
 	const update = useStateBool(false);
 	const dialog = useStateObj({
-		data: null as GameDialogData | null,
-		dialogId: -1,
-		onClose: undefined as ((dialogId: number) => void) | undefined,
-		el: () => dialog.v.data ?
-			<GameDialog data={dialog.v.data} close={dialog.v.close} /> :
-			dialog.v.dialogId >= 0 ?
-				<GameDialogWithLoader dialogId={dialog.v.dialogId} close={dialog.v.close} /> :
+		_data: null as GameDialogData | null,
+		_dialogId: -1,
+		_onClose: undefined as ((dialogId: number) => void) | undefined,
+		el: () => dialog.v._data ?
+			<GameDialog data={dialog.v._data} close={dialog.v.close} /> :
+			dialog.v._dialogId >= 0 ?
+				<GameDialogWithLoader dialogId={dialog.v._dialogId} close={dialog.v.close} /> :
 				<></>,
 		run: (dialogId: number, onClose?: (dialogId: number) => void) =>
 			dialog.set(v =>
 			{
-				v.dialogId = dialogId;
-				v.onClose = onClose;
+				v._dialogId = dialogId;
+				v._onClose = onClose;
 				return v;
 			}),
 		runLocal: (data: GameDialogData, onClose?: () => void) =>
 			dialog.set(v =>
 			{
-				v.data = data;
-				v.onClose = onClose;
+				v._data = data;
+				v._onClose = onClose;
 				return v;
 			}),
 		close: () =>
 			dialog.set(v =>
 			{
-				if (v.dialogId < 0 && !v.data) return v;
-				v.onClose?.(v.dialogId);
-				v.onClose = undefined;
-				v.dialogId = -1;
-				v.data = null;
+				if (v._dialogId < 0 && !v._data) return v;
+				v._onClose?.(v._dialogId);
+				v._onClose = undefined;
+				v._dialogId = -1;
+				v._data = null;
 				return v;
 			}),
 	}, update.toggle);

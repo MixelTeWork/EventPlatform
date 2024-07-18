@@ -33,12 +33,15 @@ export default function Quest({ quest }: QuestProps)
 	const dialog2Id = useStateObj(quest.dialog2Id, changed.setT);
 	const dialog1DataQuery = useDialog(dialog1Id.v ?? -1, false);
 	const dialog2DataQuery = useDialog(dialog2Id.v ?? -1, false);
-	const dialog1Data = useStateObj<GameDialogData | null>(null, changed.setT);
-	const dialog2Data = useStateObj<GameDialogData | null>(null, changed.setT);
+	const dialog1Data = useStateObj<GameDialogData | null>(null);
+	const dialog2Data = useStateObj<GameDialogData | null>(null);
 
 	const dialog = useGameDialog();
 	const editor = useGameDialogEditor();
 	const mutationEdit = useMutationEditQuest(quest.id, reset, () => reset());
+
+	// eslint-disable-next-line
+	useEffect(reset, [quest])
 
 	function reset(newQuest?: QuestFull)
 	{
@@ -72,9 +75,6 @@ export default function Quest({ quest }: QuestProps)
 			}
 		}
 	}
-
-	// eslint-disable-next-line
-	useEffect(reset, [quest])
 
 	return (
 		<div className={classNames(styles.root, changed.v && styles.changed)}>
@@ -124,7 +124,7 @@ export default function Quest({ quest }: QuestProps)
 							}
 						</> : <>
 							<button onClick={() => getDialog(data, query, dialog.runLocal)}><IconView /></button>
-							<button onClick={() => getDialog(data, query, editor.open)}><IconEdit /></button>
+							<button onClick={() => getDialog(data, query, d => { changed.setT(); editor.open(d); })}><IconEdit /></button>
 							<button onClick={() => id.set(null)}><IconDelete /></button>
 						</>}
 						{query.isError && <div style={{ color: "tomato" }}>Ошибка</div>}

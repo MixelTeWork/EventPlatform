@@ -7,23 +7,23 @@ export default function useGameDialogEditor()
 {
 	const update = useStateBool(false);
 	const editor = useStateObj({
-		data: null as null | GameDialogData,
-		onClose: () => { },
-		el: () => editor.v.data ? <GameDialogEditor data={editor.v.data} close={editor.v.close} /> : <></>,
+		_data: null as null | GameDialogData,
+		_onClose: undefined as (() => void) | undefined,
+		el: () => editor.v._data ? <GameDialogEditor data={editor.v._data} close={editor.v.close} /> : <></>,
 		open: (data: GameDialogData, onClose?: () => void) =>
 			editor.set(v =>
 			{
-				v.data = data;
-				v.onClose = onClose || (() => { });
+				v._data = data;
+				v._onClose = onClose;
 				update.toggle();
 				return v;
 			}),
 		close: () =>
 			editor.set(v =>
 			{
-				if (!v.data) return v;
-				v.data = null;
-				v.onClose();
+				if (!v._data) return v;
+				v._data = null;
+				v._onClose?.();
 				update.toggle();
 				return v;
 			}),

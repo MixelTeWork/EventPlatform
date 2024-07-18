@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function useStateBool(initialState: boolean | (() => boolean), onSet?: () => void): StateBool
 {
-	let [v, set] = useState(initialState)
+	const [v, set] = useState(initialState)
 	let setFn = set;
 	if (onSet)
 		setFn = (v: boolean | ((prevState: boolean) => boolean)) =>
@@ -14,17 +14,17 @@ export default function useStateBool(initialState: boolean | (() => boolean), on
 	return {
 		v,
 		set: setFn,
-		setT: () => set(true),
-		setF: () => set(false),
-		toggle: () => set(v => !v),
+		setT: () => setFn(true),
+		setF: () => setFn(false),
+		toggle: () => setFn(v => !v),
 	};
 }
 
 export interface StateBool
 {
 	v: boolean;
-    set: React.Dispatch<React.SetStateAction<boolean>>;
-    setT: () => void;
-    setF: () => void;
-    toggle: () => void;
+	set: React.Dispatch<React.SetStateAction<boolean>>;
+	setT: () => void;
+	setF: () => void;
+	toggle: () => void;
 }
