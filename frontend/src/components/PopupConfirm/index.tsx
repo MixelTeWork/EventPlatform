@@ -22,7 +22,7 @@ export default function PopupConfirm<T, K>({ title, mutationFn, mutatateParams, 
 	}, [open]);
 
 	return (
-		<Popup open={open} close={close} title="Вы уверены?">
+		<Popup open={open} close={close} title="Вы уверены?" closeOnOutclick>
 			{displayError(mutation)}
 			{mutation.isLoading && <Spinner />}
 			<Form onSubmit={() =>

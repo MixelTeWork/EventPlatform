@@ -1,0 +1,112 @@
+.root {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 1rem 0.5rem;
+	border: 2px solid aquamarine;
+	border-radius: 0.5rem;
+}
+
+.error {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	border-radius: 0.5rem;
+	background: rgba(0, 0, 0, 0.5);
+	font-size: 1.2rem;
+	color: aquamarine;
+}
+.error button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(238, 130, 238, 0.2);
+	border: 1px solid violet;
+	color: aquamarine;
+	border-radius: 0.25rem;
+	font-size: 1rem;
+	cursor: pointer;
+}
+
+.img {
+	display: flex;
+	width: 5rem;
+	aspect-ratio: 9/16;
+	border-radius: 0.5rem;
+	flex-shrink: 0;
+	padding: 0;
+	background:
+		radial-gradient(circle at 50% 10%, purple, transparent 50%),
+		radial-gradient(circle at 90% 90%, blue, transparent 50%),
+		radial-gradient(circle at 30% 90%, azure, transparent 50%),
+		radial-gradient(circle at 50% 50%, lightblue, violet);
+	border: none;
+	cursor: pointer;
+}
+.img img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 0.5rem;
+}
+
+.id {
+	position: absolute;
+	left: 0.25rem;
+	top: 0.25rem;
+	opacity: 0.5;
+}
+
+
+.inputs {
+	display: grid;
+	grid-template-columns: auto 9rem;
+	gap: 0.25rem 0.5rem;
+}
+.inputs > :nth-child(2n - 1) {
+	align-self: center;
+}
+
+.inputs input {
+	background-color: transparent;
+	color: white;
+	border: 1px solid transparent;
+	border-bottom: 1px solid aquamarine;
+	border-radius: 0.2rem;
+	outline: none;
+}
+.inputs input:focus-visible {
+	background: rgba(238, 130, 238, 0.2);
+}
+
+.changed .inputs input {
+	border: 1px solid aquamarine;
+}
+
+.buttons {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	min-width: 4.25rem;
+}
+
+.buttons button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(238, 130, 238, 0.2);
+	border: 1px solid violet;
+	color: aquamarine;
+	border-radius: 0.25rem;
+	padding: 0;
+	width: 2rem;
+	height: 2rem;
+	font-size: 1rem;
+	cursor: pointer;
+}

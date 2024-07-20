@@ -63,13 +63,14 @@ def store_item_patch(itemId, db_sess: Session, user: User):
     if item is None:
         return response_not_found("item", itemId)
 
-    img = None
+    imgId = None
     if img_data is not None:
         img, image_error = Image.new(db_sess, user, img_data)
         if image_error:
             return response_msg(image_error), 400
+        imgId = img.id
 
-    item.update(user, name, price, count, img)
+    item.update(user, name, price, count, imgId)
 
     return jsonify(item.get_dict_full()), 200
 

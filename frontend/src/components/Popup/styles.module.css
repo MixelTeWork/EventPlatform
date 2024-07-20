@@ -31,7 +31,7 @@
 	transform: translateY(1rem);
 }
 .open .popup {
-	transform: translateY(0);
+	transform: none;
 }
 
 .header {

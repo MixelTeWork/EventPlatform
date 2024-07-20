@@ -77,18 +77,18 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             items = items.filter(StoreItem.deleted == False)
         return items.all()
 
-    def update(self, actor: User, name: Union[str, None], price: Union[int, None], count: Union[int, None], img: Union[Image, None]):
+    def update(self, actor: User, name: Union[str, None], price: Union[int, None], count: Union[int, None], imgId: Union[int, None]):
         db_sess = Session.object_session(self)
         changes = []
 
-        if img is not None:
+        if imgId is not None:
             old_img: Union[Image, None] = self.image
             if old_img is None:
-                changes.append(("imgId", None, img.id))
+                changes.append(("imgId", None, imgId))
             else:
                 old_img.delete(actor)
-                changes.append(("imgId", self.imgId, img.id))
-            self.image = img
+                changes.append(("imgId", self.imgId, imgId))
+            self.imgId = imgId
 
         if name is not None:
             changes.append(("name", self.name, name))

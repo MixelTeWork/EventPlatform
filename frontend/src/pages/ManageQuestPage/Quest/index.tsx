@@ -131,7 +131,7 @@ export default function Quest({ quest }: QuestProps)
 					</div>
 				</Fragment>)}
 			</div>
-			<div className={classNames("material_symbols", styles.buttons)}>
+			<div className={styles.buttons}>
 				{!changed.v && <button onClick={deleting.setT}><IconDelete /></button>}
 				{changed.v && <button
 

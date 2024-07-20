@@ -63,17 +63,18 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
             characters = characters.filter(DialogCharacter.deleted == False)
         return characters.all()
 
-    def update(self, actor, name: str, img: Union[Image, None]):
+    def update(self, actor, name: Union[str, None], imgId: Union[int, None]):
         db_sess = Session.object_session(self)
-        changes = [
-            ("name", self.name, name)
-        ]
-        self.name = name
+        changes = []
 
-        if img is not None:
-            changes.append(("imgId", self.imgId, img.id))
+        if name is not None:
+            changes.append(("name", self.name, name))
+            self.name = name
+
+        if imgId is not None:
+            changes.append(("imgId", self.imgId, imgId))
             self.image.delete(actor)
-            self.image = img
+            self.imgId = imgId
 
         db_sess.add(Log(
             date=get_datetime_now(),

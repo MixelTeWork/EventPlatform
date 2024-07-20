@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from data.dialog_character import DialogCharacter
+from data.image import Image
 from data.operation import Operations
 from data.dialog import Dialog
 from data.user import User
@@ -27,3 +28,63 @@ def dialog(dialogId, db_sess: Session):
 def characters(db_sess: Session):
     items = DialogCharacter.all(db_sess)
     return jsonify_list(items), 200
+
+
+@blueprint.route("/api/dialog/character", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def character_add(db_sess: Session, user: User):
+    (name, img_data), errorRes = get_json_values_from_req("name", "img")
+    if errorRes:
+        return errorRes
+
+    img, image_error = Image.new(db_sess, user, img_data)
+    if image_error:
+        return response_msg(image_error), 400
+
+    character = DialogCharacter.new(db_sess, user, name, img.id)
+
+    return jsonify(character.get_dict()), 200
+
+
+@blueprint.route("/api/dialog/character/<int:characterId>", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def character_edit(characterId, db_sess: Session, user: User):
+    (name, img_data), errorRes = get_json_values_from_req(("name", None), ("img", None))
+    if errorRes:
+        return errorRes
+
+    character = DialogCharacter.get(db_sess, characterId)
+    if character is None:
+        return response_not_found("character", characterId)
+
+    imgId = None
+    if img_data is not None:
+        img, image_error = Image.new(db_sess, user, img_data)
+        if image_error:
+            return response_msg(image_error), 400
+        imgId = img.id
+
+    character.update(user, name, imgId)
+
+    return jsonify(character.get_dict()), 200
+
+
+@blueprint.route("/api/dialog/character/<int:characterId>", methods=["DELETE"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def character_delete(characterId, db_sess: Session, user: User):
+    character = DialogCharacter.get(db_sess, characterId)
+    if character is None:
+        return response_not_found("character", characterId)
+
+    character.delete(user)
+
+    return response_msg("ok"), 200

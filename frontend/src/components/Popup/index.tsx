@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import classNames from "../../utils/classNames";
 import styles from "./styles.module.css"
 
-export default function Popup({ children, open = false, close, title = "", closeOnOutclick = false }: CustomPopupProps)
+export default function Popup({ children, open = false, close, title = "", footer, closeOnOutclick = false }: CustomPopupProps)
 {
 	const ref = useRef<HTMLDivElement>(null)
 	const [isOpen, setIsOpen] = useState(open);
@@ -41,6 +41,9 @@ export default function Popup({ children, open = false, close, title = "", close
 				<div className={styles.body}>
 					{children}
 				</div>
+				<div className={styles.footer}>
+					{footer}
+				</div>
 			</div>
 		</div>
 	);
@@ -52,6 +55,7 @@ export interface PopupProps
 	close?: () => void,
 	title?: string,
 	closeOnOutclick?: boolean,
+	footer?: React.ReactNode,
 }
 
 type CustomPopupProps = PopupProps & React.PropsWithChildren;
