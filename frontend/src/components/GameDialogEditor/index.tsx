@@ -1,8 +1,9 @@
-import { useDialogCharacters, type GameDialogData } from "../../api/dialog";
+import { createEmptyDialogNode, useDialogCharacters, type GameDialogData } from "../../api/dialog";
 import displayError from "../../utils/displayError";
 import useStateBool from "../../utils/useStateBool";
 import useStateObj from "../../utils/useStateObj";
 import Spinner from "../Spinner";
+import DialogNode from "./DialogNode";
 import ManageCharacters from "./ManageCharacters";
 import styles from "./styles.module.css"
 
@@ -38,6 +39,24 @@ export default function useGameDialogEditor()
 function GameDialogEditor({ data, close }: GameDialogEditorProps)
 {
 	const characters = useDialogCharacters();
+	const update = useStateBool(false);
+
+	function moveNode(fromI: number, toI: number)
+	{
+		if (toI < 0) return;
+		data.nodes.splice(toI, 0, data.nodes.splice(fromI, 1)[0]);
+		update.toggle();
+	}
+	function addNode(toI: number)
+	{
+		data.nodes.splice(toI, 0, createEmptyDialogNode());
+		update.toggle();
+	}
+	function deleteNode(i: number)
+	{
+		data.nodes.splice(i, 1);
+		update.toggle();
+	}
 
 	return (
 		<div className={styles.root}>
@@ -48,14 +67,21 @@ function GameDialogEditor({ data, close }: GameDialogEditorProps)
 				<h1>Редактирование диалога</h1>
 				<ManageCharacters />
 				<div className={styles.nodes}>
-					{data.nodes.map((v, i) => <div key={i} className={styles.node}>
-						<img src={characters.data?.[v.characterId].img} alt={characters.data?.[v.characterId].name} />
-						<div>
-							<h3>{characters.data?.[v.characterId].name}</h3>
-							<div>{v.text}</div>
-						</div>
-					</div>)}
+					{data.nodes.map((v, i) => <DialogNode
+						key={i}
+						data={v}
+						deleteNode={() => deleteNode(i)}
+						moveUp={() => moveNode(i, i - 1)}
+						moveDown={() => moveNode(i, i + 1)}
+						addUp={() => addNode(i)}
+						addDown={() => addNode(i + 1)}
+					/>)}
 				</div>
+				<button className={styles.addBtn} onClick={() =>
+				{
+					data.nodes.push(createEmptyDialogNode());
+					update.toggle();
+				}}>Добавить реплику</button>
 			</div>
 		</div>
 	);

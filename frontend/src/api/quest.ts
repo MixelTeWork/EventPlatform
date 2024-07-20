@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { fetchDelete, fetchJsonGet, fetchJsonPost, fetchPost } from "../utils/fetch";
+import type { GameDialogData } from "./dialog";
 
 export interface Quest
 {
@@ -66,6 +67,8 @@ export interface QuestData
 	description: string,
 	reward: number,
 	hidden: boolean,
+	dialog1?: GameDialogData | false,
+	dialog2?: GameDialogData | false,
 }
 
 export function useMutationEditQuest(questId: number, onSuccess?: (data: QuestFull) => void, onError?: (err: any) => void)
@@ -81,6 +84,12 @@ export function useMutationEditQuest(questId: number, onSuccess?: (data: QuestFu
 
 			if (queryClient.getQueryState("quests")?.status == "success")
 				queryClient.invalidateQueries("quests", { exact: true });
+
+			if (queryClient.getQueryState(["dialogs", `${data.dialog1Id}`])?.status == "success")
+				queryClient.invalidateQueries(["dialogs", `${data.dialog1Id}`], { exact: true });
+
+			if (queryClient.getQueryState(["dialogs", `${data.dialog2Id}`])?.status == "success")
+				queryClient.invalidateQueries(["dialogs", `${data.dialog2Id}`], { exact: true });
 
 			onSuccess?.(data);
 		},

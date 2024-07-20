@@ -59,6 +59,7 @@ function GameDialogWithLoader({ dialogId, characters, close }: GameDialogWithLoa
 		<GameDialog data={dialog.data.data} close={close} characters={characters} />
 		:
 		<div className={styles.root}>
+			<button className={styles.close} onClick={close}></button>
 			{dialog.isLoading && <Spinner />}
 			{displayError(dialog)}
 		</div>
@@ -80,14 +81,22 @@ function GameDialog({ data, characters, close }: GameDialogProps)
 
 	if (!characters.isSuccess)
 		return <div className={styles.root}>
+			<button className={styles.close} onClick={close}></button>
 			{characters.isLoading && <Spinner />}
 			{displayError(characters)}
+		</div>;
+
+	if (!node)
+		return <div className={styles.root}>
+			<button className={styles.close} onClick={close}></button>
+			<h2>Пусто</h2>
 		</div>;
 
 	const character = characters.data[node.characterId];
 
 	return (
 		<div className={styles.root}>
+			<button className={styles.close} onClick={close}></button>
 			<img className={styles.img} src={character.img} alt={character.name} />
 			<div className={styles.dialog_container}>
 				<div className={styles.dialog}>

@@ -1,8 +1,9 @@
-from typing import Union
-from sqlalchemy import Boolean, Column, DefaultClause, ForeignKey, Integer, String
+from typing import Literal, Union
+from sqlalchemy import Boolean, Column, DefaultClause, orm, ForeignKey, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
+from data.dialog import Dialog
 from data.log import Actions, Log, Tables
 from data.get_datetime_now import get_datetime_now
 from data.randstr import randstr
@@ -22,6 +23,9 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     hidden = Column(Boolean, nullable=False)
     dialog1Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
     dialog2Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
+
+    dialog1 = orm.relationship("Dialog", foreign_keys="Quest.dialog1Id")
+    dialog2 = orm.relationship("Dialog", foreign_keys="Quest.dialog2Id")
 
     def __repr__(self):
         return f"<Quest> [{self.id}] {self.name}"
@@ -126,7 +130,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
 
         return quests
 
-    def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None], hidden: Union[bool, None]):
+    def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None],
+               hidden: Union[bool, None], dialog1: Union[object, Literal[False], None], dialog2: Union[object, Literal[False], None]):
         db_sess = Session.object_session(self)
         changes = []
 
@@ -140,6 +145,26 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         updateField("description", description, changes)
         updateField("reward", reward, changes)
         updateField("hidden", hidden, changes)
+
+        def updateDialog(field: str, value, changes: list):
+            cur: Union[Dialog, None] = getattr(self, field)
+            if value is None:
+                return
+            if value is False:
+                if cur is not None:
+                    changes.append((field, cur.id, None))
+                    cur.delete(actor)
+                    setattr(self, field, None)
+                return
+            if cur is None:
+                dialog = Dialog.new(db_sess, actor, value)
+                changes.append((field, None, dialog.id))
+                setattr(self, field, dialog)
+            else:
+                cur.update(actor, value)
+
+        updateDialog("dialog1", dialog1, changes)
+        updateDialog("dialog2", dialog2, changes)
 
         db_sess.add(Log(
             date=get_datetime_now(),

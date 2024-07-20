@@ -11,7 +11,7 @@ export interface GameDialogData
 {
 	nodes: GameDialogNode[];
 }
-interface GameDialogNode
+export interface GameDialogNode
 {
 	characterId: number;
 	text: string;
@@ -23,15 +23,19 @@ export interface GameDialogCharacter
 	name: string;
 	img: string;
 }
-export interface GameDialogCharacterData
-{
-	[id: number]: GameDialogCharacter;
-}
+export type GameDialogCharacterData = { [id: number]: GameDialogCharacter; };
 
 export function createEmptyDialog(): GameDialogData
 {
 	return {
 		nodes: [],
+	}
+}
+export function createEmptyDialogNode(): GameDialogNode
+{
+	return {
+		characterId: 1,
+		text: "",
 	}
 }
 

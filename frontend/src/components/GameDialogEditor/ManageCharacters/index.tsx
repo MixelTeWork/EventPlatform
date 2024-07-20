@@ -1,4 +1,4 @@
-import { createEmptyCharacter, useDialogCharacters, type GameDialogCharacter } from "../../../api/dialog";
+import { createEmptyCharacter, useDialogCharacters, type GameDialogCharacter, type GameDialogCharacterData } from "../../../api/dialog";
 import displayError from "../../../utils/displayError";
 import useStateBool from "../../../utils/useStateBool";
 import useStateObj from "../../../utils/useStateObj";
@@ -11,7 +11,7 @@ export default function ManageCharacters()
 {
 	const popupOpen = useStateBool(false);
 	const characters = useDialogCharacters();
-	const charactersNew = useStateObj<{ [id: number]: GameDialogCharacter; }>({});
+	const charactersNew = useStateObj<GameDialogCharacterData>({});
 	const lastId = useStateObj(1);
 
 	return <>
@@ -34,12 +34,10 @@ export default function ManageCharacters()
 			{displayError(characters)}
 			{characters.isSuccess && <>
 				<div className={styles.characters}>
-					{Object.keys(characters.data)
-						.map(key => characters.data[key as any])
+					{Object.values<GameDialogCharacter>(characters.data)
 						.map(v => <Character key={v.id} character={v} />)
 					}
-					{Object.keys(charactersNew.v)
-						.map(key => charactersNew.v[key as any])
+					{Object.values(charactersNew.v)
 						.map(v => <Character key={v.id} character={v}
 							deleteNew={() =>
 								charactersNew.set(V =>

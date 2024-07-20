@@ -18,6 +18,7 @@ import IconReload from "../../../icons/reload";
 import { createEmptyDialog, useDialog, type Dialog, type GameDialogData } from "../../../api/dialog";
 import useGameDialogEditor from "../../../components/GameDialogEditor";
 import type { UseQueryResult } from "react-query";
+import copyObj from "../../../utils/copyObj";
 
 export default function Quest({ quest }: QuestProps)
 {
@@ -35,6 +36,8 @@ export default function Quest({ quest }: QuestProps)
 	const dialog2DataQuery = useDialog(dialog2Id.v ?? -1, false);
 	const dialog1Data = useStateObj<GameDialogData | null>(null);
 	const dialog2Data = useStateObj<GameDialogData | null>(null);
+	const dialog1Changed = useStateBool(false, changed.setT);
+	const dialog2Changed = useStateBool(false, changed.setT);
 
 	const dialog = useGameDialog();
 	const editor = useGameDialogEditor();
@@ -54,24 +57,28 @@ export default function Quest({ quest }: QuestProps)
 		dialog2Id.set(data.dialog2Id);
 		dialog1Data.set(null);
 		dialog2Data.set(null);
+		dialog1Changed.setF();
+		dialog2Changed.setF();
 		changed.setF();
 	}
 
 	async function getDialog(state: StateObj<GameDialogData | null>, query: UseQueryResult<Dialog, unknown>, fn: (dialog: GameDialogData) => void)
 	{
 		if (state.v) fn(state.v);
-		else if (query.isSuccess)
+		else if (query.isSuccess && !query.isStale)
 		{
-			state.set(query.data.data)
-			fn(query.data.data);
+			const data = copyObj(query.data.data);
+			state.set(data);
+			fn(data);
 		}
-		else if (query.isIdle || query.isError)
+		else if (query.isIdle || query.isStale || query.isError)
 		{
 			const d = await query.refetch();
 			if (d.isSuccess)
 			{
-				state.set(d.data.data)
-				fn(d.data.data);
+				const data = copyObj(d.data.data);
+				state.set(data);
+				fn(data);
 			}
 		}
 	}
@@ -81,8 +88,8 @@ export default function Quest({ quest }: QuestProps)
 			{dialog.el()}
 			{editor.el()}
 			{mutationEdit.isLoading && <Spinner block r="0.5rem" />}
-			{dialog1DataQuery.isLoading && <Spinner block r="0.5rem" />}
-			{dialog2DataQuery.isLoading && <Spinner block r="0.5rem" />}
+			{dialog1DataQuery.isFetching && <Spinner block r="0.5rem" />}
+			{dialog2DataQuery.isFetching && <Spinner block r="0.5rem" />}
 			{displayError(mutationEdit, err => <div className={styles.error}>
 				<div>{err}</div>
 				<button onClick={() => mutationEdit.reset()}>ОК</button>
@@ -107,9 +114,9 @@ export default function Quest({ quest }: QuestProps)
 					{description.v}
 				</button>
 				{[
-					{ n: 1, questId: quest.dialog1Id, id: dialog1Id, data: dialog1Data, query: dialog1DataQuery },
-					{ n: 2, questId: quest.dialog2Id, id: dialog2Id, data: dialog2Data, query: dialog2DataQuery },
-				].map(({ n, questId, id, data, query }) => <Fragment key={n}>
+					{ n: 1, questId: quest.dialog1Id, id: dialog1Id, data: dialog1Data, query: dialog1DataQuery, changed: dialog1Changed },
+					{ n: 2, questId: quest.dialog2Id, id: dialog2Id, data: dialog2Data, query: dialog2DataQuery, changed: dialog2Changed },
+				].map(({ n, questId, id, data, query, changed }) => <Fragment key={n}>
 					<div>Диалог {n}</div>
 					<div className={classNames(styles.buttons, styles.dialogBtns)}>
 						{id.v == null ? <>
@@ -142,6 +149,8 @@ export default function Quest({ quest }: QuestProps)
 							description: description.v,
 							reward: reward.v,
 							hidden: hidden.v,
+							dialog1: (quest.dialog1Id != null && dialog1Id.v == null) ? false : (dialog1Changed.v && dialog1Data.v) || undefined,
+							dialog2: (quest.dialog2Id != null && dialog2Id.v == null) ? false : (dialog2Changed.v && dialog2Data.v) || undefined,
 						});
 					}}
 				>

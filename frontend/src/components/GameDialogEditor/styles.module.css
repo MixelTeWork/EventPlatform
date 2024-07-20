@@ -5,6 +5,7 @@
 	z-index: 100;
 	display: flex;
 	justify-content: center;
+	overflow: auto;
 }
 *:has(.root) {
 	overflow: hidden;
@@ -44,10 +45,12 @@
 .body {
 	width: 100%;
 	max-width: 600px;
+	height: fit-content;
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 	margin-top: 1rem;
+	padding-bottom: 2rem;
 }
 
 .nodes {
@@ -56,17 +59,14 @@
 	gap: 0.5rem;
 }
 
-.node {
-	padding: 1rem 0.5rem;
-	border: 2px solid aquamarine;
-	border-radius: 0.5rem;
+.addBtn {
 	display: flex;
-	gap: 0.5rem;
-}
-.node img {
-	width: 15%;
-	height: fit-content;
-	aspect-ratio: 9/16;
-	object-fit: cover;
+	justify-content: center;
+	align-items: center;
+	background: rgba(238, 130, 238, 0.2);
+	border: 1px solid violet;
+	color: aquamarine;
 	border-radius: 0.25rem;
+	font-size: 1rem;
+	cursor: pointer;
 }

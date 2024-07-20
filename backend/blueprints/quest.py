@@ -51,8 +51,8 @@ def quest_add(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_quest)
 def quest_edit(questId, db_sess: Session, user: User):
-    (name, description, reward, hidden), errorRes =\
-        get_json_values_from_req(("name", None), ("description", None), ("reward", None), ("hidden", None))
+    (name, description, reward, hidden, dialog1, dialog2), errorRes =\
+        get_json_values_from_req(("name", None), ("description", None), ("reward", None), ("hidden", None), ("dialog1", None), ("dialog2", None))
     if errorRes:
         return errorRes
 
@@ -60,7 +60,7 @@ def quest_edit(questId, db_sess: Session, user: User):
     if quest is None:
         return response_not_found("quest", questId)
 
-    quest.update(user, name, description, reward, hidden)
+    quest.update(user, name, description, reward, hidden, dialog1, dialog2)
 
     return jsonify(quest.get_dict_full()), 200
 

@@ -78,7 +78,7 @@
 	}
 } */
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 300px) {
 	.inputs {
 		grid-template-columns: 8rem;
 	}
@@ -105,6 +105,13 @@
 	align-items: center;
 	gap: 0.25rem;
 	min-width: 4.25rem;
+}
+
+@media screen and (((max-width: 620px) and (min-width: 570px)) or (max-width: 340px)) {
+	.root > .buttons {
+		min-width: auto;
+		flex-direction: column;
+	}
 }
 
 .buttons button {
