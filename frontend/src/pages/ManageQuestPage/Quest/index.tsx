@@ -117,7 +117,7 @@ export default function Quest({ quest }: QuestProps)
 					{ n: 1, questId: quest.dialog1Id, id: dialog1Id, data: dialog1Data, query: dialog1DataQuery, changed: dialog1Changed },
 					{ n: 2, questId: quest.dialog2Id, id: dialog2Id, data: dialog2Data, query: dialog2DataQuery, changed: dialog2Changed },
 				].map(({ n, questId, id, data, query, changed }) => <Fragment key={n}>
-					<div>Диалог {n}</div>
+					<div className={classNames(changed.v && styles.changedHighlight)}>Диалог {n}</div>
 					<div className={classNames(styles.buttons, styles.dialogBtns)}>
 						{id.v == null ? <>
 							{!data.v && questId == null ?

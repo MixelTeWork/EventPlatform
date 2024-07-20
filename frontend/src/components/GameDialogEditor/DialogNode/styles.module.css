@@ -45,7 +45,6 @@
 	resize: none;
 	background-color: black;
 	color: white;
-	/* change to calm white by var to body + inherit */
 	border: 1px solid transparent;
 	border-radius: 0.2rem;
 	font-size: 0.9rem;

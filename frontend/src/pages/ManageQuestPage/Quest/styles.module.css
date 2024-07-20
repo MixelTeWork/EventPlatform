@@ -71,6 +71,9 @@
 .inputs > :nth-child(2n - 1) {
 	align-self: center;
 }
+.changedHighlight {
+	color: aquamarine;
+}
 
 /* @media screen and (max-width: 790px) and (min-width: 620px) {
 	.inputs {
