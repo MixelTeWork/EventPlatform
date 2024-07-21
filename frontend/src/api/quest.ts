@@ -51,8 +51,7 @@ export function useMutationAddQuest(onSuccess?: (data: QuestFull) => void, onErr
 			if (queryClient.getQueryState("quests_full")?.status == "success")
 				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests ? [...quests, data] : [data]);
 
-			if (queryClient.getQueryState("quests")?.status == "success")
-				queryClient.invalidateQueries("quests", { exact: true });
+			queryClient.invalidateQueries("quests", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -82,14 +81,9 @@ export function useMutationEditQuest(questId: number, onSuccess?: (data: QuestFu
 			if (queryClient.getQueryState("quests_full")?.status == "success")
 				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests?.map(v => v.id == data.id ? data : v) || []);
 
-			if (queryClient.getQueryState("quests")?.status == "success")
-				queryClient.invalidateQueries("quests", { exact: true });
-
-			if (queryClient.getQueryState(["dialogs", `${data.dialog1Id}`])?.status == "success")
-				queryClient.invalidateQueries(["dialogs", `${data.dialog1Id}`], { exact: true });
-
-			if (queryClient.getQueryState(["dialogs", `${data.dialog2Id}`])?.status == "success")
-				queryClient.invalidateQueries(["dialogs", `${data.dialog2Id}`], { exact: true });
+			queryClient.invalidateQueries("quests", { exact: true });
+			queryClient.invalidateQueries(["dialogs", `${data.dialog1Id}`], { exact: true });
+			queryClient.invalidateQueries(["dialogs", `${data.dialog2Id}`], { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -109,8 +103,7 @@ export function useMutationDeleteQuest(questId: number, onSuccess?: () => void, 
 			if (queryClient.getQueryState("quests_full")?.status == "success")
 				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests?.filter(v => v.id != questId) || []);
 
-			if (queryClient.getQueryState("quests")?.status == "success")
-				queryClient.invalidateQueries("quests", { exact: true });
+			queryClient.invalidateQueries("quests", { exact: true });
 
 			onSuccess?.();
 		},

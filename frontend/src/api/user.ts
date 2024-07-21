@@ -122,6 +122,9 @@ export function useMutationSetGroup(onSuccess?: () => void)
 		{
 			if (queryClient.getQueryState("user")?.status == "success")
 				queryClient.setQueryData("user", (user?: User) => ({ ...user!, group: data.group }));
+
+			queryClient.invalidateQueries("quests", { exact: true });
+
 			onSuccess?.();
 		},
 	});

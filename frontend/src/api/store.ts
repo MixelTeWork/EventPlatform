@@ -48,8 +48,7 @@ export function useMutationAddItem(onSuccess?: (data: StoreItemFull) => void, on
 			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
 				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items ? [...items, data] : [data]);
 
-			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.invalidateQueries("storeItems", { exact: true });
+			queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -77,8 +76,7 @@ export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItem
 			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
 				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.map(v => v.id == data.id ? data : v) || []);
 
-			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.invalidateQueries("storeItems", { exact: true });
+			queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -98,8 +96,7 @@ export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: Store
 			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
 				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.map(v => v.id == data.id ? data : v) || []);
 
-			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.invalidateQueries("storeItems", { exact: true });
+			queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.(data);
 		},
@@ -119,8 +116,7 @@ export function useMutationDeleteItem(itemId: number, onSuccess?: () => void, on
 			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
 				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.filter(v => v.id != itemId) || []);
 
-			if (queryClient.getQueryState("storeItems")?.status == "success")
-				queryClient.invalidateQueries("storeItems", { exact: true });
+			queryClient.invalidateQueries("storeItems", { exact: true });
 
 			onSuccess?.();
 		},
