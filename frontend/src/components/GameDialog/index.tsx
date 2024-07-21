@@ -4,13 +4,12 @@ import { useDialog, useDialogCharacters, type GameDialogCharacter, type GameDial
 import Spinner from "../Spinner";
 import displayError from "../../utils/displayError";
 import useStateObj from "../../utils/useStateObj";
-import useStateBool from "../../utils/useStateBool";
 import type { UseQueryResult } from "react-query";
 
 export default function useGameDialog()
 {
 	const characters = useDialogCharacters();
-	const update = useStateBool(false);
+	const update = useStateObj(0);
 	const dialog = useStateObj({
 		_data: null as GameDialogData | null,
 		_dialogId: -1,
@@ -45,7 +44,7 @@ export default function useGameDialog()
 				v._data = null;
 				return v;
 			}),
-	}, update.toggle);
+	}, () => update.set(v => v + 1));
 	dialog.v._characters = characters;
 
 	return dialog.v;

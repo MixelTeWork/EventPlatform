@@ -6,6 +6,7 @@ import Layout from "../../components/Layout";
 import Footer from "../../components/Footer";
 import useStateObj from "../../utils/useStateObj";
 import { useTitle } from "../../utils/useTtile";
+import GameDialogGreetings from "../../components/GameDialogGreetings";
 
 export default function MapPage()
 {
@@ -14,6 +15,7 @@ export default function MapPage()
 
 	return (
 		<Layout centeredPage headerColor="#042e40" gap="1em" className={styles.root} footer={<Footer curPage="map" />}>
+			<GameDialogGreetings />
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			<div className={styles.map}>

@@ -19,6 +19,7 @@ def init_values(dev=False, cmd=False):
     from data.race import Race
     from data.log import Actions, Log, Tables
     from data.user import User
+    from data.dialog import Dialog
 
     def init():
         db_session.global_init("dev" in sys.argv)
@@ -49,6 +50,7 @@ def init_values(dev=False, cmd=False):
         log_changes(db_sess, user_admin, roles)
 
         Race.init(db_sess)
+        Dialog.new(db_sess, user_admin, {"nodes": []}, 1)
 
         if dev:
             init_values_dev(db_sess, user_admin)
@@ -79,7 +81,6 @@ def init_values(dev=False, cmd=False):
         from utils.randstr import randstr
         from data.quest import Quest
         from data.store_item import StoreItem
-        from data.dialog import Dialog
         from data.image import Image
         from data.dialog_character import DialogCharacter
 

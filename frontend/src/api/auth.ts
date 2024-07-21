@@ -10,7 +10,7 @@ export function useMutationAuth(onError?: (msg: string) => void)
 		mutationFn: postAuth,
 		onSuccess: (data) =>
 		{
-			queryClient.setQueryData("user", () => data);
+			queryClient.setQueryData("user", data);
 		},
 		onError: (error) =>
 		{

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ApiError, ResponseMsg } from "./dataTypes";
-import { fetchJsonGet, fetchPost } from "../utils/fetch";
+import { fetchJsonGet, fetchJsonPost, fetchPost } from "../utils/fetch";
 
 export interface User
 {
@@ -12,6 +12,7 @@ export interface User
 	balance: number;
 	roles: string[];
 	operations: string[];
+    group: number;
 }
 
 export interface UserFull
@@ -27,6 +28,7 @@ export interface UserFull
 	roles: string[];
 	deleted: boolean;
 	operations: string[];
+    group: number;
 }
 
 export interface UserWithPwd extends User
@@ -36,7 +38,7 @@ export interface UserWithPwd extends User
 
 export function createEmptyUser(): User
 {
-	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [] };
+	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1 };
 }
 
 export function useUpdateUser()
@@ -108,4 +110,25 @@ export function useMutationChangeName(onSuccess?: () => void)
 interface ChangeName
 {
 	name: string;
+}
+
+export function useMutationSetGroup(onSuccess?: () => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (data: SetGroup) =>
+			await fetchJsonPost<SetGroup>("/api/user/set_group", data),
+		onSuccess: (data: SetGroup) =>
+		{
+			if (queryClient.getQueryState("user")?.status == "success")
+				queryClient.setQueryData("user", (user?: User) => ({ ...user!, group: data.group }));
+			onSuccess?.();
+		},
+	});
+	return mutation;
+}
+
+interface SetGroup
+{
+	group: number;
 }

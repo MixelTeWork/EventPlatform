@@ -56,6 +56,26 @@ export function useDialog(dialogId: number, autoEnabled = true)
 	);
 }
 
+export function useMutationEditDialog(dialogId: number, onSuccess?: (data: Dialog) => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (dialogData: DialogData) =>
+			await fetchJsonPost<Dialog>(`/api/dialog/${dialogId}`, dialogData),
+		onSuccess: (data: Dialog) =>
+		{
+			queryClient.setQueryData(["dialogs", `${dialogId}`], data);
+			onSuccess?.(data);
+		},
+		onError: onError,
+	});
+	return mutation;
+}
+export interface DialogData
+{
+	data: GameDialogData;
+}
+
 export function useDialogCharacters()
 {
 	return useQuery(["dialogCharacters"], async () =>
@@ -66,7 +86,6 @@ export function useDialogCharacters()
 		return characters;
 	});
 }
-
 
 export function useMutationAddCharacter(onSuccess?: (data: GameDialogCharacter) => void, onError?: (err: any) => void)
 {

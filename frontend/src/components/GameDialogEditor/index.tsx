@@ -7,19 +7,19 @@ import DialogNode from "./DialogNode";
 import ManageCharacters from "./ManageCharacters";
 import styles from "./styles.module.css"
 
-export default function useGameDialogEditor()
+export default function useGameDialogEditor(onClose?: (() => void))
 {
-	const update = useStateBool(false);
+	const update = useStateObj(0);
 	const editor = useStateObj({
 		_data: null as null | GameDialogData,
 		_onClose: undefined as (() => void) | undefined,
+		_onCloseMain: undefined as (() => void) | undefined,
 		el: () => editor.v._data ? <GameDialogEditor data={editor.v._data} close={editor.v.close} /> : <></>,
 		open: (data: GameDialogData, onClose?: () => void) =>
 			editor.set(v =>
 			{
 				v._data = data;
 				v._onClose = onClose;
-				update.toggle();
 				return v;
 			}),
 		close: () =>
@@ -28,10 +28,11 @@ export default function useGameDialogEditor()
 				if (!v._data) return v;
 				v._data = null;
 				v._onClose?.();
-				update.toggle();
+				v._onCloseMain?.();
 				return v;
 			}),
-	});
+	}, () => update.set(v => v + 1));
+	editor.v._onCloseMain = onClose;
 
 	return editor.v;
 }

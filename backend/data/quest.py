@@ -92,13 +92,19 @@ class Quest(SqlAlchemyBase, SerializerMixin):
                     opened_quests.append(userQuest.questId)
                 if userQuest.completeDate != None:
                     completed_quests.append(userQuest.questId)
+            dialogColumn = None
+            if user.group == 1:
+                dialogColumn = Quest.dialog1Id
+            elif user.group == 2:
+                dialogColumn = Quest.dialog2Id
         else:
             opened_quests = []
             completed_quests = []
+            dialogColumn = None
 
         all_quests = db_sess\
             .query(Quest)\
-            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, Quest.dialog1Id)  # select dialog by user team
+            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn)
 
         quests = []
         for v in list(all_quests):

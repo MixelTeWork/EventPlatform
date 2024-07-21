@@ -9,6 +9,9 @@
 	font-size: 1rem;
 	cursor: pointer;
 }
+.root:hover {
+	background: rgba(238, 130, 238, 0.3);
+}
 
 
 .img {

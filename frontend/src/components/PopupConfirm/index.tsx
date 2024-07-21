@@ -6,13 +6,13 @@ import Popup, { PopupProps } from "../Popup";
 import Spinner from "../Spinner";
 import { useEffect } from "react";
 
-export default function PopupConfirm<T, K>({ title, mutationFn, mutatateParams, itemId, onSuccess, open, close }: PopupConfirmProps<T, K>)
+export default function PopupConfirm<T, TE, K>({ title, mutationFn, mutatateParams, itemId, onSuccess, onError, open, close }: PopupConfirmProps<T, TE, K>)
 {
 	const mutation = mutationFn(itemId, (item: any) =>
 	{
 		close?.();
 		onSuccess?.(item);
-	});
+	}, onError);
 
 	useEffect(() =>
 	{
@@ -36,11 +36,12 @@ export default function PopupConfirm<T, K>({ title, mutationFn, mutatateParams, 
 	);
 }
 
-interface PopupConfirmProps<T, K> extends PopupProps
+interface PopupConfirmProps<T, TE, K> extends PopupProps
 {
-	mutationFn: (itemId: number, onSuccess: (item: T | void) => void) => UseMutationResult<T, any, K, any>,
+	mutationFn: (itemId: number, onSuccess: (item: T | void) => void, onError?: (err: TE) => void) => UseMutationResult<T, TE, K, any>,
 	mutatateParams?: K,
 	itemId: number,
 	title: string,
 	onSuccess?: (item: T) => void,
+	onError?: (err: TE) => void,
 }

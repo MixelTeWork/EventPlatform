@@ -23,6 +23,25 @@ def dialog(dialogId, db_sess: Session):
     return jsonify(dialog.get_dict()), 200
 
 
+@blueprint.route("/api/dialog/<int:dialogId>", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_quest)
+def dialog_edit(dialogId, db_sess: Session, user: User):
+    (data, ), errorRes = get_json_values_from_req("data")
+    if errorRes:
+        return errorRes
+
+    dialog = Dialog.get(db_sess, dialogId)
+    if dialog is None:
+        return response_not_found("dialog", dialogId)
+
+    dialog.update(user, data)
+
+    return jsonify(dialog.get_dict()), 200
+
+
 @blueprint.route("/api/dialog/characters")
 @use_db_session()
 def characters(db_sess: Session):

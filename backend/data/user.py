@@ -28,6 +28,7 @@ class User(SqlAlchemyBase, SerializerMixin):
     lastName = Column(String(128), nullable=True)
     imageUrl = Column(String(256), nullable=True)
     balance  = Column(Integer, nullable=False)
+    group    = Column(Integer, DefaultClause("0"), nullable=False)
 
     def __repr__(self):
         return f"<User> [{self.id} {self.login}] {self.name}"
@@ -53,7 +54,11 @@ class User(SqlAlchemyBase, SerializerMixin):
             userName=actor.name,
             tableName=Tables.User,
             recordId=-1,
-            changes=user.get_creation_changes()
+            changes=[
+                ("login", None, user.login),
+                ("name", None, user.name),
+                ("password", None, "***"),
+            ]
         )
         db_sess.add(log)
         db_sess.commit()
@@ -165,12 +170,26 @@ class User(SqlAlchemyBase, SerializerMixin):
         db_sess.commit()
         return True
 
-    def get_creation_changes(self):
-        return [
-            ("login", None, self.login),
-            ("name", None, self.name),
-            ("password", None, "***"),
-        ]
+    def set_group(self, group: int):
+        db_sess = Session.object_session(self)
+        if group not in (0, 1, 2):
+            group = 0
+        if self.group == group:
+            return group
+
+        db_sess.add(Log(
+            date=get_datetime_now(),
+            actionCode=Actions.updated,
+            userId=self.id,
+            userName=self.name,
+            tableName=Tables.User,
+            recordId=self.id,
+            changes=[("group", self.group, group)]
+        ))
+        self.group = group
+
+        db_sess.commit()
+        return group
 
     def get_roles(self):
         db_sess = Session.object_session(self)
@@ -221,6 +240,7 @@ class User(SqlAlchemyBase, SerializerMixin):
             "balance": self.balance,
             "roles": self.get_roles(),
             "operations": self.get_operations(),
+            "group": self.group,
         }
 
     def get_dict_full(self):
@@ -236,4 +256,5 @@ class User(SqlAlchemyBase, SerializerMixin):
             "roles": self.get_roles(),
             "deleted": self.deleted,
             "operations": self.get_operations(),
+            "group": self.group,
         }

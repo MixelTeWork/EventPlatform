@@ -18,8 +18,10 @@ class Dialog(SqlAlchemyBase, SerializerMixin):
         return f"<Dialog> [{self.id}]"
 
     @staticmethod
-    def new(db_sess: Session, actor, data: object):
+    def new(db_sess: Session, actor, data: object, id: int = None):
         dialog = Dialog(data=data)
+        if id is not None:
+            dialog.id = id
         db_sess.add(dialog)
 
         now = get_datetime_now()
@@ -54,7 +56,7 @@ class Dialog(SqlAlchemyBase, SerializerMixin):
             dialogs = dialogs.filter(Dialog.deleted == False)
         return dialogs.all()
 
-    def update(self, actor, data: str):
+    def update(self, actor, data: object):
         db_sess = Session.object_session(self)
         changes = [
             ("data", self.data, data),

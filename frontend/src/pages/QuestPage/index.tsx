@@ -52,7 +52,11 @@ export default function QuestPage()
 								<span>{openQuest.v.name}</span>
 								<span>{renderReward(openQuest.v.reward)}</span>
 							</button>
-							<button onClick={() => openQuest.v && openQuest.v.dialogId != null && dialog.run(openQuest.v.dialogId)}>Вступление</button>
+							{openQuest.v && openQuest.v.dialogId != null ?
+								<button onClick={() => openQuest.v && openQuest.v.dialogId != null && dialog.run(openQuest.v.dialogId)}>Вступление</button>
+								:
+								<div></div>
+							}
 							<div className={styles.questDescription__body}>{openQuest.v.description || "Нет описания"}</div>
 							<Link to="/scanner" className={styles.btn}>
 								<img src={btn} alt="Сдать" />

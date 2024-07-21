@@ -33,6 +33,9 @@
 	font-size: 1rem;
 	cursor: pointer;
 }
+.error button:hover {
+	background: rgba(238, 130, 238, 0.3);
+}
 
 .id {
 	position: absolute;
@@ -80,12 +83,12 @@
 		grid-template-columns: 8rem;
 	}
 } */
-
+/*
 @media screen and (max-width: 300px) {
 	.inputs {
 		grid-template-columns: 8rem;
 	}
-}
+} */
 
 .inputs input {
 	background-color: transparent;
@@ -130,6 +133,9 @@
 	height: 2rem;
 	font-size: 1rem;
 	cursor: pointer;
+}
+.buttons button:hover {
+	background: rgba(238, 130, 238, 0.3);
 }
 
 .btnMinus {

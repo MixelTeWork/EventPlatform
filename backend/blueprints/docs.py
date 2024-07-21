@@ -38,6 +38,15 @@ def docs():
                 "name": "string",
             },
         },
+        "/api/user/set_group POST": {
+            "__desc__": "Set user group",
+            "request": {
+                "group": "number",
+            },
+            "response": {
+                "group": "number",
+            },
+        },
         "/api/img/<int:imageId>": {
             "__desc__": "Get image",
             "response": "binary image data",
@@ -163,6 +172,11 @@ def docs():
             "__desc__": "Get dialog",
             "response": "Dialog",
         },
+        "/api/dialog/<int:dialogId> POST": {
+            "__desc__": "Edit dialog",
+            "request": "dialog.ts:GameDialogData",
+            "response": "Dialog",
+        },
         "/api/dialog/characters": {
             "__desc__": "Get all dialog characters",
             "response": "DialogCharacter[]",
@@ -175,6 +189,7 @@ def docs():
             "balance": "number",
             "roles": "string[]",
             "operations": "string[]",
+            "group": "number",
         },
         "UserFull": {
             "id": "number",
@@ -188,6 +203,7 @@ def docs():
             "roles": "string[]",
             "deleted": "boolean",
             "operations": "string[]",
+            "group": "number",
         },
         "Image": {
             "data": "string",
