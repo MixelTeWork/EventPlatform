@@ -21,9 +21,9 @@ export default function QuestPage()
 	const openQuest = useStateObjExt<Quest | null>(null, v =>
 	{
 		if (v && v.dialogId != null && !v.opened)
-			dialog.run(v.dialogId, (dialogId) =>
+			dialog.run(v.dialogId, () =>
 			{
-				mutationOpen.mutate(dialogId);
+				mutationOpen.mutate(v.id);
 				v.opened = true;
 			});
 	});

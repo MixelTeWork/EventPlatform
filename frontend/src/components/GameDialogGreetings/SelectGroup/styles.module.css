@@ -1,0 +1,56 @@
+.root {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	background-color: black;
+	z-index: 100;
+	justify-content: center;
+	align-items: center;
+}
+*:has(.root) {
+	overflow: hidden;
+}
+
+.body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.grid {
+	position: relative;
+	display: grid;
+	--_size: 8rem;
+	grid-template-columns: var(--_size) var(--_size);
+	grid-template-rows: var(--_size) var(--_size);
+}
+
+.back {
+	position: absolute;
+	z-index: -1;
+	inset: 0;
+	background: linear-gradient(45deg, transparent 0%, aquamarine 50%, transparent 50%);
+	border-top-right-radius: 1rem;
+	border-bottom-left-radius: 1rem;
+}
+.back:first-child {
+	background: linear-gradient(45deg, transparent 50%, coral 50%, transparent 100%);
+}
+
+.grid button {
+	font-size: 1.5rem;
+	color: white;
+	background-color: transparent;
+	border: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.close {
+	background-color: transparent;
+	color: inherit;
+	border: none;
+	box-shadow: inset 0 0 6px -2px currentColor;
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+}
