@@ -7,7 +7,12 @@ export function useMutationAuth(onError?: (msg: string) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: postAuth,
+		mutationFn: async (authData: AuthData) =>
+		{
+			const user = await fetchJsonPost<User>("/api/auth", authData);
+			user.auth = true;
+			return user;
+		},
 		onSuccess: (data) =>
 		{
 			queryClient.setQueryData("user", data);
@@ -20,13 +25,6 @@ export function useMutationAuth(onError?: (msg: string) => void)
 	return mutation;
 }
 
-async function postAuth(authData: AuthData)
-{
-	const user = await fetchJsonPost<User>("/api/auth", authData);
-	user.auth = true;
-	return user;
-}
-
 interface AuthData
 {
 	login: string,
@@ -34,11 +32,40 @@ interface AuthData
 }
 
 
+export function useMutationAuthByTicket(onError?: (msg: string) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (data: AuthByTicketData) =>
+		{
+			const user = await fetchJsonPost<User>("/api/auth_ticket", data);
+			user.auth = true;
+			return user;
+		},
+		onSuccess: (data) =>
+		{
+			queryClient.setQueryData("user", data);
+		},
+		onError: (error) =>
+		{
+			onError?.(error instanceof ApiError ? error.message : "Произошла ошибка, попробуйте ещё раз");
+		}
+	});
+	return mutation;
+}
+
+interface AuthByTicketData
+{
+	code: string,
+}
+
+
 export function useMutationLogout(onSuccess?: () => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: postLogout,
+		mutationFn: async () =>
+			await fetchPost("/api/logout"),
 		onSuccess: () =>
 		{
 			queryClient.setQueryData("user", (_?: User) => createEmptyUser());
@@ -46,9 +73,4 @@ export function useMutationLogout(onSuccess?: () => void)
 		}
 	});
 	return mutation;
-}
-
-export async function postLogout()
-{
-	await fetchPost("/api/logout");
 }

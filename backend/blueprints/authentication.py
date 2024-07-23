@@ -40,6 +40,22 @@ def logout():
     return response
 
 
+@blueprint.route("/api/auth_ticket", methods=["POST"])
+@use_db_session()
+def login_ticket(db_sess: Session):
+    (code, ), errorRes = get_json_values_from_req("code")
+    if errorRes:
+        return errorRes
+
+    print(code)
+    user = User.get_admin(db_sess)
+
+    response = jsonify(user.get_dict())
+    access_token = create_access_token(identity=[user.id, user.password])
+    set_access_cookies(response, access_token)
+    return response
+
+
 @blueprint.route("/auth_vk")
 @use_db_session()
 def auth_vk(db_sess: Session):

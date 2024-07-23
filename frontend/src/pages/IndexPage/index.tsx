@@ -6,8 +6,7 @@ import useStateBool from "../../utils/useStateBool";
 
 export default function IndexPage()
 {
-	// const authOpen = useStateBool(false);
-	const authOpen = useStateBool(true);
+	const authOpen = useStateBool(false);
 
 	return (
 		<div className={styles.root}>

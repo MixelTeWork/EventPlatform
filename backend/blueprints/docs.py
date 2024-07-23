@@ -15,6 +15,13 @@ def docs():
             },
             "response": "User",
         },
+        "/api/auth_ticket POST": {
+            "__desc__": "Auth as visitor by ticket code",
+            "request": {
+                "code": "string",
+            },
+            "response": "User",
+        },
         "/api/logout POST": {
             "__desc__": "Remove auth cookie",
         },
