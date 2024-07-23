@@ -1,10 +1,14 @@
 import styles from "./styles.module.css"
 import city from "./city.png";
 import { Link } from "react-router-dom";
-import { authLink } from "../../utils/authLink";
+import AuthByTicket from "../../components/AuthByTicket";
+import useStateBool from "../../utils/useStateBool";
 
 export default function IndexPage()
 {
+	// const authOpen = useStateBool(false);
+	const authOpen = useStateBool(true);
+
 	return (
 		<div className={styles.root}>
 			<Link to="/auth" className={styles.auth} />
@@ -15,9 +19,10 @@ export default function IndexPage()
 					<h2>18.02.24</h2>
 				</div>
 			</div>
-			<a className={styles.btn} href={authLink}>
+			<button className={styles.btn} onClick={authOpen.setT}>
 				Вход
-			</a>
+			</button>
+			<AuthByTicket open={authOpen.v} />
 		</div>
 	);
 }
