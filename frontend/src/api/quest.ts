@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { fetchDelete, fetchJsonGet, fetchJsonPost, fetchPost } from "../utils/fetch";
 import type { GameDialogData } from "./dialog";
+import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem } from "../utils/query";
 
 export interface Quest
 {
@@ -48,11 +49,8 @@ export function useMutationAddQuest(onSuccess?: (data: QuestFull) => void, onErr
 			await fetchJsonPost<QuestFull>("/api/quest", questData),
 		onSuccess: (data: QuestFull) =>
 		{
-			if (queryClient.getQueryState("quests_full")?.status == "success")
-				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests ? [...quests, data] : [data]);
-
-			queryClient.invalidateQueries("quests", { exact: true });
-
+			queryListAddItem(queryClient, "quests_full", data);
+			queryInvalidate(queryClient, "quests");
 			onSuccess?.(data);
 		},
 		onError: onError,
@@ -78,13 +76,10 @@ export function useMutationEditQuest(questId: number, onSuccess?: (data: QuestFu
 			await fetchJsonPost<QuestFull>(`/api/quest/${questId}`, questData),
 		onSuccess: (data: QuestFull) =>
 		{
-			if (queryClient.getQueryState("quests_full")?.status == "success")
-				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests?.map(v => v.id == data.id ? data : v) || []);
-
-			queryClient.invalidateQueries("quests", { exact: true });
-			queryClient.invalidateQueries(["dialogs", `${data.dialog1Id}`], { exact: true });
-			queryClient.invalidateQueries(["dialogs", `${data.dialog2Id}`], { exact: true });
-
+			queryListUpdateItem(queryClient, "quests_full", data);
+			queryInvalidate(queryClient, "quests");
+			queryInvalidate(queryClient, ["dialogs", data.dialog1Id]);
+			queryInvalidate(queryClient, ["dialogs", data.dialog2Id]);
 			onSuccess?.(data);
 		},
 		onError: onError,
@@ -100,11 +95,8 @@ export function useMutationDeleteQuest(questId: number, onSuccess?: () => void, 
 			await fetchDelete(`/api/quest/${questId}`),
 		onSuccess: () =>
 		{
-			if (queryClient.getQueryState("quests_full")?.status == "success")
-				queryClient.setQueryData("quests_full", (quests?: QuestFull[]) => quests?.filter(v => v.id != questId) || []);
-
-			queryClient.invalidateQueries("quests", { exact: true });
-
+			queryListDeleteItem(queryClient, "quests_full", questId);
+			queryInvalidate(queryClient, "quests");
 			onSuccess?.();
 		},
 		onError: onError,

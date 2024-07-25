@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { fetchDelete, fetchJsonGet, fetchJsonPost } from "../utils/fetch";
 import type { ImgData } from "./dataTypes";
+import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem } from "../utils/query";
 
 export interface StoreItem
 {
@@ -45,11 +46,8 @@ export function useMutationAddItem(onSuccess?: (data: StoreItemFull) => void, on
 			await fetchJsonPost<StoreItemFull>("/api/store_item", itemData),
 		onSuccess: (data: StoreItemFull) =>
 		{
-			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
-				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items ? [...items, data] : [data]);
-
-			queryClient.invalidateQueries("storeItems", { exact: true });
-
+			queryListAddItem(queryClient, "storeItemsFull", data);
+			queryInvalidate(queryClient, "storeItems");
 			onSuccess?.(data);
 		},
 		onError: onError,
@@ -73,11 +71,8 @@ export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItem
 			await fetchJsonPost<StoreItemFull>(`/api/store_item/${itemId}`, itemData),
 		onSuccess: (data: StoreItemFull) =>
 		{
-			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
-				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.map(v => v.id == data.id ? data : v) || []);
-
-			queryClient.invalidateQueries("storeItems", { exact: true });
-
+			queryListUpdateItem(queryClient, "storeItemsFull", data);
+			queryInvalidate(queryClient, "storeItems");
 			onSuccess?.(data);
 		},
 		onError: onError,
@@ -93,11 +88,8 @@ export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: Store
 			await fetchJsonPost<StoreItemFull>(`/api/store_item/${itemId}/decrease`),
 		onSuccess: (data: StoreItemFull) =>
 		{
-			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
-				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.map(v => v.id == data.id ? data : v) || []);
-
-			queryClient.invalidateQueries("storeItems", { exact: true });
-
+			queryListUpdateItem(queryClient, "storeItemsFull", data);
+			queryInvalidate(queryClient, "storeItems");
 			onSuccess?.(data);
 		},
 		onError: onError,
@@ -113,11 +105,8 @@ export function useMutationDeleteItem(itemId: number, onSuccess?: () => void, on
 			await fetchDelete(`/api/store_item/${itemId}`),
 		onSuccess: () =>
 		{
-			if (queryClient.getQueryState("storeItemsFull")?.status == "success")
-				queryClient.setQueryData("storeItemsFull", (items?: StoreItemFull[]) => items?.filter(v => v.id != itemId) || []);
-
-			queryClient.invalidateQueries("storeItems", { exact: true });
-
+			queryListDeleteItem(queryClient, "storeItemsFull", itemId);
+			queryInvalidate(queryClient, "storeItems");
 			onSuccess?.();
 		},
 		onError: onError,

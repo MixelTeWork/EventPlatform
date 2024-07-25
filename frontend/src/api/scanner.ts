@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 import { fetchJsonPost } from "../utils/fetch";
 import { createEmptyUser, type User } from "./user";
+import { queryInvalidate } from "../utils/query";
 
 
 export default function useMutationScanner(onSuccess?: (data: ScannerRes) => void, onError?: (err: any) => void)
@@ -15,7 +16,7 @@ export default function useMutationScanner(onSuccess?: (data: ScannerRes) => voi
 				user = user || createEmptyUser();
 				user.balance = res.balance;
 				if (res.res == "ok" && res.action == "promote")
-					queryClient.invalidateQueries("user");
+					queryInvalidate(queryClient, "user");
 				return user;
 			});
 			return res;
