@@ -18,17 +18,18 @@ from .db_session import SqlAlchemyBase
 class User(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "User"
 
-    id       = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    id_vk    = Column(Integer, unique=True, nullable=True)
-    id_big   = Column(String(8), unique=True, nullable=False)
-    deleted  = Column(Boolean, DefaultClause("0"), nullable=False)
-    login    = Column(String(128), index=True, unique=True, nullable=False)
-    password = Column(String(128), nullable=False)
-    name     = Column(String(128), nullable=False)
-    lastName = Column(String(128), nullable=True)
-    imageUrl = Column(String(256), nullable=True)
-    balance  = Column(Integer, nullable=False)
-    group    = Column(Integer, DefaultClause("0"), nullable=False)
+    id         = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    id_big     = Column(String(8), unique=True, nullable=False)
+    deleted    = Column(Boolean, DefaultClause("0"), nullable=False)
+    login      = Column(String(128), index=True, unique=True, nullable=False)
+    password   = Column(String(128), nullable=False)
+    name       = Column(String(128), nullable=False)
+    lastName   = Column(String(128), nullable=True)
+    imageUrl   = Column(String(256), nullable=True)
+    ticketType = Column(String(128), nullable=True)
+    ticketTId  = Column(Integer, nullable=True)
+    balance    = Column(Integer, nullable=False)
+    group      = Column(Integer, DefaultClause("0"), nullable=False)
 
     def __repr__(self):
         return f"<User> [{self.id} {self.login}] {self.name}"
@@ -89,6 +90,13 @@ class User(SqlAlchemyBase, SerializerMixin):
         if user is None or (not includeDeleted and user.deleted):
             return None
         return user
+
+    @staticmethod
+    def get_by_login(db_sess: Session, login: str, includeDeleted=False):
+        user = db_sess.query(User).filter(User.login == login)
+        if not includeDeleted:
+            user = user.filter(User.deleted == False)
+        return user.first()
 
     @staticmethod
     def get_by_big_id(db_sess: Session, big_id: int):

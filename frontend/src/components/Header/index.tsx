@@ -35,7 +35,7 @@ export default function Header({ color = "#042e40", homeBtn = false }: HeaderPro
 					</button> */}
 					{hasPermission(user, "page_debug") && <Link to="/debug">{`</>`}</Link>}
 					{hasPermission(user, "page_worker") && <Link to="/worker">[-^-]</Link>}
-					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle"}>
+					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle" && mutation.status != "error"}>
 						Выйти
 					</button>
 				</div>
