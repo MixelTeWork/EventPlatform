@@ -55,7 +55,7 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
             if userQuest.openDate == None:
                 userQuest.openDate = now
                 r = True
-            return ("openDate", None, userQuest.openDate.isoformat()), r
+            return [("openDate", None, userQuest.openDate.isoformat())], r
 
         return UserQuest.get_or_create(actor, user, quest, fn)
 
@@ -67,7 +67,7 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
             if userQuest.completeDate == None:
                 userQuest.completeDate = now
                 r = True
-            return ("completeDate", None, userQuest.completeDate.isoformat()), r
+            return [("completeDate", None, userQuest.completeDate.isoformat())], r
 
         return UserQuest.get_or_create(actor, user, quest, fn)
 
