@@ -29,9 +29,7 @@ def dialog(dialogId, db_sess: Session):
 @use_user()
 @permission_required(Operations.manage_quest)
 def dialog_edit(dialogId, db_sess: Session, user: User):
-    (data, ), errorRes = get_json_values_from_req("data")
-    if errorRes:
-        return errorRes
+    data = get_json_values_from_req("data")
 
     dialog = Dialog.get(db_sess, dialogId)
     if dialog is None:
@@ -55,9 +53,7 @@ def characters(db_sess: Session):
 @use_user()
 @permission_required(Operations.manage_quest)
 def character_add(db_sess: Session, user: User):
-    (name, img_data), errorRes = get_json_values_from_req("name", "img")
-    if errorRes:
-        return errorRes
+    name, img_data = get_json_values_from_req("name", "img")
 
     img, image_error = Image.new(db_sess, user, img_data)
     if image_error:
@@ -74,9 +70,7 @@ def character_add(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_quest)
 def character_edit(characterId, db_sess: Session, user: User):
-    (name, img_data), errorRes = get_json_values_from_req(("name", None), ("img", None))
-    if errorRes:
-        return errorRes
+    name, img_data = get_json_values_from_req(("name", None), ("img", None))
 
     character = DialogCharacter.get(db_sess, characterId)
     if character is None:

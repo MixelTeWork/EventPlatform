@@ -23,10 +23,7 @@ EVENT_ID = 3 if "dev" in sys.argv else 8
 @blueprint.route("/api/auth", methods=["POST"])
 @use_db_session()
 def login(db_sess: Session):
-    (login, password), errorRes = get_json_values_from_req("login", "password")
-    if errorRes:
-        return errorRes
-
+    login, password = get_json_values_from_req("login", "password")
     user = User.get_by_login(db_sess, login)
 
     if not user or not user.check_password(password):
@@ -48,10 +45,7 @@ def logout():
 @blueprint.route("/api/auth_ticket", methods=["POST"])
 @use_db_session()
 def login_ticket(db_sess: Session):
-    (code, ), errorRes = get_json_values_from_req("code")
-    if errorRes:
-        return errorRes
-
+    code = get_json_values_from_req("code")
     user = User.get_by_login(db_sess, f"ticket_{code}", includeDeleted=True)
     if user is None:
         user = create_user_by_ticket(db_sess, code)

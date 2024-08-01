@@ -21,9 +21,7 @@ blueprint = Blueprint("scanner", __name__)
 @use_db_session()
 @use_user()
 def scanner(db_sess: Session, user: User):
-    (code, ), errorRes = get_json_values_from_req("code")
-    if errorRes:
-        return errorRes
+    code = get_json_values_from_req("code")
 
     for key in SCANNERS:
         if (code.startswith(key)):

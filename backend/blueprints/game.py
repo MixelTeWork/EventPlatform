@@ -42,9 +42,7 @@ def duration(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def set_duration(db_sess: Session, user: User):
-    (duration, ), errorRes = get_json_values_from_req("duration")
-    if errorRes:
-        return errorRes
+    duration = get_json_values_from_req("duration")
     game = Game.get(db_sess)
     game.duration = duration
     db_sess.commit()
@@ -67,9 +65,7 @@ def counter(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def set_counter(db_sess: Session, user: User):
-    (counter, ), errorRes = get_json_values_from_req("counter")
-    if errorRes:
-        return errorRes
+    counter = get_json_values_from_req("counter")
     game = Game.get(db_sess)
     game.counter = counter
     db_sess.commit()
@@ -92,9 +88,7 @@ def price(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def set_price(db_sess: Session, user: User):
-    (price, ), errorRes = get_json_values_from_req("price")
-    if errorRes:
-        return errorRes
+    price = get_json_values_from_req("price")
     game = Game.get(db_sess)
     game.price = price
     db_sess.commit()
@@ -117,9 +111,7 @@ def startStr(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def set_startStr(db_sess: Session, user: User):
-    (startStr, ), errorRes = get_json_values_from_req("startStr")
-    if errorRes:
-        return errorRes
+    startStr = get_json_values_from_req("startStr")
     game = Game.get(db_sess)
     game.startStr = startStr
     db_sess.commit()
@@ -142,9 +134,7 @@ def start(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def finish(db_sess: Session, user: User):
-    (team, ), errorRes = get_json_values_from_req("team")
-    if errorRes:
-        return errorRes
+    team = get_json_values_from_req("team")
     Game.finish(db_sess, team)
     return jsonify(Game.get_state(db_sess, user)), 200
 
@@ -161,9 +151,7 @@ def state(db_sess: Session, user: User):
 @use_db_session()
 @use_user()
 def join(db_sess: Session, user: User):
-    (team, ), errorRes = get_json_values_from_req("team")
-    if errorRes:
-        return errorRes
+    team = get_json_values_from_req("team")
 
     if team not in ["red", "blue", "green", "yellow"]:
         return response_msg(f"Wrong team: {team}"), 400

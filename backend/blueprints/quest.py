@@ -36,9 +36,7 @@ def quests_full(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_quest)
 def quest_add(db_sess: Session, user: User):
-    (name, description, reward, hidden), errorRes = get_json_values_from_req("name", "description", "reward", "hidden")
-    if errorRes:
-        return errorRes
+    name, description, reward, hidden = get_json_values_from_req("name", "description", "reward", "hidden")
 
     quest = Quest.new(db_sess, user, name, description, reward, hidden)
 
@@ -51,10 +49,8 @@ def quest_add(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_quest)
 def quest_edit(questId, db_sess: Session, user: User):
-    (name, description, reward, hidden, dialog1, dialog2), errorRes =\
+    name, description, reward, hidden, dialog1, dialog2 =\
         get_json_values_from_req(("name", None), ("description", None), ("reward", None), ("hidden", None), ("dialog1", None), ("dialog2", None))
-    if errorRes:
-        return errorRes
 
     quest = Quest.get(db_sess, questId)
     if quest is None:
