@@ -5,21 +5,21 @@ import useStateObj from "../../utils/useStateObj";
 import { useEffect } from "react";
 import useStateBool from "../../utils/useStateBool";
 import useSound from "../../utils/useSound";
-import { useMutationRaceFinish, useRaceDuration, useRaceState } from "../../api/race";
-import useRace from "./useRace";
+import { useMutationGameFinish, useGameDuration, useGameState } from "../../api/game";
+import useGame from "./useGame";
 import classNames from "../../utils/classNames";
 import { useTitle } from "../../utils/useTtile";
 
 const aspect = 472 / 629;
 // [!] Sometimes finish dont work
 
-export default function RaceScreenPage()
+export default function GameScreenPage()
 {
 	useTitle("Гонки");
-	const raceDuration = useRaceDuration();
-	const mutateFinish = useMutationRaceFinish();
-	const race = useRace(raceDuration.data?.duration || 10);
-	const state = useRaceState();
+	const gameDuration = useGameDuration();
+	const mutateFinish = useMutationGameFinish();
+	const game = useGame(gameDuration.data?.duration || 10);
+	const state = useGameState();
 	const ostSound = useSound(ost, true);
 	const soundEnable = useStateBool(false);
 	const width = useStateObj(0);
@@ -39,7 +39,7 @@ export default function RaceScreenPage()
 	{
 		if (state.data?.state == "play" || state.data?.state == "nojoin")
 		{
-			race.start();
+			game.start();
 			return;
 		}
 
@@ -54,7 +54,7 @@ export default function RaceScreenPage()
 	{
 		if (state.data?.state != "join" && state.data?.state != "wait") return;
 		counter.set(state.data.counter);
-		raceDuration.refetch();
+		gameDuration.refetch();
 		const t = setInterval(() =>
 		{
 			counter.set(v =>
@@ -73,11 +73,11 @@ export default function RaceScreenPage()
 
 	useEffect(() =>
 	{
-		if (race.winner != "")
+		if (game.winner != "")
 		{
-			mutateFinish.mutate(race.winner);
+			mutateFinish.mutate(game.winner);
 		}
-	}, [race.winner])
+	}, [game.winner])
 
 	return (
 		<div className={styles.root}>
@@ -97,11 +97,11 @@ export default function RaceScreenPage()
 				"--w": width.v
 			} as React.CSSProperties}>
 				<img className={styles.background} src={field} alt="Поле" />
-				<div className={classNames(styles.snail1, race.started && styles.snailAnim)} style={{ right: snailPos(race.snail1) }} />
-				<div className={classNames(styles.snail2, race.started && styles.snailAnim)} style={{ right: snailPos(race.snail2) }} />
-				<div className={classNames(styles.snail3, race.started && styles.snailAnim)} style={{ right: snailPos(race.snail3) }} />
-				<div className={classNames(styles.snail4, race.started && styles.snailAnim)} style={{ right: snailPos(race.snail4) }} />
-				{(state.data?.state != "play" && state.data?.state != "nojoin" || race.title) && <div className={styles.msg}>
+				<div className={classNames(styles.snail1, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail1) }} />
+				<div className={classNames(styles.snail2, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail2) }} />
+				<div className={classNames(styles.snail3, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail3) }} />
+				<div className={classNames(styles.snail4, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail4) }} />
+				{(state.data?.state != "play" && state.data?.state != "nojoin" || game.title) && <div className={styles.msg}>
 					{state.data?.state == "title" && <span>Скоро начало!</span>}
 					{(state.data?.state == "join" || state.data?.state == "wait") &&
 						<span>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</span>}
@@ -114,7 +114,7 @@ export default function RaceScreenPage()
 							"": "",
 						}[state.data.winner]}</span>
 						:
-						(race.title) && <span>{race.title}</span>
+						(game.title) && <span>{game.title}</span>
 					}
 				</div>}
 			</div>

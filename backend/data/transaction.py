@@ -56,5 +56,5 @@ class Actions:
     buyItem = "buyItem"
     endQuest = "endQuest"
     send = "sendMoney"
-    raceJoin = "raceJoin"
-    raceWin = "raceWin"
+    gameJoin = "gameJoin"
+    gameWin = "gameWin"

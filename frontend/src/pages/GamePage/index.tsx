@@ -7,17 +7,17 @@ import banner from "./banner.png"
 import ghost2 from "./ghost2.png"
 import press from "./press.png"
 import useStateObj from "../../utils/useStateObj";
-import { useRaceState, type Team, useMutationRaceJoin } from "../../api/race";
+import { useGameState, type Team, useMutationGameJoin } from "../../api/game";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import { useEffect } from "react";
 
 
-export default function RacePage()
+export default function GamePage()
 {
-	useTitle("Гонки");
-	const state = useRaceState();
-	const mutationJoin = useMutationRaceJoin();
+	useTitle("Игра");
+	const state = useGameState();
+	const mutationJoin = useMutationGameJoin();
 	const selectedTeam = useStateObj<Team>("");
 	const counter = useStateObj(0);
 
@@ -57,7 +57,7 @@ export default function RacePage()
 	}, [state.data])
 
 	return (
-		<Layout centeredPage headerColor="#512d00" gap="1em" className={styles.root} footer={<Footer curPage="race" />}>
+		<Layout centeredPage headerColor="#512d00" gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
 			<div className={styles.background}></div>
 			{state.isLoading && <Spinner />}
 			{mutationJoin.isLoading && <Spinner />}

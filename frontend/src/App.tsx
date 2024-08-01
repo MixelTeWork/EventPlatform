@@ -28,9 +28,9 @@ import UsersPage from "./pages/UsersPage";
 import WorkerPage from "./pages/WorkerPage";
 import WorkerQuestPage from "./pages/WorkerQuestPage";
 import WorkerStorePage from "./pages/WorkerStorePage";
-import RacePage from "./pages/RacePage";
-import RaceSettingsPage from "./pages/RaceSettingsPage";
-import RaceScreenPage from "./pages/RaceScreenPage";
+import GamePage from "./pages/GamePage";
+import GameSettingsPage from "./pages/GameSettingsPage";
+import GameScreenPage from "./pages/GameScreenPage";
 
 export default function App()
 {
@@ -61,14 +61,14 @@ export default function App()
 				<Route path="/quest" element={<QuestPage />} />
 				<Route path="/store" element={<StorePage />} />
 				<Route path="/map" element={<MapPage />} />
-				<Route path="/race" element={<RacePage />} />
+				<Route path="/game" element={<GamePage />} />
 				{ProtectedRoute(null, "/scanner", <ScannerPage />)}
 				{/* {ProtectedRoute(null, "/profile", <ProfilePage />)} */}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}
 				{ProtectedRoute("manage_quest", "/manage_quest", <ManageQuestPage />)}
-				{ProtectedRoute("manage_games", "/race_settings", <RaceSettingsPage />)}
-				{ProtectedRoute("manage_games", "/race_screen", <RaceScreenPage />)}
+				{ProtectedRoute("manage_games", "/game_settings", <GameSettingsPage />)}
+				{ProtectedRoute("manage_games", "/game_screen", <GameScreenPage />)}
 				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
 				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}

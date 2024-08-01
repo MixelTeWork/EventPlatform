@@ -10,7 +10,7 @@ export default function Footer({ curPage = "" }: FooterProps)
 				<Link className={curPage == "timetable" ? styles.active : ""} to={"/timetable"}>План</Link>
 				<Link className={curPage == "quest" ? styles.active : ""} to={"/quest"}>Квест</Link>
 				<Link className={curPage == "store" ? styles.active : ""} to={"/store"}>Магаз</Link>
-				<Link className={curPage == "race" ? styles.active : ""} to={"/race"}>Гонки</Link>
+				<Link className={curPage == "game" ? styles.active : ""} to={"/game"}>Игра</Link>
 			</div>
 		</div>
 	);
@@ -18,5 +18,5 @@ export default function Footer({ curPage = "" }: FooterProps)
 
 interface FooterProps
 {
-	curPage?: "map" | "timetable" | "quest" | "store" | "race" | ""
+	curPage?: "map" | "timetable" | "quest" | "store" | "game" | ""
 }

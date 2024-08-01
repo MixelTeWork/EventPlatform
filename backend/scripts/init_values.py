@@ -16,7 +16,7 @@ def init_values(dev=False, cmd=False):
     from data.operation import Operation, Operations
     from data.permission import Permission
     from data.role import Role, Roles, ROLES
-    from data.race import Race
+    from data.game import Game
     from data.log import Actions, Log, Tables
     from data.user import User
     from data.dialog import Dialog
@@ -49,7 +49,7 @@ def init_values(dev=False, cmd=False):
 
         log_changes(db_sess, user_admin, roles)
 
-        Race.init(db_sess)
+        Game.init(db_sess)
         Dialog.new(db_sess, user_admin, {"nodes": []}, 1)
 
         if dev:

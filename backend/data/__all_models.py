@@ -4,7 +4,7 @@ from . import image
 from . import user_role
 from . import user_quest
 from . import user_send
-from . import user_race
+from . import user_game
 from . import operation
 from . import permission
 from . import log
@@ -12,6 +12,6 @@ from . import quest
 from . import store_item
 from . import transaction
 from . import send
-from . import race
+from . import game
 from . import dialog
 from . import dialog_character

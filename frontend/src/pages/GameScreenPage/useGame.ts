@@ -1,10 +1,10 @@
-import type { Team } from "../../api/race";
+import type { Team } from "../../api/game";
 import useStateObj from "../../utils/useStateObj";
 
 let s = 0;
 const T = 250;
 
-export default function useRace(raceDuration: number)
+export default function useGame(raceDuration: number)
 {
 	const speed = T / (raceDuration * 1000);
 	const state = useStateObj({
