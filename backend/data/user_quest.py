@@ -17,7 +17,8 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
     completeDate = Column(DateTime, nullable=True)
 
     @staticmethod
-    def get_or_create(db_sess: Session, actor, user, quest, fn: Callable[["UserQuest", DateTime], tuple[list, Any]]):
+    def get_or_create(creator, user, quest, fn: Callable[["UserQuest", DateTime], tuple[list, Any]]):
+        db_sess = Session.object_session(creator)
         userQuest = db_sess.query(UserQuest).filter(UserQuest.userId == user.id, UserQuest.questId == quest.id).first()
         now = get_datetime_now()
 
@@ -32,8 +33,8 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
         db_sess.add(Log(
             date=now,
             actionCode=Actions.added if new else Actions.updated,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.UserQuest,
             recordId=-1,
             changes=[
@@ -47,7 +48,7 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
         return r
 
     @staticmethod
-    def open_quest(db_sess: Session, actor, user, quest) -> bool:
+    def open_quest(actor, user, quest) -> bool:
         """returns False if already opened"""
         def fn(userQuest: UserQuest, now: DateTime):
             r = False
@@ -56,10 +57,10 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
                 r = True
             return ("openDate", None, userQuest.openDate.isoformat()), r
 
-        return UserQuest.get_or_create(db_sess, actor, user, quest, fn)
+        return UserQuest.get_or_create(actor, user, quest, fn)
 
     @staticmethod
-    def complete_quest(db_sess: Session, actor, user, quest) -> bool:
+    def complete_quest(actor, user, quest) -> bool:
         """returns False if already completed"""
         def fn(userQuest: UserQuest, now: DateTime):
             r = False
@@ -68,7 +69,7 @@ class UserQuest(SqlAlchemyBase, SerializerMixin):
                 r = True
             return ("completeDate", None, userQuest.completeDate.isoformat()), r
 
-        return UserQuest.get_or_create(db_sess, actor, user, quest, fn)
+        return UserQuest.get_or_create(actor, user, quest, fn)
 
     def delete(self, actor):
         db_sess = Session.object_session(self)

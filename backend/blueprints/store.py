@@ -38,11 +38,11 @@ def store_item_add(db_sess: Session, user: User):
     name, price, count, img_data = get_json_values_from_req("name", "price", "count", ("img", None))
 
     if img_data is not None:
-        img, image_error = Image.new(db_sess, user, img_data)
+        img, image_error = Image.new(user, img_data)
         if image_error:
             return response_msg(image_error), 400
 
-    item = StoreItem.new(db_sess, user, name, price, count, img.id if img_data is not None else None)
+    item = StoreItem.new(user, name, price, count, img.id if img_data is not None else None)
 
     return jsonify(item.get_dict_full()), 200
 
@@ -61,7 +61,7 @@ def store_item_patch(itemId, db_sess: Session, user: User):
 
     imgId = None
     if img_data is not None:
-        img, image_error = Image.new(db_sess, user, img_data)
+        img, image_error = Image.new(user, img_data)
         if image_error:
             return response_msg(image_error), 400
         imgId = img.id

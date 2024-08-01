@@ -24,7 +24,8 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
         return f"<DialogCharacter> [{self.id}]"
 
     @staticmethod
-    def new(db_sess: Session, actor, name: str, imgId: int):
+    def new(creator, name: str, imgId: int):
+        db_sess = Session.object_session(creator)
         character = DialogCharacter(name=name, imgId=imgId)
         db_sess.add(character)
 
@@ -32,8 +33,8 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.DialogCharacter,
             recordId=-1,
             changes=[

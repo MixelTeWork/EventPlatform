@@ -29,7 +29,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         return f"<StoreItem> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor: User, name: str, price: int, count: int, imgId: Union[int, None]):
+    def new(creator: User, name: str, price: int, count: int, imgId: Union[int, None]):
+        db_sess = Session.object_session(creator)
         item = StoreItem(name=name, price=price, count=count, imgId=imgId)
 
         t = item
@@ -44,8 +45,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.StoreItem,
             recordId=-1,
             changes=item.get_creation_changes()

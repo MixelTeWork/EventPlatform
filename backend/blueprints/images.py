@@ -33,7 +33,7 @@ def img(db_sess: Session, imgId):
 def upload_img(db_sess: Session, user: User):
     img_data = get_json_values_from_req("img")
 
-    img, image_error = Image.new(db_sess, user, img_data)
+    img, image_error = Image.new(user, img_data)
     if image_error:
         return jsonify({"msg": image_error}), 400
 

@@ -45,12 +45,12 @@ def init_values(dev=False, cmd=False):
         for operation in Operations.get_all():
             db_sess.add(Permission(roleId=Roles.admin, operationId=operation[0]))
 
-        user_admin = User.new(db_sess, User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin])
+        user_admin = User.new(User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin], db_sess=db_sess)
 
         log_changes(db_sess, user_admin, roles)
 
         Game.init(db_sess)
-        Dialog.new(db_sess, user_admin, {"nodes": []}, 1)
+        Dialog.new(user_admin, {"nodes": []}, 1)
 
         if dev:
             init_values_dev(db_sess, user_admin)
@@ -105,10 +105,10 @@ def init_values(dev=False, cmd=False):
         db_sess.add(img1)
         db_sess.add(img2)
 
-        character1 = DialogCharacter.new(db_sess, user_admin, "Ярик Всемогущий", 1)
-        character2 = DialogCharacter.new(db_sess, user_admin, "Альвер Шухтен", 2)
+        character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1)
+        character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2)
 
-        dialog = Dialog.new(db_sess, user_admin, {
+        dialog = Dialog.new(user_admin, {
             "nodes": [
                 {
                     "characterId": character1.id,
@@ -134,8 +134,8 @@ def init_values(dev=False, cmd=False):
             log(Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
 
-        User.new(db_sess, user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
-        User.new(db_sess, user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
+        User.new(user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
+        User.new(user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
 
         db_sess.commit()
 

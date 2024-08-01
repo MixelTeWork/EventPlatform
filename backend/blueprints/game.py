@@ -170,7 +170,7 @@ def join(db_sess: Session, user: User):
         user.balance = balance - game.price
         balance = user.balance
         Transaction.new(db_sess, user.id, 1, game.price, Actions.gameJoin, 1, True)
-        UserGame.new(db_sess, user, team)
+        UserGame.new(user, team)
     else:
         ur.team = team
         db_sess.commit()

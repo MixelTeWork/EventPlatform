@@ -35,7 +35,7 @@ def scanner_quest(db_sess: Session, user: User, code: str):
     if quest is None:
         return respose_wrong(user, "quest")
 
-    completed = UserQuest.complete_quest(db_sess, user, user, quest)
+    completed = UserQuest.complete_quest(user, user, quest)
     if not completed:
         return respose_error(user, "quest", f"Квест {quest.name} уже завершён")
 
@@ -83,7 +83,7 @@ def scanner_send(db_sess: Session, user: User, code: str):
         Transaction.new(db_sess, user.id, 1, send.value, Actions.send, send.id)
 
     if send.reusable:
-        UserSend.new(db_sess, user, send)
+        UserSend.new(user, send)
     else:
         send.used = True
         db_sess.commit()

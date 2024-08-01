@@ -18,7 +18,8 @@ class Dialog(SqlAlchemyBase, SerializerMixin):
         return f"<Dialog> [{self.id}]"
 
     @staticmethod
-    def new(db_sess: Session, actor, data: object, id: int = None):
+    def new(creator, data: object, id: int = None):
+        db_sess = Session.object_session(creator)
         dialog = Dialog(data=data)
         if id is not None:
             dialog.id = id
@@ -28,8 +29,8 @@ class Dialog(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.Dialog,
             recordId=-1,
             changes=dialog.get_creation_changes()

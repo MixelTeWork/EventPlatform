@@ -16,7 +16,8 @@ class UserSend(SqlAlchemyBase, SerializerMixin):
         return f"<UserSend> user: {self.userId} send: {self.sendId}"
 
     @staticmethod
-    def new(db_sess: Session, user, send):
+    def new(user, send):
+        db_sess = Session.object_session(user)
         userQuest = UserSend(userId=user.id, sendId=send.id)
         db_sess.add(userQuest)
         db_sess.commit()

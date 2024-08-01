@@ -38,7 +38,7 @@ def quests_full(db_sess: Session, user: User):
 def quest_add(db_sess: Session, user: User):
     name, description, reward, hidden = get_json_values_from_req("name", "description", "reward", "hidden")
 
-    quest = Quest.new(db_sess, user, name, description, reward, hidden)
+    quest = Quest.new(user, name, description, reward, hidden)
 
     return jsonify(quest.get_dict_full()), 200
 
@@ -85,6 +85,6 @@ def quest_open(questId, db_sess: Session, user: User):
     if quest is None:
         return response_not_found("quest", questId)
 
-    UserQuest.open_quest(db_sess, user, user, quest)
+    UserQuest.open_quest(user, user, quest)
 
     return response_msg("ok"), 200

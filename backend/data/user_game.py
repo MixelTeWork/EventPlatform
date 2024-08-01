@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, orm
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
@@ -14,7 +14,8 @@ class UserGame(SqlAlchemyBase, SerializerMixin):
         return f"<UserGame> user: {self.userId} team: {self.team}"
 
     @staticmethod
-    def new(db_sess: Session, user, team):
+    def new(user, team):
+        db_sess = Session.object_session(user)
         userGame = UserGame(userId=user.id, team=team)
         db_sess.add(userGame)
         db_sess.commit()

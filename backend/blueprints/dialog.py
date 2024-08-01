@@ -55,11 +55,11 @@ def characters(db_sess: Session):
 def character_add(db_sess: Session, user: User):
     name, img_data = get_json_values_from_req("name", "img")
 
-    img, image_error = Image.new(db_sess, user, img_data)
+    img, image_error = Image.new(user, img_data)
     if image_error:
         return response_msg(image_error), 400
 
-    character = DialogCharacter.new(db_sess, user, name, img.id)
+    character = DialogCharacter.new(user, name, img.id)
 
     return jsonify(character.get_dict()), 200
 
@@ -78,7 +78,7 @@ def character_edit(characterId, db_sess: Session, user: User):
 
     imgId = None
     if img_data is not None:
-        img, image_error = Image.new(db_sess, user, img_data)
+        img, image_error = Image.new(user, img_data)
         if image_error:
             return response_msg(image_error), 400
         imgId = img.id

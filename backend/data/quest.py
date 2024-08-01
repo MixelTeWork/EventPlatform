@@ -31,7 +31,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         return f"<Quest> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor, name: str, description: str, reward: int, hidden: bool):
+    def new(creator, name: str, description: str, reward: int, hidden: bool):
+        db_sess = Session.object_session(creator)
         quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
 
         q = quest
@@ -46,8 +47,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.Quest,
             recordId=-1,
             changes=quest.get_creation_changes()
@@ -163,7 +164,7 @@ class Quest(SqlAlchemyBase, SerializerMixin):
                     setattr(self, field, None)
                 return
             if cur is None:
-                dialog = Dialog.new(db_sess, actor, value)
+                dialog = Dialog.new(actor, value)
                 changes.append((field, None, dialog.id))
                 setattr(self, field, dialog)
             else:

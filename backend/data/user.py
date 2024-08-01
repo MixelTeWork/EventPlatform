@@ -35,7 +35,8 @@ class User(SqlAlchemyBase, SerializerMixin):
         return f"<User> [{self.id} {self.login}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor: User, login: str, password: str, name: str, roles: list[int]):
+    def new(creator: User, login: str, password: str, name: str, roles: list[int], db_sess: Session = None):
+        db_sess = db_sess if db_sess else Session.object_session(creator)
         user = User(login=login, name=name, balance=0)
         user.set_password(password)
 
@@ -51,8 +52,8 @@ class User(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.User,
             recordId=-1,
             changes=[
@@ -73,8 +74,8 @@ class User(SqlAlchemyBase, SerializerMixin):
             db_sess.add(Log(
                 date=now,
                 actionCode=Actions.added,
-                userId=actor.id,
-                userName=actor.name,
+                userId=creator.id,
+                userName=creator.name,
                 tableName=Tables.UserRole,
                 recordId=-1,
                 changes=user_role.get_creation_changes()
