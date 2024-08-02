@@ -7,19 +7,14 @@
 	width: 100%;
 }
 
-.soundBtn {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	background-color: black;
-	border: 2px solid white;
-	color: white;
-	font-size: 1.5rem;
-	padding: 0.5rem 1rem;
-	z-index: 10;
+@property --bar {
+	syntax: "<percentage>";
+	initial-value: 50%;
+	inherits: true;
 }
 
 .field {
+	--bar: 50%;
 	position: relative;
 	/* background: #111; */
 }
@@ -29,87 +24,20 @@
 	height: 100%;
 	image-rendering: pixelated;
 }
-.snail1,
-.snail2,
-.snail3,
-.snail4 {
+
+.bar {
 	position: absolute;
-	top: 30%;
-	right: 16%;
-	width: 5%;
-	height: 5%;
-	background-image: url(./imgs/blue1.png);
-	background-size: 100% auto;
-	background-repeat: no-repeat;
-	image-rendering: pixelated;
-	transition: right 250ms linear;
-}
-
-.snail1 {
-	top: 25%;
-	background-image: url(./imgs/yellow1.png);
-}
-.snail2 {
-	top: 33%;
-	background-image: url(./imgs/blue1.png);
-}
-.snail3 {
-	top: 41%;
-	background-image: url(./imgs/red1.png);
-}
-.snail4 {
 	top: 50%;
-	background-image: url(./imgs/green1.png);
-}
-
-.snailAnim.snail1 {
-	animation: anim-snail1 500ms infinite;
-}
-.snailAnim.snail2 {
-	animation: anim-snail2 500ms infinite;
-}
-.snailAnim.snail3 {
-	animation: anim-snail3 500ms infinite;
-}
-.snailAnim.snail4 {
-	animation: anim-snail4 500ms infinite;
-}
-
-@keyframes anim-snail1 {
-	0%,
-	100% {
-		background-image: url(./imgs/yellow1.png);
-	}
-	50% {
-		background-image: url(./imgs/yellow2.png);
-	}
-}
-@keyframes anim-snail2 {
-	0%,
-	100% {
-		background-image: url(./imgs/blue1.png);
-	}
-	50% {
-		background-image: url(./imgs/blue2.png);
-	}
-}
-@keyframes anim-snail3 {
-	0%,
-	100% {
-		background-image: url(./imgs/red1.png);
-	}
-	50% {
-		background-image: url(./imgs/red2.png);
-	}
-}
-@keyframes anim-snail4 {
-	0%,
-	100% {
-		background-image: url(./imgs/green1.png);
-	}
-	50% {
-		background-image: url(./imgs/green2.png);
-	}
+	left: 0;
+	width: 100%;
+	height: 40%;
+	transform: translateY(-50%);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: calc(var(--w) * 0.08px);
+	transition: --bar 1200ms;
+	background: linear-gradient(98deg, limegreen var(--bar), tomato var(--bar));
 }
 
 .msg {
@@ -125,16 +53,15 @@
 	align-items: center;
 	font-size: calc(var(--w) * 0.08px);
 }
-
-.c_yellow {
-	color: yellow;
-}
-.c_blue {
-	color: #6868ff;
-}
-.c_red {
-	color: red;
-}
-.c_green {
-	color: #00af00;
+.soundBtn {
+	position: absolute;
+	top: -4px;
+	left: 50%;
+	background-color: black;
+	border: 2px solid white;
+	color: white;
+	font-size: 1.5rem;
+	padding: 0.5rem 1rem;
+	z-index: 10;
+	transform: translateX(-50%);
 }

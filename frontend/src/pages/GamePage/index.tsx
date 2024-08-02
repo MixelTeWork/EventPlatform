@@ -94,6 +94,7 @@ export default function GamePage()
 				<div className={styles.snail2_2}></div>
 				<div className={styles.snail6}></div>
 				<h1 className={styles.title}>Underparty</h1>
+				<h1 className={styles.title}>{user.data?.group == 1 ? "Сапожник" : "Кактус"}</h1>
 				<img src={banner} alt="Игра" />
 				<h2 className={styles.subtitle}>Дождитесь начала</h2>
 				<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
@@ -107,8 +108,9 @@ export default function GamePage()
 			{state.data?.state == "going" && <>
 				<div className={styles.snail2_2}></div>
 				<h1 className={styles.title}>Underparty</h1>
+				<h1 className={styles.title}>{user.data?.group == 1 ? "Сапожник" : "Кактус"}</h1>
 				<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
-				<h1 className={styles.title}>{clicks.v}</h1>
+				{/* <h1 className={styles.title}>{clicks.v}</h1> */}
 				<div className={styles.press}>
 					<button
 						onClick={e =>
@@ -124,6 +126,7 @@ export default function GamePage()
 			{state.data?.state == "end" && <>
 				<div className={styles.snail2_2}></div>
 				<h1 className={styles.title}>Underparty</h1>
+				<h1 className={styles.title}>{user.data?.group == 1 ? "Сапожник" : "Кактус"}</h1>
 				{state.data.winner == 0 ? <h1>Игра завершена!</h1> : <>
 					<h1 className={styles.title}>{user.data?.group == state.data.winner ? "Победа!" : "Проигрыш!"}</h1>
 					{user.data?.group != state.data.winner && <h2 className={styles.subtitle}>Повезёт в следующий раз</h2>}

@@ -111,7 +111,7 @@ def state(db_sess: Session):
 @use_db_session()
 @use_user()
 @permission_required(Operations.manage_games)
-def state_full(db_sess: Session):
+def state_full(db_sess: Session, user: User):
     return jsonify(Game.get_state_update(db_sess)), 200
 
 
