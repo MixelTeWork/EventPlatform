@@ -1,4 +1,3 @@
-import type { Team } from "../../api/game";
 import useStateObj from "../../utils/useStateObj";
 
 let s = 0;
@@ -27,7 +26,7 @@ export default function useGame(raceDuration: number)
 		snailD3: 1,
 		snailD4: 1,
 		started: false,
-		winner: "" as Team,
+		winner: "",
 	});
 
 	return {
@@ -78,7 +77,7 @@ export default function useGame(raceDuration: number)
 					const snail3 = t * (v.snailA3 * (1 - a) + a) * (v.snailB3 * (1 - b) + b) + v.snailD3 * d;
 					const snail4 = t * (v.snailA4 * (1 - a) + a) * (v.snailB4 * (1 - b) + b) + v.snailD4 * d;
 					const max = Math.max(snail1, snail2, snail3, snail4);
-					let winner = "blue" as Team;
+					let winner = "blue";
 					if (eq(snail1, max)) winner = "yellow";
 					if (eq(snail2, max)) winner = "blue";
 					if (eq(snail3, max)) winner = "red";

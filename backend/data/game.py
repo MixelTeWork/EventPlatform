@@ -1,11 +1,9 @@
 from datetime import timedelta
-import math
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, DefaultClause, Integer, String, func
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
 from data.get_datetime_now import get_datetime_now
-from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_game import UserGame
 from .db_session import SqlAlchemyBase
@@ -15,123 +13,102 @@ class Game(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "Game"
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    winner = Column(String(8), nullable=True)
+    startStr = Column(String(8), DefaultClause("16:30"), nullable=False)
+    duration = Column(Integer, DefaultClause("60"), nullable=False)
+    counter = Column(Integer, DefaultClause("150"), nullable=False)
     startTime = Column(DateTime, nullable=True)
-    reward = Column(Integer, nullable=True)
-    startStr = Column(String(8), nullable=False)
-    price = Column(Integer, nullable=False)
-    duration = Column(Integer, nullable=False)
-    counter = Column(Integer, nullable=False)
+    clicks1 = Column(Integer, DefaultClause("0"), nullable=False)
+    clicks2 = Column(Integer, DefaultClause("0"), nullable=False)
+    winner = Column(Integer, DefaultClause("0"), nullable=False)
 
     @staticmethod
     def init(db_sess: Session):
-        game = db_sess.query(Game).filter(Game.id == 1).first()
+        game = Game.get(db_sess)
         if game is not None:
             return
-        db_sess.add(Game(id=1, duration=60, price=10, counter=150, startStr="16:30"))
+        db_sess.add(Game(id=1))
         db_sess.commit()
 
     @staticmethod
     def get(db_sess: Session):
-        return db_sess.query(Game).filter(Game.id == 1).first()
+        return db_sess.get(Game, 1)
 
     @staticmethod
     def start(db_sess: Session):
         game = Game.get(db_sess)
         game.startTime = get_datetime_now()
+        db_sess.query(UserGame).delete()
         db_sess.commit()
 
     @staticmethod
-    def get_state(db_sess: Session, user):
+    def reset(db_sess: Session):
         game = Game.get(db_sess)
-        if user is not None:
-            ur = db_sess.query(UserGame).filter(UserGame.userId == user.id).first()
-            team = ur.team if ur is not None else ""
-            balance = user.balance
-        else:
-            team = ""
-            balance = 0
+        game.startTime = None
+        game.clicks1 = 0
+        game.clicks2 = 0
+        game.winner = 0
+        db_sess.commit()
 
-        if game.winner is not None:
-            if team == "":
-                return {
-                    "state": "end",
-                    "team": "",
-                    "winner": game.winner,
-                    "counter": 0,
-                    "price": game.price,
-                    "start": game.startStr,
-                    "balance": balance,
-                    "reward": game.reward,
-                }
-            return {
-                "state": "won" if team == game.winner else "loss",
-                "team": team,
-                "winner": game.winner,
-                "counter": 0,
-                "price": game.price,
-                "start": game.startStr,
-                "balance": balance,
-                "reward": game.reward,
-            }
-
+    @staticmethod
+    def get_state(db_sess: Session, game: "Game" = None):
+        game = Game.get(db_sess) if game is None else game
+        state = {
+            "state": GameState.wait,
+            "start": game.startStr,
+            "counter": 0,
+            "winner": game.winner,
+        }
         if game.startTime is None:
-            return {
-                "state": "title",
-                "team": "",
-                "winner": "",
-                "counter": 0,
-                "price": game.price,
-                "start": game.startStr,
-                "balance": balance,
-                "reward": game.reward,
-            }
+            return state
 
         now = get_datetime_now().replace(tzinfo=None)
         dt = now - game.startTime
-        if dt > timedelta(seconds=game.counter):
-            return {
-                "state": "nojoin" if team == "" else "play",
-                "team": team,
-                "winner": "",
-                "counter": 0,
-                "price": game.price,
-                "start": game.startStr,
-                "balance": balance,
-                "reward": game.reward,
-            }
-        return {
-            "state": "join" if team == "" else "wait",
-            "team": team,
-            "winner": "",
-            "counter": game.counter - dt.seconds,
-            "price": game.price,
-            "start": game.startStr,
-            "balance": balance,
-            "reward": game.reward,
-        }
+        if dt < timedelta(seconds=game.counter):
+            state["state"] = GameState.start
+            state["counter"] = game.counter - dt.seconds
+            return state
+
+        if dt < timedelta(seconds=game.counter + game.duration):
+            state["state"] = GameState.going
+            state["counter"] = game.counter + game.duration - dt.seconds
+            return state
+
+        state["state"] = GameState.end
+        return state
 
     @staticmethod
-    def finish(db_sess: Session, team):
+    def get_state_update(db_sess: Session):
         game = Game.get(db_sess)
-        game.winner = team
-        players = db_sess.query(User).join(UserGame, UserGame.userId == User.id).count()
-        winners = list(db_sess.query(User).join(UserGame, UserGame.userId == User.id).filter(UserGame.team == team).all())
-        winners_count = len(winners)
-        if winners_count == 0:
-            winners_count = 1
-        all_value = game.price * players
-        reward = all_value / winners_count / 2
-        reward = math.floor(reward) + 10
-        game.reward = reward
-        for winner in winners:
-            winner.balance += reward
-            Transaction.new(db_sess, 1, winner.id, reward, Actions.gameWin, 1, True)
-        db_sess.commit()
+        state = Game.get_state(db_sess, game)
+        state["clicks1"] = game.clicks1
+        state["clicks2"] = game.clicks2
+        if state["state"] != GameState.going and state["state"] != GameState.end:
+            return state
+
+        if game.winner == 0:
+            state = {**state, **Game.get_clicks(db_sess)}
+            if state["state"] == GameState.end:
+                game.clicks1 = state["clicks1"]
+                game.clicks2 = state["clicks2"]
+                game.winner = 1 if game.clicks1 > game.clicks2 else 2
+                state["winner"] = game.winner
+                from data.log_game import GameLog
+                GameLog.create(db_sess)
+                db_sess.commit()
+
+        return state
+
+    @staticmethod
+    def get_clicks(db_sess: Session):
+        return {(f"clicks{v[0]}"): v[1] for v in db_sess
+                .query(User.group, func.sum(UserGame.clicks))
+                .join(User, User.id == UserGame.userId)
+                .group_by(User.group)
+                .all()}
 
 
-class GameTeams:
-    red = "red"
-    blue = "blue"
-    green = "green"
-    yellow = "yellow"
+class GameState:
+    wait = "wait"
+    start = "start"
+    going = "going"
+    end = "end"

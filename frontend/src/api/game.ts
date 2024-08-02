@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { fetchJsonGet, fetchJsonPost, fetchPost } from "../utils/fetch";
-import type { User } from "./user";
+import type { UserGroup } from "./user";
 
-export type State = "title" | "wait" | "join" | "play" | "nojoin" | "won" | "loss" | "end";
-export type Team = "blue" | "yellow" | "green" | "red" | "";
+export type State = "wait" | "start" | "going" | "end";
 
 export interface GameState
 {
 	state: State,
-	team: Team,
-	winner: Team,
+	winner: UserGroup,
 	counter: number,
-	price: number,
 	start: string,
-	balance: number,
-	reward: number | null,
+}
+export interface GameStateFull extends GameState
+{
+	clicks1: number,
+	clicks2: number,
 }
 export interface GameDuration
 {
@@ -24,10 +24,6 @@ export interface GameCounter
 {
 	counter: number,
 }
-export interface GamePrice
-{
-	price: number,
-}
 export interface GameStartStr
 {
 	startStr: string,
@@ -35,14 +31,34 @@ export interface GameStartStr
 
 export function useGameState()
 {
-	const queryClient = useQueryClient();
 	return useQuery("gameState", async () =>
-	{
-		const r = await fetchJsonGet<GameState>("/api/game/state")
-		queryClient.setQueryData<User>("user", user => ({ ...user!, balance: r.balance }));
-		return r;
-	});
+		await fetchJsonGet<GameState>("/api/game/state")
+	);
 }
+
+export function useGameStateFull()
+{
+	return useQuery("gameStateFull", async () =>
+		await fetchJsonGet<GameStateFull>("/api/game/state_full")
+	);
+}
+
+export function useMutationSendClick(onSuccess?: () => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (count: number) =>
+			await fetchJsonPost<GameState>("/api/game/click", { count }),
+		onSuccess: (state: GameState) =>
+		{
+			queryClient.setQueryData("gameState", state);
+			onSuccess?.();
+		},
+		onError,
+	});
+	return mutation;
+}
+
 
 export function useGameDuration()
 {
@@ -58,13 +74,6 @@ export function useGameCounter()
 	);
 }
 
-export function useGamePrice()
-{
-	return useQuery("gamePrice", async () =>
-		await fetchJsonGet<GamePrice>("/api/game/price")
-	);
-}
-
 export function useGameStartStr()
 {
 	return useQuery("gameStartStr", async () =>
@@ -75,36 +84,14 @@ export function useGameStartStr()
 
 export function useMutationGameStart(onSuccess?: () => void, onError?: (err: any) => void)
 {
+	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () =>
 			await fetchPost("/api/game/start"),
-		onSuccess,
-		onError,
-	});
-	return mutation;
-}
-
-
-export function useMutationGameReset(onSuccess?: () => void, onError?: (err: any) => void)
-{
-	const mutation = useMutation({
-		mutationFn: async () =>
-			await fetchPost("/api/game/reset"),
-		onSuccess,
-		onError,
-	});
-	return mutation;
-}
-
-export function useMutationGameFinish(onSuccess?: () => void, onError?: (err: any) => void)
-{
-	const queryClient = useQueryClient();
-	const mutation = useMutation({
-		mutationFn: async (team: Team) =>
-			await fetchJsonPost<GameState>("/api/game/finish", { team }),
-		onSuccess: (state: GameState) =>
+		onSuccess: () =>
 		{
-			queryClient.setQueryData("gameState", state);
+			if (queryClient.getQueryState("gameState")?.status == "success")
+				queryClient.setQueryData("gameState", (s?: GameState) => ({ ...s!, state: "start" as State }));
 			onSuccess?.();
 		},
 		onError,
@@ -113,16 +100,16 @@ export function useMutationGameFinish(onSuccess?: () => void, onError?: (err: an
 }
 
 
-export function useMutationGameJoin(onSuccess?: () => void, onError?: (err: any) => void)
+export function useMutationGameReset(onSuccess?: () => void, onError?: (err: any) => void)
 {
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
-		mutationFn: async (team: Team) =>
-			await fetchJsonPost<GameState>("/api/game/join", { team }),
-		onSuccess: (state: GameState) =>
+		mutationFn: async () =>
+			await fetchPost("/api/game/reset"),
+		onSuccess: () =>
 		{
-			queryClient.setQueryData("gameState", state);
-			queryClient.setQueryData<User>("user", user => ({ ...user!, balance: state.balance }));
+			if (queryClient.getQueryState("gameState")?.status == "success")
+				queryClient.setQueryData("gameState", (s?: GameState) => ({ ...s!, state: "wait" as State }));
 			onSuccess?.();
 		},
 		onError,
@@ -156,22 +143,6 @@ export function useMutationGameCounter(onSuccess?: (data: GameCounter) => void, 
 		onSuccess: (data: GameCounter) =>
 		{
 			queryClient.setQueryData("gameCounter", data);
-			onSuccess?.(data);
-		},
-		onError,
-	});
-	return mutation;
-}
-
-export function useMutationGamePrice(onSuccess?: (data: GamePrice) => void, onError?: (err: any) => void)
-{
-	const queryClient = useQueryClient();
-	const mutation = useMutation({
-		mutationFn: async (price: number) =>
-			await fetchJsonPost<GamePrice>("/api/game/price", { price }),
-		onSuccess: (data: GamePrice) =>
-		{
-			queryClient.setQueryData("gamePrice", data);
 			onSuccess?.(data);
 		},
 		onError,

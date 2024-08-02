@@ -7,6 +7,8 @@ from . import user_send
 from . import user_game
 from . import operation
 from . import permission
+from . import log_game
+from . import log_user_game
 from . import log
 from . import quest
 from . import store_item

@@ -12,7 +12,7 @@ export interface User
 	balance: number;
 	roles: string[];
 	operations: string[];
-    group: number;
+    group: UserGroup;
 }
 
 export interface UserFull
@@ -28,8 +28,10 @@ export interface UserFull
 	roles: string[];
 	deleted: boolean;
 	operations: string[];
-    group: number;
+    group: UserGroup;
 }
+
+export type UserGroup = -1 | 0 | 1 | 2;
 
 export interface UserWithPwd extends User
 {
@@ -133,5 +135,5 @@ export function useMutationSetGroup(onSuccess?: () => void)
 
 interface SetGroup
 {
-	group: number;
+	group: UserGroup;
 }

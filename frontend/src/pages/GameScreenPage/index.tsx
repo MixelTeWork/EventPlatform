@@ -5,7 +5,7 @@ import useStateObj from "../../utils/useStateObj";
 import { useEffect } from "react";
 import useStateBool from "../../utils/useStateBool";
 import useSound from "../../utils/useSound";
-import { useMutationGameFinish, useGameDuration, useGameState } from "../../api/game";
+import { useGameDuration, useGameState } from "../../api/game";
 import useGame from "./useGame";
 import classNames from "../../utils/classNames";
 import { useTitle } from "../../utils/useTtile";
@@ -15,9 +15,8 @@ const aspect = 472 / 629;
 
 export default function GameScreenPage()
 {
-	useTitle("Гонки");
+	useTitle("Игра");
 	const gameDuration = useGameDuration();
-	const mutateFinish = useMutationGameFinish();
 	const game = useGame(gameDuration.data?.duration || 10);
 	const state = useGameState();
 	const ostSound = useSound(ost, true);
@@ -37,46 +36,46 @@ export default function GameScreenPage()
 
 	useEffect(() =>
 	{
-		if (state.data?.state == "play" || state.data?.state == "nojoin")
-		{
-			game.start();
-			return;
-		}
+		// if (state.data?.state == "play" || state.data?.state == "nojoin")
+		// {
+		// 	game.start();
+		// 	return;
+		// }
 
-		if (state.data?.state != "title") return;
+		// if (state.data?.state != "title") return;
 
-		const t = setInterval(() => state.refetch(), 5000);
+		// const t = setInterval(() => state.refetch(), 5000);
 
-		return () => clearInterval(t);
+		// return () => clearInterval(t);
 	}, [state.data])
 
 	useEffect(() =>
 	{
-		if (state.data?.state != "join" && state.data?.state != "wait") return;
-		counter.set(state.data.counter);
-		gameDuration.refetch();
-		const t = setInterval(() =>
-		{
-			counter.set(v =>
-			{
-				v = Math.max(v - 1, 0);
-				if (v == 0)
-				{
-					state.refetch();
-					clearInterval(t);
-				}
-				return v;
-			});
-		}, 1000);
-		return () => clearInterval(t);
+		// if (state.data?.state != "join" && state.data?.state != "wait") return;
+		// counter.set(state.data.counter);
+		// gameDuration.refetch();
+		// const t = setInterval(() =>
+		// {
+		// 	counter.set(v =>
+		// 	{
+		// 		v = Math.max(v - 1, 0);
+		// 		if (v == 0)
+		// 		{
+		// 			state.refetch();
+		// 			clearInterval(t);
+		// 		}
+		// 		return v;
+		// 	});
+		// }, 1000);
+		// return () => clearInterval(t);
 	}, [state.data])
 
 	useEffect(() =>
 	{
-		if (game.winner != "")
-		{
-			mutateFinish.mutate(game.winner);
-		}
+		// if (game.winner != "")
+		// {
+		// 	mutateFinish.mutate(game.winner);
+		// }
 	}, [game.winner])
 
 	return (
@@ -101,7 +100,7 @@ export default function GameScreenPage()
 				<div className={classNames(styles.snail2, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail2) }} />
 				<div className={classNames(styles.snail3, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail3) }} />
 				<div className={classNames(styles.snail4, game.started && styles.snailAnim)} style={{ right: snailPos(game.snail4) }} />
-				{(state.data?.state != "play" && state.data?.state != "nojoin" || game.title) && <div className={styles.msg}>
+				{/* {(state.data?.state != "play" && state.data?.state != "nojoin" || game.title) && <div className={styles.msg}>
 					{state.data?.state == "title" && <span>Скоро начало!</span>}
 					{(state.data?.state == "join" || state.data?.state == "wait") &&
 						<span>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</span>}
@@ -116,7 +115,7 @@ export default function GameScreenPage()
 						:
 						(game.title) && <span>{game.title}</span>
 					}
-				</div>}
+				</div>} */}
 			</div>
 		</div>
 	);

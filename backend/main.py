@@ -67,12 +67,13 @@ def before_request():
     if request.path.startswith("/api"):
         try:
             if g.json[1]:
-                data = ""
                 if "password" in g.json[0]:
                     password = g.json[0]["password"]
                     g.json[0]["password"] = "***"
                     data = json.dumps(g.json[0])[:512]
                     g.json[0]["password"] = password
+                else:
+                    data = json.dumps(g.json[0])[:512]
                 logging.info("Request;%(data)s", {"data": data})
             else:
                 logging.info("Request")
