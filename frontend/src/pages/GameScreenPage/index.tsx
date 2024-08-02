@@ -10,7 +10,6 @@ import { useTitle } from "../../utils/useTtile";
 import displayError from "../../utils/displayError";
 
 const aspect = 472 / 629;
-// [!] Sometimes finish dont work
 
 export default function GameScreenPage()
 {
@@ -39,6 +38,7 @@ export default function GameScreenPage()
 		const t = setTimeout(() => state.refetch(), delay);
 
 		return () => clearTimeout(t);
+		// eslint-disable-next-line
 	}, [state.isFetching])
 
 	useEffect(() =>

@@ -32,8 +32,9 @@ export default function GameSettingsPage()
 	const gameStart = useMutationGameStart(popupOpen2.setT);
 	const gameReset = useMutationGameReset(popupOpen4.setT);
 
-	useEffect(() => duration.set(gameDuration.data?.duration || 0), [gameDuration.data]);
-	useEffect(() => counter.set(gameCounter.data?.counter || 0), [gameCounter.data]);
+	// eslint-disable-next-line
+	useEffect(() => duration.set(gameDuration.data?.duration || 0), [gameDuration.data]); // eslint-disable-next-line
+	useEffect(() => counter.set(gameCounter.data?.counter || 0), [gameCounter.data]); // eslint-disable-next-line
 	useEffect(() => startStr.set(gameStartStr.data?.startStr || ""), [gameStartStr.data]);
 
 	return (

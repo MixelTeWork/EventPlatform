@@ -31,6 +31,7 @@ export default function GamePage()
 		const t = setTimeout(() => state.refetch(), 5000);
 
 		return () => clearTimeout(t);
+		// eslint-disable-next-line
 	}, [state.isFetching])
 
 	useEffect(() =>
@@ -64,6 +65,7 @@ export default function GamePage()
 		sendClick.mutate(clicks.v);
 		lastClickSend.set(Date.now())
 		clicks.set(0);
+		// eslint-disable-next-line
 	}, [clicks.v]);
 
 	return (

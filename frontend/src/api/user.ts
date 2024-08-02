@@ -12,7 +12,7 @@ export interface User
 	balance: number;
 	roles: string[];
 	operations: string[];
-    group: UserGroup;
+	group: UserGroup;
 }
 
 export interface UserFull
@@ -28,7 +28,7 @@ export interface UserFull
 	roles: string[];
 	deleted: boolean;
 	operations: string[];
-    group: UserGroup;
+	group: UserGroup;
 }
 
 export type UserGroup = -1 | 0 | 1 | 2;

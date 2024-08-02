@@ -23,7 +23,7 @@ export default function EditStartDialog()
 	{
 		if (!saving.v && dialogData.v && dialogDataQuery.isSuccess)
 			dialogData.set(copyObj(dialogDataQuery.data.data));
-	// eslint-disable-next-line
+		// eslint-disable-next-line
 	}, [saving.v]);
 
 	async function getDialog(fn: (dialog: GameDialogData) => void)

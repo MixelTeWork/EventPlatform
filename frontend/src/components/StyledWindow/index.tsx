@@ -11,7 +11,7 @@ export default function StyledWindow({ children, title = "Underparty", footer, c
 
 	useEffect(() =>
 	{
-		if ( !contentRef.current) return;
+		if (!contentRef.current) return;
 		showArrows.set(contentRef.current.scrollHeight > contentRef.current.clientHeight);
 		// eslint-disable-next-line
 	}, [children, contentRef.current])
