@@ -29,7 +29,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         return f"<StoreItem> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor: User, name: str, price: int, count: int, imgId: Union[int, None]):
+    def new(creator: User, name: str, price: int, count: int, imgId: Union[int, None]):
+        db_sess = Session.object_session(creator)
         item = StoreItem(name=name, price=price, count=count, imgId=imgId)
 
         t = item
@@ -44,8 +45,8 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.StoreItem,
             recordId=-1,
             changes=item.get_creation_changes()
@@ -77,16 +78,18 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
             items = items.filter(StoreItem.deleted == False)
         return items.all()
 
-    def update(self, actor: User, name: Union[str, None], price: Union[int, None], count: Union[int, None], img: Union[Image, None]):
+    def update(self, actor: User, name: Union[str, None], price: Union[int, None], count: Union[int, None], imgId: Union[int, None]):
         db_sess = Session.object_session(self)
         changes = []
 
-        if img is not None:
-            old_img: Image = self.image
-            if old_img is not None:
+        if imgId is not None:
+            old_img: Union[Image, None] = self.image
+            if old_img is None:
+                changes.append(("imgId", None, imgId))
+            else:
                 old_img.delete(actor)
-                changes.append(("imageId", old_img.id, img.id))
-            self.image = img
+                changes.append(("imgId", self.imgId, imgId))
+            self.imgId = imgId
 
         if name is not None:
             changes.append(("name", self.name, name))
@@ -112,6 +115,10 @@ class StoreItem(SqlAlchemyBase, SerializerMixin):
     def delete(self, actor: User):
         db_sess = Session.object_session(self)
         self.deleted = True
+
+        image: Image = self.image
+        if image is not None:
+            image.delete(actor)
 
         db_sess.add(Log(
             date=get_datetime_now(),

@@ -30,6 +30,9 @@ is_admin_default = False
 
 
 def main():
+    if not os.path.exists(app.config["IMAGES_FOLDER"]):
+        os.makedirs(app.config["IMAGES_FOLDER"])
+
     if "dev" in sys.argv:
         if not os.path.exists("db"):
             os.makedirs("db")
@@ -37,9 +40,6 @@ def main():
             init_values(True)
 
     db_session.global_init("dev" in sys.argv)
-
-    if not os.path.exists(app.config["IMAGES_FOLDER"]):
-        os.makedirs(app.config["IMAGES_FOLDER"])
 
     if "dev" not in sys.argv:
         check_is_admin_default()
@@ -67,12 +67,13 @@ def before_request():
     if request.path.startswith("/api"):
         try:
             if g.json[1]:
-                data = ""
                 if "password" in g.json[0]:
                     password = g.json[0]["password"]
                     g.json[0]["password"] = "***"
                     data = json.dumps(g.json[0])[:512]
                     g.json[0]["password"] = password
+                else:
+                    data = json.dumps(g.json[0])[:512]
                 logging.info("Request;%(data)s", {"data": data})
             else:
                 logging.info("Request")

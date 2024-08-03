@@ -40,7 +40,8 @@ class Image(SqlAlchemyBase, SerializerMixin):
         return os.path.join(current_app.config["IMAGES_FOLDER"], f"{self.id}.{self.type}")
 
     @staticmethod
-    def new(db_sess: Session, creator: User, json: ImageJson):
+    def new(creator: User, json: ImageJson):
+        db_sess = Session.object_session(creator)
         (data, name), values_error = get_json_values(json, "data", "name")
         if values_error:
             return None, values_error

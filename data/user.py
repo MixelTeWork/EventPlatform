@@ -18,22 +18,25 @@ from .db_session import SqlAlchemyBase
 class User(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "User"
 
-    id       = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    id_vk    = Column(Integer, unique=True, nullable=True)
-    id_big   = Column(String(8), unique=True, nullable=False)
-    deleted  = Column(Boolean, DefaultClause("0"), nullable=False)
-    login    = Column(String(128), index=True, unique=True, nullable=False)
-    password = Column(String(128), nullable=False)
-    name     = Column(String(128), nullable=False)
-    lastName = Column(String(128), nullable=True)
-    imageUrl = Column(String(256), nullable=True)
-    balance  = Column(Integer, nullable=False)
+    id         = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    id_big     = Column(String(8), unique=True, nullable=False)
+    deleted    = Column(Boolean, DefaultClause("0"), nullable=False)
+    login      = Column(String(128), index=True, unique=True, nullable=False)
+    password   = Column(String(128), nullable=False)
+    name       = Column(String(128), nullable=False)
+    lastName   = Column(String(128), nullable=True)
+    imageUrl   = Column(String(256), nullable=True)
+    ticketType = Column(String(128), nullable=True)
+    ticketTId  = Column(Integer, nullable=True)
+    balance    = Column(Integer, nullable=False)
+    group      = Column(Integer, DefaultClause("0"), nullable=False)
 
     def __repr__(self):
         return f"<User> [{self.id} {self.login}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor: User, login: str, password: str, name: str, roles: list[int]):
+    def new(creator: User, login: str, password: str, name: str, roles: list[int], db_sess: Session = None):
+        db_sess = db_sess if db_sess else Session.object_session(creator)
         user = User(login=login, name=name, balance=0)
         user.set_password(password)
 
@@ -49,11 +52,15 @@ class User(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.User,
             recordId=-1,
-            changes=user.get_creation_changes()
+            changes=[
+                ("login", None, user.login),
+                ("name", None, user.name),
+                ("password", None, "***"),
+            ]
         )
         db_sess.add(log)
         db_sess.commit()
@@ -67,8 +74,8 @@ class User(SqlAlchemyBase, SerializerMixin):
             db_sess.add(Log(
                 date=now,
                 actionCode=Actions.added,
-                userId=actor.id,
-                userName=actor.name,
+                userId=creator.id,
+                userName=creator.name,
                 tableName=Tables.UserRole,
                 recordId=-1,
                 changes=user_role.get_creation_changes()
@@ -84,6 +91,13 @@ class User(SqlAlchemyBase, SerializerMixin):
         if user is None or (not includeDeleted and user.deleted):
             return None
         return user
+
+    @staticmethod
+    def get_by_login(db_sess: Session, login: str, includeDeleted=False):
+        user = db_sess.query(User).filter(User.login == login)
+        if not includeDeleted:
+            user = user.filter(User.deleted == False)
+        return user.first()
 
     @staticmethod
     def get_by_big_id(db_sess: Session, big_id: int):
@@ -165,12 +179,26 @@ class User(SqlAlchemyBase, SerializerMixin):
         db_sess.commit()
         return True
 
-    def get_creation_changes(self):
-        return [
-            ("login", None, self.login),
-            ("name", None, self.name),
-            ("password", None, "***"),
-        ]
+    def set_group(self, group: int):
+        db_sess = Session.object_session(self)
+        if group not in (0, 1, 2):
+            group = 0
+        if self.group == group:
+            return group
+
+        db_sess.add(Log(
+            date=get_datetime_now(),
+            actionCode=Actions.updated,
+            userId=self.id,
+            userName=self.name,
+            tableName=Tables.User,
+            recordId=self.id,
+            changes=[("group", self.group, group)]
+        ))
+        self.group = group
+
+        db_sess.commit()
+        return group
 
     def get_roles(self):
         db_sess = Session.object_session(self)
@@ -198,7 +226,7 @@ class User(SqlAlchemyBase, SerializerMixin):
         quests = db_sess\
             .query(Quest)\
             .join(UserQuest, UserQuest.questId == Quest.id)\
-            .filter(UserQuest.userId == self.id)\
+            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
             .all()
 
         return quests
@@ -207,7 +235,7 @@ class User(SqlAlchemyBase, SerializerMixin):
         db_sess = Session.object_session(self)
         quests = db_sess\
             .query(UserQuest)\
-            .filter(UserQuest.userId == self.id)\
+            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
             .values(UserQuest.questId)
 
         return list(map(lambda v: v[0], quests))
@@ -221,6 +249,7 @@ class User(SqlAlchemyBase, SerializerMixin):
             "balance": self.balance,
             "roles": self.get_roles(),
             "operations": self.get_operations(),
+            "group": self.group,
         }
 
     def get_dict_full(self):
@@ -236,4 +265,5 @@ class User(SqlAlchemyBase, SerializerMixin):
             "roles": self.get_roles(),
             "deleted": self.deleted,
             "operations": self.get_operations(),
+            "group": self.group,
         }

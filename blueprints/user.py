@@ -1,11 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from data.log import Actions, Log, Tables
 from data.operation import Operations
 from data.user import User
 from data.get_datetime_now import get_datetime_now
-from utils import get_json_values_from_req, jsonify_list, permission_required, use_db_session, use_user
+from utils import get_json_values_from_req, jsonify_list, permission_required, response_msg, use_db_session, use_user
 
 
 blueprint = Blueprint("user", __name__)
@@ -26,9 +26,7 @@ def users(db_sess: Session, user: User):
 @use_db_session()
 @use_user()
 def change_password(db_sess: Session, user: User):
-    (password, ), errorRes = get_json_values_from_req("password")
-    if errorRes:
-        return errorRes
+    password = get_json_values_from_req("password")
 
     user.set_password(password)
 
@@ -43,7 +41,7 @@ def change_password(db_sess: Session, user: User):
     ))
     db_sess.commit()
 
-    return "", 200
+    return response_msg("ok"), 200
 
 
 @blueprint.route("/api/user/change_name", methods=["POST"])
@@ -51,9 +49,7 @@ def change_password(db_sess: Session, user: User):
 @use_db_session()
 @use_user()
 def change_name(db_sess: Session, user: User):
-    (name, ), errorRes = get_json_values_from_req("name")
-    if errorRes:
-        return errorRes
+    name = get_json_values_from_req("name")
 
     pastName = user.name
     user.name = name
@@ -69,4 +65,16 @@ def change_name(db_sess: Session, user: User):
     ))
     db_sess.commit()
 
-    return "", 200
+    return response_msg("ok"), 200
+
+
+@blueprint.route("/api/user/set_group", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+def set_group(db_sess: Session, user: User):
+    group = get_json_values_from_req("group")
+
+    group = user.set_group(group)
+
+    return jsonify({"group": group}), 200

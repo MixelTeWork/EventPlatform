@@ -1,11 +1,12 @@
 import logging
-from flask import Blueprint, jsonify, redirect, request
+import sys
+from flask import Blueprint, abort, jsonify, redirect, request
 from flask_jwt_extended import create_access_token, unset_jwt_cookies, set_access_cookies
 import requests
 from sqlalchemy.orm import Session
 from data.role import Roles
 from data.user import User
-from utils import get_json_values_from_req, get_vk_secret_key, randstr, response_msg, use_db_session
+from utils import get_api_secret_key, get_json_values_from_req, get_vk_secret_key, randstr, response_msg, use_db_session
 
 
 blueprint = Blueprint("authentication", __name__)
@@ -13,16 +14,17 @@ CLIENT_ID = "51848582"
 CLIENT_SECRET = get_vk_secret_key()
 # REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
 REDIRECT_URI = "https://www.underparty.fun/auth_vk"
+TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
+TICKETS_API_URL += "api/event_platform/"
+API_SECRET = get_api_secret_key()
+EVENT_ID = 3 if "dev" in sys.argv else 8
 
 
 @blueprint.route("/api/auth", methods=["POST"])
 @use_db_session()
 def login(db_sess: Session):
-    (login, password), errorRes = get_json_values_from_req("login", "password")
-    if errorRes:
-        return errorRes
-
-    user: User = db_sess.query(User).filter(User.login == login, User.deleted == False).first()
+    login, password = get_json_values_from_req("login", "password")
+    user = User.get_by_login(db_sess, login)
 
     if not user or not user.check_password(password):
         return response_msg("Неправильный логин или пароль"), 400
@@ -40,6 +42,59 @@ def logout():
     return response
 
 
+@blueprint.route("/api/auth_ticket", methods=["POST"])
+@use_db_session()
+def login_ticket(db_sess: Session):
+    code = get_json_values_from_req("code")
+    user = User.get_by_login(db_sess, f"ticket_{code}", includeDeleted=True)
+    if user is None:
+        user = create_user_by_ticket(db_sess, code)
+
+    if user.deleted:
+        user.deleted = False
+        db_sess.commit()
+
+    response = jsonify(user.get_dict())
+    access_token = create_access_token(identity=[user.id, user.password])
+    set_access_cookies(response, access_token)
+    return response
+
+
+def create_user_by_ticket(db_sess: Session, code: str):
+    res = requests.get(TICKETS_API_URL + "user_info_by_ticket", json={
+        "apikey": API_SECRET,
+        "eventId": EVENT_ID,
+        "code": code,
+    })
+    if not res.ok:
+        logging.warning(f"auth_error: {res.status_code}; code={code}; {res.content}")
+        abort(500)
+
+    res_data = res.json()
+    res_code = res_data.get("res", None)
+    data = res_data.get("data", {})
+
+    if res_code == "wrong event":
+        abort(response_msg("Билет от другого мероприятия", 400))
+    if res_code == "not found":
+        abort(response_msg("Несуществующий билет", 400))
+    if res_code != "ok":
+        logging.warning(f"auth_error: {res_code}; code={code}")
+        abort(500)
+
+    typeId = data.get("typeId", 0)
+    typeName = data.get("typeName", "")
+    personName = data.get("personName", "Инкогнито")
+
+    admin = User.get_admin(db_sess)
+    user = User.new(admin, f"ticket_{code}", randstr(8), personName, [Roles.visitor])
+    user.ticketTId = typeId
+    user.ticketType = typeName
+    db_sess.commit()
+
+    return user
+
+
 @blueprint.route("/auth_vk")
 @use_db_session()
 def auth_vk(db_sess: Session):
@@ -48,8 +103,7 @@ def auth_vk(db_sess: Session):
         return redirect("/auth_error")
     user_id, access_token = vk_user
 
-    user: User = db_sess.query(User).filter(User.id_vk == user_id).first()
-
+    user = User.get_by_login(db_sess, f"vk_{user_id}", includeDeleted=True)
     if user is None:
         user = create_vk_user(db_sess, user_id, access_token)
 
@@ -117,8 +171,7 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
     last_name = response.get("last_name", "Инкогнито")
 
     admin = User.get_admin(db_sess)
-    user = User.new(db_sess, admin, f"vk_{user_id}", randstr(8), first_name, [Roles.visitor])
-    user.id_vk = user_id
+    user = User.new(admin, f"vk_{user_id}", randstr(8), first_name, [Roles.visitor])
     user.lastName = last_name
     user.imageUrl = photo
     db_sess.commit()

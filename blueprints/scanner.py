@@ -21,9 +21,7 @@ blueprint = Blueprint("scanner", __name__)
 @use_db_session()
 @use_user()
 def scanner(db_sess: Session, user: User):
-    (code, ), errorRes = get_json_values_from_req("code")
-    if errorRes:
-        return errorRes
+    code = get_json_values_from_req("code")
 
     for key in SCANNERS:
         if (code.startswith(key)):
@@ -37,11 +35,10 @@ def scanner_quest(db_sess: Session, user: User, code: str):
     if quest is None:
         return respose_wrong(user, "quest")
 
-    already_completed = db_sess.query(UserQuest).filter(UserQuest.userId == user.id, UserQuest.questId == quest.id).first()
-    if already_completed is not None:
+    completed = UserQuest.complete_quest(user, user, quest)
+    if not completed:
         return respose_error(user, "quest", f"Квест {quest.name} уже завершён")
 
-    UserQuest.new(db_sess, user, user, quest)
     user.balance += quest.reward
     Transaction.new(db_sess, 1, user.id, quest.reward, Actions.endQuest, quest.id)
 
@@ -86,7 +83,7 @@ def scanner_send(db_sess: Session, user: User, code: str):
         Transaction.new(db_sess, user.id, 1, send.value, Actions.send, send.id)
 
     if send.reusable:
-        UserSend.new(db_sess, user, send)
+        UserSend.new(user, send)
     else:
         send.used = True
         db_sess.commit()

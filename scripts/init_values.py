@@ -11,19 +11,15 @@ def init_values(dev=False, cmd=False):
     else:
         add_parent_to_path()
 
-    from datetime import timedelta
-    from random import randint, choice
     from data import db_session
-    from data.log import Actions, Log, Tables
+    from data.get_datetime_now import get_datetime_now
     from data.operation import Operation, Operations
     from data.permission import Permission
-    from utils.randstr import randstr
     from data.role import Role, Roles, ROLES
+    from data.game import Game
+    from data.log import Actions, Log, Tables
     from data.user import User
-    from data.quest import Quest
-    from data.race import Race
-    from data.store_item import StoreItem
-    from data.get_datetime_now import get_datetime_now
+    from data.dialog import Dialog
 
     def init():
         db_session.global_init("dev" in sys.argv)
@@ -49,11 +45,12 @@ def init_values(dev=False, cmd=False):
         for operation in Operations.get_all():
             db_sess.add(Permission(roleId=Roles.admin, operationId=operation[0]))
 
-        user_admin = User.new(db_sess, User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin])
+        user_admin = User.new(User(id=1, name="Админ"), "admin", "admin", "Админ", [Roles.admin], db_sess=db_sess)
 
         log_changes(db_sess, user_admin, roles)
 
-        Race.init(db_sess)
+        Game.init(db_sess)
+        Dialog.new(user_admin, {"nodes": []}, 1)
 
         if dev:
             init_values_dev(db_sess, user_admin)
@@ -78,6 +75,15 @@ def init_values(dev=False, cmd=False):
         db_sess.commit()
 
     def init_values_dev(db_sess, user_admin):
+        from datetime import timedelta
+        from random import randint, choice
+        import shutil
+        from utils.randstr import randstr
+        from data.quest import Quest
+        from data.store_item import StoreItem
+        from data.image import Image
+        from data.dialog_character import DialogCharacter
+
         now = get_datetime_now()
         user_admin.balance = 100
 
@@ -92,10 +98,34 @@ def init_values(dev=False, cmd=False):
                 changes=changes
             ))
 
+        shutil.copy("scripts/dev_init_data/1.jpeg", "images/1.jpeg")
+        shutil.copy("scripts/dev_init_data/2.jpeg", "images/2.jpeg")
+        img1 = Image(id=1, name="img1", type="jpeg")
+        img2 = Image(id=2, name="img2", type="jpeg")
+        db_sess.add(img1)
+        db_sess.add(img2)
+
+        character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1)
+        character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2)
+
+        dialog = Dialog.new(user_admin, {
+            "nodes": [
+                {
+                    "characterId": character1.id,
+                    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus, officiis assumenda consequatur unde perspiciatis error quos laudantium laborum. Totam tenetur alias reiciendis voluptatibus.",  # noqa: E501
+                },
+                {
+                    "characterId": character2.id,
+                    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus.",
+                }
+            ]})
+
         for i in range(15):
             description = f"Описание квеста №{i + 1}\nLorem, ipsum dolor sit amet consectetur adipisicing elit."
             quest = Quest(id=i, name=f"Квест {i + 1}", description=description,
                           reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0, id_big=randstr(8))
+            if i == 1:
+                quest.dialog1Id = dialog.id
             log(Tables.Quest, i, quest.get_creation_changes())
             db_sess.add(quest)
 
@@ -104,8 +134,8 @@ def init_values(dev=False, cmd=False):
             log(Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
 
-        User.new(db_sess, user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
-        User.new(db_sess, user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
+        User.new(user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
+        User.new(user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
 
         db_sess.commit()
 
@@ -116,6 +146,11 @@ def add_parent_to_path():
     current = os.path.dirname(os.path.realpath(__file__))
     parent = os.path.dirname(current)
     sys.path.append(parent)
+
+
+def read_file(path):
+    with open(path) as f:
+        return f.read()
 
 
 if __name__ == "__main__":

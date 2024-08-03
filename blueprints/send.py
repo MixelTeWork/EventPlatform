@@ -16,9 +16,7 @@ blueprint = Blueprint("send", __name__)
 @use_user()
 @permission_required(Operations.send_any)
 def send(db_sess: Session, user: User):
-    (value, positive, reusable), errorRes = get_json_values_from_req("value", "positive", "reusable")
-    if errorRes:
-        return errorRes
+    value, positive, reusable = get_json_values_from_req("value", "positive", "reusable")
 
     send = Send.new(db_sess, user.id, value, positive, reusable)
 
@@ -31,9 +29,7 @@ def send(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.send_any)
 def send_check(db_sess: Session, user: User):
-    (sendId, ), errorRes = get_json_values_from_req("id")
-    if errorRes:
-        return errorRes
+    sendId = get_json_values_from_req("id")
 
     send = Send.get_by_big_id(db_sess, sendId)
     if send is None:

@@ -15,6 +15,13 @@ def docs():
             },
             "response": "User",
         },
+        "/api/auth_ticket POST": {
+            "__desc__": "Auth as visitor by ticket code",
+            "request": {
+                "code": "string",
+            },
+            "response": "User",
+        },
         "/api/logout POST": {
             "__desc__": "Remove auth cookie",
         },
@@ -36,6 +43,15 @@ def docs():
             "__desc__": "Set new name",
             "request": {
                 "name": "string",
+            },
+        },
+        "/api/user/set_group POST": {
+            "__desc__": "Set user group",
+            "request": {
+                "group": "number",
+            },
+            "response": {
+                "group": "number",
             },
         },
         "/api/img/<int:imageId>": {
@@ -80,6 +96,8 @@ def docs():
                 "description": "?string",
                 "reward": "?number",
                 "hidden": "?boolean",
+                "dialog1": "?dialog.ts:GameDialogData | False",  # False - delete
+                "dialog2": "?dialog.ts:GameDialogData | False",  # False - delete
             },
             "response": "QuestFull",
         },
@@ -157,6 +175,19 @@ def docs():
                 "successful": "boolean",
             },
         },
+        "/api/dialog/<int:dialogId>": {
+            "__desc__": "Get dialog",
+            "response": "Dialog",
+        },
+        "/api/dialog/<int:dialogId> POST": {
+            "__desc__": "Edit dialog",
+            "request": "dialog.ts:GameDialogData",
+            "response": "Dialog",
+        },
+        "/api/dialog/characters": {
+            "__desc__": "Get all dialog characters",
+            "response": "DialogCharacter[]",
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -165,6 +196,7 @@ def docs():
             "balance": "number",
             "roles": "string[]",
             "operations": "string[]",
+            "group": "number",
         },
         "UserFull": {
             "id": "number",
@@ -178,6 +210,7 @@ def docs():
             "roles": "string[]",
             "deleted": "boolean",
             "operations": "string[]",
+            "group": "number",
         },
         "Image": {
             "data": "string",
@@ -199,6 +232,8 @@ def docs():
             "description": "string",
             "reward": "number",
             "completed": "boolean",
+            "dialogId": "number | null",
+            "opened": "boolean",
         },
         "QuestFull": {
             "id": "number",
@@ -207,6 +242,8 @@ def docs():
             "description": "string",
             "reward": "number",
             "hidden": "boolean",
+            "dialog1Id": "number | null",
+            "dialog2Id": "number | null",
         },
         "StoreItem": {
             "id": "number",
@@ -229,5 +266,14 @@ def docs():
             "value": "number",
             "action": "string",
             "itemId": "number",
+        },
+        "Dialog": {
+            "id": "number",
+            "data": "dialog.ts:GameDialogData",
+        },
+        "DialogCharacter": {
+            "id": "number",
+            "name": "string",
+            "img": "string",
         },
     }), 200

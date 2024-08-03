@@ -35,16 +35,14 @@ def store_items_full(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_store)
 def store_item_add(db_sess: Session, user: User):
-    (name, price, count, img_data), errorRes = get_json_values_from_req("name", "price", "count", ("img", None))
-    if errorRes:
-        return errorRes
+    name, price, count, img_data = get_json_values_from_req("name", "price", "count", ("img", None))
 
     if img_data is not None:
-        img, image_error = Image.new(db_sess, user, img_data)
+        img, image_error = Image.new(user, img_data)
         if image_error:
             return response_msg(image_error), 400
 
-    item = StoreItem.new(db_sess, user, name, price, count, img.id if img_data is not None else None)
+    item = StoreItem.new(user, name, price, count, img.id if img_data is not None else None)
 
     return jsonify(item.get_dict_full()), 200
 
@@ -55,21 +53,20 @@ def store_item_add(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_store)
 def store_item_patch(itemId, db_sess: Session, user: User):
-    (name, price, count, img_data), errorRes = get_json_values_from_req(("name", None), ("price", None), ("count", None), ("img", None))
-    if errorRes:
-        return errorRes
+    name, price, count, img_data = get_json_values_from_req(("name", None), ("price", None), ("count", None), ("img", None))
 
     item = StoreItem.get(db_sess, itemId)
     if item is None:
         return response_not_found("item", itemId)
 
-    img = None
+    imgId = None
     if img_data is not None:
-        img, image_error = Image.new(db_sess, user, img_data)
+        img, image_error = Image.new(user, img_data)
         if image_error:
             return response_msg(image_error), 400
+        imgId = img.id
 
-    item.update(user, name, price, count, img)
+    item.update(user, name, price, count, imgId)
 
     return jsonify(item.get_dict_full()), 200
 
@@ -80,7 +77,7 @@ def store_item_patch(itemId, db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_store)
 def store_item_decrease(itemId, db_sess: Session, user: User):
-    item: StoreItem = StoreItem.get(db_sess, itemId)
+    item = StoreItem.get(db_sess, itemId)
     if item is None:
         return response_not_found("item", itemId)
 
@@ -98,10 +95,6 @@ def store_item_delete(itemId, db_sess: Session, user: User):
     item = StoreItem.get(db_sess, itemId)
     if item is None:
         return response_not_found("item", itemId)
-
-    image: Image = item.image
-    if image is not None:
-        image.delete(user)
 
     item.delete(user)
 

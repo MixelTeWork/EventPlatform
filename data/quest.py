@@ -1,8 +1,9 @@
-from typing import Union
-from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
+from typing import Literal, Union
+from sqlalchemy import Boolean, Column, DefaultClause, orm, ForeignKey, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy_serializer import SerializerMixin
 
+from data.dialog import Dialog
 from data.log import Actions, Log, Tables
 from data.get_datetime_now import get_datetime_now
 from data.randstr import randstr
@@ -20,12 +21,18 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     description = Column(String(256), nullable=False)
     reward = Column(Integer, nullable=False)
     hidden = Column(Boolean, nullable=False)
+    dialog1Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
+    dialog2Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
+
+    dialog1 = orm.relationship("Dialog", foreign_keys="Quest.dialog1Id")
+    dialog2 = orm.relationship("Dialog", foreign_keys="Quest.dialog2Id")
 
     def __repr__(self):
         return f"<Quest> [{self.id}] {self.name}"
 
     @staticmethod
-    def new(db_sess: Session, actor, name: str, description: str, reward: int, hidden: bool):
+    def new(creator, name: str, description: str, reward: int, hidden: bool):
+        db_sess = Session.object_session(creator)
         quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
 
         q = quest
@@ -40,8 +47,8 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         log = Log(
             date=now,
             actionCode=Actions.added,
-            userId=actor.id,
-            userName=actor.name,
+            userId=creator.id,
+            userName=creator.name,
             tableName=Tables.Quest,
             recordId=-1,
             changes=quest.get_creation_changes()
@@ -78,19 +85,27 @@ class Quest(SqlAlchemyBase, SerializerMixin):
     @staticmethod
     def all_for_user(db_sess: Session, user):
         if user:
-            completed_quests = db_sess\
-                .query(Quest)\
-                .join(UserQuest, UserQuest.questId == Quest.id)\
-                .filter(UserQuest.userId == user.id)\
-                .values(Quest.id)
-
-            completed_quests = list(map(lambda x: x[0], completed_quests))
-        else:
+            userQuests = db_sess.query(UserQuest).filter(UserQuest.userId == user.id)
+            opened_quests = []
             completed_quests = []
+            for userQuest in userQuests:
+                if userQuest.openDate != None:
+                    opened_quests.append(userQuest.questId)
+                if userQuest.completeDate != None:
+                    completed_quests.append(userQuest.questId)
+            dialogColumn = None
+            if user.group == 1:
+                dialogColumn = Quest.dialog1Id
+            elif user.group == 2:
+                dialogColumn = Quest.dialog2Id
+        else:
+            opened_quests = []
+            completed_quests = []
+            dialogColumn = None
 
         all_quests = db_sess\
             .query(Quest)\
-            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden)
+            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn)
 
         quests = []
         for v in list(all_quests):
@@ -99,6 +114,11 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             description = v[2]
             reward = v[3]
             hidden = v[4]
+            dialog = v[5]
+
+            opened = False
+            if id in opened_quests:
+                opened = True
 
             completed = False
             if id in completed_quests:
@@ -111,11 +131,14 @@ class Quest(SqlAlchemyBase, SerializerMixin):
                     "description": description,
                     "reward": reward,
                     "completed": completed,
+                    "dialogId": dialog,
+                    "opened": opened,
                 })
 
         return quests
 
-    def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None], hidden: Union[bool, None]):
+    def update(self, actor, name: Union[str, None], description: Union[str, None], reward: Union[int, None],
+               hidden: Union[bool, None], dialog1: Union[object, Literal[False], None], dialog2: Union[object, Literal[False], None]):
         db_sess = Session.object_session(self)
         changes = []
 
@@ -130,12 +153,32 @@ class Quest(SqlAlchemyBase, SerializerMixin):
         updateField("reward", reward, changes)
         updateField("hidden", hidden, changes)
 
+        def updateDialog(field: str, value, changes: list):
+            cur: Union[Dialog, None] = getattr(self, field)
+            if value is None:
+                return
+            if value is False:
+                if cur is not None:
+                    changes.append((field, cur.id, None))
+                    cur.delete(actor)
+                    setattr(self, field, None)
+                return
+            if cur is None:
+                dialog = Dialog.new(actor, value)
+                changes.append((field, None, dialog.id))
+                setattr(self, field, dialog)
+            else:
+                cur.update(actor, value)
+
+        updateDialog("dialog1", dialog1, changes)
+        updateDialog("dialog2", dialog2, changes)
+
         db_sess.add(Log(
             date=get_datetime_now(),
             actionCode=Actions.updated,
             userId=actor.id,
             userName=actor.name,
-            tableName=Tables.StoreItem,
+            tableName=Tables.Quest,
             recordId=self.id,
             changes=changes
         ))
@@ -179,4 +222,6 @@ class Quest(SqlAlchemyBase, SerializerMixin):
             "description": self.description,
             "reward": self.reward,
             "hidden": self.hidden,
+            "dialog1Id": self.dialog1Id,
+            "dialog2Id": self.dialog2Id,
         }
