@@ -255,7 +255,6 @@ class User(SqlAlchemyBase, SerializerMixin):
     def get_dict_full(self):
         return {
             "id": self.id,
-            "id_vk": self.id_vk,
             "id_big": self.id_big,
             "login": self.login,
             "name": self.name,
