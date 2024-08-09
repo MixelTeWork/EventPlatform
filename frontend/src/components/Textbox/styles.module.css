@@ -1,0 +1,90 @@
+.root {
+	position: relative;
+	margin: 6px 6px 16px 16px;
+}
+.box {
+	min-width: 250px;
+	min-height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #79c3fb;
+	color: #ffc95e;
+	border: 3px solid #fea35c;
+	border-radius: 1px;
+	box-shadow: 0 0 0 3px #9f1841, inset 0 0 0 3px #9f1841;
+}
+.outline {
+	outline: 4px solid #ff0000aa;
+	border-radius: 0.5px;
+}
+
+.box_back,
+.outline_back,
+.outline_front {
+	position: absolute;
+	z-index: -1;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+}
+.box_back,
+.outline_back {
+	left: -12px;
+	bottom: -12px;
+}
+.box_back {
+	opacity: 0.4;
+}
+
+.btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: flex;
+	transform: translateY(-100%);
+	width: 60px;
+}
+.btn img {
+	width: 100%;
+}
+.btnOutline {
+	position: absolute;
+	width: calc(100% + 4px);
+	height: calc(100%);
+	top: -3px;
+	left: -2px;
+	background-color: #ff0000aa;
+	z-index: -1;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+.small {
+	margin: 6px 6px 10px 10px;
+}
+.small .box {
+	min-width: 0px;
+	min-height: 0px;
+	border-width: 1px;
+	box-shadow: 0 0 0 2px #9f1841, inset 0 0 0 2px #9f1841;
+}
+.small .box_back,
+.small .outline_back {
+	left: -6px;
+	bottom: -6px;
+}
+.small .btn {
+	width: 30px;
+}
+
+.type2 .box {
+	border: 5px solid #fccf65;
+	border-top: 14px solid #fea35c;
+	box-shadow: 0 0 0 3px #9e163f, inset 0 0 0 3px #9e163f;
+}
+.type2 .box_back,
+.type2 .outline_back {
+	left: -10px;
+	bottom: -10px;
+}

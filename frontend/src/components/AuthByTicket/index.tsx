@@ -7,6 +7,7 @@ import styles from "./styles.module.css"
 import logo from "./logo.png";
 import avatar from "./avatar.png";
 import QrcodeDecoder from "qrcode-decoder/dist/index";
+import Textbox from "../Textbox";
 
 export default function AuthByTicket({ open }: AuthByTicketProps)
 {
@@ -17,33 +18,28 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 		<div className={classNames(styles.root, open && styles.open)}>
 			{mutation.isLoading && <Spinner />}
 			<div className={styles.body}>
-				<div className={classNames("textbox", styles.msgWide)}>
-					<div></div>
+				<Textbox className={styles.msgWide}>
 					<div className={styles.msg1}>
 						<img src={logo} alt="Инди кон" />
 						<span>Загрузка системы...</span>
 					</div>
-				</div>
-				<div className={classNames("textbox2", styles.msg2box)}>
-					<div></div>
+				</Textbox>
+				<Textbox type2 className={styles.msg2box}>
 					<div className={styles.msg2}>
 						<img src={avatar} alt="Avatar" />
 						<h2 className="title">Админ</h2>
 						<span>Добро пожаловать на индикон "пользователь"! Для того, чтобы начать игру, загрузи свой билет</span>
 					</div>
-				</div>
-				<div className={classNames("textbox2", styles.msg2box, styles.msg_error, error.v && styles.msg_error_open)}>
-					<div></div>
+				</Textbox>
+				<Textbox type2 className={classNames(styles.msg2box, styles.msg_error, error.v && styles.msg_error_open)}>
 					<div className={styles.msg2}>
 						<img src={avatar} alt="Avatar" />
 						<h2 className="title">Админ</h2>
 						<span>В доступе отказано! {error.v}</span>
 					</div>
-				</div>
-				<label className={classNames("textbox", styles.msg3, styles.msgWide)}>
-					<div></div>
-					<span className="textbox_btn"></span>
-					<div className={styles.openFile}>
+				</Textbox>
+				<Textbox className={classNames(styles.msg3, styles.msgWide)}>
+					<label className={styles.openFile}>
 						<div className="title">Загрузить билет</div>
 						<input
 							type="file"
@@ -68,8 +64,8 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 								mutation.mutate({ code });
 							}}
 						/>
-					</div>
-				</label>
+					</label>
+				</Textbox>
 			</div>
 		</div>
 	);

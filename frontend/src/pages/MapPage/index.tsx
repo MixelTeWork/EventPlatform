@@ -7,6 +7,8 @@ import Footer from "../../components/Footer";
 import useStateObj from "../../utils/useStateObj";
 import { useTitle } from "../../utils/useTtile";
 import GameDialogGreetings from "../../components/GameDialogGreetings";
+import classNames from "../../utils/classNames";
+import Textbox from "../../components/Textbox";
 
 export default function MapPage()
 {
@@ -14,17 +16,22 @@ export default function MapPage()
 	const map = useStateObj(0);
 
 	return (
-		<Layout centeredPage headerColor="#042e40" gap="1em" className={styles.root} footer={<Footer curPage="map" />}>
+		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="map" />}>
 			<GameDialogGreetings />
-			<div className={styles.background}></div>
-			<h1 className={styles.title}>Underparty</h1>
+			<h1 className={classNames("title", styles.title)}>Индикон</h1>
 			<div className={styles.map}>
 				<img src={[map1, map2, map3][map.v]} alt="Карта" />
 			</div>
 			<div className={styles.btns}>
-				<button onClick={() => map.set(0)} className={map.v == 0 ? styles.active : ""}>Этаж 1</button>
-				<button onClick={() => map.set(1)} className={map.v == 1 ? styles.active : ""}>Этаж 2</button>
-				<button onClick={() => map.set(2)} className={map.v == 2 ? styles.active : ""}>Маркет</button>
+				<Textbox small btn highlight={map.v == 0}>
+					<button onClick={() => map.set(0)} className={classNames(styles.btn, "title")}>Этаж 1</button>
+				</Textbox>
+				<Textbox small btn highlight={map.v == 1}>
+					<button onClick={() => map.set(1)} className={classNames(styles.btn, "title")}>Этаж 2</button>
+				</Textbox>
+				<Textbox small btn highlight={map.v == 2}>
+					<button onClick={() => map.set(2)} className={classNames(styles.btn, "title")}>Этаж 3</button>
+				</Textbox>
 			</div>
 		</Layout>
 	);

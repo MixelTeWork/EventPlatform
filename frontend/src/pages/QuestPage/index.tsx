@@ -30,7 +30,7 @@ export default function QuestPage()
 	const quests = useQuests();
 
 	return (
-		<Layout centeredPage headerColor="#545f82" gap="1em" className={styles.root} footer={<Footer curPage="quest" />}>
+		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="quest" />}>
 			{dialog.el()}
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>

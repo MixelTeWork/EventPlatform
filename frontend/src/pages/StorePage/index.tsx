@@ -16,7 +16,7 @@ export default function StorePage()
 	const items = useStoreItems()
 
 	return (
-		<Layout centeredPage headerColor="#0a424c" gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
+		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
 			{items.isLoading && <Spinner />}
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>

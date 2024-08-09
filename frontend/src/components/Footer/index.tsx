@@ -1,16 +1,25 @@
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css"
+import Textbox from "../Textbox";
+import classNames from "../../utils/classNames";
 
 export default function Footer({ curPage = "" }: FooterProps)
 {
 	return (
 		<div className={styles.root}>
 			<div>
-				<Link className={curPage == "map" ? styles.active : ""} to={"/map"}>Карта</Link>
-				<Link className={curPage == "timetable" ? styles.active : ""} to={"/timetable"}>План</Link>
-				<Link className={curPage == "quest" ? styles.active : ""} to={"/quest"}>Квест</Link>
-				<Link className={curPage == "store" ? styles.active : ""} to={"/store"}>Магаз</Link>
-				<Link className={curPage == "game" ? styles.active : ""} to={"/game"}>Игра</Link>
+				<Textbox small btn highlight={curPage == "map"}>
+					<Link className={classNames(styles.btn, "title")} to={"/map"}>Карта</Link>
+				</Textbox>
+				<Textbox small btn highlight={curPage == "timetable"}>
+					<Link className={classNames(styles.btn, "title")} to={"/timetable"}>План</Link>
+				</Textbox>
+				<Textbox small btn highlight={curPage == "store"}>
+					<Link className={classNames(styles.btn, "title")} to={"/store"}>Магаз</Link>
+				</Textbox>
+				<Textbox small btn highlight={curPage == "game"}>
+					<Link className={classNames(styles.btn, "title")} to={"/game"}>Игра</Link>
+				</Textbox>
 			</div>
 		</div>
 	);

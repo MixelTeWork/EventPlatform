@@ -69,7 +69,7 @@ export default function GamePage()
 	}, [clicks.v]);
 
 	return (
-		<Layout centeredPage headerColor="#512d00" gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
+		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
 			<div className={styles.background}></div>
 			{state.isLoading && <Spinner />}
 			{displayError(state)}

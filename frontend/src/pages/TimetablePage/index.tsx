@@ -13,7 +13,7 @@ export default function TimetablePage()
 	const showTurnamentFirst = useStateBool(true);
 
 	return (
-		<Layout centeredPage headerColor="#4d0709" className={styles.root} footer={<Footer curPage="timetable" />}>
+		<Layout centeredPage className={styles.root} footer={<Footer curPage="timetable" />}>
 			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			<div className={styles.body}>

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css"
+import avatar from "./avatar.png";
 import { useMutationLogout } from "../../api/auth";
 import useUser from "../../api/user";
 import Spinner from "../Spinner";
@@ -8,7 +9,7 @@ import classNames from "../../utils/classNames";
 import hasPermission from "../../api/operations";
 import IconHome from "../../icons/home";
 
-export default function Header({ color = "#042e40", homeBtn = false }: HeaderProps)
+export default function Header({ homeBtn = false }: HeaderProps)
 {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
@@ -19,17 +20,17 @@ export default function Header({ color = "#042e40", homeBtn = false }: HeaderPro
 	const user = useUser();
 
 	return (
-		<div className={styles.root} style={{ background: color }}>
+		<div className={styles.root}>
 			<Link to={"/"} className={styles.home}>
 				{homeBtn && <IconHome />}
 			</Link>
 			<span className={styles.block}>
-				<div className={styles.balance}>{user.data?.balance || 0} G</div>
-				<button className={styles.user} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/")}>
+				<div className={classNames(styles.balance, "title")}>{user.data?.balance || 0}М</div>
+				<button className={classNames(styles.user, "title")} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/")}>
 					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
-					{user.data?.photo && <img className={styles.img} src={user.data.photo} alt="avatar" />}
+					<img className={styles.img} src={user.data?.photo || avatar} alt="avatar" />
 				</button>
-				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)} style={{ background: color }}>
+				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)}>
 					{/* <button onClick={() => navigate("/profile")}>
 						Профиль
 					</button> */}
@@ -47,6 +48,5 @@ export default function Header({ color = "#042e40", homeBtn = false }: HeaderPro
 
 interface HeaderProps
 {
-	color?: string,
 	homeBtn?: boolean
 }

@@ -23,17 +23,11 @@
 	gap: 0.8rem;
 }
 
-.btns button {
-	text-decoration: none;
-	text-transform: lowercase;
-	background-color: black;
-	color: white;
-	border: 2px solid white;
-	border-radius: 0;
-	font-size: 1rem;
-	line-height: 1rem;
-	padding: 0.3rem 0.5rem;
-	text-transform: uppercase;
+.btn {
+	padding: 0.5em 1em;
+	border: none;
+	color: inherit;
+	background: transparent;
 }
 
 .btns .active {
