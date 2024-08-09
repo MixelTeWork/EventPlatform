@@ -1,16 +1,5 @@
 .root {}
 
-.background {
-	position: fixed;
-	z-index: -1;
-	inset: 0;
-	background-image: url(./logo.png), url(./stars.png);
-	background-size: 100% auto;
-	background-repeat: no-repeat, repeat;
-	background-position: bottom, bottom;
-	image-rendering: pixelated;
-}
-
 .body {
 	margin-bottom: 2.5rem;
 	min-height: 0;

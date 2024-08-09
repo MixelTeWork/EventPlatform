@@ -18,7 +18,6 @@ export default function StorePage()
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
 			{items.isLoading && <Spinner />}
-			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			<div className={styles.body}>
 				<StyledWindow title="Магазин" className={styles.list}>

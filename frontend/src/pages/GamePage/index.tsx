@@ -70,7 +70,6 @@ export default function GamePage()
 
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
-			<div className={styles.background}></div>
 			{state.isLoading && <Spinner />}
 			{displayError(state)}
 			{(state.isLoading || state.data?.state == "wait") && <>

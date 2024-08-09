@@ -14,7 +14,6 @@ export default function TimetablePage()
 
 	return (
 		<Layout centeredPage className={styles.root} footer={<Footer curPage="timetable" />}>
-			<div className={styles.background}></div>
 			<h1 className={styles.title}>Underparty</h1>
 			<div className={styles.body}>
 				{showTimetable.v ?
