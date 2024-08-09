@@ -1,0 +1,335 @@
+.root {
+	position: fixed;
+	inset: 0;
+	background-color: black;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	pointer-events: none;
+	user-select: none;
+	opacity: 0;
+	transform: scaleY(0);
+	transition: transform 500ms, opacity 100ms;
+}
+.root.open {
+	pointer-events: all;
+	user-select: auto;
+	opacity: 1;
+	transform: scaleY(1);
+}
+
+.body {
+	--_color: darkcyan;
+	--_corner: 1rem;
+	flex-grow: 1;
+	max-height: calc(100% - 0.8rem);
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	max-width: 500px;
+	background:
+		linear-gradient(0deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(180deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(-90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		var(--_color);
+	border: 1px solid var(--_color);
+	box-shadow: 0 0 0.5rem 1px var(--_color);
+	margin: 0.3rem;
+	padding: 0.5rem;
+}
+
+.message {
+	--_color: aquamarine;
+	--_corner: 0.5rem;
+	position: relative;
+	display: grid;
+	grid-template-columns: 5rem 1fr;
+	grid-template-rows: auto auto;
+	border: 1px solid var(--_color);
+	padding: 0.25rem;
+	background:
+		linear-gradient(0deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(180deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(-90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		var(--_color);
+	box-shadow: 0 0 0.25rem var(--_color);
+}
+.message_error {
+	--_color: tomato;
+}
+.message__fade {
+	position: absolute;
+	inset: -0.35rem;
+	background-color: black;
+	z-index: 2;
+	transition: transform 500ms 750ms;
+	transform-origin: right;
+}
+.open .message__fade {
+	transform: scaleX(0);
+}
+.message_error .message__fade {
+	transition: none;
+	transform: none;
+}
+.message_error_open .message__fade {
+	transition: transform 500ms;
+	transform: scaleX(0);
+}
+.message_last .message__fade {
+	transition: none;
+	transform: none;
+}
+.message_last_open .message__fade {
+	transition: transform 500ms;
+	transform: scaleX(0);
+}
+.message__img {
+	grid-row: 1/3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.75rem;
+	transition: transform 500ms 1800ms;
+	transform: scale(0);
+}
+.open .message__img {
+	transform: scale(1);
+}
+.message__img > div {
+	width: 80%;
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid white;
+	animation: messageImg1 10s linear infinite;
+	box-shadow: 0 0 5px -1px white, inset 0 0 5px -1px white;
+}
+@keyframes messageImg1 {
+	0% {
+		transform: rotate(0deg);
+	}
+	10% {
+		transform: rotate(47deg);
+	}
+	12% {
+		transform: rotate(42deg);
+	}
+	20% {
+		transform: rotate(42deg);
+	}
+	30% {
+		transform: rotate(-4deg);
+	}
+	32% {
+		transform: rotate(0deg);
+	}
+	40% {
+		transform: rotate(0deg);
+	}
+	50% {
+		transform: rotate(-135deg);
+	}
+	52% {
+		transform: rotate(-120deg);
+	}
+	60% {
+		transform: rotate(-120deg);
+	}
+	80% {
+		transform: rotate(-90deg);
+	}
+	85% {
+		transform: rotate(-90deg);
+	}
+}
+.message__img > div > div {
+	width: 68%;
+	aspect-ratio: 1;
+	border: 1px solid white;
+	animation: messageImg2 10s linear infinite;
+	box-shadow: 0 0 5px -1px white, inset 0 0 5px -1px white;
+}
+@keyframes messageImg2 {
+	0% {
+		transform: scale(1);
+	}
+	10% {
+		transform: scale(1.1);
+	}
+	12% {
+		transform: scale(0.9);
+	}
+	15% {
+		transform: scale(1);
+	}
+	37% {
+		transform: scale(1.1);
+	}
+	40% {
+		transform: scale(0.8) rotate(0deg);
+	}
+	50% {
+		transform: scale(0.8) rotate(-90deg);
+	}
+	52% {
+		transform: scale(1) rotate(-90deg);
+	}
+	60% {
+		transform: scale(1) rotate(-90deg);
+	}
+	80% {
+		transform: scale(1) rotate(-90deg);
+	}
+	85% {
+		transform: scale(0.8) rotate(-90deg);
+	}
+}
+.message__title {
+	font-size: 1.1rem;
+	color: aquamarine;
+	transition: opacity 400ms 800ms;
+	opacity: 0;
+}
+.message_error .message__title {
+	color: tomato;
+}
+.open .message__title {
+	opacity: 1;
+}
+.message__text {
+	font-size: 0.9rem;
+	color: white;
+	transition: opacity 400ms 1200ms;
+	opacity: 0;
+}
+.open .message__text {
+	opacity: 1;
+}
+
+.message2 {
+	--_color: aquamarine;
+	--_corner: 0.5rem;
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr 5rem;
+	grid-template-rows: auto auto;
+	border: 1px solid var(--_color);
+	padding: 0.25rem;
+	background:
+		linear-gradient(0deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(180deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(-90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		var(--_color);
+	box-shadow: 0 0 0.25rem var(--_color);
+}
+.message2__fade {
+	position: absolute;
+	inset: -0.25rem;
+	background-color: black;
+	z-index: 2;
+	transition: transform 500ms 2500ms;
+	transform-origin: left;
+}
+.open .message2__fade {
+	transform: scaleX(0);
+}
+.message2__img {
+	grid-row: 1/3;
+	grid-column: 2/3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.75rem;
+	transition: transform 500ms 3550ms;
+	transform: scale(0);
+}
+.open .message2__img {
+	transform: scale(1);
+}
+.message2__img > div {
+	width: 60%;
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid white;
+	border-radius: 50%;
+	animation: message2Img1 5s linear infinite;
+	box-shadow: 0 0 5px -1px white, inset 0 0 5px -1px white;
+}
+@keyframes message2Img1 {
+	0%,
+	100% {
+		transform: translateY(-30%) scaleX(1.1) scaleY(0.9);
+	}
+	40% {
+		transform: translateY(30%) scaleX(1) scaleY(0.9);
+		box-shadow: 0 0 5px -1px white, inset 0 0 5px -1px white;
+	}
+	60% {
+		transform: translateY(50%) scaleX(1.2) scaleY(0.8);
+		box-shadow: 0 0 5px 1px white, inset 0 0 5px 1px white;
+	}
+	80% {
+		transform: translateY(10%) scaleX(0.9) scaleY(1.1);
+		box-shadow: 0 0 5px -1px white, inset 0 0 5px -1px white;
+	}
+}
+
+.message2__title {
+	font-size: 1.1rem;
+	color: aquamarine;
+	text-align: right;
+	transition: opacity 400ms 2550ms;
+	opacity: 0;
+}
+.open .message2__title {
+	opacity: 1;
+}
+.message2__text {
+	font-size: 0.9rem;
+	text-align: right;
+	color: white;
+	transition: opacity 400ms 2950ms;
+	opacity: 0;
+}
+.open .message2__text {
+	opacity: 1;
+}
+
+.openFile {
+	--_color: violet;
+	--_corner: 0.3rem;
+	position: relative;
+	width: fit-content;
+	align-self: center;
+	border: 1px solid var(--_color);
+	padding: 0.25rem 0.75rem;
+	color: white;
+	font-size: 1rem;
+	cursor: pointer;
+	outline: none;
+	background:
+		linear-gradient(0deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(180deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		linear-gradient(-90deg, transparent var(--_corner), black var(--_corner), black 51%, transparent 51%),
+		var(--_color);
+	box-shadow: 0 0 0.25rem var(--_color);
+}
+.openFile__fade {
+	position: absolute;
+	inset: -0.25rem;
+	background-color: black;
+	z-index: 2;
+	transition: transform 500ms 3800ms;
+	transform-origin: bottom;
+}
+.open .openFile__fade {
+	transform: scaleY(0);
+}

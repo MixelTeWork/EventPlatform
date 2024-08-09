@@ -1,5 +1,6 @@
 import styles from "./styles.module.css"
-import city from "./city.png";
+import logo from "./logo.png";
+import btn from "./btn.png";
 import { Link } from "react-router-dom";
 import AuthByTicket from "../../components/AuthByTicket";
 import useStateBool from "../../utils/useStateBool";
@@ -11,15 +12,10 @@ export default function IndexPage()
 	return (
 		<div className={styles.root}>
 			<Link to="/auth" className={styles.auth} />
-			<div className={styles.title}>
-				<img className={styles.img} src={city} alt="Город" />
-				<div>
-					<h1>Underparty</h1>
-					<h2>18.02.24</h2>
-				</div>
-			</div>
+			<div></div>
+			<img className={styles.logo} src={logo} alt="Инди кон" />
 			<button className={styles.btn} onClick={authOpen.setT}>
-				Вход
+				<img src={btn} alt="Вход" />
 			</button>
 			<AuthByTicket open={authOpen.v} />
 		</div>

@@ -6,7 +6,6 @@ import { useTitle } from "../../utils/useTtile";
 import { Form, FormField } from "../../components/Form";
 import Spinner from "../../components/Spinner";
 import { Link } from "react-router-dom";
-import classNames from "../../utils/classNames";
 
 export default function AuthPage()
 {
@@ -25,7 +24,7 @@ export default function AuthPage()
 
 	return (
 		<Layout header={null} centered centeredPage gap="2em">
-			<Link to="/" className={classNames(styles.back, "material_symbols")}>arrow_back</Link>
+			<Link to="/" className={styles.back}></Link>
 			<h1>Мероприятие</h1>
 			{error && <h3>{error}</h3>}
 			{mutation.isLoading && <Spinner />}

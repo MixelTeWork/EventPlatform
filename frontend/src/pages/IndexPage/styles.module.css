@@ -8,8 +8,6 @@
 	width: 100%;
 	gap: 2rem;
 	padding-bottom: 8rem;
-	overflow-x: hidden;
-	overflow-y: auto;
 }
 
 .auth {
@@ -20,57 +18,17 @@
 	height: 3rem;
 }
 
-.img {
-	width: 100%;
-	max-width: 500px;
-	margin-bottom: 2rem;
-}
-
-.title div {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.7rem;
-}
-
-.title h1 {
-	font-size: min(4rem, 16vw);
-	font-weight: normal;
-	text-transform: uppercase;
-}
-.title h2 {
-	font-size: min(2.5rem, 10vw);
-	font-weight: normal;
-	letter-spacing: 0.15em;
-	color: #cdcdcd;
+.logo {
+	width: 80%;
+	max-width: 300px;
 }
 
 .btn {
-	position: relative;
-	font-size: min(3rem, 12vw);
-	padding: 0.15em 1.1em;
-	background-color: black;
-	border-radius: 0;
-	color: white;
-	border: 2px solid white;
-	text-transform: uppercase;
-	text-decoration: none;
-	letter-spacing: 0.1em;
+	max-width: 350px;
+	background-color: transparent;
+	border: none;
+	-webkit-tap-highlight-color: transparent;
 }
-.btn::after,
-.btn::before {
-	content: "";
-	position: absolute;
-	top: -2px;
-	height: calc(100% + 4px);
-	width: 40%;
-	z-index: -1;
-}
-.btn::after {
-	left: -40%;
-	background: linear-gradient(-90deg, #ffffff55, transparent);
-}
-.btn::before {
-	right: -40%;
-	background: linear-gradient(90deg, #ffffff55, transparent);
+.btn img {
+	width: 100%;
 }

@@ -2,9 +2,23 @@
 	position: fixed;
 	top: 1rem;
 	left: 1rem;
-	font-size: 2rem;
-	color: black;
-	text-decoration: none;
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff66;
+	border: 2px solid currentColor;
+	border-radius: 0.5rem;
+}
+.back::before {
+	content: "";
+	width: 40%;
+	height: 40%;
+	border: 2px solid currentColor;
+	border-bottom: none;
+	border-right: none;
+	transform: translateX(25%) rotate(-45deg);
 }
 
 .form {
