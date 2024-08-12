@@ -3,8 +3,6 @@ import Layout from "../../components/Layout";
 import classNames from "../../utils/classNames";
 import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
-import banner from "./banner.png"
-import press from "./press.png"
 import useStateObj from "../../utils/useStateObj";
 import { useGameState, useMutationSendClick } from "../../api/game";
 import Spinner from "../../components/Spinner";

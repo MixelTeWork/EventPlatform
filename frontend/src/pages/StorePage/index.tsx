@@ -3,7 +3,6 @@ import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
-import btn from "./btn.png"
 import styles from "./styles.module.css"
 import StyledWindow from "../../components/StyledWindow";
 import { Link } from "react-router-dom";
