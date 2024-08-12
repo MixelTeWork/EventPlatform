@@ -23,7 +23,7 @@
 }
 
 .selectName {
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	font-size: 1.17rem;
 	border: 1px solid transparent;
@@ -35,7 +35,7 @@
 	background: rgba(238, 130, 238, 0.2);
 }
 .selectName option {
-	background-color: black;
+	background-color: #3035dc;
 	color: white;
 	font-size: 1rem;
 }
@@ -43,7 +43,7 @@
 .textarea {
 	flex-grow: 1;
 	resize: none;
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	border: 1px solid transparent;
 	border-radius: 0.2rem;

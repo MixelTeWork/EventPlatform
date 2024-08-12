@@ -40,7 +40,7 @@
 	min-width: 15rem;
 	margin-block: 1rem;
 	font-size: 1.1rem;
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	border: 1px solid aquamarine;
 	border-radius: 0.25rem;
@@ -59,7 +59,7 @@
 }
 
 .form input {
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	outline: none;
 	border: 1px solid transparent;
@@ -72,7 +72,7 @@
 }
 
 .form button {
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	outline: none;
 	border: 1px solid violet;

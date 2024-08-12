@@ -24,6 +24,12 @@ body {
 		linear-gradient(0deg, #3035dc, #120cbc);
 	color: white;
 }
+body:has(.calmBack) {
+	background: linear-gradient(0deg, #3035dc, #120cbc);
+}
+.calmBack {
+	position: fixed;
+}
 
 pre,
 code {

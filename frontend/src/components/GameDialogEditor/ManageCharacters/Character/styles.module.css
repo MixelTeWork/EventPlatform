@@ -69,6 +69,11 @@
 	grid-template-columns: auto 9rem;
 	gap: 0.25rem 0.5rem;
 }
+@media screen and (max-width: 400px) {
+	.inputs {
+		grid-template-columns: auto;
+	}
+}
 .inputs > :nth-child(2n - 1) {
 	align-self: center;
 }
@@ -80,6 +85,7 @@
 	border-bottom: 1px solid aquamarine;
 	border-radius: 0.2rem;
 	outline: none;
+	min-width: 2rem;
 }
 .inputs input:focus-visible {
 	background: rgba(238, 130, 238, 0.2);

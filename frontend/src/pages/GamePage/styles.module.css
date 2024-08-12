@@ -23,6 +23,7 @@
 
 .window {
 	flex-grow: 1;
+	margin-left: -0.5rem;
 }
 
 .text {

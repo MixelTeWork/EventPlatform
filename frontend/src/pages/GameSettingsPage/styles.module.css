@@ -5,7 +5,7 @@
 }
 
 .input input {
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	border: 1px solid transparent;
 	border-bottom: 1px solid aquamarine;
@@ -21,7 +21,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: black;
+	background: rgba(238, 130, 238, 0.2);
 	color: white;
 	border: 1px solid violet;
 	border-radius: 0.25rem;
@@ -33,7 +33,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: black;
+	background-color: rgb(127, 255, 212, 0.2);
 	color: white;
 	border: 1px solid aquamarine;
 	border-radius: 0.25rem;
@@ -46,7 +46,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: black;
+	background: rgba(238, 130, 238, 0.2);
 	color: white;
 	border: 1px solid violet;
 	border-radius: 0.25rem;

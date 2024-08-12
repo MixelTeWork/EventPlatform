@@ -15,6 +15,7 @@ export default function ManageQuestPage()
 
 	return (
 		<Layout centeredPage gap="0.5rem" homeBtn>
+			<div className="calmBack"></div>
 			{quests.isLoading && <Spinner />}
 			{displayError(quests)}
 
