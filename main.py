@@ -110,7 +110,7 @@ def frontend(path):
         abort(404)
     if path != "" and os.path.exists(FRONTEND_FOLDER + "/" + path):
         res = send_from_directory(FRONTEND_FOLDER, path)
-        if request.path.startswith("/static") or request.path.startswith("/fonts"):
+        if request.path.startswith("/static/") or request.path.startswith("/fonts/"):
             res.headers.set("Cache-Control", "public,max-age=604800,immutable")
         else:
             res.headers.set("Cache-Control", "no_cache")
