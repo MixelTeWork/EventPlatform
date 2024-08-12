@@ -23,7 +23,7 @@ export default function GameScreenPage()
 	{
 		if (state.isFetching) return;
 
-		const delay = state.data?.state == "going" ? 1000 : 5000;
+		const delay = state.data?.state == "going" ? 500 : 5000;
 		const t = setTimeout(() => state.refetch(), delay);
 
 		return () => clearTimeout(t);

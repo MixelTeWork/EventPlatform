@@ -10,11 +10,13 @@ import displayError from "../../utils/displayError";
 import { useEffect } from "react";
 import useUser from "../../api/user";
 import StyledWindow from "../../components/StyledWindow";
+import { useDisableZoom } from "../../utils/useDisableZoom";
 
 
 export default function GamePage()
 {
 	useTitle("Игра");
+	useDisableZoom();
 	const user = useUser();
 	const state = useGameState();
 	const counter = useStateObj(0);
@@ -59,7 +61,7 @@ export default function GamePage()
 	{
 		if (state.data?.state != "going") return;
 		if (clicks.v <= 0 || sendClick.isLoading) return;
-		if (Date.now() - lastClickSend.v < 2500) return;
+		if (Date.now() - lastClickSend.v < 500) return;
 
 		sendClick.mutate(clicks.v);
 		lastClickSend.set(Date.now())
