@@ -100,7 +100,7 @@ class Game(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def get_clicks(db_sess: Session):
-        return {(f"clicks{v[0]}"): v[1] for v in db_sess
+        return {(f"clicks{v[0]}"): int(v[1]) for v in db_sess
                 .query(User.group, func.sum(UserGame.clicks))
                 .join(User, User.id == UserGame.userId)
                 .group_by(User.group)
