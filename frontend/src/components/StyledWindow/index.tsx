@@ -12,7 +12,7 @@ export default function StyledWindow({ children, title = "Underparty", footer, c
 		if (contentRef.current)
 			contentRef.current.scrollTo(0, 0);
 		// eslint-disable-next-line
-	}, [children, scrollUpdate])
+	}, [scrollUpdate])
 
 	return (
 		<div className={classNames(styles.root, className)}>
