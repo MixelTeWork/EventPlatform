@@ -61,7 +61,7 @@ export default function GamePage()
 	{
 		if (state.data?.state != "going") return;
 		if (clicks.v <= 0 || sendClick.isLoading) return;
-		if (Date.now() - lastClickSend.v < 500) return;
+		if (Date.now() - lastClickSend.v < 2500) return;
 
 		sendClick.mutate(clicks.v);
 		lastClickSend.set(Date.now())
