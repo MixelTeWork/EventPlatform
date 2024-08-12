@@ -19,13 +19,9 @@
 	padding: 0.3rem 0.5rem;
 }
 
-/* @media screen and (max-width: 340px) {
+@media screen and (max-width: 340px) {
 	.root > * {
-		gap: 0.25rem;
-	}
-
-	.root > * > * {
-		padding: 0.3rem 0.4rem;
+		gap: 0rem;
 	}
 }
 
@@ -33,13 +29,8 @@
 	.root > * {
 		gap: 1rem;
 	}
-
-	.root > * > * {
-		font-size: 1.2rem;
-		padding: 0.4rem 0.7rem;
+	.btn {
+		font-size: 1.1rem;
+		padding: 0.5rem 0.8rem;
 	}
 }
-
-.active {
-	color: yellow;
-} */

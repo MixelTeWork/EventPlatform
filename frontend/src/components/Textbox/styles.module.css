@@ -3,16 +3,15 @@
 	margin: 6px 6px 16px 16px;
 }
 .box {
-	min-width: 250px;
-	min-height: 60px;
 	display: flex;
-	align-items: center;
-	justify-content: center;
 	background-color: #79c3fb;
 	color: #ffc95e;
 	border: 3px solid #fea35c;
 	border-radius: 1px;
 	box-shadow: 0 0 0 3px #9f1841, inset 0 0 0 3px #9f1841;
+}
+.dark .box {
+	background-color: #43c3fd;
 }
 .outline {
 	outline: 4px solid #ff0000aa;
@@ -31,11 +30,14 @@
 }
 .box_back,
 .outline_back {
-	left: -12px;
-	bottom: -12px;
+	left: -10px;
+	bottom: -10px;
 }
 .box_back {
 	opacity: 0.4;
+}
+.dark .box_back {
+	filter: brightness(0.5);
 }
 
 .btn {
@@ -64,8 +66,6 @@
 	margin: 6px 6px 10px 10px;
 }
 .small .box {
-	min-width: 0px;
-	min-height: 0px;
 	border-width: 1px;
 	box-shadow: 0 0 0 2px #9f1841, inset 0 0 0 2px #9f1841;
 }

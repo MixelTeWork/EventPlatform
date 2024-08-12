@@ -1,103 +1,125 @@
 import styles from "./styles.module.css"
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
-import useStateBool from "../../utils/useStateBool";
 import StyledWindow from "../../components/StyledWindow";
 import { useTitle } from "../../utils/useTtile";
+import useStateObj from "../../utils/useStateObj";
+import Textbox from "../../components/Textbox";
+import classNames from "../../utils/classNames";
 
 export default function TimetablePage()
 {
 	useTitle("Расписание");
-	const showTimetable = useStateBool(true);
-	const showTimetableFirst = useStateBool(true);
-	const showTurnamentFirst = useStateBool(true);
+	const timetable = useStateObj(0);
+	const items = [
+		data_timetable,
+		data_autograph,
+		data_lections,
+		data_tournaments,
+	][timetable.v];
 
 	return (
 		<Layout centeredPage className={styles.root} footer={<Footer curPage="timetable" />}>
-			<h1 className={styles.title}>Underparty</h1>
+			<h1 className={classNames("title", styles.title)}>Индикон</h1>
 			<div className={styles.body}>
-				{showTimetable.v ?
-					<StyledWindow
-						className={styles.list}
-						title={"Расписание | " + (showTimetableFirst.v ? "Главная" : "Вторая") + " сцена"}
-						footer={
-							<div className={styles.btns}>
-								<button onClick={showTimetableFirst.setT} className={showTimetableFirst.v ? styles.active : ""}>Главная</button>
-								<button onClick={showTimetableFirst.setF} className={!showTimetableFirst.v ? styles.active : ""}>Вторая</button>
-							</div>
-						}
-					>
-						<div className={styles.items}>
-							{(showTimetableFirst.v ? data_timetable_first : data_timetable_second)
-								.map((el, i) => <div key={i}>{el}</div>)}
-						</div>
-					</StyledWindow>
-					:
-					<StyledWindow
-						className={styles.list}
-						title={"Турниры | " + (showTurnamentFirst.v ? "Under" : "Ретро")}
-						footer={
-							<div className={styles.btns}>
-								<button onClick={showTurnamentFirst.setT} className={showTurnamentFirst.v ? styles.active : ""}>Under</button>
-								<button onClick={showTurnamentFirst.setF} className={!showTurnamentFirst.v ? styles.active : ""}>Ретро</button>
-							</div>
-						}
-					>
-						<div className={styles.items}>
-							{(showTurnamentFirst.v ? data_turnament_first : data_turnament_second)
-								.map((el, i) => <div key={i}>{el}</div>)}
-						</div>
-					</StyledWindow>
-				}
+				<StyledWindow className={styles.list} scrollUpdate={timetable.v}>
+					<div className={styles.items}>
+						{items.map((el, i) => el.title ?
+							<div className={classNames("title", styles.item_title)} key={i}>{el.text}</div>
+							:
+							<Textbox dark key={i}><div className={styles.item}>{el.text}</div></Textbox>
+						)}
+					</div>
+				</StyledWindow>
 				<div className={styles.btns}>
-					<button onClick={showTimetable.setT} className={showTimetable.v ? styles.active : ""}>План</button>
-					<button onClick={showTimetable.setF} className={!showTimetable.v ? styles.active : ""}>Турнир</button>
+					<Textbox small btn highlight={timetable.v == 0}>
+						<button onClick={() => timetable.set(0)} className={classNames(styles.btn, "title")}>Сцены</button>
+					</Textbox>
+					<Textbox small btn highlight={timetable.v == 1}>
+						<button onClick={() => timetable.set(1)} className={classNames(styles.btn, "title")}>Автограф</button>
+					</Textbox>
+					<Textbox small btn highlight={timetable.v == 2}>
+						<button onClick={() => timetable.set(2)} className={classNames(styles.btn, "title")}>Лекции</button>
+					</Textbox>
+					<Textbox small btn highlight={timetable.v == 3}>
+						<button onClick={() => timetable.set(3)} className={classNames(styles.btn, "title")}>Турниры</button>
+					</Textbox>
 				</div>
 			</div>
 		</Layout>
 	);
 }
 
-const data_timetable_first = [
-	"12:50 - Церемония открытия",
-	"13:00 - Shima Nori Piano Performance",
-	"13:45 - Косплей дефиле",
-	"14:45 - СлуЧайность",
-	"15:30 - Аукцион",
-	"16:00 - UnderEvent и результаты Game Jam",
-	"16:30 - Гонки улиток",
-	"17:00 - Музыкальные выступления",
-	"17:30 - Финал турниров: Undercards & UV Battles",
-	"18:30 - Награждение",
-	"19:00 - Undertale Анимации",
-	"19:55 - Закрытие сцены",
-]
+interface TimetableData
+{
+	text: string;
+	title?: boolean;
+}
 
-const data_timetable_second = [
-	"12:00 - Ответы на вопросы от Ютуберов",
-	"12:40 - Лотерея",
-	"13:00 - The Jackbox Party Pack с Ютуберами",
-	"14:00 - Undertale Quiz",
-	"14:30 - 84 Sans AU Quiz",
-	"15:00 - Лотерея",
-	"15:30 - Презентации Undertale AU",
-	"16:30 - Презентации Игр",
-	"17:30 - Лотерея",
-	"18:00 - Everybody Switch",
-	"19:00 - Дискотека",
-	"19:55 - Закрытие сцены",
-]
+const data_timetable: TimetableData[] = [
+	{ text: "Главная сцена:", title: true },
+	{ text: "12:50 - Церемония открытия" },
+	{ text: "13:00 - Музыкальные номера" },
+	{ text: "13:30 - 1 блок косплей дефиле" },
+	{ text: "14:00 - Shima Nori. Инди игры на фортепиано" },
+	{ text: "14:30 - Аукцион" },
+	{ text: "14:50 - Undertale Сценка: Underdogs" },
+	{ text: "15:00 - 2 блок косплей дефиле" },
+	{ text: "15:40 - Музыкальные номера" },
+	{ text: "16:15 - Блок Анимации: АнтиКек, Dead Cells" },
+	{ text: "17:00 - Выступление музыкальных групп" },
+	{ text: "18:10 - Финальная Битва" },
+	{ text: "18:25 - Награждение" },
+	{ text: "18:50 - Анимации" },
+	{ text: "19:50 - Закрытие сцены" },
+	{ text: "Малая сцена:", title: true },
+	{ text: "12:00 - Ответы на вопросы от Ютуберов" },
+	{ text: "12:40 - Лотерея" },
+	{ text: "13:30 - QWIZ Инди хорроры" },
+	{ text: "14:00 - EVRYBODY SWITCH" },
+	{ text: "15:00 - Лотерея" },
+	{ text: "15:30 - QWIZ пиксельные РПГ" },
+	{ text: "16:00 - Турнир: Overcooked 2" },
+	{ text: "16:40 - Турнир: Your Only Move Is HUSTLE" },
+	{ text: "17:20 - Турнир: Rival of Aether" },
+	{ text: "18:00 - Лотерея" },
+	{ text: "18:45 - Дискотека" },
+	{ text: "19:45 - Закрытие сцены" },
+	{ text: "Инди Сцена:", title: true },
+	{ text: "13:00 - Презентации инди-игр" },
+	{ text: "14:00 - Презентации Game Jam" },
+	{ text: "15:00 - Презентации инди-игр" },
+	{ text: "16:00 - Результаты джема" },
+	{ text: "16:30 - Презентации инди-игр" },
+];
 
-const data_turnament_first = [
-	"14:00 - Undercards",
-	"15:00 - Underverse Battles",
-	"11:30 - 17:00 - Endless Sans",
-	"11:30 - 17:00 - Unfair Undyne",
-]
+const data_autograph: TimetableData[] = [
+	{ text: "13:30 - АнтиКек" },
+	{ text: "14:00 - Бемон" },
+	{ text: "14:30 - JF Voice и FolkStudio" },
+	{ text: "15:00 - Неадекват Рекордс" },
+	{ text: "15:30 - WonderNope" },
+	{ text: "16:00 - Игорь Чай (тв)" },
+	{ text: "16:30 - Щищ (игра в Uno)" },
+];
 
-const data_turnament_second = [
-	"13:00 - Nes - TMNT: Tournament Fighters",
-	"14:00 - Sega - Ultimate Mortal Kombat 3",
-	"15:00 - Snes - Super Tetris 3",
-	"16:00 - Ps1 - Tekken 3",
+const data_lections: TimetableData[] = [
+	{ text: "13:00 - О франшизе Hylics" },
+	{ text: "13:40 - Инди игры как искусство" },
+	{ text: "14:10 - Как найти ✨ту самую✨ идею для игры" },
+	{ text: "14:40 - Краудфандинг авторской игры" },
+	{ text: "15:20 - Что такое Touhou Project и как его употреблять?" },
+	{ text: "16:00 - Производственный ад в игровой индустрии" },
+	{ text: "16:40 - Анализ игр для гейм-дизайнеров и обзорщиков" },
+];
+
+const data_tournaments: TimetableData[] = [
+	{ text: "Инди Турниры (на малой сцене):", title: true },
+	{ text: "16:00 - Overcooked 2" },
+	{ text: "16:40 - Your Only Move Is HUSTLE" },
+	{ text: "17:20 - Rival of Aether" },
+	{ text: "Ретро Турниры (на гейм зоне):", title: true },
+	{ text: "13:00 - Super Tetris 3" },
+	{ text: "14:00 - Tekken 3" },
+	{ text: "15:00 - Mortal Combat 3" },
 ]
