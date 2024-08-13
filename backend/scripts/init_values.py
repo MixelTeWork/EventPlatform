@@ -83,6 +83,7 @@ def init_values(dev=False, cmd=False):
             db_sess.add(quest)
             if quest1 is None:
                 quest1 = quest
+        db_sess.commit()
 
         if dev:
             init_values_dev(db_sess, user_admin, quest1)
