@@ -17,6 +17,8 @@ export default function useMutationScanner(onSuccess?: (data: ScannerRes) => voi
 				user.balance = res.balance;
 				if (res.res == "ok" && res.action == "promote")
 					queryInvalidate(queryClient, "user");
+				if (res.res == "ok" && res.action == "quest")
+					queryInvalidate(queryClient, "quests");
 				return user;
 			});
 			return res;

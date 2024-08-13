@@ -52,7 +52,7 @@ export default function ScannerPage()
 					<br />
 					<h2>
 						<span>Награда: </span>
-						<span className={styles.gold}>{res.v.value}G</span>
+						<span className={styles.gold}>{res.v.value}М</span>
 					</h2>
 				</>}
 				{res.v?.action == "store" && <>
@@ -62,13 +62,13 @@ export default function ScannerPage()
 					<br />
 					<h2>
 						<span>Потрачено: </span>
-						<span className={styles.gold}>{res.v.value}G</span>
+						<span className={styles.gold}>{res.v.value}М</span>
 					</h2>
 				</>}
 				{res.v?.action == "send" && <>
 					<h1>{res.v.value > 0 ? "Пополнено" : "Вычтено"}</h1>
 					<br />
-					<h1 className={styles.gold}>{res.v.value > 0 ? "+" : ""}{res.v.value}G</h1>
+					<h1 className={styles.gold}>{res.v.value > 0 ? "+" : ""}{res.v.value}М</h1>
 				</>}
 				{res.v?.action == "promote" && <>
 					<h1>Назначение</h1>

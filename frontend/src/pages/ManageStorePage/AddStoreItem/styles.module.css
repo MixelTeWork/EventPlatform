@@ -33,7 +33,7 @@
 }
 
 .form input {
-	background-color: black;
+	background-color: transparent;
 	color: white;
 	outline: none;
 	border: 1px solid transparent;
@@ -46,7 +46,7 @@
 }
 
 .form button {
-	background-color: black;
+	background: rgba(238, 130, 238, 0.2);
 	color: white;
 	outline: none;
 	border: 1px solid violet;

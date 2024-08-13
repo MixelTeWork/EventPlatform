@@ -10,25 +10,68 @@ import mark_stand from "./marks/stand.png";
 import mark_banner from "./marks/banner.png";
 import Layout from "../../components/Layout";
 import Footer from "../../components/Footer";
-import useStateObj from "../../utils/useStateObj";
+import useStateObj, { useStateObjExt } from "../../utils/useStateObj";
 import { useTitle } from "../../utils/useTtile";
 import GameDialogGreetings from "../../components/GameDialogGreetings";
 import classNames from "../../utils/classNames";
 import Textbox from "../../components/Textbox";
 import StyledWindow from "../../components/StyledWindow";
 import InteractiveMap from "./InteractiveMap";
+import useGameDialog from "../../components/GameDialog";
+import { useMutationOpenQuest, useQuests, type Quest } from "../../api/quest";
+import Spinner from "../../components/Spinner";
+import displayError from "../../utils/displayError";
+import { Link } from "react-router-dom";
 
 export default function MapPage()
 {
 	useTitle("Карта");
-	const map = useStateObj(0);
+	const dialog = useGameDialog();
+	const mutationOpen = useMutationOpenQuest();
+	const openedQuest = useStateObjExt<Quest | null>(null, v =>
+	{
+		if (v && v.dialogId != null && !v.opened)
+			dialog.run(v.dialogId, () =>
+			{
+				mutationOpen.mutate(v.id);
+				v.opened = true;
+			});
+	});
+	const quests = useQuests();
+	const map = useStateObj(0, () => openedQuest.set(null));
+
+	function questMark(id: number, img: string, x: number, y: number, w: number, h: number)
+	{
+		if (!quests.isSuccess) return null;
+		const quest = quests.data.find(v => v.id == id);
+		if (!quest || quest.completed) return null;
+		return {
+			img, x, y, w, h,
+			onClick: () => openedQuest.set(quest),
+		}
+	}
+	function questMarkDepends(dependsOnId: number, id: number, img: string, x: number, y: number, w: number, h: number)
+	{
+		if (!quests.isSuccess) return null;
+		const questDepends = quests.data.find(v => v.id == dependsOnId);
+		if (!questDepends?.completed) return null;
+		const quest = quests.data.find(v => v.id == id);
+		if (!quest || quest.completed) return null;
+		return {
+			img, x, y, w, h,
+			onClick: () => openedQuest.set(quest),
+		}
+	}
 
 	return (
 		<Layout centeredPage className={styles.root} footer={<Footer curPage="map" />}>
+			{dialog.el()}
 			<GameDialogGreetings />
+			{quests.isLoading && <Spinner />}
 			<h1 className={classNames("title", styles.title)}>Индикон</h1>
-			<StyledWindow className={styles.window}>
-				<div className={styles.map}>
+			<StyledWindow className={styles.window} onClose={() => openedQuest.set(null)}>
+				{displayError(quests)}
+				<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
 					<InteractiveMap
 						img={[map1, map2, map3][map.v]}
 						imgW={2150}
@@ -37,20 +80,45 @@ export default function MapPage()
 						disablePadding
 						fillOnStart
 						// objectsOpacity={0.5}
-						objects={[[
-							{ img: mark_mady, x: 3.6, y: 6.9, w: 11.2, h: 14 },
-							{ img: mark_info, x: 56.5, y: 75.3, w: 21.2, h: 17.1 },
+						objects={quests.isSuccess ? [[
+							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
+							questMark(2, mark_info, 56.5, 75.3, 21.2, 17.1),
+							questMarkDepends(2, 3, mark_info, 56.5, 75.3, 21.2, 17.1),
 						], [
-							{ img: mark_mady, x: 3.6, y: 6.9, w: 11.2, h: 14 },
-							{ img: mark_indi, x: 4.7, y: 26.3, w: 17.9, h: 35.5 },
-							{ img: mark_game, x: 23.9, y: 45.5, w: 12.2, h: 19.7 },
-							{ img: mark_stand, x: 37.4, y: 49.9, w: 11.2, h: 21.2 },
-							{ img: mark_banner, x: 62.7, y: 47.5, w: 9.1, h: 19.1 },
+							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
+							questMark(4, mark_indi, 4.7, 26.3, 17.9, 35.5),
+							questMark(5, mark_game, 23.9, 45.5, 12.2, 19.7),
+							questMark(6, mark_stand, 37.4, 49.9, 11.2, 21.2),
+							questMark(7, mark_banner, 62.7, 47.5, 9.1, 19.1),
 						], [
-							{ img: mark_mady, x: 3.6, y: 6.9, w: 11.2, h: 14 },
-						]][map.v]}
+							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
+						]][map.v] : []}
 					/>
 				</div>
+				{openedQuest.v &&
+					<div className={styles.quest}>
+						<div className={classNames("title", styles.quest__title)}>
+							<span>{openedQuest.v.name}</span>
+							<span>{openedQuest.v.reward}М</span>
+						</div>
+						<Textbox dark>
+							<div className={styles.quest__description}>{openedQuest.v.description || "Нет описания"}</div>
+						</Textbox>
+						{openedQuest.v.dialogId != null &&
+							<Textbox btn>
+								<button
+									className={classNames("title", styles.quest__dialog)}
+									onClick={() => openedQuest.v && openedQuest.v.dialogId != null && dialog.run(openedQuest.v.dialogId)}
+								>Вступление</button>
+							</Textbox>
+						}
+						<div className={styles.quest__spacer}></div>
+						<Textbox btn className={styles.quest__scanner}>
+							<Link to="/scanner" className={styles.quest__scanner__link}>
+								<div className="title">Сдать</div>
+							</Link>
+						</Textbox>
+					</div>}
 			</StyledWindow>
 			<div className={styles.btns}>
 				<Textbox small btn highlight={map.v == 0}>

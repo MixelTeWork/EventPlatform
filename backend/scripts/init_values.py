@@ -21,6 +21,19 @@ def init_values(dev=False, cmd=False):
     from data.user import User
     from data.dialog import Dialog
 
+    now = get_datetime_now()
+
+    def log(db_sess, user_admin, tableName, recordId, changes):
+        db_sess.add(Log(
+            date=now,
+            actionCode=Actions.added,
+            userId=user_admin.id,
+            userName=user_admin.name,
+            tableName=tableName,
+            recordId=recordId,
+            changes=changes
+        ))
+
     def init():
         db_session.global_init("dev" in sys.argv)
         db_sess = db_session.create_session()
@@ -52,51 +65,44 @@ def init_values(dev=False, cmd=False):
         Game.init(db_sess)
         Dialog.new(user_admin, {"nodes": []}, 1)
 
+        from data.quest import Quest
+        from utils.randstr import randstr
+        quests = [
+            (1, "Чудик в углу"),
+            (2, "Инфостенд первый"),
+            (3, "Инфостенд второй"),
+            (4, "Инди зона"),
+            (5, "Гейм зона"),
+            (6, "Стенды"),
+            (7, "Баннер"),
+        ]
+        quest1 = None
+        for (i, name) in quests:
+            quest = Quest(id=i, name=name, description="", reward=0, hidden=False, id_big=randstr(8))
+            log(db_sess, user_admin, Tables.Quest, i, quest.get_creation_changes())
+            db_sess.add(quest)
+            if quest1 is None:
+                quest1 = quest
+
         if dev:
-            init_values_dev(db_sess, user_admin)
+            init_values_dev(db_sess, user_admin, quest1)
 
     def log_changes(db_sess, user_admin, roles):
-        now = get_datetime_now()
-
-        def log(tableName, recordId, changes):
-            db_sess.add(Log(
-                date=now,
-                actionCode=Actions.added,
-                userId=user_admin.id,
-                userName=user_admin.name,
-                tableName=tableName,
-                recordId=recordId,
-                changes=changes
-            ))
-
         for role in roles:
-            log(Tables.Role, role.id, role.get_creation_changes())
+            log(db_sess, user_admin, Tables.Role, role.id, role.get_creation_changes())
 
         db_sess.commit()
 
-    def init_values_dev(db_sess, user_admin):
+    def init_values_dev(db_sess, user_admin, quest1):
         from datetime import timedelta
         from random import randint, choice
         import shutil
         from utils.randstr import randstr
-        from data.quest import Quest
         from data.store_item import StoreItem
         from data.image import Image
         from data.dialog_character import DialogCharacter
 
-        now = get_datetime_now()
         user_admin.balance = 100
-
-        def log(tableName, recordId, changes):
-            db_sess.add(Log(
-                date=now,
-                actionCode=Actions.added,
-                userId=user_admin.id,
-                userName=user_admin.name,
-                tableName=tableName,
-                recordId=recordId,
-                changes=changes
-            ))
 
         shutil.copy("scripts/dev_init_data/1.jpeg", "images/1.jpeg")
         shutil.copy("scripts/dev_init_data/2.jpeg", "images/2.jpeg")
@@ -120,18 +126,20 @@ def init_values(dev=False, cmd=False):
                 }
             ]})
 
-        for i in range(15):
-            description = f"Описание квеста №{i + 1}\nLorem, ipsum dolor sit amet consectetur adipisicing elit."
-            quest = Quest(id=i, name=f"Квест {i + 1}", description=description,
-                          reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0, id_big=randstr(8))
-            if i == 1:
-                quest.dialog1Id = dialog.id
-            log(Tables.Quest, i, quest.get_creation_changes())
-            db_sess.add(quest)
+        quest1.dialog1Id = dialog.id
+
+        # for i in range(15):
+        #     description = f"Описание квеста №{i + 1}\nLorem, ipsum dolor sit amet consectetur adipisicing elit."
+        #     quest = Quest(id=i, name=f"Квест {i + 1}", description=description,
+        #                   reward=(i + 1) * 5234 % 150 + 50, hidden=i % 5 == 0, id_big=randstr(8))
+        #     if i == 1:
+        #         quest.dialog1Id = dialog.id
+        #     log(db_sess, user_admin, Tables.Quest, i, quest.get_creation_changes())
+        #     db_sess.add(quest)
 
         for i in range(15):
             item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50, id_big=randstr(8))
-            log(Tables.StoreItem, i, item.get_creation_changes())
+            log(db_sess, user_admin, Tables.StoreItem, i, item.get_creation_changes())
             db_sess.add(item)
 
         User.new(user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])

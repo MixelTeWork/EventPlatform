@@ -61,7 +61,7 @@ export default function App()
 				<Route path="/quest" element={<QuestPage />} />
 				<Route path="/store" element={<StorePage />} />
 				<Route path="/map" element={<MapPage />} />
-				<Route path="/game" element={<GamePage />} />
+				{ProtectedRoute(null, "/game", <GamePage />)}
 				{ProtectedRoute(null, "/scanner", <ScannerPage />)}
 				{/* {ProtectedRoute(null, "/profile", <ProfilePage />)} */}
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}

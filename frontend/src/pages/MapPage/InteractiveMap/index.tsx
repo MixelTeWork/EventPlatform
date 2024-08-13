@@ -12,6 +12,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 		h: imgH,
 		zoom: 1,
 		toCenter: true,
+		markClick: undefined,
 		window: {
 			w: 0,
 			h: 0,
@@ -93,8 +94,12 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			state.set(v =>
 			{
 				if (!v.moving.active) return v;
-				v.x = v.moving.six + (e.screenX - v.moving.sx);
-				v.y = v.moving.siy + (e.screenY - v.moving.sy);
+				const dx = (e.screenX - v.moving.sx);
+				const dy = (e.screenY - v.moving.sy);
+				v.x = v.moving.six + dx;
+				v.y = v.moving.siy + dy;
+				const d = dx * dx + dy * dy;
+				if (d > 100) v.markClick = undefined;
 				applyBoundaries(v);
 				return { ...v };
 			});
@@ -105,6 +110,12 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			state.set(v =>
 			{
 				v.moving.active = false;
+				if (v.markClick)
+				{
+					const markClick = v.markClick;
+					v.markClick = undefined;
+					setTimeout(markClick);
+				}
 				return { ...v };
 			});
 		}
@@ -191,8 +202,12 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			{
 				if (v.moving.active && e.touches.length == 1)
 				{
-					v.x = v.moving.six + (e.touches[0].clientX - v.moving.sx);
-					v.y = v.moving.siy + (e.touches[0].clientY - v.moving.sy);
+					const dx = (e.touches[0].clientX - v.moving.sx);
+					const dy = (e.touches[0].clientY - v.moving.sy);
+					v.x = v.moving.six + dx;
+					v.y = v.moving.siy + dy;
+					const d = dx * dx + dy * dy;
+					if (d > 100) v.markClick = undefined;
 					applyBoundaries(v);
 					return { ...v };
 				}
@@ -207,6 +222,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 					const dy = (y1 - y2);
 					const d = dx * dx + dy * dy;
 					v.zoom = v.zooming.sz * Math.sqrt(d / v.zooming.sd);
+					v.markClick = undefined;
 					rezoom(v, z);
 					return { ...v };
 				}
@@ -227,6 +243,12 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 					v.moving.sy = e.touches[0].clientY;
 					v.moving.six = v.x;
 					v.moving.siy = v.y;
+				}
+				if (v.markClick)
+				{
+					const markClick = v.markClick;
+					v.markClick = undefined;
+					setTimeout(markClick);
 				}
 				return { ...v };
 			});
@@ -251,6 +273,15 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 		// eslint-disable-next-line
 	}, [mapEl, zoomMin, zoomMax, disablePadding])
 
+	function setMarkClick(onClick: (() => void) | undefined)
+	{
+		state.set(v =>
+		{
+			v.markClick = onClick;
+			return { ...v };
+		})
+	}
+
 	return (
 		<div className={styles.root} ref={mapEl}>
 			<div className={styles.map} style={{
@@ -260,14 +291,21 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 				"--h": `${state.v.h}px`,
 			} as React.CSSProperties}>
 				<img src={img} alt="Карта" />
-				{objects?.map((v, i) => <div key={i} className={styles.mark} style={{
-					left: `${v.x}%`,
-					top: `${v.y}%`,
-					width: `${v.w}%`,
-					height: `${v.h}%`,
-					opacity: objectsOpacity,
-				}}>
+				{(objects?.filter(v => !!v) as MapObject[]).map((v, i) => <div
+					key={i}
+					className={styles.mark}
+					onMouseDown={() => setMarkClick(v.onClick)}
+					onTouchStart={() => setMarkClick(v.onClick)}
+					style={{
+						left: `${v.x}%`,
+						top: `${v.y}%`,
+						width: `${v.w}%`,
+						height: `${v.h}%`,
+						opacity: objectsOpacity,
+					}}
+				>
 					<img src={v.img} alt="Метка" />
+					<div className={styles.mark__mark} style={{ "animationDelay": `-${i * 150}ms` }}>!</div>
 				</div>)}
 			</div>
 		</div>
@@ -284,7 +322,7 @@ interface InteractiveMapProps
 	disablePadding?: boolean;
 	fillOnStart?: boolean;
 	objectsOpacity?: number;
-	objects?: MapObject[];
+	objects?: (MapObject | null)[];
 }
 interface MapObject
 {
@@ -293,6 +331,7 @@ interface MapObject
 	w: number;
 	h: number;
 	img: string;
+	onClick?: () => void;
 }
 
 interface MapState
@@ -303,6 +342,7 @@ interface MapState
 	h: number;
 	zoom: number;
 	toCenter: boolean;
+	markClick: (() => void) | undefined;
 	window: {
 		w: number,
 		h: number,

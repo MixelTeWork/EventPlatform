@@ -19,4 +19,26 @@
 
 .mark {
 	position: absolute;
+	cursor: pointer;
+}
+
+.mark__mark {
+	position: absolute;
+	top: calc(var(--w) * -0.04);
+	right: calc(var(--w) * -0.02);
+	font-size: calc(var(--w) * 0.08);
+	color: #fece5f;
+	text-shadow: 0 0 calc(var(--w) * 0.01) white, 0 0 calc(var(--w) * 0.01) white;
+	animation: mark 1s ease-in-out infinite;
+	pointer-events: none;
+	user-select: none;
+}
+
+@keyframes mark {
+	0%, 100% {
+		transform: translateY(calc(var(--w) * -0.01));
+	}
+	50% {
+		transform: translateY(calc(var(--w) * 0.01));
+	}
 }
