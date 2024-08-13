@@ -13,8 +13,11 @@ def use_user_try():
                 abort(500, "use_user_try: no db_sess")
 
             db_sess: Session = kwargs["db_sess"]
-            jwt = verify_jwt_in_request(True)
-            if jwt is None:
+            try:
+                jwt = verify_jwt_in_request(True, False)
+                if jwt is None:
+                    return fn(*args, **kwargs, user=None)
+            except Exception:
                 return fn(*args, **kwargs, user=None)
 
             jwt_identity = get_jwt_identity()

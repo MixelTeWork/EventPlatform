@@ -22,6 +22,7 @@ app.config["IMAGES_FOLDER"] = "images"
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_SECRET_KEY"] = get_jwt_secret_key()
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
+app.config["JWT_SESSION_COOKIE"] = False
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 MESSAGE_TO_FRONTEND = ""
 
