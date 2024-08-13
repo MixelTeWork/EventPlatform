@@ -8,6 +8,10 @@
 	overflow: hidden;
 	transform-style: preserve-3d;
 }
+body:has(.root) {
+	--_cellSize: 2vw;
+	--_strokeWidth: 0.2vw;
+}
 
 @property --bar {
 	syntax: "<number>";
@@ -50,8 +54,6 @@
 	transform: translate(-52%, -50%) skewX(20deg);
 	perspective: 100vw;
 	display: flex;
-	transition: --bar 1200ms;
-	background: linear-gradient(98deg, #e161dc var(--bar), #43ccde var(--bar));
 }
 .bar > div {
 	position: relative;
@@ -66,8 +68,8 @@
 }
 .barLeft {
 	flex-grow: calc(var(--bar) * 2);
-	background-color: #43ccde;
-	box-shadow: 0 0 1vw 1vw #43ccde;
+	background-color: #85c3ee;
+	box-shadow: 0 0 1vw 1vw #85c3ee;
 	justify-content: flex-end;
 	border-right: 0.5vw solid white;
 }
@@ -77,16 +79,16 @@
 @keyframes barLeft {
 	0%,
 	100% {
-		box-shadow: 0 0 1vw 1vw #43ccde;
+		box-shadow: 0 0 1vw 1vw #85c3ee;
 	}
 	50% {
-		box-shadow: 0 0 1.5vw 1.5vw #43ccde;
+		box-shadow: 0 0 1.5vw 1.5vw #85c3ee;
 	}
 }
 .barRight {
 	flex-grow: calc((100 - var(--bar)) * 2);
-	background-color: #e161dc;
-	box-shadow: 0 0 1vw 1vw #e161dc;
+	background-color: #fea45c;
+	box-shadow: 0 0 1vw 1vw #fea45c;
 	border-left: 0.5vw solid white;
 }
 .going .barRight {
@@ -95,10 +97,10 @@
 @keyframes barRight {
 	0%,
 	100% {
-		box-shadow: 0 0 1vw 1vw #e161dc;
+		box-shadow: 0 0 1vw 1vw #fea45c;
 	}
 	50% {
-		box-shadow: 0 0 1.5vw 1.5vw #e161dc;
+		box-shadow: 0 0 1.5vw 1.5vw #fea45c;
 	}
 }
 .barLeft::after,

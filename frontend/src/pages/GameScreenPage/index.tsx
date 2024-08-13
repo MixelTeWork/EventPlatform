@@ -85,7 +85,7 @@ export default function GameScreenPage()
 				<div className={styles.bar}>
 					<div className={styles.barLeft}>
 						<span>Сапожники</span>
-						<div className={styles.nums}>{state.isSuccess && `${state.data.clicks1} - ${state.data.clicks2}`}</div>
+						{/* <div className={styles.nums}>{state.isSuccess && `${state.data.clicks1} - ${state.data.clicks2}`}</div> */}
 					</div>
 					<div className={styles.barRight}>Кактусы</div>
 				</div>
