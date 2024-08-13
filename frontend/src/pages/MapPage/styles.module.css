@@ -7,14 +7,13 @@
 	text-transform: uppercase;
 }
 
-.map {
-	overflow: auto;
-	margin-top: 1rem;
+.window {
+	margin: 1rem 1rem 0.5rem 0.5rem;
+	flex-grow: 1;
 }
-.map img {
-	display: block;
-	width: 100%;
-	height: auto;
+
+.map {
+	height: 100%;
 }
 
 .btns {

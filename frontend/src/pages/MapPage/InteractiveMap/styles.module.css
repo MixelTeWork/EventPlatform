@@ -1,0 +1,22 @@
+.root {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.map {
+	position: absolute;
+	top: var(--y);
+	left: var(--x);
+	width: var(--w);
+	height: var(--h);
+}
+.root img {
+	width: 100%;
+	height: 100%;
+}
+
+.mark {
+	position: absolute;
+}
