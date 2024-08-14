@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import useUser from "../../api/user";
 import StyledWindow from "../../components/StyledWindow";
 import { useDisableZoom } from "../../utils/useDisableZoom";
+import randomInt from "../../utils/randomInt";
 
 
 export default function GamePage()
@@ -21,8 +22,9 @@ export default function GamePage()
 	const state = useGameState();
 	const counter = useStateObj(0);
 	const clicks = useStateObj(0);
+	const sendDelay = useStateObj(0);
 	const lastClickSend = useStateObj(Date.now());
-	const sendClick = useMutationSendClick();
+	const sendClick = useMutationSendClick(() => lastClickSend.set(Date.now()), () => lastClickSend.set(Date.now()));
 
 	useEffect(() =>
 	{
@@ -61,11 +63,11 @@ export default function GamePage()
 	{
 		if (state.data?.state != "going") return;
 		if (clicks.v <= 0 || sendClick.isLoading) return;
-		if (Date.now() - lastClickSend.v < 2500) return;
+		if (Date.now() - lastClickSend.v < sendDelay.v) return;
 
 		sendClick.mutate(clicks.v);
-		lastClickSend.set(Date.now())
 		clicks.set(0);
+		sendDelay.set(randomInt(1000, 3000));
 		// eslint-disable-next-line
 	}, [clicks.v]);
 

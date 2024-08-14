@@ -23,7 +23,7 @@ export default function GameScreenPage()
 	{
 		if (state.isFetching) return;
 
-		const delay = state.data?.state == "going" ? 500 : 5000;
+		const delay = state.data?.state == "going" ? 250 : 5000;
 		const t = setTimeout(() => state.refetch(), delay);
 
 		return () => clearTimeout(t);
@@ -85,7 +85,7 @@ export default function GameScreenPage()
 				<div className={styles.bar}>
 					<div className={styles.barLeft}>
 						<span>Сапожники</span>
-						{/* <div className={styles.nums}>{state.isSuccess && `${state.data.clicks1} - ${state.data.clicks2}`}</div> */}
+						{/* <div className={styles.nums}>{state.isSuccess && `${round(state.data.clicks1)} - ${round(state.data.clicks2)}`}</div> */}
 					</div>
 					<div className={styles.barRight}>Кактусы</div>
 				</div>
@@ -135,3 +135,7 @@ function spawnRect(parent: HTMLDivElement)
 
 	setTimeout(() => parent.removeChild(rect), 1000);
 }
+// function round(num: number)
+// {
+// 	return Math.floor(num * 10) / 10;
+// }
