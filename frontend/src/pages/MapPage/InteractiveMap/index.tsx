@@ -68,7 +68,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			window.removeEventListener("resize", setSize);
 		}
 		// eslint-disable-next-line
-	}, [mapEl, state.v.toCenter]);
+	}, [mapEl, state.v.toCenter, imgH, imgW]);
 
 	useEffect(() =>
 	{
@@ -271,7 +271,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			el.removeEventListener("touchend", onTouchEnd);
 		}
 		// eslint-disable-next-line
-	}, [mapEl, zoomMin, zoomMax, disablePadding])
+	}, [mapEl, zoomMin, zoomMax, disablePadding, imgH, imgW])
 
 	function setMarkClick(onClick: (() => void) | undefined)
 	{
@@ -291,7 +291,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 				"--h": `${state.v.h}px`,
 			} as React.CSSProperties}>
 				<img src={img} alt="Карта" />
-				{(objects?.filter(v => !!v) as MapObject[]).map((v, i) => <div
+				{((objects || []).filter(v => !!v) as MapObject[]).map((v, i) => <div
 					key={i}
 					className={styles.mark}
 					onMouseDown={() => setMarkClick(v.onClick)}

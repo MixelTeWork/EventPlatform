@@ -1,7 +1,9 @@
 import styles from "./styles.module.css"
 import map1 from "./map1.png";
 import map2 from "./map2.png";
-import map3 from "./map3.png";
+import map3 from "./map3.jpeg";
+import map4 from "./map4.jpeg";
+import map5 from "./map5.jpeg";
 import mark_mady from "./marks/mady.png";
 import mark_info from "./marks/info.png";
 import mark_indi from "./marks/indi.png";
@@ -73,9 +75,9 @@ export default function MapPage()
 				{displayError(quests)}
 				<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
 					<InteractiveMap
-						img={[map1, map2, map3][map.v]}
-						imgW={2150}
-						imgH={1512}
+						img={[map1, map2, map3, map4, map5][map.v]}
+						imgW={[2150, 2150, 1600, 1600, 1600][map.v]}
+						imgH={[1512, 1512, 1125, 1142, 1395][map.v]}
 						zoomMin={1}
 						disablePadding
 						fillOnStart
@@ -87,12 +89,12 @@ export default function MapPage()
 						], [
 							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
 							questMark(4, mark_indi, 4.7, 26.3, 17.9, 35.5),
-							questMark(5, mark_game, 23.9, 45.5, 12.2, 19.7),
-							questMark(6, mark_stand, 37.4, 49.9, 11.2, 21.2),
-							questMark(7, mark_banner, 62.7, 47.5, 9.1, 19.1),
+							questMark(5, mark_game, 24.8, 35.4, 11.7, 20.2),
+							questMark(6, mark_stand, 37.5, 49.9, 9.2, 17.4),
+							questMark(7, mark_banner, 64.7, 51.5, 7, 14.8),
 						], [
 							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
-						]][map.v] : []}
+						], [], []][map.v] : []}
 					/>
 				</div>
 				{openedQuest.v &&
@@ -129,6 +131,14 @@ export default function MapPage()
 				</Textbox>
 				<Textbox small btn highlight={map.v == 2}>
 					<button onClick={() => map.set(2)} className={classNames(styles.btn, "title")}>Этаж 3</button>
+				</Textbox>
+			</div>
+			<div className={styles.btns}>
+				<Textbox small btn highlight={map.v == 3}>
+					<button onClick={() => map.set(3)} className={classNames(styles.btn, "title")}>Инди</button>
+				</Textbox>
+				<Textbox small btn highlight={map.v == 4}>
+					<button onClick={() => map.set(4)} className={classNames(styles.btn, "title")}>Маркет</button>
 				</Textbox>
 			</div>
 		</Layout>
