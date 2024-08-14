@@ -35,11 +35,12 @@ class UserGame(SqlAlchemyBase, SerializerMixin):
         now = get_datetime_now().replace(tzinfo=None)
         hackAlert = 0
         if userGame.lastClick is None:
-            if clicks > 50:
+            if clicks > 100:
                 hackAlert = 1
         else:
-            dt = (now - userGame.lastClick).seconds
-            if clicks / dt > 15:
+            dt = now - userGame.lastClick
+            dt = dt.seconds + dt.microseconds / 1000000
+            if clicks / dt > 16:
                 hackAlert = 2
 
         userGame.lastClick = now
