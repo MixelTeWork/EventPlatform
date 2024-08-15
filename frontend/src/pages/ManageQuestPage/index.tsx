@@ -4,6 +4,7 @@ import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import { useTitle } from "../../utils/useTtile";
 import AddQuest from "./AddQuest";
+import EditGameDialog from "./EditGameDialog";
 import EditStartDialog from "./EditStartDialog";
 import Quest from "./Quest";
 import styles from "./styles.module.css"
@@ -23,6 +24,7 @@ export default function ManageQuestPage()
 
 			<AddQuest />
 			<EditStartDialog />
+			<EditGameDialog />
 
 			<div className={styles.quests}>
 				{quests.data?.map(quest => <Quest key={quest.id} quest={quest} />)}

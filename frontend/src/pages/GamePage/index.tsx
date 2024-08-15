@@ -12,6 +12,7 @@ import useUser from "../../api/user";
 import StyledWindow from "../../components/StyledWindow";
 import { useDisableZoom } from "../../utils/useDisableZoom";
 import randomInt from "../../utils/randomInt";
+import GameDialogGame from "../../components/GameDialogGame";
 
 
 export default function GamePage()
@@ -71,7 +72,8 @@ export default function GamePage()
 		// eslint-disable-next-line
 	}, [clicks.v]);
 
-	return (
+	return (<>
+		{state.data?.state == "start" && <GameDialogGame />}
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
 			{state.isLoading && <Spinner />}
 			{displayError(state)}
@@ -116,7 +118,7 @@ export default function GamePage()
 				</>}
 			</StyledWindow>
 		</Layout>
-	);
+	</>);
 }
 
 function animateBtnPress(el: HTMLElement)

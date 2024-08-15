@@ -13,6 +13,7 @@ export interface User
 	roles: string[];
 	operations: string[];
 	group: UserGroup;
+	gameOpened: boolean;
 }
 
 export interface UserFull
@@ -29,6 +30,7 @@ export interface UserFull
 	deleted: boolean;
 	operations: string[];
 	group: UserGroup;
+	gameOpened: boolean;
 }
 
 export type UserGroup = -1 | 0 | 1 | 2;
@@ -40,7 +42,7 @@ export interface UserWithPwd extends User
 
 export function createEmptyUser(): User
 {
-	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1 };
+	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1, gameOpened: false };
 }
 
 export function useUpdateUser()
@@ -136,4 +138,21 @@ export function useMutationSetGroup(onSuccess?: () => void)
 interface SetGroup
 {
 	group: UserGroup;
+}
+
+export function useMutationOpenGame(onSuccess?: () => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async () =>
+			await fetchPost("/api/user/open_game"),
+		onSuccess: () =>
+		{
+			if (queryClient.getQueryState("user")?.status == "success")
+				queryClient.setQueryData("user", (user?: User) => ({ ...user!, gameOpened: true }));
+
+			onSuccess?.();
+		},
+	});
+	return mutation;
 }

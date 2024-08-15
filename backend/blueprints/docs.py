@@ -54,6 +54,9 @@ def docs():
                 "group": "number",
             },
         },
+        "/api/user/open_game POST": {
+            "__desc__": "Mark game dialog as opened",
+        },
         "/api/img/<int:imageId>": {
             "__desc__": "Get image",
             "response": "binary image data",
@@ -100,6 +103,9 @@ def docs():
                 "dialog2": "?dialog.ts:GameDialogData | False",  # False - delete
             },
             "response": "QuestFull",
+        },
+        "/api/quest/<int:questId>/open POST": {
+            "__desc__": "Mark quest as opened",
         },
         "/api/quest/<int:questId> DELETE": {
             "__desc__": "Delete quest",
@@ -218,6 +224,7 @@ def docs():
             "roles": "string[]",
             "operations": "string[]",
             "group": "number",
+            "gameOpened": "boolean",
         },
         "UserFull": {
             "id": "number",
@@ -232,6 +239,7 @@ def docs():
             "deleted": "boolean",
             "operations": "string[]",
             "group": "number",
+            "gameOpened": "boolean",
         },
         "Image": {
             "data": "string",

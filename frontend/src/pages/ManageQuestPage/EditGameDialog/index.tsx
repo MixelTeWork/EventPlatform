@@ -10,9 +10,9 @@ import styles from "./styles.module.css"
 import useGameDialog from "../../../components/GameDialog";
 import IconEdit from "../../../icons/edit";
 
-const DIALOGID = 1;
+const DIALOGID = 2;
 
-export default function EditStartDialog()
+export default function EditGameDialog()
 {
 	const saving = useStateBool(false);
 	const dialogDataQuery = useDialog(DIALOGID, false);
@@ -62,7 +62,7 @@ export default function EditStartDialog()
 			/>
 		}
 		<div className={styles.root}>
-			<button onClick={() => getDialog(dialog.runLocal)}>Стартовый диалог</button>
+			<button onClick={() => getDialog(dialog.runLocal)}>Диалог перед игрой</button>
 			<button onClick={() => getDialog(editor.open)}><IconEdit /></button>
 		</div>
 		{dialog.el()}
