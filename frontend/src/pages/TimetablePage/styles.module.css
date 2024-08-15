@@ -71,3 +71,34 @@
 		padding: 0.5rem 0.8rem;
 	}
 }
+@media screen and (max-height: 600px) {
+	.root {
+		flex-direction: row;
+		padding: 0;
+		padding-left: 1rem;
+	}
+	.title {
+		width: 2rem;
+		line-height: 0.8;
+		word-break: break-all;
+		align-self: center;
+		transform: translateY(1rem);
+	}
+	.body {
+		flex-direction: row;
+		margin-bottom: 0;
+	}
+	.list {
+		margin-bottom: -1rem;
+	}
+	.btns {
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+}
+
+@media screen and (max-height: 650px) and (min-height: 600px) {
+	.body {
+		margin-bottom: 0;
+	}
+}

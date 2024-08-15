@@ -122,24 +122,26 @@ export default function MapPage()
 						</Textbox>
 					</div>}
 			</StyledWindow>
-			<div className={styles.btns}>
-				<Textbox small btn highlight={map.v == 0}>
-					<button onClick={() => map.set(0)} className={classNames(styles.btn, "title")}>Этаж 1</button>
-				</Textbox>
-				<Textbox small btn highlight={map.v == 1}>
-					<button onClick={() => map.set(1)} className={classNames(styles.btn, "title")}>Этаж 2</button>
-				</Textbox>
-				<Textbox small btn highlight={map.v == 2}>
-					<button onClick={() => map.set(2)} className={classNames(styles.btn, "title")}>Этаж 3</button>
-				</Textbox>
-			</div>
-			<div className={styles.btns}>
-				<Textbox small btn highlight={map.v == 3}>
-					<button onClick={() => map.set(3)} className={classNames(styles.btn, "title")}>Инди</button>
-				</Textbox>
-				<Textbox small btn highlight={map.v == 4}>
-					<button onClick={() => map.set(4)} className={classNames(styles.btn, "title")}>Маркет</button>
-				</Textbox>
+			<div className={styles.btns__block}>
+				<div className={styles.btns}>
+					<Textbox small btn highlight={map.v == 0}>
+						<button onClick={() => map.set(0)} className={classNames(styles.btn, "title")}>Этаж 1</button>
+					</Textbox>
+					<Textbox small btn highlight={map.v == 1}>
+						<button onClick={() => map.set(1)} className={classNames(styles.btn, "title")}>Этаж 2</button>
+					</Textbox>
+					<Textbox small btn highlight={map.v == 2}>
+						<button onClick={() => map.set(2)} className={classNames(styles.btn, "title")}>Этаж 3</button>
+					</Textbox>
+				</div>
+				<div className={styles.btns}>
+					<Textbox small btn highlight={map.v == 3}>
+						<button onClick={() => map.set(3)} className={classNames(styles.btn, "title")}>Инди</button>
+					</Textbox>
+					<Textbox small btn highlight={map.v == 4}>
+						<button onClick={() => map.set(4)} className={classNames(styles.btn, "title")}>Маркет</button>
+					</Textbox>
+				</div>
 			</div>
 		</Layout>
 	);

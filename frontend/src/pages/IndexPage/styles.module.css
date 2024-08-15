@@ -32,3 +32,20 @@
 .btn img {
 	width: 100%;
 }
+
+@media screen and (max-height: 400px) {
+	.root {
+		flex-direction: row;
+		padding: 0;
+		padding-right: 2rem;
+	}
+	.logo {
+		max-width: 30vw;
+	}
+}
+
+@media screen and (max-height: 500px) and (min-height: 400px) {
+	.logo {
+		max-width: 200px;
+	}
+}

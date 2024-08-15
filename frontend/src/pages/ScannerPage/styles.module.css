@@ -4,9 +4,15 @@
 	position: fixed;
 	inset: 0;
 	z-index: -1;
-	background-color: #000000;
 	opacity: 1;
-	background: linear-gradient(135deg, #51185b55 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(225deg, #51185b 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(315deg, #51185b55 25%, transparent 25%) 0px 0/ 80px 80px, linear-gradient(45deg, #51185b 25%, #000000 25%) 0px 0/ 80px 80px;
+	/* --c1: #51185b55;
+	--c2: #51185b;
+	--c3: #000000; */
+	--c1: #fea45c55;
+	--c2: #fea45c;
+	--c3: #120cbc;
+	background: var(--c3);
+	background: linear-gradient(135deg, var(--c1) 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(225deg, var(--c2) 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(315deg, var(--c1) 25%, transparent 25%) 0px 0/ 80px 80px, linear-gradient(45deg, var(--c2) 25%, var(--c3) 25%) 0px 0/ 80px 80px;
 	animation: anim-background 10s linear infinite alternate;
 }
 
