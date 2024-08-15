@@ -20,6 +20,7 @@ export default function Character({ character, deleteNew }: CharacterProps)
 	const id = useStateObj(character.id);
 	const name = useStateObj(character.name, changed.setT);
 	const imgData = useStateObj<ImgData | null>(null, changed.setT);
+	const orien = useStateObj(character.orien, changed.setT);
 
 	const mutationAdd = useMutationAddCharacter(deleteNew);
 	const mutationEdit = useMutationEditCharacter(id.v, reset, () => reset());
@@ -32,6 +33,7 @@ export default function Character({ character, deleteNew }: CharacterProps)
 		const data = newCharacter || character;
 		id.set(data.id);
 		name.set(data.name);
+		orien.set(data.orien);
 		changed.setF();
 	}
 
@@ -67,6 +69,15 @@ export default function Character({ character, deleteNew }: CharacterProps)
 			<div className={styles.inputs}>
 				<div>Имя</div>
 				<input type="text" value={name.v} onChange={inp => name.set(inp.target.value)} />
+				<span>Ориен</span>
+				<div className={styles.checkbox}>
+					<span>Слева</span>
+					<label>
+						<input type="checkbox" checked={orien.v == 1} onChange={inp => orien.set(inp.target.checked ? 1 : 2)} />
+						<span></span>
+					</label>
+					<span>Справа</span>
+				</div>
 			</div>
 			<div className={styles.buttons}>
 				{id.v > 0 ? <>
@@ -77,6 +88,7 @@ export default function Character({ character, deleteNew }: CharacterProps)
 							mutationEdit.mutate({
 								name: name.v,
 								img: imgData.v || undefined,
+								orien: orien.v,
 							});
 						}}
 					>
@@ -90,6 +102,7 @@ export default function Character({ character, deleteNew }: CharacterProps)
 							mutationAdd.mutate({
 								name: name.v,
 								img: imgData.v || undefined,
+								orien: orien.v,
 							});
 						}}
 					>

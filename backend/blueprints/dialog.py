@@ -53,13 +53,13 @@ def characters(db_sess: Session):
 @use_user()
 @permission_required(Operations.manage_quest)
 def character_add(db_sess: Session, user: User):
-    name, img_data = get_json_values_from_req("name", "img")
+    name, img_data, orien = get_json_values_from_req("name", "img", "orien")
 
     img, image_error = Image.new(user, img_data)
     if image_error:
         return response_msg(image_error), 400
 
-    character = DialogCharacter.new(user, name, img.id)
+    character = DialogCharacter.new(user, name, img.id, orien)
 
     return jsonify(character.get_dict()), 200
 
@@ -70,7 +70,7 @@ def character_add(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_quest)
 def character_edit(characterId, db_sess: Session, user: User):
-    name, img_data = get_json_values_from_req(("name", None), ("img", None))
+    name, img_data, orien = get_json_values_from_req(("name", None), ("img", None), ("orien", None))
 
     character = DialogCharacter.get(db_sess, characterId)
     if character is None:
@@ -83,7 +83,7 @@ def character_edit(characterId, db_sess: Session, user: User):
             return response_msg(image_error), 400
         imgId = img.id
 
-    character.update(user, name, imgId)
+    character.update(user, name, imgId, orien)
 
     return jsonify(character.get_dict()), 200
 

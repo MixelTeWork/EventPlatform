@@ -188,6 +188,27 @@ def docs():
             "__desc__": "Get all dialog characters",
             "response": "DialogCharacter[]",
         },
+        "/api/dialog/character POST": {
+            "__desc__": "Add character",
+            "request": {
+                "name": "string",
+                "img": "Image",
+                "orien": "number",
+            },
+            "response": "DialogCharacter",
+        },
+        "/api/dialog/character/<int:characterId> POST": {
+            "__desc__": "Edit character",
+            "request": {
+                "name": "?string",
+                "img": "?Image",
+                "orien": "?number",
+            },
+            "response": "DialogCharacter",
+        },
+        "/api/dialog/character/<int:characterId> DELETE": {
+            "__desc__": "Delete character",
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -275,5 +296,6 @@ def docs():
             "id": "number",
             "name": "string",
             "img": "string",
+            "orien": "number",
         },
     }), 200

@@ -5,6 +5,7 @@ import Spinner from "../Spinner";
 import displayError from "../../utils/displayError";
 import useStateObj from "../../utils/useStateObj";
 import type { UseQueryResult } from "react-query";
+import classNames from "../../utils/classNames";
 
 export default function useGameDialog()
 {
@@ -91,14 +92,14 @@ function GameDialog({ data, characters, close }: GameDialogProps)
 			<h2>Пусто</h2>
 		</div>;
 
-	const character = characters.data[node.characterId];
+	const character = characters.data[node.characterId] || { id: -1, name: "УДАЛЁННЫЙ", img: "", orien: 1 };
 
 	return (
 		<div className={styles.root}>
 			<button className={styles.close} onClick={close}></button>
-			<img className={styles.img} src={character.img} alt={character.name} />
 			<div className={styles.dialog_container}>
 				<div className={styles.dialog}>
+					<img className={classNames(styles.img, character.orien == 1 && styles.img_right)} src={character.img} alt={character.name} />
 					<div className={styles.dialog__title}>{character.name}</div>
 					<div className={styles.dialog__body}>
 						<p className={styles.dialog__text}>{node.text}</p>

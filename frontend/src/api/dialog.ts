@@ -22,6 +22,7 @@ export interface GameDialogCharacter
 	id: number;
 	name: string;
 	img: string;
+	orien: number;
 }
 export type GameDialogCharacterData = { [id: number]: GameDialogCharacter; };
 
@@ -45,6 +46,7 @@ export function createEmptyCharacter(id: number): GameDialogCharacter
 		id,
 		name: "",
 		img: "",
+		orien: 1,
 	}
 }
 
@@ -114,6 +116,7 @@ export interface CharacterData
 {
 	name: string;
 	img?: ImgData;
+	orien: number;
 }
 
 export function useMutationEditCharacter(characterId: number, onSuccess?: (data: GameDialogCharacter) => void, onError?: (err: any) => void)
