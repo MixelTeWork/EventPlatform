@@ -30,6 +30,7 @@ class User(SqlAlchemyBase, SerializerMixin):
     ticketTId  = Column(Integer, nullable=True)
     balance    = Column(Integer, nullable=False)
     group      = Column(Integer, DefaultClause("0"), nullable=False)
+    gameOpened = Column(Boolean, DefaultClause("0"), nullable=False)
 
     def __repr__(self):
         return f"<User> [{self.id} {self.login}] {self.name}"
@@ -250,6 +251,7 @@ class User(SqlAlchemyBase, SerializerMixin):
             "roles": self.get_roles(),
             "operations": self.get_operations(),
             "group": self.group,
+            "gameOpened": self.gameOpened,
         }
 
     def get_dict_full(self):
@@ -265,4 +267,5 @@ class User(SqlAlchemyBase, SerializerMixin):
             "deleted": self.deleted,
             "operations": self.get_operations(),
             "group": self.group,
+            "gameOpened": self.gameOpened,
         }

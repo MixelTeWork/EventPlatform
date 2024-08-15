@@ -64,6 +64,7 @@ def init_values(dev=False, cmd=False):
 
         Game.init(db_sess)
         Dialog.new(user_admin, {"nodes": []}, 1)
+        Dialog.new(user_admin, {"nodes": []}, 2)
 
         from data.quest import Quest
         from utils.randstr import randstr

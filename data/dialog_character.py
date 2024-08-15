@@ -17,6 +17,7 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
     deleted = Column(Boolean, DefaultClause("0"), nullable=False)
     name = Column(String(128), nullable=False)
     imgId = Column(Integer, ForeignKey("Image.id"), nullable=True)
+    orien = Column(Integer, DefaultClause("0"), nullable=False)
 
     image = orm.relationship("Image")
 
@@ -24,9 +25,9 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
         return f"<DialogCharacter> [{self.id}]"
 
     @staticmethod
-    def new(creator, name: str, imgId: int):
+    def new(creator, name: str, imgId: int, orien: int):
         db_sess = Session.object_session(creator)
-        character = DialogCharacter(name=name, imgId=imgId)
+        character = DialogCharacter(name=name, imgId=imgId, orien=orien)
         db_sess.add(character)
 
         now = get_datetime_now()
@@ -64,7 +65,7 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
             characters = characters.filter(DialogCharacter.deleted == False)
         return characters.all()
 
-    def update(self, actor, name: Union[str, None], imgId: Union[int, None]):
+    def update(self, actor, name: Union[str, None], imgId: Union[int, None], orien: Union[int, None]):
         db_sess = Session.object_session(self)
         changes = []
 
@@ -76,6 +77,10 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
             changes.append(("imgId", self.imgId, imgId))
             self.image.delete(actor)
             self.imgId = imgId
+
+        if orien is not None:
+            changes.append(("orien", self.orien, orien))
+            self.orien = orien
 
         db_sess.add(Log(
             date=get_datetime_now(),
@@ -112,4 +117,5 @@ class DialogCharacter(SqlAlchemyBase, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "img": url_for("images.img", imgId=self.imgId),
+            "orien": self.orien,
         }

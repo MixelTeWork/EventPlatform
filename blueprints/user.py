@@ -78,3 +78,14 @@ def set_group(db_sess: Session, user: User):
     group = user.set_group(group)
 
     return jsonify({"group": group}), 200
+
+
+@blueprint.route("/api/user/open_game", methods=["POST"])
+@jwt_required()
+@use_db_session()
+@use_user()
+def open_game(db_sess: Session, user: User):
+    user.gameOpened = True
+    db_sess.commit()
+
+    return response_msg("ok"), 200
