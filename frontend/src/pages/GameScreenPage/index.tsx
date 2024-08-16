@@ -84,10 +84,11 @@ export default function GameScreenPage()
 			<div className={styles.barShake}>
 				<div className={styles.bar}>
 					<div className={styles.barLeft}>
-						<span>Сапожники</span>
+						<span>Вернуться</span>
 						{/* <div className={styles.nums}>{state.isSuccess && `${round(state.data.clicks1)} - ${round(state.data.clicks2)}`}</div> */}
+						<div className={styles.nums}>Персонажи должны...</div>
 					</div>
-					<div className={styles.barRight}>Кактусы</div>
+					<div className={styles.barRight}>Остаться</div>
 				</div>
 			</div>
 			<div className={styles.msg}>
@@ -99,9 +100,9 @@ export default function GameScreenPage()
 							<span>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</span>}
 
 						{state.data.state == "end" && <>
-							<span>Победитель:</span>
-							{state.data.winner == 1 && <span>Сапожники!</span>}
-							{state.data.winner == 2 && <span>Кактусы!</span>}
+							<span>Персонажи должны </span>
+							<span className="title" style={{ marginLeft: "0.25em" }}>{state.data.winner == 1 ? "Вернуться" : "Остаться"}</span>
+							<span>!</span>
 						</>}
 					</>}
 					{!soundEnable.v && <button

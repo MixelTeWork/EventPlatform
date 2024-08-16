@@ -9,8 +9,18 @@
 	transform-style: preserve-3d;
 }
 body:has(.root) {
-	--_cellSize: 2vw;
+	--_cellSize: 3.13vw;
 	--_strokeWidth: 0.2vw;
+	animation: back 250ms linear infinite;
+
+}
+@keyframes back {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: calc(var(--_cellSize) + var(--_strokeWidth)) 0;
+	}
 }
 
 @property --bar {
@@ -69,8 +79,8 @@ body:has(.root) {
 }
 .barLeft {
 	flex-grow: calc(var(--bar) * 2);
-	background-color: #85c3ee;
-	box-shadow: 0 0 1vw 1vw #85c3ee;
+	background-color: #fea45c;
+	box-shadow: 0 0 1vw 1vw #fea45c;
 	justify-content: flex-end;
 	border-right: 0.5vw solid white;
 }
@@ -80,16 +90,16 @@ body:has(.root) {
 @keyframes barLeft {
 	0%,
 	100% {
-		box-shadow: 0 0 1vw 1vw #85c3ee;
+		box-shadow: 0 0 1vw 1vw #fea45c;
 	}
 	50% {
-		box-shadow: 0 0 1.5vw 1.5vw #85c3ee;
+		box-shadow: 0 0 1.5vw 1.5vw #fea45c;
 	}
 }
 .barRight {
 	flex-grow: calc((100 - var(--bar)) * 2);
-	background-color: #fea45c;
-	box-shadow: 0 0 1vw 1vw #fea45c;
+	background-color: #85c3ee;
+	box-shadow: 0 0 1vw 1vw #85c3ee;
 	border-left: 0.5vw solid white;
 }
 .going .barRight {
@@ -98,10 +108,10 @@ body:has(.root) {
 @keyframes barRight {
 	0%,
 	100% {
-		box-shadow: 0 0 1vw 1vw #fea45c;
+		box-shadow: 0 0 1vw 1vw #85c3ee;
 	}
 	50% {
-		box-shadow: 0 0 1.5vw 1.5vw #fea45c;
+		box-shadow: 0 0 1.5vw 1.5vw #85c3ee;
 	}
 }
 .barLeft::after,
@@ -214,7 +224,7 @@ body:has(.root) {
 	height: 20vw;
 	border: 0.25vw solid white;
 	animation: rect 1000ms linear infinite;
-	box-shadow: inset 0 0 2vw 1vw white,  0 0 2vw 1vw white;
+	box-shadow: inset 0 0 2vw 1vw white, 0 0 2vw 1vw white;
 }
 @keyframes rect {
 	0% {

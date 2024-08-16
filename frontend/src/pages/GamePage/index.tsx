@@ -82,14 +82,14 @@ export default function GamePage()
 				{(state.isLoading || state.data?.state == "wait") && <>
 					<div className={styles.text}>
 						<div>
-							<span>Для участия в финальной битве приходите на сцену</span>
+							<span>Чтобы увидеть и повлиять на концовку истории приходите на сцену</span>
 							{state.data?.start && <span> в {state.data.start}</span>}
 						</div>
 					</div>
 				</>}
 				{state.data?.state == "start" && <>
 					<div className={styles.text}>
-						<div className={styles.title2}>{user.data?.group == 1 ? "Сапожник" : "Кактус"}</div>
+						<div className={styles.title2}>Персонажи должны {user.data?.group == 1 ? "вернуться" : "остаться"}</div>
 						<h2 className={styles.subtitle}>Дождитесь начала</h2>
 						<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
 					</div>
@@ -102,14 +102,14 @@ export default function GamePage()
 						clicks.set(v => v + 1);
 					}}
 				>
-					<h1 className={styles.title2}>{user.data?.group == 1 ? "Сапожник" : "Кактус"}</h1>
+					<h1 className={styles.title2}>Персонажи должны {user.data?.group == 1 ? "вернуться" : "остаться"}</h1>
 					{/* <h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1> */}
 					{/* <h1 className={styles.title}>{clicks.v}</h1> */}
 					<div className={classNames("title", styles.press__btn)}>Жми!!!</div>
 				</button>}
 				{state.data?.state == "end" && <>
 					<div className={styles.text}>
-						<div className={styles.title2}>{user.data?.group == 1 ? "Сапожник" : "Кактус"}</div>
+						<div className={styles.title2}>Персонажи должны {state.data.winner == 1 ? "вернуться" : "остаться"}</div>
 						<h1 className={styles.title3}>
 							{state.data.winner == 0 ? "Игра завершена!" :
 								user.data?.group == state.data.winner ? "Победа!" : "Проигрыш!"}

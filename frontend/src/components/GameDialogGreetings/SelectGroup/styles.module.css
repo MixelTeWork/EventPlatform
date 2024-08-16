@@ -3,6 +3,9 @@
 	inset: 0;
 	display: flex;
 	background-color: black;
+	background: repeating-linear-gradient(90deg, var(--_strokeColor) 0px, var(--_strokeColor) var(--_strokeWidth), transparent var(--_strokeWidth), transparent var(--_cellSize)),
+		repeating-linear-gradient(0deg, var(--_strokeColor) 0px, var(--_strokeColor) var(--_strokeWidth), transparent var(--_strokeWidth), transparent var(--_cellSize)),
+		linear-gradient(0deg, #3035dc, #120cbc);
 	z-index: 100;
 	justify-content: center;
 	align-items: center;
@@ -30,20 +33,26 @@
 	position: absolute;
 	z-index: -1;
 	inset: 0;
-	background: linear-gradient(45deg, transparent 0%, aquamarine 50%, transparent 50%);
+	background: linear-gradient(45deg, transparent 0%, #85c3ee 50%, transparent 50%);
 	border-top-right-radius: 1rem;
 	border-bottom-left-radius: 1rem;
 }
 .back:first-child {
-	background: linear-gradient(45deg, transparent 50%, coral 50%, transparent 100%);
+	background: linear-gradient(45deg, transparent 50%, #fea45c 50%, transparent 100%);
 }
 
 .grid button {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 	font-size: 1.5rem;
-	color: white;
+	/* color: white; */
 	background-color: transparent;
 	border: none;
 	-webkit-tap-highlight-color: transparent;
+}
+.grid button ~ button {
+	justify-content: flex-start;
 }
 
 .close {
