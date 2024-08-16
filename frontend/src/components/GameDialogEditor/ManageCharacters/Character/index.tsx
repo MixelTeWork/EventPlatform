@@ -70,14 +70,11 @@ export default function Character({ character, deleteNew }: CharacterProps)
 				<div>Имя</div>
 				<input type="text" value={name.v} onChange={inp => name.set(inp.target.value)} />
 				<span>Ориен</span>
-				<div className={styles.checkbox}>
-					<span>Слева</span>
-					<label>
-						<input type="checkbox" checked={orien.v == 1} onChange={inp => orien.set(inp.target.checked ? 1 : 2)} />
-						<span></span>
-					</label>
-					<span>Справа</span>
-				</div>
+				<select className={styles.select} value={orien.v} onChange={e => orien.set(parseInt(e.target.value, 10))}>
+					<option value={0}>Слева</option>
+					<option value={2}>Центр</option>
+					<option value={1}>Справа</option>
+				</select>
 			</div>
 			<div className={styles.buttons}>
 				{id.v > 0 ? <>

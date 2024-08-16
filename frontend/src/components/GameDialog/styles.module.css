@@ -54,10 +54,13 @@
 	max-width: 560px;
 	transform: translateY(-100%);
 }
-.img_right
-{
+.img_right {
 	left: auto;
 	right: 0;
+}
+.img_center {
+	left: 50%;
+	transform: translate(-50%, -100%);
 }
 .dialog_container {
 	position: fixed;

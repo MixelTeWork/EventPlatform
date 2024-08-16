@@ -99,7 +99,11 @@ function GameDialog({ data, characters, close }: GameDialogProps)
 			<button className={styles.close} onClick={close}></button>
 			<div className={styles.dialog_container}>
 				<div className={styles.dialog}>
-					<img className={classNames(styles.img, character.orien == 1 && styles.img_right)} src={character.img} alt={character.name} />
+					<img
+						className={classNames(styles.img, character.orien == 1 && styles.img_right, character.orien == 2 && styles.img_center)}
+						src={character.img}
+						alt={character.name}
+					/>
 					<div className={styles.dialog__title}>{character.name}</div>
 					<div className={styles.dialog__body}>
 						<p className={styles.dialog__text}>{node.text}</p>
