@@ -24,10 +24,14 @@ import { useMutationOpenQuest, useQuests, type Quest } from "../../api/quest";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import { Link } from "react-router-dom";
+import usePreloadGameDialogImgs from "../../components/GameDialog/usePreloadGameDialogImgs";
+import usePreloadImgs from "../../utils/usePreloadImgs";
 
 export default function MapPage()
 {
 	useTitle("Карта");
+	usePreloadGameDialogImgs();
+	usePreloadImgs(map1, map2, map3, map4, map5, mark_mady, mark_info, mark_indi, mark_game, mark_stand, mark_banner);
 	const dialog = useGameDialog();
 	const mutationOpen = useMutationOpenQuest();
 	const openedQuest = useStateObjExt<Quest | null>(null, v =>

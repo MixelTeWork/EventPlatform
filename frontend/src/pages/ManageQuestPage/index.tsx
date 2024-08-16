@@ -1,4 +1,5 @@
 import { useQuestsFull } from "../../api/quest";
+import usePreloadGameDialogImgs from "../../components/GameDialog/usePreloadGameDialogImgs";
 import Layout from "../../components/Layout";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
@@ -12,6 +13,7 @@ import styles from "./styles.module.css"
 export default function ManageQuestPage()
 {
 	useTitle("Квесты");
+	usePreloadGameDialogImgs();
 	const quests = useQuestsFull();
 
 	return (
