@@ -24,7 +24,6 @@ export default function useSound(url: string, loop = false)
 
 	useEffect(() =>
 	{
-		console.log("some log for testing");
 		if (playing.v)
 		{
 			audio.v.currentTime = 0;
