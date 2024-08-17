@@ -57,7 +57,7 @@ export default function useScanner(pause = false, afterScanTimeout = 500)
 		if (isTimeout || pause) return;
 		setScanned(r);
 		setIsTimeout(true);
-		playBeep();
+		playBeep.play();
 		setTimeout(() =>
 		{
 			setScanned("");

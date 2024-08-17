@@ -52,6 +52,17 @@ export default function GameScreenPage()
 		// eslint-disable-next-line
 	}, [state.data])
 
+	useEffect(() =>
+	{
+		if (!state.data) return;
+		if (!soundEnable.v) return;
+
+		if (state.data.state == "going")
+			ostSound.play();
+		else
+			ostSound.stop();
+	}, [state.data, soundEnable.v])
+
 	// useEffect(() =>
 	// {
 	// 	const t = setInterval(() =>
@@ -107,11 +118,7 @@ export default function GameScreenPage()
 					</>}
 					{!soundEnable.v && <button
 						className={styles.soundBtn}
-						onClick={() =>
-						{
-							soundEnable.setT();
-							ostSound();
-						}}
+						onClick={soundEnable.setT}
 					>
 						Включить звук
 					</button>}
