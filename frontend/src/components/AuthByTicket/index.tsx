@@ -59,7 +59,7 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 								if (!code || !code.match(/\d+-\d+-\d+-\d+-\d+/))
 								{
 									error.set("Изображение не содержит QR-кода или он некорректный.");
-									fetch("/api/auth_ticket_err")
+									fetch("/api/auth_ticket_err", {method: "POST"})
 									return;
 								}
 								mutation.mutate({ code });
