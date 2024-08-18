@@ -177,3 +177,7 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
     db_sess.commit()
 
     return user
+
+@blueprint.route("/api/auth_ticket_err", methods=["POST"])
+def login_ticket_err():
+    return response_msg("ok")
