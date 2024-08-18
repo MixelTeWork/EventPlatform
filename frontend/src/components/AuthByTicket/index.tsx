@@ -55,12 +55,12 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 
 								const qr = new QrcodeDecoder();
 								const r = await qr.decodeFromImage(imgData.data);
-								const code = r?.data;
-								if (!code || !code.match(/\d+-\d+-\d+-\d+-\d+/))
-								{
-									error.set("Изображение не содержит QR-кода или он некорректный.");
-									return;
-								}
+								const code = r?.data || "err";
+								// if (!code || !code.match(/\d+-\d+-\d+-\d+-\d+/))
+								// {
+								// 	error.set("Изображение не содержит QR-кода или он некорректный.");
+								// 	return;
+								// }
 								mutation.mutate({ code });
 							}}
 						/>
