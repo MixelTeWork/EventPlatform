@@ -75,7 +75,7 @@ def before_request():
                     g.json[0]["password"] = password
                 else:
                     data = json.dumps(g.json[0])[:512]
-                logging.info("Request;%(data)s", {"data": data})
+                logging.info("Request;;%(data)s", {"data": data})
             else:
                 logging.info("Request")
         except Exception as x:

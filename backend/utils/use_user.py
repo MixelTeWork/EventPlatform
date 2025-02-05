@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import abort
+from flask import abort, g
 from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from sqlalchemy.orm import Session
 from data.user import User
@@ -27,6 +27,8 @@ def use_user():
                 response = response_msg("The JWT has expired")
                 unset_jwt_cookies(response)
                 return response, 401
+
+            g.userId = user.id
             return fn(*args, **kwargs, user=user)
 
         return decorator
