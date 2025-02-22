@@ -20,7 +20,6 @@ TICKETS_API_URL += "api/event_platform/"
 EVENT_ID = 3 if "dev" in sys.argv else 8
 
 
-# add methods to bfs
 @blueprint.route("/api/auth", methods=["POST"])
 @use_db_session()
 def login(db_sess: Session):

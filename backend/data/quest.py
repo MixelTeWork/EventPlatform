@@ -51,7 +51,6 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
             quests = quests.filter(Quest.hidden == False)
         return quests.all()
 
-# add user type hints
     @staticmethod
     def all_for_user(db_sess: Session, user: User):
         from data.user_quest import UserQuest

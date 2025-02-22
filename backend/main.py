@@ -15,7 +15,7 @@ app, run = create_app(__name__, AppConfig(
 )
     .add_data_folder("FONTS_FOLDER", "fonts")
     .add_secret_key("API_SECRET_KEY", "secret_key_api.txt")
-    .add_secret_key("VK_SECRET_KEY", "vk_secret_key.txt")
+    .add_secret_key("VK_SECRET_KEY", "secret_key_vk.txt")
 )
 
 run(__name__ == "__main__", lambda: (init_values(True), init_dev_values(True)))
