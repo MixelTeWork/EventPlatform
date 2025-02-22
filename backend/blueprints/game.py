@@ -1,11 +1,12 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.operation import Operations
+
+from bfs import get_json_values_from_req, permission_required, response_msg, use_db_session, use_user
+from data._operations import Operations
 from data.game import Game, GameState
-from data.user_game import UserGame
-from utils import get_json_values_from_req, permission_required, response_msg, use_db_session, use_user
 from data.user import User
+from data.user_game import UserGame
 
 
 blueprint = Blueprint("game", __name__)
@@ -18,7 +19,7 @@ blueprint = Blueprint("game", __name__)
 @permission_required(Operations.manage_games)
 def duration(db_sess: Session, user: User):
     game = Game.get(db_sess)
-    return jsonify({"duration": game.duration}), 200
+    return {"duration": game.duration}
 
 
 @blueprint.route("/api/game/duration", methods=["POST"])
@@ -31,7 +32,7 @@ def set_duration(db_sess: Session, user: User):
     game = Game.get(db_sess)
     game.duration = duration
     db_sess.commit()
-    return jsonify({"duration": game.duration}), 200
+    return {"duration": game.duration}
 
 
 @blueprint.route("/api/game/counter")
@@ -41,7 +42,7 @@ def set_duration(db_sess: Session, user: User):
 @permission_required(Operations.manage_games)
 def counter(db_sess: Session, user: User):
     game = Game.get(db_sess)
-    return jsonify({"counter": game.counter}), 200
+    return {"counter": game.counter}
 
 
 @blueprint.route("/api/game/counter", methods=["POST"])
@@ -54,7 +55,7 @@ def set_counter(db_sess: Session, user: User):
     game = Game.get(db_sess)
     game.counter = counter
     db_sess.commit()
-    return jsonify({"counter": game.counter}), 200
+    return {"counter": game.counter}
 
 
 @blueprint.route("/api/game/startStr")
@@ -64,7 +65,7 @@ def set_counter(db_sess: Session, user: User):
 @permission_required(Operations.manage_games)
 def startStr(db_sess: Session, user: User):
     game = Game.get(db_sess)
-    return jsonify({"startStr": game.startStr}), 200
+    return {"startStr": game.startStr}
 
 
 @blueprint.route("/api/game/startStr", methods=["POST"])
@@ -77,7 +78,7 @@ def set_startStr(db_sess: Session, user: User):
     game = Game.get(db_sess)
     game.startStr = startStr
     db_sess.commit()
-    return jsonify({"startStr": game.startStr}), 200
+    return {"startStr": game.startStr}
 
 
 @blueprint.route("/api/game/start", methods=["POST"])
@@ -87,7 +88,7 @@ def set_startStr(db_sess: Session, user: User):
 @permission_required(Operations.manage_games)
 def start(db_sess: Session, user: User):
     Game.start(db_sess)
-    return response_msg("ok"), 200
+    return response_msg("ok")
 
 
 @blueprint.route("/api/game/reset", methods=["POST"])
@@ -125,4 +126,4 @@ def click(db_sess: Session, user: User):
     if state["state"] == GameState.going:
         if not UserGame.click(user, count):
             return "", 429
-    return jsonify(state), 200
+    return jsonify(state)

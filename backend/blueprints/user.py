@@ -1,11 +1,10 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.log import Actions, Log, Tables
-from data.operation import Operations
+
+from bfs import get_json_values_from_req, jsonify_list, permission_required, response_msg, use_db_session, use_user
+from data._operations import Operations
 from data.user import User
-from data.get_datetime_now import get_datetime_now
-from utils import get_json_values_from_req, jsonify_list, permission_required, response_msg, use_db_session, use_user
 
 
 blueprint = Blueprint("user", __name__)
@@ -17,8 +16,8 @@ blueprint = Blueprint("user", __name__)
 @use_user()
 @permission_required(Operations.page_users)
 def users(db_sess: Session, user: User):
-    users = User.all(db_sess, True)
-    return jsonify_list(users, "get_dict_full"), 200
+    users = User.all(db_sess, includeDeleted=True)
+    return jsonify_list(users, "get_dict_full")
 
 
 @blueprint.route("/api/user/change_password", methods=["POST"])
@@ -28,20 +27,9 @@ def users(db_sess: Session, user: User):
 def change_password(db_sess: Session, user: User):
     password = get_json_values_from_req("password")
 
-    user.set_password(password)
+    user.update_password(password)
 
-    db_sess.add(Log(
-        date=get_datetime_now(),
-        actionCode=Actions.updated,
-        userId=user.id,
-        userName=user.name,
-        tableName=Tables.User,
-        recordId=user.id,
-        changes=[("password", "***", "***")]
-    ))
-    db_sess.commit()
-
-    return response_msg("ok"), 200
+    return response_msg("ok")
 
 
 @blueprint.route("/api/user/change_name", methods=["POST"])
@@ -51,21 +39,9 @@ def change_password(db_sess: Session, user: User):
 def change_name(db_sess: Session, user: User):
     name = get_json_values_from_req("name")
 
-    pastName = user.name
-    user.name = name
+    user.update_name(name)
 
-    db_sess.add(Log(
-        date=get_datetime_now(),
-        actionCode=Actions.updated,
-        userId=user.id,
-        userName=user.name,
-        tableName=Tables.User,
-        recordId=user.id,
-        changes=[("name", pastName, name)]
-    ))
-    db_sess.commit()
-
-    return response_msg("ok"), 200
+    return response_msg("ok")
 
 
 @blueprint.route("/api/user/set_group", methods=["POST"])
@@ -77,7 +53,7 @@ def set_group(db_sess: Session, user: User):
 
     group = user.set_group(group)
 
-    return jsonify({"group": group}), 200
+    return jsonify({"group": group})
 
 
 @blueprint.route("/api/user/open_game", methods=["POST"])
@@ -88,4 +64,4 @@ def open_game(db_sess: Session, user: User):
     user.gameOpened = True
     db_sess.commit()
 
-    return response_msg("ok"), 200
+    return response_msg("ok")

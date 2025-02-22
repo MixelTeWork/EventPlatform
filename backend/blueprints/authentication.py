@@ -1,25 +1,26 @@
 import logging
-import sys
-from flask import Blueprint, abort, jsonify, redirect, request
-from flask_jwt_extended import create_access_token, unset_jwt_cookies, set_access_cookies
 import requests
+import sys
+
+from flask import Blueprint, abort, current_app, jsonify, redirect, request
+from flask_jwt_extended import create_access_token, unset_jwt_cookies, set_access_cookies
 from sqlalchemy.orm import Session
-from data.role import Roles
+
+from bfs import get_json_values_from_req, randstr, response_msg, use_db_session
+from data._roles import Roles
 from data.user import User
-from utils import get_api_secret_key, get_json_values_from_req, get_vk_secret_key, randstr, response_msg, use_db_session
 
 
 blueprint = Blueprint("authentication", __name__)
 CLIENT_ID = "51848582"
-CLIENT_SECRET = get_vk_secret_key()
 # REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
 REDIRECT_URI = "https://www.underparty.fun/auth_vk"
 TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
 TICKETS_API_URL += "api/event_platform/"
-API_SECRET = get_api_secret_key()
 EVENT_ID = 3 if "dev" in sys.argv else 8
 
 
+# add methods to bfs
 @blueprint.route("/api/auth", methods=["POST"])
 @use_db_session()
 def login(db_sess: Session):
@@ -27,7 +28,7 @@ def login(db_sess: Session):
     user = User.get_by_login(db_sess, login)
 
     if not user or not user.check_password(password):
-        return response_msg("Неправильный логин или пароль"), 400
+        return response_msg("Неправильный логин или пароль", 400)
 
     response = jsonify(user.get_dict())
     access_token = create_access_token(identity=[user.id, user.password])
@@ -51,8 +52,7 @@ def login_ticket(db_sess: Session):
         user = create_user_by_ticket(db_sess, code)
 
     if user.deleted:
-        user.deleted = False
-        db_sess.commit()
+        user.restore(user)
 
     response = jsonify(user.get_dict())
     access_token = create_access_token(identity=[user.id, user.password])
@@ -62,7 +62,7 @@ def login_ticket(db_sess: Session):
 
 def create_user_by_ticket(db_sess: Session, code: str):
     res = requests.get(TICKETS_API_URL + "user_info_by_ticket", json={
-        "apikey": API_SECRET,
+        "apikey": current_app.config["API_SECRET_KEY"],
         "eventId": EVENT_ID,
         "code": code,
     })
@@ -130,7 +130,7 @@ def get_vk_user():
 
     res = requests.get("https://oauth.vk.com/access_token", {
         "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
+        "client_secret": current_app.config["VK_SECRET_KEY"],
         "redirect_uri": REDIRECT_URI,
         "code": code,
     })
@@ -177,6 +177,7 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
     db_sess.commit()
 
     return user
+
 
 @blueprint.route("/api/auth_ticket_err", methods=["POST"])
 def login_ticket_err():

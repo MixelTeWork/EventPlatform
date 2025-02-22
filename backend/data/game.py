@@ -1,18 +1,17 @@
 from datetime import timedelta
-from sqlalchemy import Column, DateTime, DefaultClause, Integer, String, func
-from sqlalchemy.orm import Session
-from sqlalchemy_serializer import SerializerMixin
 
-from data.get_datetime_now import get_datetime_now
+from sqlalchemy import Column, DateTime, DefaultClause, func, Integer, String
+from sqlalchemy.orm import Session
+
+from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
+from data._tables import Tables
 from data.user import User
 from data.user_game import UserGame
-from .db_session import SqlAlchemyBase
 
 
-class Game(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = "Game"
+class Game(SqlAlchemyBase, IdMixin):
+    __tablename__ = Tables.Game
 
-    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     startStr = Column(String(8), DefaultClause("16:30"), nullable=False)
     duration = Column(Integer, DefaultClause("60"), nullable=False)
     counter = Column(Integer, DefaultClause("150"), nullable=False)
@@ -62,7 +61,7 @@ class Game(SqlAlchemyBase, SerializerMixin):
             return state
 
         now = get_datetime_now().replace(tzinfo=None)
-        dt = now - game.startTime
+        dt: timedelta = now - game.startTime
         if dt < timedelta(seconds=game.counter):
             state["state"] = GameState.start
             state["counter"] = game.counter - dt.seconds

@@ -1,17 +1,16 @@
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.orm import Session
-from sqlalchemy_serializer import SerializerMixin
 
+from bfs import SqlAlchemyBase, IdMixin
+from data._tables import Tables
 from data.game import Game
 from data.log_user_game import UserGameLog
 from data.user_game import UserGame
-from .db_session import SqlAlchemyBase
 
 
-class GameLog(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = "GameLog"
+class GameLog(SqlAlchemyBase, IdMixin):
+    __tablename__ = Tables.GameLog
 
-    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     startStr = Column(String(8))
     duration = Column(Integer)
     counter = Column(Integer)

@@ -2,10 +2,11 @@ from functools import wraps
 from flask import abort, g
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 from sqlalchemy.orm import Session
-from data.user import User
 
 
 def use_user_try():
+    from data.user import User
+
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):

@@ -106,10 +106,12 @@ def create_app(import_name: str, config: AppConfig):
     def before_request():
         g.json = get_json(request)
         g.req_id = randstr(4)
-        if verify_jwt_in_request(optional=True):
+        try:
             jwt_identity = get_jwt_identity()
-            if isinstance(jwt_identity, (list, tuple)) and len(jwt_identity) == 2:
-                g.userId = jwt_identity[0]
+        except Exception:
+            jwt_identity = None
+        if jwt_identity and isinstance(jwt_identity, (list, tuple)) and len(jwt_identity) == 2:
+            g.userId = jwt_identity[0]
         if request.path.startswith(bfs_config.api_url):
             try:
                 if g.json[1]:

@@ -1,9 +1,10 @@
 from functools import wraps
 from flask import abort
-from data.user import User
 
 
 def permission_required(*operations: tuple[str, str]):
+    from data.user import User
+
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
@@ -25,6 +26,8 @@ def permission_required(*operations: tuple[str, str]):
 
 
 def permission_required_any(*operations: tuple[str, str]):
+    from data.user import User
+
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):

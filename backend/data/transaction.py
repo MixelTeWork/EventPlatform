@@ -1,15 +1,13 @@
-from sqlalchemy import Column, ForeignKey, Integer, DateTime, String, orm
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, orm, String
 from sqlalchemy.orm import Session
-from sqlalchemy_serializer import SerializerMixin
 
-from data.get_datetime_now import get_datetime_now
-from .db_session import SqlAlchemyBase
+from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
+from data._tables import Tables
 
 
-class Transaction(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = "Transaction"
+class Transaction(SqlAlchemyBase, IdMixin):
+    __tablename__ = Tables.Transaction
 
-    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     date = Column(DateTime, nullable=False)
     fromId = Column(Integer, ForeignKey("User.id"), nullable=False)
     toId = Column(Integer, ForeignKey("User.id"), nullable=False)
@@ -24,10 +22,9 @@ class Transaction(SqlAlchemyBase, SerializerMixin):
         return f"<Transaction> [{self.id}] {self.action}"
 
     @staticmethod
-    def new(db_sess: Session, userFromId: int, userToId: int, value: int, action: str, itemId: int = -1, no_commit=False):
-        now = get_datetime_now()
+    def new(db_sess: Session, userFromId: int, userToId: int, value: int, action: str, itemId: int = -1, commit=True):
         item = Transaction(
-            date=now,
+            date=get_datetime_now(),
             fromId=userFromId,
             toId=userToId,
             value=value,
@@ -35,7 +32,7 @@ class Transaction(SqlAlchemyBase, SerializerMixin):
             itemId=itemId,
         )
         db_sess.add(item)
-        if not no_commit:
+        if commit:
             db_sess.commit()
 
         return item

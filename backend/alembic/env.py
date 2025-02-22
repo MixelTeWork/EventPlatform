@@ -19,8 +19,10 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from data.db_session import SqlAlchemyBase
-from data import __all_models
+from bfs.db_session import SqlAlchemyBase
+from bfs.utils.import_all_tables import import_all_tables
+import bfs_config
+import_all_tables()
 target_metadata = SqlAlchemyBase.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -29,8 +31,10 @@ target_metadata = SqlAlchemyBase.metadata
 # ... etc.
 
 issqlite = os.environ.get("dev", "0") == "1"
-if os.environ.get("dev", "0") == "1":
-    config.set_main_option("sqlalchemy.url", "sqlite:///db/EventPlatform.db?check_same_thread=False")
+if issqlite:
+    config.set_main_option("sqlalchemy.url", f"sqlite:///{bfs_config.db_dev_path}?check_same_thread=False")
+else:
+    config.set_main_option("sqlalchemy.url", f"mysql+pymysql://{bfs_config.db_path}?charset=UTF8mb4")
 
 
 def run_migrations_offline() -> None:
@@ -51,6 +55,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        render_as_batch=issqlite,
     )
 
     with context.begin_transaction():
@@ -72,7 +77,9 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
+            render_as_batch=issqlite,
         )
 
         with context.begin_transaction():
