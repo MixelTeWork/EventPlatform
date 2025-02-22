@@ -1,11 +1,10 @@
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.log import Log
-from data.operation import Operations
-from data.user import User
 
-from utils import jsonify_list, permission_required, use_db_session, use_user
+from bfs import Log, jsonify_list, permission_required, use_db_session, use_user
+from data._operations import Operations
+from data.user import User
 
 
 blueprint = Blueprint("debug", __name__)
@@ -18,7 +17,7 @@ blueprint = Blueprint("debug", __name__)
 @permission_required(Operations.page_debug)
 def debug_log(db_sess: Session, user: User):
     log = db_sess.query(Log).order_by(Log.date.desc()).all()
-    return jsonify_list(log), 200
+    return jsonify_list(log)
 
 
 @blueprint.route("/api/debug/log_info")

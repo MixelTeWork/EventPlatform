@@ -1,16 +1,17 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.operation import Operations
+
+from bfs import get_json_values_from_req, permission_required, response_not_found, use_db_session, use_user
+from data._operations import Operations
 from data.send import Send
-from utils import get_json_values_from_req, permission_required, response_not_found, use_db_session, use_user
 from data.user import User
 
 
 blueprint = Blueprint("send", __name__)
 
 
-@blueprint.route("/api/send", methods=["POST"])
+@blueprint.post("/api/send")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -20,10 +21,10 @@ def send(db_sess: Session, user: User):
 
     send = Send.new(db_sess, user.id, value, positive, reusable)
 
-    return jsonify(send.get_dict()), 200
+    return send.get_dict()
 
 
-@blueprint.route("/api/send_check", methods=["POST"])
+@blueprint.post("/api/send_check")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -35,4 +36,4 @@ def send_check(db_sess: Session, user: User):
     if send is None:
         return response_not_found("send", sendId)
 
-    return jsonify({"successful": send.used}), 200
+    return {"successful": send.used}

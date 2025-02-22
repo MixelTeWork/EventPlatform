@@ -1,13 +1,12 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.dialog_character import DialogCharacter
-from data.image import Image
-from data.operation import Operations
+
+from bfs import Image, get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
+from data._operations import Operations
 from data.dialog import Dialog
+from data.dialog_character import DialogCharacter
 from data.user import User
-from utils import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any,
-                   response_msg, response_not_found, use_db_session, use_user, use_user_try)
 
 
 blueprint = Blueprint("dialog", __name__)
@@ -20,10 +19,10 @@ def dialog(dialogId, db_sess: Session):
     if dialog is None:
         return response_not_found("dialog", dialogId)
 
-    return jsonify(dialog.get_dict()), 200
+    return dialog.get_dict()
 
 
-@blueprint.route("/api/dialog/<int:dialogId>", methods=["POST"])
+@blueprint.post("/api/dialog/<int:dialogId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -37,17 +36,17 @@ def dialog_edit(dialogId, db_sess: Session, user: User):
 
     dialog.update(user, data)
 
-    return jsonify(dialog.get_dict()), 200
+    return dialog.get_dict()
 
 
 @blueprint.route("/api/dialog/characters")
 @use_db_session()
 def characters(db_sess: Session):
     items = DialogCharacter.all(db_sess)
-    return jsonify_list(items), 200
+    return jsonify_list(items)
 
 
-@blueprint.route("/api/dialog/character", methods=["POST"])
+@blueprint.post("/api/dialog/character")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -61,10 +60,10 @@ def character_add(db_sess: Session, user: User):
 
     character = DialogCharacter.new(user, name, img.id, orien)
 
-    return jsonify(character.get_dict()), 200
+    return character.get_dict()
 
 
-@blueprint.route("/api/dialog/character/<int:characterId>", methods=["POST"])
+@blueprint.post("/api/dialog/character/<int:characterId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -85,10 +84,10 @@ def character_edit(characterId, db_sess: Session, user: User):
 
     character.update(user, name, imgId, orien)
 
-    return jsonify(character.get_dict()), 200
+    return character.get_dict()
 
 
-@blueprint.route("/api/dialog/character/<int:characterId>", methods=["DELETE"])
+@blueprint.delete("/api/dialog/character/<int:characterId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -100,4 +99,4 @@ def character_delete(characterId, db_sess: Session, user: User):
 
     character.delete(user)
 
-    return response_msg("ok"), 200
+    return response_msg("ok")

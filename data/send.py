@@ -1,19 +1,15 @@
-from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, Integer, String, orm
+from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, Integer, orm
 from sqlalchemy.orm import Session
-from sqlalchemy_serializer import SerializerMixin
-from data.get_datetime_now import get_datetime_now
 
-from data.randstr import randstr
+from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
+from data._tables import Tables
 from data.user import User
-from data.user_send import UserSend
-from .db_session import SqlAlchemyBase
+from utils import BigIdMixin
 
 
-class Send(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = "Send"
+class Send(SqlAlchemyBase, IdMixin, BigIdMixin):
+    __tablename__ = Tables.Send
 
-    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    id_big = Column(String(8), unique=True, nullable=False)
     date = Column(DateTime, nullable=False)
     creatorId = Column(Integer, ForeignKey("User.id"), nullable=False)
     value = Column(Integer, nullable=False)
@@ -28,32 +24,22 @@ class Send(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def new(db_sess: Session, creatorId: int, value: int, positive: bool, reusable: bool):
-        now = get_datetime_now()
         send = Send(
-            date=now,
+            date=get_datetime_now(),
             creatorId=creatorId,
             value=value,
             positive=positive,
             reusable=reusable,
         )
-
-        s = send
-        while s is not None:
-            id_big = randstr(8)
-            s = db_sess.query(Send).filter(Send.id_big == id_big).first()
-        send.id_big = id_big
+        send.set_unique_big_id(db_sess)
 
         db_sess.add(send)
         db_sess.commit()
 
         return send
 
-    @staticmethod
-    def get_by_big_id(db_sess: Session, big_id: int):
-        send = db_sess.query(Send).filter(Send.id_big == big_id).first()
-        return send
-
     def check_used_by(self, user: User):
+        from data.user_send import UserSend
         db_sess = Session.object_session(self)
         used = db_sess\
             .query(UserSend)\

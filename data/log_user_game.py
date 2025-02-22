@@ -1,13 +1,12 @@
 from sqlalchemy import Column, DateTime, Integer
-from sqlalchemy_serializer import SerializerMixin
 
-from .db_session import SqlAlchemyBase
+from bfs import SqlAlchemyBase, IdMixin
+from data._tables import Tables
 
 
-class UserGameLog(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = "UserGameLog"
+class UserGameLog(SqlAlchemyBase, IdMixin):
+    __tablename__ = Tables.UserGameLog
 
-    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     gameId = Column(Integer)
     userId = Column(Integer)
     clicks = Column(Integer)

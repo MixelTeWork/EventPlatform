@@ -1,12 +1,15 @@
+from typing import Union
+
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.operation import Operations
+
+from bfs import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any, response_msg,
+                 response_not_found, use_db_session, use_user, use_user_optional)
+from data._operations import Operations
 from data.quest import Quest
 from data.user import User
 from data.user_quest import UserQuest
-from utils import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any,
-                   response_msg, response_not_found, use_db_session, use_user, use_user_try)
 
 
 blueprint = Blueprint("quest", __name__)
@@ -14,10 +17,10 @@ blueprint = Blueprint("quest", __name__)
 
 @blueprint.route("/api/quests")
 @use_db_session()
-@use_user_try()
-def quests(db_sess: Session, user: User):
+@use_user_optional()
+def quests(db_sess: Session, user: Union[User, None]):
     quests = Quest.all_for_user(db_sess, user)
-    return jsonify(quests), 200
+    return jsonify(quests)
 
 
 @blueprint.route("/api/quests_full")
@@ -27,10 +30,10 @@ def quests(db_sess: Session, user: User):
 @permission_required_any(Operations.page_worker_quest, Operations.manage_quest)
 def quests_full(db_sess: Session, user: User):
     quests = Quest.all(db_sess, includeHidden=True)
-    return jsonify_list(quests, "get_dict_full"), 200
+    return jsonify_list(quests, "get_dict_full")
 
 
-@blueprint.route("/api/quest", methods=["POST"])
+@blueprint.post("/api/quest")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -40,10 +43,10 @@ def quest_add(db_sess: Session, user: User):
 
     quest = Quest.new(user, name, description, reward, hidden)
 
-    return jsonify(quest.get_dict_full()), 200
+    return quest.get_dict_full()
 
 
-@blueprint.route("/api/quest/<int:questId>", methods=["POST"])
+@blueprint.post("/api/quest/<int:questId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -58,10 +61,10 @@ def quest_edit(questId, db_sess: Session, user: User):
 
     quest.update(user, name, description, reward, hidden, dialog1, dialog2)
 
-    return jsonify(quest.get_dict_full()), 200
+    return quest.get_dict_full()
 
 
-@blueprint.route("/api/quest/<int:questId>", methods=["DELETE"])
+@blueprint.delete("/api/quest/<int:questId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -73,10 +76,10 @@ def quest_delete(questId, db_sess: Session, user: User):
 
     quest.delete(user)
 
-    return response_msg("ok"), 200
+    return response_msg("ok")
 
 
-@blueprint.route("/api/quest/<int:questId>/open", methods=["POST"])
+@blueprint.post("/api/quest/<int:questId>/open")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -87,4 +90,4 @@ def quest_open(questId, db_sess: Session, user: User):
 
     UserQuest.open_quest(user, user, quest)
 
-    return response_msg("ok"), 200
+    return response_msg("ok")

@@ -1,30 +1,31 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from data.operation import Operations
+
+from bfs import get_json_values_from_req, use_db_session, use_user
+from data._operations import Operations
+from data._roles import Roles
 from data.quest import Quest
-from data.role import Roles
 from data.send import Send
 from data.store_item import StoreItem
 from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
 from data.user_send import UserSend
-from utils import get_json_values_from_req, use_db_session, use_user
 
 
 blueprint = Blueprint("scanner", __name__)
 
 
-@blueprint.route("/api/scanner", methods=["POST"])
+@blueprint.post("/api/scanner")
 @jwt_required()
 @use_db_session()
 @use_user()
 def scanner(db_sess: Session, user: User):
-    code = get_json_values_from_req("code")
+    code: str = get_json_values_from_req("code")
 
     for key in SCANNERS:
-        if (code.startswith(key)):
+        if code.startswith(key):
             return SCANNERS[key](db_sess, user, code[len(key):])
 
     return respose_wrong(user, "")
@@ -54,7 +55,7 @@ def scanner_item(db_sess: Session, user: User, code: str):
         return respose_error(user, "store", f"Маловато средств для покупки {item.name}", item.price)
 
     user.balance -= item.price
-    Transaction.new(db_sess, user.id, 1, item.price, Actions.buyItem, item.id)
+    Transaction.new(db_sess, user.id, 1, item.price, Actions.buyItem, item.id, commit=False)
     item.decrease()
 
     return respose_ok(user, "store", item.name, item.price)
@@ -75,12 +76,12 @@ def scanner_send(db_sess: Session, user: User, code: str):
 
     if send.positive:
         user.balance += send.value
-        Transaction.new(db_sess, 1, user.id, send.value, Actions.send, send.id)
+        Transaction.new(db_sess, 1, user.id, send.value, Actions.send, send.id, commit=False)
     else:
         if user.balance < send.value:
             return respose_error(user, "send", "Маловато средств", send.value)
         user.balance -= send.value
-        Transaction.new(db_sess, user.id, 1, send.value, Actions.send, send.id)
+        Transaction.new(db_sess, user.id, 1, send.value, Actions.send, send.id, commit=False)
 
     if send.reusable:
         UserSend.new(user, send)
@@ -129,33 +130,33 @@ def scanner_promote(db_sess: Session, user: User, code: str):
 
 
 def respose_ok(user: User, action: str, msg: str, value=0):
-    return jsonify({
+    return {
         "res": "ok",
         "action": action,
         "value": value,
         "msg": msg,
         "balance": user.balance,
-    }), 200
+    }
 
 
 def respose_wrong(user: User, msg: str):
-    return jsonify({
+    return {
         "res": "wrong",
         "action": "",
         "value": 0,
         "msg": msg,
         "balance": user.balance,
-    }), 200
+    }
 
 
 def respose_error(user: User, action: str, msg: str, value=0):
-    return jsonify({
+    return {
         "res": "error",
         "action": action,
         "value": value,
         "msg": msg,
         "balance": user.balance,
-    }), 200
+    }
 
 
 SCANNERS = {
