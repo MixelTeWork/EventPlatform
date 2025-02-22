@@ -29,7 +29,7 @@ def store_items_full(db_sess: Session, user: User):
     return jsonify_list(items, "get_dict_full")
 
 
-@blueprint.route("/api/store_item", methods=["POST"])
+@blueprint.post("/api/store_item")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -47,7 +47,7 @@ def store_item_add(db_sess: Session, user: User):
     return item.get_dict_full()
 
 
-@blueprint.route("/api/store_item/<int:itemId>", methods=["POST"])
+@blueprint.post("/api/store_item/<int:itemId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -71,7 +71,7 @@ def store_item_patch(itemId, db_sess: Session, user: User):
     return item.get_dict_full()
 
 
-@blueprint.route("/api/store_item/<int:itemId>/decrease", methods=["POST"])
+@blueprint.post("/api/store_item/<int:itemId>/decrease")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -86,7 +86,7 @@ def store_item_decrease(itemId, db_sess: Session, user: User):
     return item.get_dict_full()
 
 
-@blueprint.route("/api/store_item/<int:itemId>", methods=["DELETE"])
+@blueprint.delete("/api/store_item/<int:itemId>")
 @jwt_required()
 @use_db_session()
 @use_user()

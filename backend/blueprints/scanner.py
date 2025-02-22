@@ -17,7 +17,7 @@ from data.user_send import UserSend
 blueprint = Blueprint("scanner", __name__)
 
 
-@blueprint.route("/api/scanner", methods=["POST"])
+@blueprint.post("/api/scanner")
 @jwt_required()
 @use_db_session()
 @use_user()

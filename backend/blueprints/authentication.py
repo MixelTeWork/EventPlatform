@@ -20,7 +20,7 @@ TICKETS_API_URL += "api/event_platform/"
 EVENT_ID = 3 if "dev" in sys.argv else 8
 
 
-@blueprint.route("/api/auth", methods=["POST"])
+@blueprint.post("/api/auth")
 @use_db_session()
 def login(db_sess: Session):
     login, password = get_json_values_from_req("login", "password")
@@ -35,14 +35,14 @@ def login(db_sess: Session):
     return response
 
 
-@blueprint.route("/api/logout", methods=["POST"])
+@blueprint.post("/api/logout")
 def logout():
     response = response_msg("logout successful")
     unset_jwt_cookies(response)
     return response
 
 
-@blueprint.route("/api/auth_ticket", methods=["POST"])
+@blueprint.post("/api/auth_ticket")
 @use_db_session()
 def login_ticket(db_sess: Session):
     code = get_json_values_from_req("code")
@@ -178,6 +178,6 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
     return user
 
 
-@blueprint.route("/api/auth_ticket_err", methods=["POST"])
+@blueprint.post("/api/auth_ticket_err")
 def login_ticket_err():
     return response_msg("ok")

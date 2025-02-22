@@ -22,7 +22,7 @@ def dialog(dialogId, db_sess: Session):
     return dialog.get_dict()
 
 
-@blueprint.route("/api/dialog/<int:dialogId>", methods=["POST"])
+@blueprint.post("/api/dialog/<int:dialogId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -46,7 +46,7 @@ def characters(db_sess: Session):
     return jsonify_list(items)
 
 
-@blueprint.route("/api/dialog/character", methods=["POST"])
+@blueprint.post("/api/dialog/character")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -63,7 +63,7 @@ def character_add(db_sess: Session, user: User):
     return character.get_dict()
 
 
-@blueprint.route("/api/dialog/character/<int:characterId>", methods=["POST"])
+@blueprint.post("/api/dialog/character/<int:characterId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -87,7 +87,7 @@ def character_edit(characterId, db_sess: Session, user: User):
     return character.get_dict()
 
 
-@blueprint.route("/api/dialog/character/<int:characterId>", methods=["DELETE"])
+@blueprint.delete("/api/dialog/character/<int:characterId>")
 @jwt_required()
 @use_db_session()
 @use_user()

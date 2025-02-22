@@ -19,7 +19,7 @@ def img(db_sess: Session, imgId):
     return img.create_file_response()
 
 
-@blueprint.route("/api/img", methods=["POST"])
+@blueprint.post("/api/img")
 @jwt_required()
 @use_db_session()
 @use_user()

@@ -31,7 +31,7 @@ def quests_full(db_sess: Session, user: User):
     return jsonify_list(quests, "get_dict_full")
 
 
-@blueprint.route("/api/quest", methods=["POST"])
+@blueprint.post("/api/quest")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -44,7 +44,7 @@ def quest_add(db_sess: Session, user: User):
     return quest.get_dict_full()
 
 
-@blueprint.route("/api/quest/<int:questId>", methods=["POST"])
+@blueprint.post("/api/quest/<int:questId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -62,7 +62,7 @@ def quest_edit(questId, db_sess: Session, user: User):
     return quest.get_dict_full()
 
 
-@blueprint.route("/api/quest/<int:questId>", methods=["DELETE"])
+@blueprint.delete("/api/quest/<int:questId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -77,7 +77,7 @@ def quest_delete(questId, db_sess: Session, user: User):
     return response_msg("ok")
 
 
-@blueprint.route("/api/quest/<int:questId>/open", methods=["POST"])
+@blueprint.post("/api/quest/<int:questId>/open")
 @jwt_required()
 @use_db_session()
 @use_user()

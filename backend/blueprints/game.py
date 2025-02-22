@@ -22,7 +22,7 @@ def duration(db_sess: Session, user: User):
     return {"duration": game.duration}
 
 
-@blueprint.route("/api/game/duration", methods=["POST"])
+@blueprint.post("/api/game/duration")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -45,7 +45,7 @@ def counter(db_sess: Session, user: User):
     return {"counter": game.counter}
 
 
-@blueprint.route("/api/game/counter", methods=["POST"])
+@blueprint.post("/api/game/counter")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -68,7 +68,7 @@ def startStr(db_sess: Session, user: User):
     return {"startStr": game.startStr}
 
 
-@blueprint.route("/api/game/startStr", methods=["POST"])
+@blueprint.post("/api/game/startStr")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -81,7 +81,7 @@ def set_startStr(db_sess: Session, user: User):
     return {"startStr": game.startStr}
 
 
-@blueprint.route("/api/game/start", methods=["POST"])
+@blueprint.post("/api/game/start")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -91,7 +91,7 @@ def start(db_sess: Session, user: User):
     return response_msg("ok")
 
 
-@blueprint.route("/api/game/reset", methods=["POST"])
+@blueprint.post("/api/game/reset")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -116,7 +116,7 @@ def state_full(db_sess: Session, user: User):
     return jsonify(Game.get_state_update(db_sess)), 200
 
 
-@blueprint.route("/api/game/click", methods=["POST"])
+@blueprint.post("/api/game/click")
 @jwt_required()
 @use_db_session()
 @use_user()

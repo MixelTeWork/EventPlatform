@@ -11,7 +11,7 @@ from data.user import User
 blueprint = Blueprint("send", __name__)
 
 
-@blueprint.route("/api/send", methods=["POST"])
+@blueprint.post("/api/send")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -24,7 +24,7 @@ def send(db_sess: Session, user: User):
     return send.get_dict()
 
 
-@blueprint.route("/api/send_check", methods=["POST"])
+@blueprint.post("/api/send_check")
 @jwt_required()
 @use_db_session()
 @use_user()
