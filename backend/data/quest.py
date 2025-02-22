@@ -52,7 +52,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
         return quests.all()
 
     @staticmethod
-    def all_for_user(db_sess: Session, user: User):
+    def all_for_user(db_sess: Session, user: Union[User, None]):
         from data.user_quest import UserQuest
         if user:
             userQuests = db_sess.query(UserQuest).filter(UserQuest.userId == user.id)
