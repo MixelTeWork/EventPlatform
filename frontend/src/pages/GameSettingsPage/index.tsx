@@ -56,6 +56,7 @@ export default function GameSettingsPage()
 			{displayError(gameReset)}
 			{displayError(mutateStartStr)}
 			<Link to="/game_screen" className={styles.openScreen}>Открыть экран</Link>
+			<Link to="/game_characters" className={styles.openScreen}>Персонажи турнира</Link>
 			<div className={styles.input}>
 				<span>Время начала</span>
 				<input type="text" value={startStr.v} onChange={e => startStr.set(e.target.value)} />

@@ -8,16 +8,18 @@ def init_values(dev=False, cmd=False):
         add_parent_to_path()
 
     from bfs import db_session, Log, get_datetime_now, randstr
-    from data.game import Game
-    from data.user import User
     from data.dialog import Dialog
+    from data.game import Game
     from data.quest import Quest
+    from data.tourney import Tourney
+    from data.user import User
 
     db_session.global_init(dev)
     db_sess = db_session.create_session()
     user_admin = User.get_admin(db_sess)
 
     Game.init(db_sess)
+    Tourney.init(db_sess)
     Dialog.new(user_admin, {"nodes": []}, 1)
     Dialog.new(user_admin, {"nodes": []}, 2)
 

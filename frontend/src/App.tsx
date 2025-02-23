@@ -31,6 +31,7 @@ import WorkerStorePage from "./pages/WorkerStorePage";
 import GamePage from "./pages/GamePage";
 import GameSettingsPage from "./pages/GameSettingsPage";
 import GameScreenPage from "./pages/GameScreenPage";
+import GameCharactersPage from "./pages/GameCharactersPage";
 
 export default function App()
 {
@@ -67,6 +68,7 @@ export default function App()
 				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}
 				{ProtectedRoute("manage_quest", "/manage_quest", <ManageQuestPage />)}
+				{ProtectedRoute("manage_games", "/game_characters", <GameCharactersPage />)}
 				{ProtectedRoute("manage_games", "/game_settings", <GameSettingsPage />)}
 				{ProtectedRoute("manage_games", "/game_screen", <GameScreenPage />)}
 				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
