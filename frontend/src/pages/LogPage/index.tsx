@@ -1,19 +1,30 @@
-import { LogItem, useLog } from "../../api/log";
+import { LogItem, useLog, useLogCacheClear, useLogLen } from "../../api/log";
 import Layout from "../../components/Layout"
 import { datetimeToString } from "../../utils/dates";
 import displayError from "../../utils/displayError";
+import useStateObj from "../../utils/useStateObj";
 import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
 
 export default function LogPage()
 {
 	useTitle("Log");
-	const log = useLog();
+	const clearCache = useLogCacheClear();
+	const page = useStateObj(0);
+	const log = useLog(page.v);
+	const logLen = useLogLen().data?.len ?? 0;
 
 	return <Layout centeredPage styles={{ fontFamily: "'PT Sans', Arial", background: "#1e1e1e" }} homeBtn>
-		{log.isFetching && <h3>Загрузка</h3>}
 		{displayError(log)}
-		{!log.isFetching && <button className={styles.btn} onClick={() => log.refetch()}>Update</button>}
+		<div className={styles.btns}>
+			<button disabled={log.isFetching} className="button button_small" onClick={() => { clearCache(); page.set(0); log.refetch(); }}>Update</button>
+			<button disabled={log.isFetching} className="button button_small" onClick={() => page.set(0)}>&lt;&lt;</button>
+			<button disabled={log.isFetching} className="button button_small" onClick={() => page.set(p => Math.max(p - 1, 0))}>&lt;</button>
+			<span>{page.v + 1}/{logLen}</span>
+			<button disabled={log.isFetching} className="button button_small" onClick={() => page.set(p => Math.min(p + 1, logLen - 1))}>&gt;</button>
+			<button disabled={log.isFetching} className="button button_small" onClick={() => page.set(logLen - 1)}>&gt;&gt;</button>
+		</div>
+		{log.isFetching && <h3>Загрузка</h3>}
 		<table className={styles.table}>
 			<thead>
 				<tr>

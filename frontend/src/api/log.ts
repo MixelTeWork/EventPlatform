@@ -1,11 +1,31 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { Modify } from "./dataTypes";
 import { fetchJsonGet } from "../utils/fetch";
 
-export function useLog()
+export function useLog(page = 0)
 {
-	return useQuery("log", async () =>
-		(await fetchJsonGet<LogItemResponse[]>("/api/debug/log")).map(parseLogResponse)
+	const queryClient = useQueryClient();
+	const fn = async (p: number) =>
+		(await fetchJsonGet<LogItemResponse[]>(`/api/debug/log?p=${p}`)).map(parseLogResponse);
+	queryClient.prefetchQuery(["log", page - 1], () => fn(page - 1));
+	queryClient.prefetchQuery(["log", page + 1], () => fn(page + 1));
+	return useQuery(["log", page], () => fn(page));
+}
+
+export function useLogCacheClear()
+{
+	const queryClient = useQueryClient();
+	return () =>
+	{
+		queryClient.removeQueries("log");
+		queryClient.invalidateQueries("logLen");
+	}
+}
+
+export function useLogLen()
+{
+	return useQuery("logLen", async () =>
+		await fetchJsonGet<LogLenResponse>("/api/debug/log_len")
 	);
 }
 
@@ -31,3 +51,8 @@ export interface LogItem
 type LogItemResponse = Modify<LogItem, {
 	date: string,
 }>
+
+export interface LogLenResponse
+{
+	len: number,
+}
