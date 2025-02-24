@@ -14,7 +14,7 @@ import { useTitle } from "../../utils/useTtile";
 
 export default function GameSettingsPage()
 {
-	useTitle("Настройки гонок");
+	useTitle("Настройки игры");
 	const state = useGameState();
 	const gameDuration = useGameDuration();
 	const gameCounter = useGameCounter();
