@@ -3,6 +3,19 @@ import { fetchDelete, fetchJsonGet, fetchJsonPost } from "../utils/fetch";
 import type { ImgData } from "./dataTypes";
 import { queryListAddItem, queryListDeleteItem, queryListUpdateItem } from "../utils/query";
 
+
+export interface TourneyData
+{
+	tree: TreeNode,
+}
+
+export interface TreeNode
+{
+	characterId: number,
+	left: TreeNode | null,
+	right: TreeNode | null,
+}
+
 export function useTourneyCharacters()
 {
 	return useQuery("tourneyCharacters", async () =>

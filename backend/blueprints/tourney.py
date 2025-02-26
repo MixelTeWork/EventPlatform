@@ -4,11 +4,22 @@ from sqlalchemy.orm import Session
 
 from bfs import Image, get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
 from data._operations import Operations
+from data.tourney import Tourney
 from data.tourney_character import TourneyCharacter
 from data.user import User
 
 
 blueprint = Blueprint("tourney", __name__)
+
+
+@blueprint.route("/api/tourney")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def tourney(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    return tourney.get_dict()
 
 
 @blueprint.route("/api/tourney/characters")

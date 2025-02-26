@@ -32,6 +32,7 @@ import GamePage from "./pages/GamePage";
 import GameSettingsPage from "./pages/GameSettingsPage";
 import GameScreenPage from "./pages/GameScreenPage";
 import GameCharactersPage from "./pages/GameCharactersPage";
+import TourneyPage from "./pages/TourneyPage";
 
 export default function App()
 {
@@ -71,6 +72,7 @@ export default function App()
 				{ProtectedRoute("manage_games", "/game_characters", <GameCharactersPage />)}
 				{ProtectedRoute("manage_games", "/game_settings", <GameSettingsPage />)}
 				{ProtectedRoute("manage_games", "/game_screen", <GameScreenPage />)}
+				{ProtectedRoute("manage_games", "/tourney_screen", <TourneyPage />)}
 				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
 				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}

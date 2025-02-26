@@ -15,23 +15,24 @@ class Game
 
 	private updateScreen?: () => void;
 	private state: GameStateFull | null = null;
-	private updateTimeout?: NodeJS.Timeout;
+	private startI = 0;
 	private counterTimer?: NodeJS.Timer;
 	private stoped = false;
-
-	public stop()
-	{
-		this.stoped = true;
-		clearTimeout(this.updateTimeout);
-		clearInterval(this.counterTimer);
-	}
 
 	public start(updateScreen: () => void)
 	{
 		this.stoped = false;
+		this.startI++;
 		this.updateScreen = updateScreen;
-		this.update();
+		this.updateState(this.startI);
 		this.counterTimer = setInterval(() => this.counter(), 1000);
+	}
+
+	public stop()
+	{
+		this.stoped = true;
+		this.startI++;
+		clearInterval(this.counterTimer);
 	}
 
 	private counter()
@@ -46,16 +47,19 @@ class Game
 		}
 	}
 
-	private async update()
+	private async updateState(startI: number)
 	{
-		if (this.stoped) return;
+		if (startI != this.startI) return;
 		const updateStart = new Date();
 		try
 		{
-			this.state = await fetchJsonGet<GameStateFull>("/api/game/state_full");
+			const newState = await fetchJsonGet<GameStateFull>("/api/game/state_full");
+			if (startI != this.startI) return;
+			this.state = newState;
 		}
 		catch (e)
 		{
+			if (startI != this.startI) return;
 			this.state = null;
 			this.title = <h3 style={{ color: "tomato", textAlign: "center" }}>{formatError(e)}</h3>;
 			this.updateScreen?.();
@@ -63,11 +67,11 @@ class Game
 		}
 		finally
 		{
+			if (startI != this.startI) return;
 			const now = new Date();
 			const dt = +now - +updateStart;
 			const delay = this.state?.state == "going" ? 1000 : 5000;
-			clearTimeout(this.updateTimeout);
-			this.updateTimeout = setTimeout(() => this.update(), Math.max(0, delay - dt));
+			setTimeout(() => this.updateState(startI), Math.max(0, delay - dt));
 		}
 		this.onNewState();
 		this.updateScreen?.();
