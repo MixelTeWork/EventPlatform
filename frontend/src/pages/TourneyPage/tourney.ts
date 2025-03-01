@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { fetchJsonGet } from "../../utils/fetch";
-import { type TourneyCharacter, type TourneyData, type TreeNode } from "../../api/tourney";
+import { type TourneyCharacter, type TourneyData } from "../../api/tourney";
 import { formatError } from "../../utils/displayError";
 import { Tree, type TourneyCharactersTreeData } from "./tree";
 
@@ -54,6 +54,7 @@ class Tourney
 			const newState = await fetchJsonGet<TourneyData>("/api/tourney");
 			if (startI != this.startI) return;
 			this.state = newState;
+			this.error = "";
 		}
 		catch (e)
 		{
@@ -92,7 +93,11 @@ class Tourney
 	private onNewState()
 	{
 		if (!this.state || !this.characters) return;
-		if (!this.tree)
+		if (this.tree)
+		{
+			this.tree.updateData(this.state.tree);
+		}
+		else
 		{
 			const characters = {} as TourneyCharactersTreeData;
 			this.characters.forEach(ch =>

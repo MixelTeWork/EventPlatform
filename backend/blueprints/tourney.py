@@ -22,6 +22,36 @@ def tourney(db_sess: Session, user: User):
     return tourney.get_dict()
 
 
+@blueprint.post("/api/tourney/nodes/<int:nodeId>")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def edit_node(nodeId, db_sess: Session, user: User):
+    characterId = get_json_values_from_req("characterId")
+
+    tourney = Tourney.get(db_sess)
+    r = tourney.edit_node(nodeId, characterId)
+    if not r:
+        return response_not_found("node", nodeId)
+
+    return tourney.get_dict()
+
+
+@blueprint.post("/api/tourney/third")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def set_third(db_sess: Session, user: User):
+    characterId = get_json_values_from_req("characterId")
+
+    tourney = Tourney.get(db_sess)
+    tourney.set_third(characterId)
+
+    return tourney.get_dict()
+
+
 @blueprint.route("/api/tourney/characters")
 @jwt_required()
 @use_db_session()

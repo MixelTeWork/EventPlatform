@@ -127,6 +127,7 @@ export function useGame()
 	{
 		game.start(() => update.set(v => v + 1));
 		return () => game.stop();
+		// eslint-disable-next-line
 	}, []);
 	return game;
 }

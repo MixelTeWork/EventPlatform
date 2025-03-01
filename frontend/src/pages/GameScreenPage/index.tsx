@@ -23,6 +23,7 @@ export default function GameScreenPage()
 			ostSound.play();
 		else
 			ostSound.stop();
+	// eslint-disable-next-line
 	}, [game.isGoing, soundEnable.v])
 
 	useEffect(() =>

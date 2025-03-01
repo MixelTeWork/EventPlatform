@@ -1,4 +1,4 @@
-import type { TourneyCharacter, TreeNode as ITreeNode } from "../../api/tourney";
+import type { TreeNode as ITreeNode } from "../../api/tourney";
 
 
 export class Tree
@@ -8,6 +8,11 @@ export class Tree
 		tree: ITreeNode,
 		private characters: TourneyCharactersTreeData,
 	)
+	{
+		this.tree = createTree(tree, this.characters);
+	}
+
+	public updateData(tree: ITreeNode)
 	{
 		this.tree = createTree(tree, this.characters);
 	}

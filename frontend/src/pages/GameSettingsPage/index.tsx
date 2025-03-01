@@ -11,6 +11,7 @@ import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import { useEffect } from "react";
 import { useTitle } from "../../utils/useTtile";
+import TourneyEdit from "./TourneyEdit";
 
 export default function GameSettingsPage()
 {
@@ -81,6 +82,7 @@ export default function GameSettingsPage()
 					<button onClick={() => counter.set(gameCounter.data.counter)}><IconCancel /></button>
 				</>}
 			</div>
+			<TourneyEdit />
 			{state.data?.state == "wait" && <button className={styles.start} onClick={popupOpen.setT}>Старт!</button>}
 			<button className={styles.start} onClick={popupOpen3.setT}>Сбросить</button>
 			<Popup open={popupOpen.v} close={popupOpen.setF} closeOnOutclick>
