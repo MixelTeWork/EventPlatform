@@ -38,6 +38,7 @@ function Tree({ tree, characters, c = false }: { tree: TreeNode, characters: Tou
 	const character = characters.find(ch => ch.id == characterId.v);
 	const editNode = useMutationEditTourneyNode(tree.id);
 
+	// eslint-disable-next-line
 	useEffect(() => { characterId.set(tree.characterId) }, [tree.characterId]);
 
 	return (
@@ -76,6 +77,7 @@ function ThirdPlace({ third, characters }: { third: number, characters: TourneyC
 	const character = characters.find(ch => ch.id == characterId.v);
 	const editNode = useMutationEditTourneyThird();
 
+	// eslint-disable-next-line
 	useEffect(() => { characterId.set(third) }, [third]);
 
 	return (

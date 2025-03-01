@@ -37,6 +37,8 @@ class Tourney
 		window.setTourneyTransform = (dx: number, dy: number, s: number) => this.transform = { dx, dy, s };
 		// @ts-ignore
 		window.setTourneyTransform(-50, -100, 0.35);
+		// @ts-ignore
+		window.setTourneyTransform(-50, -100, 0.6);
 	}
 
 	public stop()
@@ -95,7 +97,7 @@ class Tourney
 		if (!this.state || !this.characters) return;
 		if (this.tree)
 		{
-			this.tree.updateData(this.state.tree);
+			this.tree.updateData(this.state);
 		}
 		else
 		{
@@ -106,7 +108,7 @@ class Tourney
 				img.src = ch.img;
 				characters[ch.id] = { ...ch, img };
 			});
-			this.tree = new Tree(this.state.tree, characters);
+			this.tree = new Tree(this.state, characters);
 		}
 	}
 

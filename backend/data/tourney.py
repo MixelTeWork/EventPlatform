@@ -83,7 +83,9 @@ def find_node(tree, id: int):
     if tree["id"] == id:
         return tree
     if tree["left"]:
-        return find_node(tree["left"], id)
+        r = find_node(tree["left"], id)
+        if r:
+            return r
     if tree["right"]:
         return find_node(tree["right"], id)
     return False

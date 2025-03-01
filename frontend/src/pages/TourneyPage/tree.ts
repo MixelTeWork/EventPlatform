@@ -1,25 +1,39 @@
-import type { TreeNode as ITreeNode } from "../../api/tourney";
+import type { TreeNode as ITreeNode, TourneyData } from "../../api/tourney";
 
 
 export class Tree
 {
 	private tree: TreeNode;
+	private third: TreeNode;
+
 	constructor(
-		tree: ITreeNode,
+		data: TourneyData,
 		private characters: TourneyCharactersTreeData,
 	)
 	{
-		this.tree = createTree(tree, this.characters);
+		this.tree = new TreeNode(this.characters, { id: -1, characterId: -1 });
+		this.third = new TreeNode(this.characters, { id: -1, characterId: -1 });
+		this.updateData(data)
 	}
 
-	public updateData(tree: ITreeNode)
+	public updateData(data: TourneyData)
 	{
-		this.tree = createTree(tree, this.characters);
+		this.tree = createTree(data.tree, this.characters);
+		if (data.tree.left && data.tree.right)
+		{
+			const left = data.tree.left.characterId == data.tree.left.left?.characterId ? data.tree.left.right : data.tree.left.left;
+			const right = data.tree.right.characterId == data.tree.right.left?.characterId ? data.tree.right.right : data.tree.right.left;
+			this.third = new TreeNode(this.characters, { id: -2, characterId: data.third },
+				new TreeNode(this.characters, left || { id: -1, characterId: -1 }),
+				new TreeNode(this.characters, right || { id: -1, characterId: -1 }),
+			);
+		}
 	}
 
 	public draw(ctx: CanvasRenderingContext2D)
 	{
 		this.tree.draw(ctx);
+		this.third.draw(ctx, -1);
 	}
 }
 
@@ -48,6 +62,7 @@ class TreeNode
 	public draw(ctx: CanvasRenderingContext2D, type = 1)
 	{
 		ctx.save();
+		if (type == -1) ctx.translate(0, this.S * 4);
 		ctx.fillStyle = "cyan";
 		if (type == 1) ctx.fillStyle = "blue";
 		ctx.fillRect(0, 0, this.S * 3, this.S);
@@ -222,6 +237,29 @@ class TreeNode
 			if (this.left) this.drawLine0(ctx, [0.5, 0], [0, 0.9], [0.5, 0]);
 			if (this.right) this.drawLine0(ctx, [0.5, 0], [0, 0.9], [0.5, 0]);
 		}
+		else if (type == -1)
+		{
+			ctx.save();
+			ctx.translate(-this.S * 2, this.S * 1.4);
+			if (this.left) this.left.draw(ctx, -2);
+			ctx.translate(this.S * 4, 0);
+			if (this.right) this.right.draw(ctx, -3);
+			ctx.restore();
+
+			ctx.translate(this.S * 1.5, this.S * 1);
+			if (this.left) this.drawLine0(ctx, [0, 0.9], [-0.5, 0]);
+			if (this.right) this.drawLine0(ctx, [0, 0.9], [0.5, 0]);
+		}
+		else if (type == -2)
+		{
+			ctx.translate(this.S * 1.5, 0);
+			this.drawLine0(ctx, [0, -4.9]);
+		}
+		else if (type == -3)
+		{
+			ctx.translate(this.S * 1.5, 0);
+			this.drawLine0(ctx, [0, -2.4]);
+		}
 
 		ctx.restore();
 	}
@@ -251,6 +289,7 @@ class TreeNode
 
 interface NodeData
 {
+	id: number,
 	characterId: number,
 }
 
@@ -258,7 +297,7 @@ function createTree(tree: ITreeNode, characters: TourneyCharactersTreeData): Tre
 {
 	return new TreeNode(
 		characters,
-		{ characterId: tree.characterId },
+		{ id: tree.id, characterId: tree.characterId },
 		tree.left && createTree(tree.left, characters),
 		tree.right && createTree(tree.right, characters)
 	);
