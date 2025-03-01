@@ -215,6 +215,49 @@ def docs():
         "/api/dialog/character/<int:characterId> DELETE": {
             "__desc__": "Delete character",
         },
+        "/api/tourney": {
+            "__desc__": "Get tourney",
+            "response": "Tourney",
+        },
+        "/api/tourney/nodes/<int:nodeId> POST": {
+            "__desc__": "Edit tourney node",
+            "request": {
+                "characterId": "number",
+            },
+            "response": "Tourney",
+        },
+        "/api/tourney/tourney/third POST": {
+            "__desc__": "Edit third place",
+            "request": {
+                "characterId": "number",
+            },
+            "response": "Tourney",
+        },
+        "/api/tourney/characters": {
+            "__desc__": "Get tourney characters",
+            "response": "TourneyCharacter[]",
+        },
+        "/api/tourney/characters POST": {
+            "__desc__": "Add tourney character",
+            "request": {
+                "name": "string",
+                "color": "string",
+                "img": "Image",
+            },
+            "response": "TourneyCharacter",
+        },
+        "/api/tourney/characters/<int:characterId> POST": {
+            "__desc__": "Edit tourney character",
+            "request": {
+                "name": "?string",
+                "color": "?string",
+                "img": "?Image",
+            },
+            "response": "TourneyCharacter",
+        },
+        "/api/tourney/characters/<int:characterId> DELETE": {
+            "__desc__": "Delete tourney character",
+        },
         "User": {
             "id": "string",
             "name": "string",
@@ -305,5 +348,21 @@ def docs():
             "name": "string",
             "img": "string",
             "orien": "number",
+        },
+        "Tourney": {
+            "tree": "TourneyTreeNode",
+            "third": "number",
+        },
+        "TourneyTreeNode": {
+            "id": "number",
+            "characterId": "number",
+            "left": "TourneyTreeNode | null",
+            "right": "TourneyTreeNode | null",
+        },
+        "TourneyCharacter": {
+            "id": "number",
+            "name": "string",
+            "color": "string",
+            "img": "string",
         },
     }

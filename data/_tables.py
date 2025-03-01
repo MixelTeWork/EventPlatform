@@ -9,6 +9,8 @@ class Tables(TablesBase):
     Quest = "Quest"
     Send = "Send"
     StoreItem = "StoreItem"
+    Tourney = "Tourney"
+    TourneyCharacter = "TourneyCharacter"
     Transaction = "Transaction"
     UserGame = "UserGame"
     UserGameLog = "UserGameLog"
