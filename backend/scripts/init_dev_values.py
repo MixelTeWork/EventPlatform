@@ -31,8 +31,9 @@ def init_dev_values(dev=False, cmd=False):
     shutil.copy("scripts/dev_init_data/4.png", "images/4.png")
     db_sess.add(Image(id=1, name="img1", type="jpeg", creationDate=now, createdById=user_admin.id))
     db_sess.add(Image(id=2, name="img2", type="jpeg", creationDate=now, createdById=user_admin.id))
-    db_sess.add(Image(id=3, name="img1", type="png", creationDate=now, createdById=user_admin.id))
-    db_sess.add(Image(id=4, name="img2", type="png", creationDate=now, createdById=user_admin.id))
+    db_sess.add(Image(id=3, name="img3", type="png", creationDate=now, createdById=user_admin.id))
+    db_sess.add(Image(id=4, name="img4", type="png", creationDate=now, createdById=user_admin.id))
+    db_sess.add(Image(id=5, name="img5", type="png", creationDate=now, createdById=user_admin.id))
 
     character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1, 1)
     character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2, 1)
@@ -42,6 +43,8 @@ def init_dev_values(dev=False, cmd=False):
     TourneyCharacter.new(user_admin, "Курита Мален", 3)
     TourneyCharacter.new(user_admin, "Суль Минохон", 4)
     TourneyCharacter.new(user_admin, "Минь Сулёхен", 4)
+    for i in range(16 - 5):
+        TourneyCharacter.new(user_admin, f"Бот #{i+1}", 5)
     Tourney.get(db_sess).gen_new_tree()
 
     dialog = Dialog.new(user_admin, {

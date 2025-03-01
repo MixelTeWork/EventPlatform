@@ -35,6 +35,8 @@ class Tourney
 		this.updateState(this.startI);
 		// @ts-ignore
 		window.setTourneyTransform = (dx: number, dy: number, s: number) => this.transform = { dx, dy, s };
+		// @ts-ignore
+		window.setTourneyTransform(-50, -100, 0.35);
 	}
 
 	public stop()
