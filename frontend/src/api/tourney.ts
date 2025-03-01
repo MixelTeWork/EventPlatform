@@ -36,6 +36,7 @@ export interface TourneyCharacter
 {
 	id: number,
 	name: string,
+	color: string,
 	img: string,
 }
 
@@ -58,6 +59,7 @@ export function useMutationAddTourneyCharacter(onSuccess?: (data: TourneyCharact
 export interface TourneyCharacterData
 {
 	name: string,
+	color: string,
 	img?: ImgData,
 }
 

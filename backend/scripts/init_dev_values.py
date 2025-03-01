@@ -1,3 +1,4 @@
+import json
 import sys
 import os
 
@@ -8,6 +9,7 @@ def init_dev_values(dev=False, cmd=False):
         add_parent_to_path()
 
     import shutil
+    from random import randint, seed
     from bfs import db_session, Log, Image, randstr, get_datetime_now
     from data._roles import Roles
     from data.dialog import Dialog
@@ -38,14 +40,16 @@ def init_dev_values(dev=False, cmd=False):
     character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1, 1)
     character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2, 1)
 
-    TourneyCharacter.new(user_admin, "Ярик Всемогущий", 1)
-    TourneyCharacter.new(user_admin, "Альвер Шухтен", 2)
-    TourneyCharacter.new(user_admin, "Курита Мален", 3)
-    TourneyCharacter.new(user_admin, "Суль Минохон", 4)
-    TourneyCharacter.new(user_admin, "Минь Сулёхен", 4)
+    TourneyCharacter.new(user_admin, "Ярик Всемогущий", "#ae00ff", 1)
+    TourneyCharacter.new(user_admin, "Альвер Шухтен", "#00ccff", 2)
+    TourneyCharacter.new(user_admin, "Курита Мален", "#ffae00", 3)
+    TourneyCharacter.new(user_admin, "Суль Минохон", "#00ff1e", 4)
+    TourneyCharacter.new(user_admin, "Минь Сулёхен", "#ff0000", 4)
     for i in range(16 - 5):
-        TourneyCharacter.new(user_admin, f"Бот #{i+1}", 5)
+        seed(i + 7)
+        TourneyCharacter.new(user_admin, f"Бот #{i+1}", f"#{randint(0, 16777215):x}", 5)
     Tourney.get(db_sess).gen_new_tree()
+    Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
 
     dialog = Dialog.new(user_admin, {
         "nodes": [
@@ -78,6 +82,11 @@ def add_parent_to_path():
     current = os.path.dirname(os.path.realpath(__file__))
     parent = os.path.dirname(current)
     sys.path.append(parent)
+
+
+def read_file(path: str):
+    with open(path, "r", encoding="utf8") as f:
+        return f.read()
 
 
 if __name__ == "__main__":

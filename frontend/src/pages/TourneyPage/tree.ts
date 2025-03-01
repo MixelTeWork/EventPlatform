@@ -21,8 +21,18 @@ export class Tree
 		this.tree = createTree(data.tree, this.characters);
 		if (data.tree.left && data.tree.right)
 		{
-			const left = data.tree.left.characterId == data.tree.left.left?.characterId ? data.tree.left.right : data.tree.left.left;
-			const right = data.tree.right.characterId == data.tree.right.left?.characterId ? data.tree.right.right : data.tree.right.left;
+			const left =
+				data.tree.left.characterId == data.tree.left.left?.characterId ?
+					data.tree.left.right : (
+						data.tree.left.characterId == data.tree.left.right?.characterId ?
+							data.tree.left.left : null
+					);
+			const right =
+				data.tree.right.characterId == data.tree.right.left?.characterId ?
+					data.tree.right.right : (
+						data.tree.right.characterId == data.tree.right.right?.characterId ?
+							data.tree.right.left : null
+					);
 			this.third = new TreeNode(this.characters, { id: -2, characterId: data.third },
 				new TreeNode(this.characters, left || { id: -1, characterId: -1 }),
 				new TreeNode(this.characters, right || { id: -1, characterId: -1 }),
@@ -41,6 +51,7 @@ interface TourneyCharacterTreeData
 {
 	id: number,
 	name: string,
+	color: string,
 	img: HTMLImageElement,
 }
 
@@ -62,16 +73,20 @@ class TreeNode
 	public draw(ctx: CanvasRenderingContext2D, type = 1)
 	{
 		ctx.save();
+		const imgRight = [4, 5, 6, 7].includes(type);
+		const character = this.characters[this.data.characterId];
+
 		if (type == -1) ctx.translate(0, this.S * 4);
+
 		ctx.fillStyle = "cyan";
 		if (type == 1) ctx.fillStyle = "blue";
 		ctx.fillRect(0, 0, this.S * 3, this.S);
+
 		ctx.strokeStyle = "magenta";
 		ctx.lineWidth = 2;
-		const imgRight = [4, 5, 6, 7].includes(type);
+
 		ctx.strokeRect(0, 0, this.S * 3, this.S);
-		ctx.strokeRect(imgRight ? this.S * 2 : 0, 0, this.S, this.S);
-		const character = this.characters[this.data.characterId];
+
 		if (character)
 		{
 			ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S);
@@ -85,6 +100,9 @@ class TreeNode
 			ctx.fillStyle = "magenta";
 			ctx.fillText("Winner", this.S * 1.1, this.S / 2, this.S * 1.9);
 		}
+
+		if (character) ctx.strokeStyle = character.color;
+		ctx.strokeRect(imgRight ? this.S * 2 : 0, 0, this.S, this.S);
 
 		// ctx.font = "40px ZeroCool, Arial";
 		// ctx.fillStyle = "magenta";
@@ -103,9 +121,11 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 1.5, 0);
-			if (this.left) this.drawLine0(ctx, [0, -0.5]);
-			ctx.translate(0, this.S * 1.5);
-			if (this.right) this.drawLine0(ctx, [0, -0.5]);
+			this.drawLines(ctx,
+				[[0, 0], [0, -0.5]],
+				[[0, 1], [0, 0.5]],
+				false,
+			);
 		}
 		else if (type == 2)
 		{
@@ -117,8 +137,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 1.5, 0);
-			if (this.left) this.drawLine0(ctx, [0, -0.5], [-2, 0], [0, 2.5], [-0.5, 0], [0, -0.5], [-0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, -0.5], [-2, 0], [0, 2.5], [-0.5, 0], [0, 0.5], [-0.5, 0]);
+			this.drawLines(ctx,
+				[[0, -0.5], [-2, 0], [0, 2.5], [-0.5, 0], [0, -0.5], [-0.5, 0]],
+				[[0, -0.5], [-2, 0], [0, 2.5], [-0.5, 0], [0, 0.5], [-0.5, 0]],
+			)
 		}
 		else if (type == 3)
 		{
@@ -130,8 +152,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 1.5, this.S * 1);
-			if (this.left) this.drawLine0(ctx, [0, 0.5], [2, 0], [0, -2.5], [0.5, 0], [0, -0.5], [0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, 0.5], [2, 0], [0, -2.5], [0.5, 0], [0, 0.5], [0.5, 0]);
+			this.drawLines(ctx,
+				[[0, 0.5], [2, 0], [0, -2.5], [0.5, 0], [0, -0.5], [0.5, 0]],
+				[[0, 0.5], [2, 0], [0, -2.5], [0.5, 0], [0, 0.5], [0.5, 0]],
+			);
 		}
 		else if (type == 4)
 		{
@@ -143,8 +167,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 2, 0);
-			if (this.left) this.drawLine0(ctx, [0, -2.3], [-0.5, 0], [0, -0.5], [-0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, -2.3], [-0.5, 0], [0, 0.5], [-0.5, 0]);
+			this.drawLines(ctx,
+				[[0, -2.3], [-0.5, 0], [0, -0.5], [-0.5, 0]],
+				[[0, -2.3], [-0.5, 0], [0, 0.5], [-0.5, 0]],
+			);
 		}
 		else if (type == 5)
 		{
@@ -156,8 +182,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 2, this.S * 1);
-			if (this.left) this.drawLine0(ctx, [0, 2.3], [-0.5, 0], [0, -0.5], [-0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, 2.3], [-0.5, 0], [0, 0.5], [-0.5, 0]);
+			this.drawLines(ctx,
+				[[0, 2.3], [-0.5, 0], [0, -0.5], [-0.5, 0]],
+				[[0, 2.3], [-0.5, 0], [0, 0.5], [-0.5, 0]],
+			);
 		}
 		else if (type == 6)
 		{
@@ -169,8 +197,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(0, this.S * 0.5);
-			if (this.left) this.drawLine0(ctx, [-0.5, 0], [0, -0.9], [-0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [-0.5, 0], [0, -0.9], [-0.5, 0]);
+			this.drawLines(ctx,
+				[[-0.5, 0], [0, -0.9], [-0.5, 0]],
+				[[-0.5, 0], [0, -0.9], [-0.5, 0]],
+			);
 		}
 		else if (type == 7)
 		{
@@ -182,8 +212,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(0, this.S * 0.5);
-			if (this.left) this.drawLine0(ctx, [-0.5, 0], [0, 0.9], [-0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [-0.5, 0], [0, 0.9], [-0.5, 0]);
+			this.drawLines(ctx,
+				[[-0.5, 0], [0, 0.9], [-0.5, 0]],
+				[[-0.5, 0], [0, 0.9], [-0.5, 0]],
+			);
 		}
 		else if (type == 8)
 		{
@@ -195,8 +227,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 1, 0);
-			if (this.left) this.drawLine0(ctx, [0, -2.3], [0.5, 0], [0, -0.5], [0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, -2.3], [0.5, 0], [0, 0.5], [0.5, 0]);
+			this.drawLines(ctx,
+				[[0, -2.3], [0.5, 0], [0, -0.5], [0.5, 0]],
+				[[0, -2.3], [0.5, 0], [0, 0.5], [0.5, 0]],
+			);
 		}
 		else if (type == 9)
 		{
@@ -208,8 +242,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 1, this.S * 1);
-			if (this.left) this.drawLine0(ctx, [0, 2.3], [0.5, 0], [0, -0.5], [0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, 2.3], [0.5, 0], [0, 0.5], [0.5, 0]);
+			this.drawLines(ctx,
+				[[0, 2.3], [0.5, 0], [0, -0.5], [0.5, 0]],
+				[[0, 2.3], [0.5, 0], [0, 0.5], [0.5, 0]],
+			);
 		}
 		else if (type == 10)
 		{
@@ -221,8 +257,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 3, this.S * 0.5);
-			if (this.left) this.drawLine0(ctx, [0.5, 0], [0, -0.9], [0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0.5, 0], [0, -0.9], [0.5, 0]);
+			this.drawLines(ctx,
+				[[0.5, 0], [0, -0.9], [0.5, 0]],
+				[[0.5, 0], [0, -0.9], [0.5, 0]],
+			);
 		}
 		else if (type == 11)
 		{
@@ -234,8 +272,10 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 3, this.S * 0.5);
-			if (this.left) this.drawLine0(ctx, [0.5, 0], [0, 0.9], [0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0.5, 0], [0, 0.9], [0.5, 0]);
+			this.drawLines(ctx,
+				[[0.5, 0], [0, 0.9], [0.5, 0]],
+				[[0.5, 0], [0, 0.9], [0.5, 0]],
+			);
 		}
 		else if (type == -1)
 		{
@@ -247,17 +287,21 @@ class TreeNode
 			ctx.restore();
 
 			ctx.translate(this.S * 1.5, this.S * 1);
-			if (this.left) this.drawLine0(ctx, [0, 0.9], [-0.5, 0]);
-			if (this.right) this.drawLine0(ctx, [0, 0.9], [0.5, 0]);
+			this.drawLines(ctx,
+				[[0, 0.9], [-0.5, 0]],
+				[[0, 0.9], [0.5, 0]],
+			);
 		}
 		else if (type == -2)
 		{
 			ctx.translate(this.S * 1.5, 0);
+			if (character) ctx.strokeStyle = character.color;
 			this.drawLine0(ctx, [0, -4.9]);
 		}
 		else if (type == -3)
 		{
 			ctx.translate(this.S * 1.5, 0);
+			if (character) ctx.strokeStyle = character.color;
 			this.drawLine0(ctx, [0, -2.4]);
 		}
 
@@ -267,6 +311,7 @@ class TreeNode
 	private drawLine(ctx: CanvasRenderingContext2D, ...points: [number, number][])
 	{
 		if (points.length == 0) return;
+		points = points.map(v => ([v[0] * this.S, v[1] * this.S]));
 		ctx.beginPath();
 		let x = points[0][0];
 		let y = points[0][1];
@@ -282,8 +327,43 @@ class TreeNode
 
 	private drawLine0(ctx: CanvasRenderingContext2D, ...points: [number, number][])
 	{
-		if (points.length == 0) return;
-		this.drawLine(ctx, [0, 0], ...points.map(v => ([v[0] * this.S, v[1] * this.S]) as any));
+		this.drawLine(ctx, [0, 0], ...points);
+	}
+
+	private drawLines(ctx: CanvasRenderingContext2D, left: [number, number][], right: [number, number][], zero = true)
+	{
+		const drawLine = zero ? this.drawLine0.bind(this) : this.drawLine.bind(this);
+		const winner = this.data.characterId < 0 ? 0 : (this.data.characterId == this.left?.data.characterId ? -1 : (this.data.characterId == this.right?.data.characterId ? 1 : 0));
+		ctx.strokeStyle = "gray";
+		if (winner == 0)
+		{
+			if (this.left) drawLine(ctx, ...left);
+			if (this.right) drawLine(ctx, ...right);
+		}
+		else
+		{
+			const character = this.characters[this.data.characterId];
+			if (winner == -1)
+			{
+				if (this.right)
+				{
+					ctx.strokeStyle = this.characters[this.right.data.characterId]?.color;
+					drawLine(ctx, ...right);
+				}
+				ctx.strokeStyle = character?.color;
+				if (this.left) drawLine(ctx, ...left);
+			}
+			else
+			{
+				if (this.left)
+				{
+					ctx.strokeStyle = this.characters[this.left.data.characterId]?.color;
+					drawLine(ctx, ...left);
+				}
+				ctx.strokeStyle = character?.color;
+				if (this.right) drawLine(ctx, ...right);
+			}
+		}
 	}
 }
 

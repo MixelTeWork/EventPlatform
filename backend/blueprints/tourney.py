@@ -68,13 +68,13 @@ def characters(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def add_character(db_sess: Session, user: User):
-    name, img_data = get_json_values_from_req("name", "img")
+    name, color, img_data = get_json_values_from_req("name", "color", "img")
 
     img, image_error = Image.new(user, img_data)
     if image_error:
         return response_msg(image_error, 400)
 
-    character = TourneyCharacter.new(user, name, img.id)
+    character = TourneyCharacter.new(user, name, color, img.id)
 
     return character.get_dict()
 
@@ -85,7 +85,7 @@ def add_character(db_sess: Session, user: User):
 @use_user()
 @permission_required(Operations.manage_games)
 def store_item_patch(characterId, db_sess: Session, user: User):
-    name, img_data = get_json_values_from_req(("name", None), ("img", None))
+    name, color, img_data = get_json_values_from_req(("name", None), ("color", None), ("img", None))
 
     character = TourneyCharacter.get(db_sess, characterId)
     if character is None:
@@ -98,7 +98,7 @@ def store_item_patch(characterId, db_sess: Session, user: User):
             return response_msg(image_error, 400)
         imgId = img.id
 
-    character.update(user, name, imgId)
+    character.update(user, name, color, imgId)
 
     return character.get_dict()
 

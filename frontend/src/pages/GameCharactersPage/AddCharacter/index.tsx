@@ -15,6 +15,7 @@ export default function AddCharacter()
 	const popupOpen = useStateBool(false);
 	const imgData = useStateObj<ImgData | null>(null);
 	const nameRef = useRef<HTMLInputElement>(null);
+	const colorRef = useRef<HTMLInputElement>(null);
 	const mutationAdd = useMutationAddTourneyCharacter(() =>
 	{
 		imgData.set(null);
@@ -34,9 +35,11 @@ export default function AddCharacter()
 				onSubmit={() =>
 				{
 					const name = nameRef.current?.value;
-					if (name && imgData.v && imgData.v.data != "")
+					const color = colorRef.current?.value;
+					if (name && color && imgData.v && imgData.v.data != "")
 						mutationAdd.mutate({
 							name,
+							color,
 							img: imgData.v,
 						});
 				}}
@@ -59,6 +62,9 @@ export default function AddCharacter()
 				</FormField>
 				<FormField label="Имя">
 					<input ref={nameRef} required type="text" />
+				</FormField>
+				<FormField label="Цвет">
+					<input ref={colorRef} required type="color" />
 				</FormField>
 				<FormField>
 					<button type="submit">Добавить</button>

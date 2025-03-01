@@ -226,6 +226,13 @@ def docs():
             },
             "response": "Tourney",
         },
+        "/api/tourney/tourney/third POST": {
+            "__desc__": "Edit third place",
+            "request": {
+                "characterId": "number",
+            },
+            "response": "Tourney",
+        },
         "/api/tourney/characters": {
             "__desc__": "Get tourney characters",
             "response": "TourneyCharacter[]",
@@ -234,6 +241,7 @@ def docs():
             "__desc__": "Add tourney character",
             "request": {
                 "name": "string",
+                "color": "string",
                 "img": "Image",
             },
             "response": "TourneyCharacter",
@@ -242,6 +250,7 @@ def docs():
             "__desc__": "Edit tourney character",
             "request": {
                 "name": "?string",
+                "color": "?string",
                 "img": "?Image",
             },
             "response": "TourneyCharacter",
@@ -353,6 +362,7 @@ def docs():
         "TourneyCharacter": {
             "id": "number",
             "name": "string",
+            "color": "string",
             "img": "string",
         },
     }

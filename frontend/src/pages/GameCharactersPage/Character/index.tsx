@@ -19,6 +19,7 @@ export default function Character({ character }: CharacterProps)
 	const deleting = useStateBool(false);
 	const imgData = useStateObj<ImgData | null>(null, changed.setT);
 	const name = useStateObj(character.name, changed.setT);
+	const color = useStateObj(character.color, changed.setT);
 
 	const mutationEdit = useMutationEditTourneyCharacter(character.id, reset, () => reset());
 
@@ -60,6 +61,8 @@ export default function Character({ character }: CharacterProps)
 			<div className={styles.inputs}>
 				<div>Имя</div>
 				<input type="text" value={name.v} onChange={inp => name.set(inp.target.value)} />
+				<div>Цвет</div>
+				<input type="color" value={color.v} onChange={inp => color.set(inp.target.value)} />
 			</div>
 			<div className={styles.buttons}>
 				{!changed.v && <button onClick={deleting.setT}><IconDelete /></button>}
@@ -69,6 +72,7 @@ export default function Character({ character }: CharacterProps)
 					{
 						mutationEdit.mutate({
 							name: name.v,
+							color: color.v,
 							img: imgData.v || undefined,
 						});
 					}}
