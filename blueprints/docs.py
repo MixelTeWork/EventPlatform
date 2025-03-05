@@ -233,6 +233,13 @@ def docs():
             },
             "response": "Tourney",
         },
+        "/api/tourney/tourney/start_game_at_node POST": {
+            "__desc__": "Start game at node",
+            "request": {
+                "nodeId": "number",
+            },
+            "response": "Tourney",
+        },
         "/api/tourney/characters": {
             "__desc__": "Get tourney characters",
             "response": "TourneyCharacter[]",
@@ -352,6 +359,7 @@ def docs():
         "Tourney": {
             "tree": "TourneyTreeNode",
             "third": "number",
+            "curGameNodeId": "number",
         },
         "TourneyTreeNode": {
             "id": "number",

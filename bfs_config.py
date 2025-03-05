@@ -3,6 +3,7 @@ db_path = "platformevent:UR2hqJDbSfQ@platformevent.mysql.pythonanywhere-services
 sql_echo = False
 
 log_path = "log_info.csv"
+log_requests_path = "log_requests.csv"
 log_errors_path = "log_errors.log"
 log_frontend_path = "log_frontend.log"
 

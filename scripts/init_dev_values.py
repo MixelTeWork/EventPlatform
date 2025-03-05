@@ -49,7 +49,7 @@ def init_dev_values(dev=False, cmd=False):
         seed(i + 7)
         TourneyCharacter.new(user_admin, f"Бот #{i+1}", f"#{randint(0, 16777215):x}", 5)
     Tourney.get(db_sess).gen_new_tree()
-    Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
+    # Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
 
     dialog = Dialog.new(user_admin, {
         "nodes": [

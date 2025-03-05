@@ -11,7 +11,7 @@ app, run = create_app(__name__, AppConfig(
     JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=24),
     MESSAGE_TO_FRONTEND="",
     DEV_MODE="dev" in sys.argv,
-    # DELAY_MODE="delay" in sys.argv,
+    DELAY_MODE="delay" in sys.argv,
 )
     .add_data_folder("FONTS_FOLDER", "fonts")
     .add_secret_key("API_SECRET_KEY", "secret_key_api.txt")
