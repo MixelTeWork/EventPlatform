@@ -8,6 +8,7 @@ export interface TourneyData
 {
 	tree: TreeNode,
 	third: number,
+	curGameNodeId: number,
 }
 
 export interface TreeNode
@@ -124,6 +125,22 @@ export function useMutationEditTourneyThird(onSuccess?: () => void, onError?: (e
 	const mutation = useMutation({
 		mutationFn: async (nodeData: TourneyNodeData) =>
 			await fetchJsonPost<TourneyData>(`/api/tourney/third`, nodeData),
+		onSuccess: (data: TourneyData) =>
+		{
+			queryClient.setQueryData("tourney", data);
+			onSuccess?.();
+		},
+		onError: onError,
+	});
+	return mutation;
+}
+
+export function useMutationTourneyStartGameAtNode(nodeId: number, onSuccess?: () => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async () =>
+			await fetchJsonPost<TourneyData>(`/api/tourney/start_game_at_node`, { nodeId }),
 		onSuccess: (data: TourneyData) =>
 		{
 			queryClient.setQueryData("tourney", data);

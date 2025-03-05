@@ -1,4 +1,5 @@
-from sqlalchemy import JSON, Column
+import logging
+from sqlalchemy import JSON, Column, DefaultClause, Integer
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
@@ -11,6 +12,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
     __tablename__ = Tables.Tourney
 
     data = Column(JSON, nullable=False)
+    curGameNodeId = Column(Integer, DefaultClause("-1"), nullable=False)
 
     @staticmethod
     def init(db_sess: Session):
@@ -58,6 +60,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
         flag_modified(self, "data")
         db_sess.commit()
+        logging.info(f"edit_node {node_id=} {characterId=}")
         return True
 
     def set_third(self, characterId: int):
@@ -65,9 +68,33 @@ class Tourney(SqlAlchemyBase, IdMixin):
         self.data["third"] = characterId
         flag_modified(self, "data")
         db_sess.commit()
+        logging.info(f"set_third {characterId=}")
+
+    def start_game_at_node(self, node_id: int):
+        db_sess = Session.object_session(self)
+        if node_id != -1 and node_id != -3:
+            node = find_node(self.data["tree"], node_id)
+            if not node:
+                return -1
+
+            if not node["left"] or not node["right"]:
+                return -2
+
+            if node["left"]["characterId"] == -1 or node["right"]["characterId"] == -1:
+                return -3
+
+        self.curGameNodeId = node_id
+
+        db_sess.commit()
+        logging.info(f"start_game_at_node {node_id=}")
+        return 0
 
     def get_dict(self):
-        return self.data
+        return {
+            "tree": self.data["tree"],
+            "third": self.data["third"],
+            "curGameNodeId": self.curGameNodeId,
+        }
 
 
 def tree_node(id: int, characterId=-1, left=None, right=None):

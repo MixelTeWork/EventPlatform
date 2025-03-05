@@ -19,20 +19,16 @@ export class Tree
 	public updateData(data: TourneyData)
 	{
 		this.tree = createTree(data.tree, this.characters);
-		if (data.tree.left && data.tree.right)
+		const leftNode = data.tree.left;
+		const rightNode = data.tree.right;
+		if (leftNode && rightNode)
 		{
 			const left =
-				data.tree.left.characterId == data.tree.left.left?.characterId ?
-					data.tree.left.right : (
-						data.tree.left.characterId == data.tree.left.right?.characterId ?
-							data.tree.left.left : null
-					);
+				leftNode.characterId <= 0 ? null :
+					leftNode.characterId == leftNode.left?.characterId ? leftNode.right : leftNode.left;
 			const right =
-				data.tree.right.characterId == data.tree.right.left?.characterId ?
-					data.tree.right.right : (
-						data.tree.right.characterId == data.tree.right.right?.characterId ?
-							data.tree.right.left : null
-					);
+				rightNode.characterId <= 0 ? null :
+					rightNode.characterId == rightNode.left?.characterId ? rightNode.right : rightNode.left;
 			this.third = new TreeNode(this.characters, { id: -2, characterId: data.third },
 				new TreeNode(this.characters, left || { id: -1, characterId: -1 }),
 				new TreeNode(this.characters, right || { id: -1, characterId: -1 }),
@@ -82,33 +78,31 @@ class TreeNode
 		if (type == 1) ctx.fillStyle = "blue";
 		ctx.fillRect(0, 0, this.S * 3, this.S);
 
-		ctx.strokeStyle = "magenta";
-		ctx.lineWidth = 2;
-
-		ctx.strokeRect(0, 0, this.S * 3, this.S);
-
 		if (character)
 		{
 			ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S);
 			ctx.font = "20px ZeroCool, Arial";
 			ctx.fillStyle = "magenta";
-			ctx.fillText(character.name, imgRight ? this.S * 0.1 : this.S * 1.1, this.S / 2, this.S * 1.9);
+			ctx.fillText(character.name, imgRight ? this.S * 0.1 : this.S * 1.1, this.S / 2 + 10, this.S * 1.9);
 		}
 		else if (type == 1)
 		{
 			ctx.font = "20px ZeroCool, Arial";
 			ctx.fillStyle = "magenta";
-			ctx.fillText("Winner", this.S * 1.1, this.S / 2, this.S * 1.9);
+			ctx.fillText("Winner", this.S * 1.1, this.S / 2 + 10, this.S * 1.9);
 		}
 
+		ctx.strokeStyle = "gray";
 		if (character) ctx.strokeStyle = character.color;
+		ctx.lineWidth = 4;
+		ctx.strokeRect(0, 0, this.S * 3, this.S);
 		ctx.strokeRect(imgRight ? this.S * 2 : 0, 0, this.S, this.S);
 
 		// ctx.font = "40px ZeroCool, Arial";
 		// ctx.fillStyle = "magenta";
 		// ctx.fillText(`${type}`, this.S * 0.1, this.S / 2, this.S * 0.8);
 
-		ctx.strokeStyle = "orange";
+		ctx.strokeStyle = "gray";
 		ctx.lineWidth = 4;
 
 		if (type == 1)
@@ -334,7 +328,6 @@ class TreeNode
 	{
 		const drawLine = zero ? this.drawLine0.bind(this) : this.drawLine.bind(this);
 		const winner = this.data.characterId < 0 ? 0 : (this.data.characterId == this.left?.data.characterId ? -1 : (this.data.characterId == this.right?.data.characterId ? 1 : 0));
-		ctx.strokeStyle = "gray";
 		if (winner == 0)
 		{
 			if (this.left) drawLine(ctx, ...left);

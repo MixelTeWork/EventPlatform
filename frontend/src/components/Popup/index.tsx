@@ -34,7 +34,7 @@ export default function Popup({ children, open = false, close, title = "", foote
 				{
 					(title || close) &&
 					<div className={styles.header}>
-						<h3>{title}</h3>
+						{typeof title == "string" ? <h3>{title}</h3> : title}
 						{close && <button className={styles.close} onClick={close}></button>}
 					</div>
 				}
@@ -53,7 +53,7 @@ export interface PopupProps
 {
 	open?: boolean,
 	close?: () => void,
-	title?: string,
+	title?: string | React.ReactNode,
 	closeOnOutclick?: boolean,
 	footer?: React.ReactNode,
 }

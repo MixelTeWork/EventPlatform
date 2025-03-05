@@ -29,7 +29,7 @@ export default function PopupConfirm<T, TE, K>({ title, mutationFn, mutatatePara
 			{
 				mutation.mutate(mutatateParams!);
 			}}>
-				<h2>{title}</h2>
+				{typeof title == "string" ? <h2>{title}</h2> : title}
 				<button type="submit" className={styles.button}>Подтвердить</button>
 			</Form>
 		</Popup>
@@ -41,7 +41,7 @@ interface PopupConfirmProps<T, TE, K> extends PopupProps
 	mutationFn: (itemId: number, onSuccess: (item: T | void) => void, onError?: (err: TE) => void) => UseMutationResult<T, TE, K, any>,
 	mutatateParams?: K,
 	itemId: number,
-	title: string,
+	title: string | React.ReactNode,
 	onSuccess?: (item: T) => void,
 	onError?: (err: TE) => void,
 }

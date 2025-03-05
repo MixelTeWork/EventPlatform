@@ -4,6 +4,16 @@
 	gap: 0.5rem;
 }
 
+.curGameState {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding-inline: 0.5rem;
+}
+.characterName {
+	color: magenta;
+}
+
 .node {
 	position: relative;
 	display: flex;
@@ -43,7 +53,7 @@
 	border: 1px solid cyan;
 }
 
-.node button {
+.nodeData button, .btn {
 	width: 1.4rem;
 	height: 1.4rem;
 	display: flex;
@@ -86,4 +96,20 @@
 }
 .nodeCollapsed > * > .collapseBtn::before {
 	transform: translateX(-0.05rem) rotate(-45deg);
+}
+
+.third {
+	display: grid;
+	grid-template-areas: "a a" "b c";
+}
+.third > :nth-child(1) {
+	grid-area: a;
+	border-bottom: none;
+}
+.third > :nth-child(2) {
+	grid-area: b;
+	border-right: none;
+}
+.third > :nth-child(3) {
+	grid-area: c;
 }

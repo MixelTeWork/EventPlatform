@@ -52,6 +52,28 @@ def set_third(db_sess: Session, user: User):
     return tourney.get_dict()
 
 
+@blueprint.post("/api/tourney/start_game_at_node")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def start_game_at_node(db_sess: Session, user: User):
+    nodeId = get_json_values_from_req("nodeId")
+
+    tourney = Tourney.get(db_sess)
+    r = tourney.start_game_at_node(nodeId)
+    if r >= 0:
+        return tourney.get_dict()
+
+    if r == -1:
+        return response_not_found("node", nodeId)
+    if r == -2:
+        return response_msg("node hasnt children", 400)
+    if r == -3:
+        return response_msg("node children is unset", 400)
+    return response_msg("err", 400)
+
+
 @blueprint.route("/api/tourney/characters")
 @jwt_required()
 @use_db_session()
