@@ -15,7 +15,6 @@ class Tourney
 
 	private state: TourneyData | null = null;
 	private characters?: TourneyCharacter[] | null;
-	private transform = { dx: 0, dy: 0, s: 1 };
 	private tree?: Tree;
 	private x = 0;
 	private y = 0;
@@ -33,12 +32,6 @@ class Tourney
 		this.loadCharacters();
 		requestAnimationFrame(this.loop.bind(this, this.startI));
 		this.updateState(this.startI);
-		// @ts-ignore
-		window.setTourneyTransform = (dx: number, dy: number, s: number) => this.transform = { dx, dy, s };
-		// @ts-ignore
-		window.setTourneyTransform(-50, -100, 0.35);
-		// @ts-ignore
-		window.setTourneyTransform(-50, -100, 0.6);
 	}
 
 	public stop()
@@ -51,6 +44,7 @@ class Tourney
 	{
 		if (startI != this.startI) return;
 		const updateStart = new Date();
+		const oldState = JSON.stringify(this.state);
 		try
 		{
 			const newState = await fetchJsonGet<TourneyData>("/api/tourney");
@@ -73,7 +67,8 @@ class Tourney
 			const delay = 1000;
 			setTimeout(() => this.updateState(startI), Math.max(0, delay - dt));
 		}
-		this.onNewState();
+		if (JSON.stringify(this.state) != oldState)
+			this.onNewState();
 	}
 
 	private async loadCharacters()
@@ -158,6 +153,7 @@ class Tourney
 				if (this.x < 0) { this.x = 0; this.dx = 1 };
 				if (this.y > this.canvas.height - this.s) { this.y = this.canvas.height - this.s; this.dy = -1 };
 				if (this.y < 0) { this.y = 0; this.dy = 1 };
+				this.tree?.update(dt, this.canvas.width, this.canvas.height);
 				this.draw();
 			}
 		}
@@ -171,14 +167,7 @@ class Tourney
 
 		this.ctx.fillRect(this.x, this.y, this.s, this.s);
 
-		const w = this.canvas.width;
-		const h = this.canvas.height;
-
-		this.ctx.save();
-		this.ctx.translate(w / 2 + this.transform.dx, h / 2 + this.transform.dy);
-		this.ctx.scale(this.transform.s, this.transform.s);
 		this.tree?.draw(this.ctx);
-		this.ctx.restore();
 	}
 
 	public setCanvas(canvas: HTMLCanvasElement)

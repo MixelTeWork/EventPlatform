@@ -16,7 +16,7 @@ export default function TourneyEdit()
 	const tourney = useTourneyData()
 	const characters = useTourneyCharacters();
 
-	const curGame = findNode(tourney.data?.tree, tourney.data?.curGameNodeId || 0);
+	const curGame = findNode(tourney.data?.tree, tourney.data?.curGameNodeId || 0, tourney.data?.third || -1);
 	const curGameCharacterLeft = characters.data?.find(ch => ch.id == curGame?.left?.characterId);
 	const curGameCharacterRight = characters.data?.find(ch => ch.id == curGame?.right?.characterId);
 
@@ -110,11 +110,17 @@ function Tree({ tree, characters, c = false }: { tree: TreeNode, characters: Tou
 	);
 }
 
-function findNode(tree: TreeNode | null | undefined, id: number): TreeNode | null
+function findNode(tree: TreeNode | null | undefined, id: number, third: number): TreeNode | null
 {
 	if (!tree) return null;
 	if (tree.id == id) return tree;
-	return findNode(tree.left, id) || findNode(tree.right, id);
+	if (id == -3)
+	{
+		const left = { id: -2, characterId: (!tree.left?.characterId || tree.left?.characterId == -1 ? null : tree.left.left?.characterId == tree.left?.characterId ? tree.left.right?.characterId : tree.left.left?.characterId) || -1, left: null, right: null };
+		const right = { id: -2, characterId: (!tree.right?.characterId || tree.right?.characterId == -1 ? null : tree.right.left?.characterId == tree.right?.characterId ? tree.right.right?.characterId : tree.right.left?.characterId) || -1, left: null, right: null };
+		return { id: -3, characterId: third, left, right, };
+	}
+	return findNode(tree.left, id, third) || findNode(tree.right, id, third);
 }
 
 function ThirdPlace({ tree, third, characters }: { tree: TreeNode, third: number, characters: TourneyCharacter[] })
