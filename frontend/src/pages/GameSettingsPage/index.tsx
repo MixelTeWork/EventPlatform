@@ -22,6 +22,7 @@ export default function GameSettingsPage()
 	return (
 		<Layout centeredPage homeBtn gap="2rem">
 			<h1>Настройки игры</h1>
+			{tourney.isLoading && <Spinner />}
 			{displayError(tourney)}
 			<Link to="/tourney_screen" className={styles.openScreen}>Открыть экран</Link>
 			<Link to="/game_characters" className={styles.openScreen}>Персонажи турнира</Link>

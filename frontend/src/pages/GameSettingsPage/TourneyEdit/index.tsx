@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMutationTourneyEditNode, useMutationTourneyEditThird, useMutationTourneyStartGameAtNode, useTourneyCharacters, useTourneyData, type TourneyCharacter, type TreeNode } from "../../../api/tourney";
+import { useMutationTourneyEditNode, useMutationTourneyEditThird, useMutationTourneyStartGameAtNode, useTourneyCharacters, useTourneyData, type TourneyCharacter, type TourneyData, type TreeNode } from "../../../api/tourney";
 import Spinner from "../../../components/Spinner";
 import classNames from "../../../utils/classNames";
 import displayError from "../../../utils/displayError";
@@ -10,6 +10,8 @@ import IconCancel from "../../../icons/cancel";
 import IconSave from "../../../icons/save";
 import IconPlay from "../../../icons/play";
 import PopupConfirm from "../../../components/PopupConfirm";
+import IconEdit from "../../../icons/edit";
+import { type UseQueryResult } from "react-query";
 
 export default function TourneyEdit()
 {
@@ -17,28 +19,31 @@ export default function TourneyEdit()
 	const characters = useTourneyCharacters();
 
 	const curGame = findNode(tourney.data?.tree, tourney.data?.curGameNodeId || 0, tourney.data?.third || -1);
+	const curGameWinner = characters.data?.find(ch => ch.id == curGame?.characterId);
 	const curGameCharacterLeft = characters.data?.find(ch => ch.id == curGame?.left?.characterId);
 	const curGameCharacterRight = characters.data?.find(ch => ch.id == curGame?.right?.characterId);
 
 	return (
 		<div className={styles.root}>
-			{tourney.isLoading && <Spinner />}
 			{characters.isLoading && <Spinner />}
-			{displayError(tourney)}
 			{displayError(characters)}
 			{tourney.data && characters.data && <>
-				<span>
+				<div className={styles.curGameState}>
 					<span>Текущая игра: </span>
-					{!curGame ? <span>не запущено</span> : <span className={styles.curGameState}>
+					{!curGame ? <span>не запущено</span> : <span>
 						<span className={styles.characterName}>{curGameCharacterLeft?.name ?? "N/A"}</span>
 						<span> vs </span>
 						<span className={styles.characterName}>{curGameCharacterRight?.name ?? "N/A"}</span>
 						<CancelGameBtn />
 					</span>}
-				</span>
-				<span style={{ marginTop: "0.5rem" }}>Турнирная таблица:</span>
+					<span>
+						<span>Победитель: </span>
+						<EditWinnerBtn tourney={tourney} winner={curGameWinner} oponent1={curGameCharacterLeft} oponent2={curGameCharacterRight} />
+					</span>
+				</div>
+				<div style={{ marginTop: "0.5rem" }}>Турнирная таблица:</div>
 				<Tree tree={tourney.data.tree} characters={characters.data} />
-				<span style={{ marginTop: "0.5rem" }}>Третье место:</span>
+				<div style={{ marginTop: "0.5rem" }}>Третье место:</div>
 				<ThirdPlace tree={tourney.data.tree} third={tourney.data.third} characters={characters.data} />
 			</>}
 		</div>
@@ -56,6 +61,49 @@ function CancelGameBtn()
 			itemId={-1} mutationFn={useMutationTourneyStartGameAtNode}
 			open={canceling.v} close={canceling.setF}
 		/>
+	</>
+}
+
+function EditWinnerBtn({ tourney, winner, oponent1, oponent2 }: { tourney: UseQueryResult<TourneyData>, winner: TourneyCharacter | undefined, oponent1: TourneyCharacter | undefined, oponent2: TourneyCharacter | undefined })
+{
+	const winnerId = useStateObj(winner?.id || -1);
+	const editing = useStateBool(false);
+	const editNode = useMutationTourneyEditNode(tourney.data?.curGameNodeId || -1);
+
+	// eslint-disable-next-line
+	useEffect(() => { winnerId.set(winner?.id || -1) }, [winner?.id]);
+
+	const winnerName =
+		winnerId.v == winner?.id ? winner.name :
+			winnerId.v == oponent1?.id ? oponent1.name :
+				winnerId.v == oponent2?.id ? oponent2.name : "отсутствует";
+
+	return <>
+		{!editing.v ? <>
+			<span className={styles.characterName}>{winnerName}</span>
+			{oponent1 && oponent2 &&
+				<button className={styles.btn} onClick={() =>
+				{
+					tourney.refetch()
+					editing.setT();
+				}}><IconEdit /></button>
+			}
+		</> : <>
+			{tourney.isFetching && <Spinner />}
+			<select className={styles.winnerSelect} value={winnerId.v} onChange={e => winnerId.set(parseInt(e.target.value, 10))}>
+				<option value="-1">отсутствует</option>
+				<option value={oponent1?.id || "-1"}>{oponent1?.name ?? "N/A"}</option>
+				<option value={oponent2?.id || "-1"}>{oponent2?.name ?? "N/A"}</option>
+			</select>
+			<button className={styles.btn} onClick={() =>
+			{
+				editNode.mutate({ characterId: winnerId.v });
+				editing.setF();
+			}}>
+				<IconSave />
+			</button>
+			<button className={styles.btn} onClick={editing.setF}><IconCancel /></button>
+		</>}
 	</>
 }
 
@@ -100,7 +148,7 @@ function Tree({ tree, characters, c = false }: { tree: TreeNode, characters: Tou
 				{(tree.left || tree.right) && <button className={styles.collapseBtn} onClick={collapsed.toggle}></button>}
 			</div>
 			<PopupConfirm
-				title={<><h3>Запустить игру</h3><h4>{characterLeft?.name ?? "N/A"} vs {characterRight?.name ?? "N/A"}</h4></>}
+				title={<><h3>Выбрать для запуска</h3><h4>{characterLeft?.name ?? "N/A"} vs {characterRight?.name ?? "N/A"}</h4></>}
 				itemId={tree.id} mutationFn={useMutationTourneyStartGameAtNode}
 				open={starting.v} close={starting.setF}
 			/>
