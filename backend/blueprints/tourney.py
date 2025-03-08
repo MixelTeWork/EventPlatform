@@ -74,6 +74,50 @@ def start_game_at_node(db_sess: Session, user: User):
     return response_msg("err", 400)
 
 
+@blueprint.post("/api/tourney/select_next_game")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def select_next_game(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.select_next_game()
+    return tourney.get_dict()
+
+
+@blueprint.post("/api/tourney/start_game")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def start_game(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.start_game()
+    return tourney.get_dict()
+
+
+@blueprint.post("/api/tourney/end_game")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def end_game(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.end_game()
+    return tourney.get_dict()
+
+
+@blueprint.post("/api/tourney/reset")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def reset(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.reset()
+    return tourney.get_dict()
+
+
 @blueprint.route("/api/tourney/characters")
 @jwt_required()
 @use_db_session()

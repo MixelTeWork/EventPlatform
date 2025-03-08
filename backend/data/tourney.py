@@ -47,6 +47,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
             parent_nodes = []
 
         self.data["tree"] = child_nodes.pop()
+        self.data["third"] = -1
         flag_modified(self, "data")
         db_sess.commit()
 
@@ -82,12 +83,59 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
             if node["left"]["characterId"] == -1 or node["right"]["characterId"] == -1:
                 return -3
+        elif node_id == -3:
+            if not self.data["tree"]["left"] or not self.data["tree"]["right"]:
+                return -2
+
+            if self.data["tree"]["left"]["characterId"] == -1 or self.data["tree"]["right"]["characterId"] == -1:
+                return -3
 
         self.curGameNodeId = node_id
 
         db_sess.commit()
         logging.info(f"start_game_at_node {node_id=}")
         return 0
+
+    def select_next_game(self):
+        db_sess = Session.object_session(self)
+
+        nodes = []
+        next_nodes = [self.data["tree"]]
+        while any(n["characterId"] == -1 for n in next_nodes):
+            nodes = next_nodes
+            next_nodes = []
+            for node in nodes:
+                if node["left"]:
+                    next_nodes.append(node["left"])
+                if node["right"]:
+                    next_nodes.append(node["right"])
+
+        node_id = -1
+        if len(next_nodes) == 2 and self.data["third"] == -1:
+            node_id = -3
+            # if True:
+            #     self.data["third"] = get_not_winner(self.data["tree"]["left"])
+            #     flag_modified(self, "data")
+        else:
+            next_node = next((n for n in nodes if n["characterId"] == -1), None)
+            if next_node:
+                node_id = next_node["id"]
+                # if True:
+                #     next_node["characterId"] = next_node["left"]["characterId"]
+                #     flag_modified(self, "data")
+
+        self.curGameNodeId = node_id
+        db_sess.commit()
+        logging.info(f"start_next_game {node_id=}")
+
+    def start_game(self):
+        pass
+
+    def end_game(self):
+        pass
+
+    def reset(self):
+        self.gen_new_tree()
 
     def get_dict(self):
         return {
@@ -116,6 +164,18 @@ def find_node(tree, id: int):
     if tree["right"]:
         return find_node(tree["right"], id)
     return False
+
+
+def get_not_winner(tree):
+    if not tree or tree["characterId"] == -1:
+        return -1
+    left = tree["left"]
+    right = tree["right"]
+    if not left or not right:
+        return -1
+    if left["characterId"] == tree["characterId"]:
+        return right["characterId"]
+    return left["characterId"]
 
 
 INIT_DATA = {

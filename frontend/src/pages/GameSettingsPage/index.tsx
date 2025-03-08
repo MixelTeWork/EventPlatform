@@ -5,111 +5,68 @@ import IconSave from "../../icons/save";
 import styles from "./styles.module.css"
 import useStateObj from "../../utils/useStateObj";
 import { useMutationGameCounter, useMutationGameDuration, useMutationGameReset, useMutationGameStart, useMutationGameStartStr, useGameCounter, useGameDuration, useGameStartStr, useGameState } from "../../api/game";
-import Popup from "../../components/Popup";
-import useStateBool from "../../utils/useStateBool";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import { useEffect } from "react";
 import { useTitle } from "../../utils/useTtile";
 import TourneyEdit from "./TourneyEdit";
+import { useMutationTourneyEndGame, useMutationTourneyReset, useMutationTourneySelectNextGame, useMutationTourneyStartGame } from "../../api/tourney";
+import ConfirmingButton from "../../components/ConfirmingButton";
+import type { UseMutationResult, UseQueryResult } from "react-query";
 
 export default function GameSettingsPage()
 {
 	useTitle("Настройки игры");
 	const state = useGameState();
-	const gameDuration = useGameDuration();
-	const gameCounter = useGameCounter();
-	const gameStartStr = useGameStartStr();
-	const mutateDuration = useMutationGameDuration();
-	const mutateCounter = useMutationGameCounter();
-	const mutateStartStr = useMutationGameStartStr();
-	const duration = useStateObj(0);
-	const counter = useStateObj(0);
-	const startStr = useStateObj("");
-	const popupOpen = useStateBool(false);
-	const popupOpen2 = useStateBool(false);
-	const popupOpen3 = useStateBool(false);
-	const popupOpen4 = useStateBool(false);
-	const gameStart = useMutationGameStart(popupOpen2.setT);
-	const gameReset = useMutationGameReset(popupOpen4.setT);
-
-	// eslint-disable-next-line
-	useEffect(() => duration.set(gameDuration.data?.duration || 0), [gameDuration.data]); // eslint-disable-next-line
-	useEffect(() => counter.set(gameCounter.data?.counter || 0), [gameCounter.data]); // eslint-disable-next-line
-	useEffect(() => startStr.set(gameStartStr.data?.startStr || ""), [gameStartStr.data]);
 
 	return (
 		<Layout centeredPage homeBtn gap="2rem">
 			<h1>Настройки игры</h1>
-			{gameStart.isLoading && <Spinner />}
-			{gameDuration.isLoading && <Spinner />}
-			{gameCounter.isLoading && <Spinner />}
-			{mutateDuration.isLoading && <Spinner />}
-			{mutateCounter.isLoading && <Spinner />}
-			{mutateStartStr.isLoading && <Spinner />}
-			{gameReset.isLoading && <Spinner />}
-			{gameStartStr.isLoading && <Spinner />}
-			{displayError(gameStart)}
-			{displayError(gameDuration)}
-			{displayError(gameCounter)}
-			{displayError(mutateDuration)}
-			{displayError(mutateCounter)}
-			{displayError(gameReset)}
-			{displayError(mutateStartStr)}
 			<Link to="/game_screen" className={styles.openScreen}>Открыть экран</Link>
 			<Link to="/tourney_screen" className={styles.openScreen}>Открыть турнир</Link>
 			<Link to="/game_characters" className={styles.openScreen}>Персонажи турнира</Link>
-			<div className={styles.input}>
-				<span>Время начала</span>
-				<input type="text" value={startStr.v} onChange={e => startStr.set(e.target.value)} />
-				{gameStartStr.data && startStr.v != gameStartStr.data.startStr && <>
-					<button onClick={() => mutateStartStr.mutate(startStr.v)}><IconSave /></button>
-					<button onClick={() => startStr.set(gameStartStr.data.startStr)}><IconCancel /></button>
-				</>}
-			</div>
-			<div className={styles.input}>
-				<span>Длительность игры (сек.)</span>
-				<input type="number" value={duration.v} onChange={e => duration.set(e.target.valueAsNumber)} />
-				{gameDuration.data && duration.v != gameDuration.data.duration && <>
-					<button onClick={() => mutateDuration.mutate(duration.v)}><IconSave /></button>
-					<button onClick={() => duration.set(gameDuration.data.duration)}><IconCancel /></button>
-				</>}
-			</div>
-			<div className={styles.input}>
-				<span>Обратный отсчёт (сек.)</span>
-				<input type="number" value={counter.v} onChange={e => counter.set(e.target.valueAsNumber)} />
-				{gameCounter.data && counter.v != gameCounter.data.counter && <>
-					<button onClick={() => mutateCounter.mutate(counter.v)}><IconSave /></button>
-					<button onClick={() => counter.set(gameCounter.data.counter)}><IconCancel /></button>
-				</>}
+			<Input text="Время начала" type="text" query={useGameStartStr} getv={d => d?.startStr || ""} newv={inp => inp.value} mutation={useMutationGameStartStr} />
+			<Input text="Длительность игры (сек.)" type="number" query={useGameDuration} getv={d => d?.duration || 0} newv={inp => inp.valueAsNumber} mutation={useMutationGameDuration} />
+			<Input text="Обратный отсчёт (сек.)" type="number" query={useGameCounter} getv={d => d?.counter || 0} newv={inp => inp.valueAsNumber} mutation={useMutationGameCounter} />
+			<div className={styles.tourney}>
+				<h3>Управление турниром</h3>
+				<div>
+					<ConfirmingButton className={styles.start} h="Выбрать следующую игру?" bt="Выбрать" rt="Игра выбрана!" mutation={useMutationTourneySelectNextGame}>Выбрать следующую игру</ConfirmingButton>
+					<ConfirmingButton className={styles.start} h="Запустить игру?" bt="Запустить" rt="Игра запущена!" mutation={useMutationTourneyStartGame}>Запустить игру</ConfirmingButton>
+					<ConfirmingButton className={styles.start} h="Завершить игру?" bt="Завершить" rt="Игра завершена!" mutation={useMutationTourneyEndGame}>Завершить игру</ConfirmingButton>
+				</div>
 			</div>
 			<TourneyEdit />
-			{state.data?.state == "wait" && <button className={styles.start} onClick={popupOpen.setT}>Старт!</button>}
-			<button className={styles.start} onClick={popupOpen3.setT}>Сбросить</button>
-			<Popup open={popupOpen.v} close={popupOpen.setF} closeOnOutclick>
-				<h2>Начать игру?</h2>
-				<br />
-				<button className={styles.start} onClick={() =>
-				{
-					popupOpen.setF();
-					gameStart.mutate();
-				}}>Начать</button>
-			</Popup>
-			<Popup open={popupOpen2.v} close={popupOpen2.setF} closeOnOutclick>
-				<h2>Игра запущена!</h2>
-			</Popup>
-			<Popup open={popupOpen3.v} close={popupOpen3.setF} closeOnOutclick>
-				<h2>Сбросить игру?</h2>
-				<br />
-				<button className={styles.start} onClick={() =>
-				{
-					popupOpen3.setF();
-					gameReset.mutate();
-				}}>Сбросить</button>
-			</Popup>
-			<Popup open={popupOpen4.v} close={popupOpen4.setF} closeOnOutclick>
-				<h2>Игра сброшена!</h2>
-			</Popup>
+			{state.data?.state == "wait" &&
+				<ConfirmingButton className={styles.start} h="Начать игру?" bt="Начать" rt="Игра запущена!" mutation={useMutationGameStart}>Старт!</ConfirmingButton>
+			}
+			<ConfirmingButton className={styles.start} h="Сбросить игру?" bt="Сбросить" rt="Игра сброшена!" mutation={useMutationGameReset}>Сбросить</ConfirmingButton>
+			<ConfirmingButton className={styles.start} h="Сбросить весь турнир?" bt="Сбросить" rt="Весь турнир сброшен!" mutation={useMutationTourneyReset}>Сбросить весь турнир</ConfirmingButton>
 		</Layout>
 	);
+}
+
+function Input<T, K extends number | string>({ text, type, getv, newv, query, mutation }: { text: string, type: "number" | "text", getv: (data?: T) => K, newv: (inp: HTMLInputElement) => K, query: () => UseQueryResult<T, unknown>, mutation: () => UseMutationResult<T, any, K, unknown> })
+{
+	const value = useStateObj(getv());
+	const queryR = query();
+	const mutate = mutation();
+
+	// eslint-disable-next-line
+	useEffect(() => value.set(getv(queryR.data)), [queryR.data]);
+
+	return (
+		<div className={styles.input}>
+			{queryR.isLoading && <Spinner />}
+			{mutate.isLoading && <Spinner />}
+			{displayError(queryR)}
+			{displayError(mutate)}
+			<span>{text}</span>
+			<input type={type} value={value.v} onChange={e => value.set(newv(e.target))} />
+			{queryR.data && value.v != getv(queryR.data) && <>
+				<button onClick={() => mutate.mutate(value.v)}><IconSave /></button>
+				<button onClick={() => value.set(getv(queryR.data))}><IconCancel /></button>
+			</>}
+		</div>
+	)
 }

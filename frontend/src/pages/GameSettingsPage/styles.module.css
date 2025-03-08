@@ -54,3 +54,16 @@
 	font-size: 1rem;
 	text-decoration: none;
 }
+
+.tourney {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.tourney > :first-child {
+	text-align: center;
+}
+.tourney > :last-child {
+	display: flex;
+	gap: 0.5rem;
+}

@@ -16,8 +16,8 @@ export class Tree
 		private characters: TourneyCharactersTreeData,
 	)
 	{
-		this.tree = new TreeNode(this.characters, { id: -1, characterId: -1 });
-		this.third = new TreeNode(this.characters, { id: -1, characterId: -1 });
+		this.tree = new TreeNode(this.characters, { id: -1, characterId: -1 }, -1);
+		this.third = new TreeNode(this.characters, { id: -1, characterId: -1 }, -1);
 		this.updateData(data)
 		// @ts-ignore
 		window.setTourneyTransform = (dx: number, dy: number, s: number) => this.transform = { dx, dy, s };
@@ -30,23 +30,30 @@ export class Tree
 	public updateData(data: TourneyData)
 	{
 		const init = this.tree.data.id == -1;
-		if (init) this.tree = createTree(data.tree, this.characters);
-		else this.tree.updateData(data.tree);
+		if (init) this.tree = createTree(data.tree, data.curGameNodeId, this.characters);
+		else this.tree.updateData(data.tree, data.curGameNodeId);
 
 		const leftNode = data.tree.left;
 		const rightNode = data.tree.right;
 		if (leftNode && rightNode)
 		{
 			const left =
-				leftNode.characterId <= 0 ? null :
-					leftNode.characterId == leftNode.left?.characterId ? leftNode.right : leftNode.left;
+				(leftNode.characterId <= 0 ? null :
+					leftNode.characterId == leftNode.left?.characterId ? leftNode.right : leftNode.left)
+				|| { id: -2, characterId: -1, left: null, right: null };
 			const right =
-				rightNode.characterId <= 0 ? null :
-					rightNode.characterId == rightNode.left?.characterId ? rightNode.right : rightNode.left;
-			this.third = new TreeNode(this.characters, { id: -3, characterId: data.third },
-				new TreeNode(this.characters, left || { id: -2, characterId: -1 }),
-				new TreeNode(this.characters, right || { id: -2, characterId: -1 }),
+				(rightNode.characterId <= 0 ? null :
+					rightNode.characterId == rightNode.left?.characterId ? rightNode.right : rightNode.left)
+				|| { id: -2, characterId: -1, left: null, right: null };
+			if (init) this.third = new TreeNode(this.characters, { id: -3, characterId: data.third },
+				data.curGameNodeId,
+				new TreeNode(this.characters, left, data.curGameNodeId),
+				new TreeNode(this.characters, right, data.curGameNodeId),
 			);
+			else
+			{
+				this.third.updateData({ id: -3, characterId: data.third, left, right }, data.curGameNodeId)
+			}
 		}
 		let newRect = this.showRect;
 		if (data.curGameNodeId >= 0)
@@ -95,8 +102,8 @@ export class Tree
 		ctx.save();
 		ctx.translate(this.transform.dx, this.transform.dy);
 		ctx.scale(this.transform.s, this.transform.s);
-		this.tree.draw(ctx);
 		this.third.draw(ctx, -1);
+		this.tree.draw(ctx);
 		ctx.strokeStyle = "red";
 		ctx.lineWidth = 4;
 		// ctx.strokeRect(this.showRect.x, this.showRect.y, this.showRect.w, this.showRect.h);
@@ -111,6 +118,8 @@ export class Tree
 			const { cx, cy } = this.findRectCenter(this.showRect);
 			this.transform.dx = w / 2 - cx;
 			this.transform.dy = h / 2 - cy;
+			this.tree.update(dt);
+			this.third.update(dt);
 		}
 		else
 		{
@@ -118,7 +127,6 @@ export class Tree
 				if (this.anim[i](dt, w, h))
 					this.anim.splice(i, 1);
 		}
-		this.tree.update(dt);
 	}
 
 	private calcScale(rect: ISize, canvas: ISize, paddingR = 0.05)
@@ -171,6 +179,7 @@ class TreeNode
 	constructor(
 		private characters: TourneyCharactersTreeData,
 		public data: NodeData,
+		private curGameNodeId: number,
 		private left: TreeNode | null = null,
 		private right: TreeNode | null = null,
 	)
@@ -188,6 +197,7 @@ class TreeNode
 
 		ctx.fillStyle = "cyan";
 		if (type == 1) ctx.fillStyle = "blue";
+		if (this.data.id == this.curGameNodeId) ctx.fillStyle = "orange";
 		ctx.fillRect(0, 0, this.S * 3, this.S);
 
 		if (character)
@@ -403,14 +413,22 @@ class TreeNode
 		else if (type == -2)
 		{
 			ctx.translate(this.S * 1.5, 0);
-			if (character) ctx.strokeStyle = character.color;
 			this.drawLine0(ctx, [[0, -4.9]]);
+			const newCharacter = this.characters[this.newCharacterId];
+			if (newCharacter) ctx.strokeStyle = newCharacter.color;
+			const t = this.data.characterId == this.newCharacterId ? 1 : this.t;
+			// this.drawLine0(ctx, [[0, -4.9]], true, t);
+			this.drawLine0(ctx, [[0, -4.9], [-0.5, 0], [0, 0.5], [-0.5, 0]], true, t);
 		}
 		else if (type == -3)
 		{
 			ctx.translate(this.S * 1.5, 0);
-			if (character) ctx.strokeStyle = character.color;
-			this.drawLine0(ctx, [[0, -2.4]]);
+			this.drawLine0(ctx, [[0, -4.9]]);
+			const newCharacter = this.characters[this.newCharacterId];
+			if (newCharacter) ctx.strokeStyle = newCharacter.color;
+			const t = this.data.characterId == this.newCharacterId ? 1 : this.t;
+			// this.drawLine0(ctx, [[0, -2.4]], true, t);
+			this.drawLine0(ctx, [[0, -4.9], [0.5, 0], [0, 0.5], [0.5, 0]], true, t);
 		}
 
 		ctx.restore();
@@ -549,12 +567,13 @@ class TreeNode
 		return null;
 	}
 
-	public updateData(data: ITreeNode)
+	public updateData(data: ITreeNode, curGameNodeId: number)
 	{
 		this.newCharacterId = data.characterId;
+		this.curGameNodeId = curGameNodeId
 		this.t = 0;
-		if (data.left) this.left?.updateData(data.left);
-		if (data.right) this.right?.updateData(data.right);
+		if (data.left) this.left?.updateData(data.left, curGameNodeId);
+		if (data.right) this.right?.updateData(data.right, curGameNodeId);
 	}
 }
 
@@ -564,12 +583,13 @@ interface NodeData
 	characterId: number,
 }
 
-function createTree(tree: ITreeNode, characters: TourneyCharactersTreeData): TreeNode
+function createTree(tree: ITreeNode, curGameNodeId: number, characters: TourneyCharactersTreeData): TreeNode
 {
 	return new TreeNode(
 		characters,
 		{ id: tree.id, characterId: tree.characterId },
-		tree.left && createTree(tree.left, characters),
-		tree.right && createTree(tree.right, characters)
+		curGameNodeId,
+		tree.left && createTree(tree.left, curGameNodeId, characters),
+		tree.right && createTree(tree.right, curGameNodeId, characters)
 	);
 }

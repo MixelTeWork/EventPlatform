@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMutationEditTourneyNode, useMutationEditTourneyThird, useMutationTourneyStartGameAtNode, useTourneyCharacters, useTourneyData, type TourneyCharacter, type TreeNode } from "../../../api/tourney";
+import { useMutationTourneyEditNode, useMutationTourneyEditThird, useMutationTourneyStartGameAtNode, useTourneyCharacters, useTourneyData, type TourneyCharacter, type TreeNode } from "../../../api/tourney";
 import Spinner from "../../../components/Spinner";
 import classNames from "../../../utils/classNames";
 import displayError from "../../../utils/displayError";
@@ -66,7 +66,7 @@ function Tree({ tree, characters, c = false }: { tree: TreeNode, characters: Tou
 	const starting = useStateBool(false);
 	const characterId = useStateObj(tree.characterId);
 	const character = characters.find(ch => ch.id == characterId.v);
-	const editNode = useMutationEditTourneyNode(tree.id);
+	const editNode = useMutationTourneyEditNode(tree.id);
 
 	const characterLeft = characters.find(ch => ch.id == tree.left?.characterId);
 	const characterRight = characters.find(ch => ch.id == tree.right?.characterId);
@@ -128,7 +128,7 @@ function ThirdPlace({ tree, third, characters }: { tree: TreeNode, third: number
 	const starting = useStateBool(false);
 	const characterId = useStateObj(third);
 	const character = characters.find(ch => ch.id == characterId.v);
-	const editNode = useMutationEditTourneyThird();
+	const editNode = useMutationTourneyEditThird();
 
 	const characterLeftId = !tree.left?.characterId || tree.left?.characterId == -1 ? null : tree.left.left?.characterId == tree.left?.characterId ? tree.left.right?.characterId : tree.left.left?.characterId;
 	const characterRightId = !tree.right?.characterId || tree.right?.characterId == -1 ? null : tree.right.left?.characterId == tree.right?.characterId ? tree.right.right?.characterId : tree.right.left?.characterId;
