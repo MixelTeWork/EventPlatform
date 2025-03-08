@@ -12,6 +12,7 @@ export interface GameState
 	winner: UserGroup,
 	counter: number,
 	start: string,
+	showGame: boolean,
 }
 export interface GameStateFull extends GameState
 {

@@ -3,6 +3,7 @@ import { fetchJsonGet } from "../../utils/fetch";
 import { type TourneyCharacter, type TourneyData } from "../../api/tourney";
 import { formatError } from "../../utils/displayError";
 import { Tree, type TourneyCharactersTreeData } from "./tree";
+import { useNavigate, type NavigateFunction } from "react-router-dom";
 
 class Tourney
 {
@@ -12,20 +13,21 @@ class Tourney
 	private pt = 0;
 	private stoped = false;
 	private error = "";
+	private navigate: NavigateFunction | null = null;
 
 	private state: TourneyData | null = null;
 	private characters?: TourneyCharacter[] | null;
 	private tree?: Tree;
+
 	private x = 0;
 	private y = 0;
 	private dx = 1;
 	private dy = 1;
 	private s = 100;
 
-	public start()
+	public start(navigate: NavigateFunction)
 	{
-		this.state = null;
-		this.tree = undefined;
+		this.navigate = navigate;
 		this.stoped = false;
 		this.error = "";
 		this.startI++;
@@ -74,7 +76,6 @@ class Tourney
 	private async loadCharacters()
 	{
 		if (this.characters === null) return;
-		this.characters = null;
 		try
 		{
 			this.characters = await fetchJsonGet<TourneyCharacter[]>(`/api/tourney/characters`);
@@ -105,6 +106,8 @@ class Tourney
 			});
 			this.tree = new Tree(this.state, characters);
 		}
+		if (this.state.showGame)
+			this.navigate?.("/game_screen");
 	}
 
 	private loop(startI: number, t: number)
@@ -182,10 +185,12 @@ class Tourney
 const tourney = new Tourney();
 export function useTourney()
 {
+	const navigate = useNavigate();
 	useEffect(() =>
 	{
-		tourney.start();
+		tourney.start(navigate);
 		return () => tourney.stop();
+		// eslint-disable-next-line
 	}, []);
 	return tourney;
 }

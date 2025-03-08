@@ -3,6 +3,7 @@ import type { GameStateFull } from "../../api/game";
 import { formatError } from "../../utils/displayError";
 import { fetchJsonGet } from "../../utils/fetch";
 import useStateObj from "../../utils/useStateObj";
+import { useNavigate, type NavigateFunction } from "react-router-dom";
 
 class Game
 {
@@ -25,15 +26,17 @@ class Game
 	}
 
 	private updateScreen?: () => void;
+	private navigate: NavigateFunction | null = null;
 	private state: GameStateFull | null = null;
 	private startI = 0;
 	private counterTimer?: NodeJS.Timer;
 	private stoped = false;
 
-	public start(updateScreen: () => void)
+	public start(updateScreen: () => void, navigate: NavigateFunction)
 	{
 		this.stoped = false;
 		this.startI++;
+		this.navigate = navigate;
 		this.updateScreen = updateScreen;
 		this.updateState(this.startI);
 		this.counterTimer = setInterval(() => this.counter(), 1000);
@@ -81,7 +84,7 @@ class Game
 			if (startI != this.startI) return;
 			const now = new Date();
 			const dt = +now - +updateStart;
-			const delay = this.state?.state == "going" ? 1000 : 5000;
+			const delay = 1000;
 			setTimeout(() => this.updateState(startI), Math.max(0, delay - dt));
 		}
 		this.onNewState();
@@ -93,6 +96,9 @@ class Game
 		if (!this.state) return;
 
 		this.barPercent = this.getBarPercent(this.state);
+
+		if (!this.state.showGame)
+			this.navigate?.("/tourney_screen");
 	}
 
 	public getCounter()
@@ -112,10 +118,11 @@ class Game
 const game = new Game();
 export function useGame()
 {
+	const navigate = useNavigate();
 	const update = useStateObj(0);
 	useEffect(() =>
 	{
-		game.start(() => update.set(v => v + 1));
+		game.start(() => update.set(v => v + 1), navigate);
 		return () => game.stop();
 		// eslint-disable-next-line
 	}, []);

@@ -436,7 +436,7 @@ class TreeNode
 
 	public update(dt: number)
 	{
-		this.t += dt / 1000;
+		this.t += dt / 1500;
 		if (this.t > 1)
 		{
 			this.data.characterId = this.newCharacterId;

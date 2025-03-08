@@ -23,8 +23,7 @@ export default function GameSettingsPage()
 		<Layout centeredPage homeBtn gap="2rem">
 			<h1>Настройки игры</h1>
 			{displayError(tourney)}
-			<Link to="/game_screen" className={styles.openScreen}>Открыть экран</Link>
-			<Link to="/tourney_screen" className={styles.openScreen}>Открыть турнир</Link>
+			<Link to="/tourney_screen" className={styles.openScreen}>Открыть экран</Link>
 			<Link to="/game_characters" className={styles.openScreen}>Персонажи турнира</Link>
 			<Input text="Время начала" type="text" query={useGameStartStr} getv={d => d?.startStr || ""} newv={inp => inp.value} mutation={useMutationGameStartStr} />
 			<Input text="Длительность игры (сек.)" type="number" query={useGameDuration} getv={d => d?.duration || 0} newv={inp => inp.valueAsNumber} mutation={useMutationGameDuration} />
