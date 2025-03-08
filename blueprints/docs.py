@@ -240,6 +240,22 @@ def docs():
             },
             "response": "Tourney",
         },
+        "/api/tourney/tourney/start_next_game POST": {
+            "__desc__": "Select next game",
+            "response": "Tourney",
+        },
+        "/api/tourney/tourney/start_game POST": {
+            "__desc__": "Start current game",
+            "response": "Tourney",
+        },
+        "/api/tourney/tourney/end_game POST": {
+            "__desc__": "End current game",
+            "response": "Tourney",
+        },
+        "/api/tourney/tourney/reset POST": {
+            "__desc__": "Full reset",
+            "response": "Tourney",
+        },
         "/api/tourney/characters": {
             "__desc__": "Get tourney characters",
             "response": "TourneyCharacter[]",
@@ -366,6 +382,7 @@ def docs():
             "characterId": "number",
             "left": "TourneyTreeNode | null",
             "right": "TourneyTreeNode | null",
+            "showGame": "boolean",
         },
         "TourneyCharacter": {
             "id": "number",
