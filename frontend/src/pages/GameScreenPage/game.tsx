@@ -28,6 +28,7 @@ class Game
 	private updateScreen?: () => void;
 	private navigate: NavigateFunction | null = null;
 	private state: GameStateFull | null = null;
+	private counterV = 0;
 	private startI = 0;
 	private counterTimer?: NodeJS.Timer;
 	private stoped = false;
@@ -53,9 +54,9 @@ class Game
 	{
 		if (this.stoped || !this.state) return;
 
-		if (this.state.counter > 0)
+		if (this.counterV > 0)
 		{
-			this.state.counter--;
+			this.counterV--;
 			this.updateScreen?.();
 		}
 	}
@@ -96,6 +97,8 @@ class Game
 		if (!this.state) return;
 
 		this.barPercent = this.getBarPercent(this.state);
+		if (Math.abs(this.counterV - this.state.counter) > 2)
+			this.counterV = this.state.counter;
 
 		if (!this.state.showGame)
 			this.navigate?.("/tourney_screen");
@@ -104,7 +107,7 @@ class Game
 	public getCounter()
 	{
 		if (!this.state) return "0:00";
-		return `${Math.floor(this.state.counter / 60)}:${(this.state.counter % 60).toString().padStart(2, "0")}`;
+		return `${Math.floor(this.counterV / 60)}:${(this.counterV % 60).toString().padStart(2, "0")}`;
 	}
 
 	private getBarPercent(data: GameStateFull)

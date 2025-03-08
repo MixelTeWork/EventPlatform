@@ -74,7 +74,7 @@ body:has(.root) {
 	min-width: 40vw;
 	padding: 3vw;
 	background-color: var(--color);
-	box-shadow: 0 0 1vw 1vw var(--color);
+	box-shadow: 1vw 0 1vw 1vw var(--color);
 	font-size: 4vw;
 	letter-spacing: 0.1em;
 	text-shadow: 0.1em 0 black, -0.1em 0 black, 0 0.1em black, 0 -0.1em black,
@@ -86,10 +86,10 @@ body:has(.root) {
 @keyframes bar {
 	0%,
 	100% {
-		box-shadow: 0 0 1vw 1vw var(--color);
+		box-shadow: 1vw 0 1vw 1vw var(--color);
 	}
 	50% {
-		box-shadow: 0 0 1.5vw 1.5vw var(--color);
+		box-shadow: 1vw 0 1.5vw 1.5vw var(--color);
 	}
 }
 

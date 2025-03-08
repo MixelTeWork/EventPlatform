@@ -45,11 +45,15 @@ export class Tree
 				(rightNode.characterId <= 0 ? null :
 					rightNode.characterId == rightNode.left?.characterId ? rightNode.right : rightNode.left)
 				|| { id: -2, characterId: -1, left: null, right: null };
-			if (init) this.third = new TreeNode(this.characters, { id: -3, characterId: data.third },
-				data.curGameNodeId,
-				new TreeNode(this.characters, left, data.curGameNodeId),
-				new TreeNode(this.characters, right, data.curGameNodeId),
-			);
+			const lnode = new TreeNode(this.characters, left, data.curGameNodeId);
+			const rnode = new TreeNode(this.characters, right, data.curGameNodeId);
+			if (init)
+			{
+				this.third = new TreeNode(this.characters, { id: -3, characterId: data.third },
+					data.curGameNodeId, lnode, rnode);
+				lnode.parent = this.third;
+				rnode.parent = this.third;
+			}
 			else
 			{
 				this.third.updateData({ id: -3, characterId: data.third, left, right }, data.curGameNodeId)
@@ -176,6 +180,7 @@ class TreeNode
 	public readonly S = TreeNode.S;
 	private t = 0;
 	private newCharacterId: number;
+	public parent?: TreeNode;
 	constructor(
 		private characters: TourneyCharactersTreeData,
 		public data: NodeData,
@@ -225,13 +230,19 @@ class TreeNode
 		// ctx.fillText(`${type}`, this.S * 0.1, this.S / 2 - 10, this.S * 0.8);
 		// ctx.fillText(`${this.data.id}`, this.S * 0.1, this.S / 2 + 30, this.S * 0.8);
 
+		if (this.parent && this.parent.data.characterId != -1 && this.parent.data.characterId != this.data.characterId)
+		{
+			ctx.fillStyle = "#00000055";
+			ctx.fillRect(0, 0, this.S * 3, this.S);
+		}
+
 		ctx.strokeStyle = "gray";
 		ctx.lineWidth = 4;
 
 		if (type == 1)
 		{
 			ctx.save();
-			ctx.translate(0, -this.S * 1.5);
+			ctx.translate(0, -this.S * 1.5)
 			if (this.left) this.left.draw(ctx, 2);
 			ctx.translate(0, this.S * 3);
 			if (this.right) this.right.draw(ctx, 3);
@@ -540,30 +551,30 @@ class TreeNode
 		}
 	}
 
-	public getBounds(curGameNodeId: number, type = 1): IRect | null | undefined
+	public getBounds(curGameNodeId: number, type = "1"): IRect | null | undefined
 	{
-		const r = (x: number, y: number, w: number, h: number, nl: number = -1, nr: number = -1) =>
+		const r = (x: number, y: number, w: number, h: number, nl: string = "", nr: string = "") =>
 		{
 			if (curGameNodeId == this.data.id)
 				return { x: x * this.S, y: y * this.S, w: w * this.S, h: h * this.S }
 			else
 				return this.left?.getBounds(curGameNodeId, nl) || this.right?.getBounds(curGameNodeId, nr);
 		}
-		if (type == 1) return r(-1, -2, 5, 5, 2, 3);
-		else if (type == 2) return r(-4.5, -2, 8, 4, 4, 5);
-		else if (type == 4) return r(-6.5, -4, 5, 4.5, 6, 7);
-		else if (type == 5) return r(-6.5, 0.5, 5, 4.5, 6.5, 7.5);
-		else if (type == 6) return r(-10.5, -5.5, 8, 5.2);
-		else if (type == 7) return r(-10.5, -5.5, 8, 5.2);
-		else if (type == 6.5) return r(-10.5, 1.3, 8, 5.2);
-		else if (type == 7.5) return r(-10.5, 1.3, 8, 5.2);
-		else if (type == 3) return r(0, -1, 8, 4, 8, 9);
-		else if (type == 8) return r(4.5, -4, 5, 4.5, 10, 11);
-		else if (type == 9) return r(4.5, 0.5, 5, 4.5, 10.5, 11.5);
-		else if (type == 10) return r(5.5, -5.5, 8, 5.2);
-		else if (type == 11) return r(5.5, -5.5, 8, 5.2);
-		else if (type == 10.5) return r(5.5, 1.3, 8, 5.2);
-		else if (type == 11.5) return r(5.5, 1.3, 8, 5.2);
+		if (type == "1") return r(-1, -2, 5, 5, "2", "3");
+		else if (type == "2") return r(-4.5, -2, 8, 4, "4", "5");
+		else if (type == "4") return r(-6.5, -4, 5, 4.5, "6", "7");
+		else if (type == "5") return r(-6.5, 0.5, 5, 4.5, "6.5", "7.5");
+		else if (type == "6") return r(-10.5, -5.5, 8, 5.2);
+		else if (type == "7") return r(-10.5, -5.5, 8, 5.2);
+		else if (type == "6.5") return r(-10.5, 1.3, 8, 5.2);
+		else if (type == "7.5") return r(-10.5, 1.3, 8, 5.2);
+		else if (type == "3") return r(0, -1, 8, 4, "8", "9");
+		else if (type == "8") return r(4.5, -4, 5, 4.5, "10", "11");
+		else if (type == "9") return r(4.5, 0.5, 5, 4.5, "10.5", "11.5");
+		else if (type == "10") return r(5.5, -5.5, 8, 5.2);
+		else if (type == "11") return r(5.5, -5.5, 8, 5.2);
+		else if (type == "10.5") return r(5.5, 1.3, 8, 5.2);
+		else if (type == "11.5") return r(5.5, 1.3, 8, 5.2);
 		return null;
 	}
 
@@ -585,11 +596,16 @@ interface NodeData
 
 function createTree(tree: ITreeNode, curGameNodeId: number, characters: TourneyCharactersTreeData): TreeNode
 {
-	return new TreeNode(
+	const left = tree.left && createTree(tree.left, curGameNodeId, characters);
+	const right = tree.right && createTree(tree.right, curGameNodeId, characters);
+	const node = new TreeNode(
 		characters,
 		{ id: tree.id, characterId: tree.characterId },
 		curGameNodeId,
-		tree.left && createTree(tree.left, curGameNodeId, characters),
-		tree.right && createTree(tree.right, curGameNodeId, characters)
+		left,
+		right,
 	);
+	if (left) left.parent = node;
+	if (right) right.parent = node;
+	return node;
 }

@@ -33,7 +33,7 @@ export default function GameSettingsPage()
 				<h3>Управление турниром</h3>
 				<div>
 					<ConfirmingButton className={styles.start} h="Выбрать следующую игру?" bt="Выбрать" rt="Игра выбрана!" disabled={!tourney.data || tourney.data?.showGame} mutation={useMutationTourneySelectNextGame}>Выбрать следующую игру</ConfirmingButton>
-					<ConfirmingButton className={styles.start} h="Запустить игру?" bt="Запустить" rt="Игра запущена!" disabled={!tourney.data || tourney.data?.showGame} mutation={useMutationTourneyStartGame}>Запустить игру</ConfirmingButton>
+					<ConfirmingButton className={styles.start} h="Запустить игру?" bt="Запустить" rt="Игра запущена!" disabled={!tourney.data || tourney.data?.showGame || tourney.data.curGameNodeId == -1} mutation={useMutationTourneyStartGame}>Запустить игру</ConfirmingButton>
 					<ConfirmingButton className={styles.start} h="Завершить игру?" bt="Завершить" rt="Игра завершена!" disabled={!tourney.data?.showGame} mutation={useMutationTourneyEndGame}>Завершить игру</ConfirmingButton>
 				</div>
 			</div>
