@@ -6,7 +6,7 @@ import Popup from "../Popup";
 import Spinner from "../Spinner";
 import styles from "./styles.module.css"
 
-export default function ConfirmingButton({ h, bt, rt, className, mutation, children }: ConfirmingButtonProps)
+export default function ConfirmingButton({ h, bt, rt, disabled, className, mutation, children }: ConfirmingButtonProps)
 {
 	const popupOpen = useStateBool(false);
 	const popupOpen2 = useStateBool(false);
@@ -16,7 +16,7 @@ export default function ConfirmingButton({ h, bt, rt, className, mutation, child
 
 	return <>
 		{mutate.isLoading && <Spinner />}
-		<button className={className} onClick={popupOpen.setT}>{children}</button>
+		<button className={className} disabled={disabled} onClick={popupOpen.setT}>{children}</button>
 		<Popup open={popupOpen.v} close={popupOpen.setF} closeOnOutclick>
 			<h2>{h}</h2>
 			<br />
@@ -40,6 +40,7 @@ interface ConfirmingButtonProps extends React.PropsWithChildren
 	h: string,
 	bt: string,
 	rt: string,
+	disabled?: boolean,
 	className?: string,
 	mutation: (onSuccess?: () => void, onError?: (err: any) => void) => UseMutationResult<any, any, void, unknown>
 }

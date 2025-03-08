@@ -14,6 +14,8 @@ class GameLog(SqlAlchemyBase, IdMixin):
     startStr = Column(String(8))
     duration = Column(Integer)
     counter = Column(Integer)
+    oponent1Id = Column(Integer)
+    oponent2Id = Column(Integer)
     startTime = Column(DateTime)
     clicks1 = Column(Integer)
     clicks2 = Column(Integer)
@@ -26,6 +28,8 @@ class GameLog(SqlAlchemyBase, IdMixin):
             startStr=game.startStr,
             duration=game.duration,
             counter=game.counter,
+            oponent1Id=game.oponent1Id,
+            oponent2Id=game.oponent2Id,
             startTime=game.startTime,
             clicks1=game.clicks1,
             clicks2=game.clicks2,

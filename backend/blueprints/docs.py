@@ -382,6 +382,7 @@ def docs():
             "characterId": "number",
             "left": "TourneyTreeNode | null",
             "right": "TourneyTreeNode | null",
+            "showGame": "boolean",
         },
         "TourneyCharacter": {
             "id": "number",

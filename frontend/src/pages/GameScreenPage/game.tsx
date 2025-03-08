@@ -6,12 +6,23 @@ import useStateObj from "../../utils/useStateObj";
 
 class Game
 {
-	public title = <span></span>;
 	public barPercent = "50";
-	public textLeft = "Вернуться";
-	public textCenter = "Персонажи должны...";
-	public textRight = "Остаться";
+	public error: string | null = null;
 	public get isGoing() { return this.state?.state == "going"; }
+	public get opponentLeftId() { return this.state?.oponent1Id || -1; }
+	public get opponentRightId() { return this.state?.oponent2Id || -1; }
+	public get winnerId() { return this.state?.winner == 1 ? this.opponentLeftId : this.state?.winner == 2 ? this.opponentRightId : -1; }
+	public get titleType()
+	{
+		if (this.error) return "error";
+		return ({
+			wait: "wait",
+			start: "counter",
+			going: "counter",
+			end: "winner",
+			"": ""
+		}[this.state?.state || ""] || "load") as "error" | "wait" | "counter" | "winner" | "load";
+	}
 
 	private updateScreen?: () => void;
 	private state: GameStateFull | null = null;
@@ -42,7 +53,6 @@ class Game
 		if (this.state.counter > 0)
 		{
 			this.state.counter--;
-			this.title = <span>{this.getCounter()}</span>
 			this.updateScreen?.();
 		}
 	}
@@ -56,12 +66,13 @@ class Game
 			const newState = await fetchJsonGet<GameStateFull>("/api/game/state_full");
 			if (startI != this.startI) return;
 			this.state = newState;
+			this.error = null;
 		}
 		catch (e)
 		{
 			if (startI != this.startI) return;
 			this.state = null;
-			this.title = <h3 style={{ color: "tomato", textAlign: "center" }}>{formatError(e)}</h3>;
+			this.error = formatError(e);
 			this.updateScreen?.();
 			return;
 		}
@@ -82,30 +93,9 @@ class Game
 		if (!this.state) return;
 
 		this.barPercent = this.getBarPercent(this.state);
-
-		if (this.state.state == "wait")
-		{
-			this.title = <span>Скоро начало!</span>;
-		}
-		else if (this.state.state == "start")
-		{
-			this.title = <span>{this.getCounter()}</span>
-		}
-		else if (this.state.state == "going")
-		{
-			this.title = <span>{this.getCounter()}</span>
-		}
-		else if (this.state.state == "end")
-		{
-			this.title = <>
-				<span>Персонажи должны </span>
-				<span className="title" style={{ marginLeft: "0.25em" }}>{this.state.winner == 1 ? "Вернуться" : "Остаться"}</span>
-				<span>!</span>
-			</>
-		}
 	}
 
-	private getCounter()
+	public getCounter()
 	{
 		if (!this.state) return "0:00";
 		return `${Math.floor(this.state.counter / 60)}:${(this.state.counter % 60).toString().padStart(2, "0")}`;

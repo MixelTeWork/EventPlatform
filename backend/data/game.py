@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from sqlalchemy import Column, DateTime, DefaultClause, func, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, func, Integer, String
 from sqlalchemy.orm import Session
 
 from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
@@ -15,10 +15,13 @@ class Game(SqlAlchemyBase, IdMixin):
     startStr = Column(String(8), DefaultClause("16:30"), nullable=False)
     duration = Column(Integer, DefaultClause("60"), nullable=False)
     counter = Column(Integer, DefaultClause("150"), nullable=False)
+    oponent1Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
+    oponent2Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
     startTime = Column(DateTime, nullable=True)
     clicks1 = Column(Integer, DefaultClause("0"), nullable=False)
     clicks2 = Column(Integer, DefaultClause("0"), nullable=False)
     winner = Column(Integer, DefaultClause("0"), nullable=False)
+    showGame = Column(Boolean, DefaultClause("0"), nullable=False)
 
     @staticmethod
     def init(db_sess: Session):
@@ -33,19 +36,31 @@ class Game(SqlAlchemyBase, IdMixin):
         return db_sess.get(Game, 1)
 
     @staticmethod
-    def start(db_sess: Session):
+    def start_new(db_sess: Session, oponent1Id: int, oponent2Id: int):
         game = Game.get(db_sess)
         game.startTime = get_datetime_now()
+        game.showGame = True
+        game.clicks1 = 0
+        game.clicks2 = 0
+        game.winner = 0
+        game.oponent1Id = oponent1Id
+        game.oponent2Id = oponent2Id
         db_sess.query(UserGame).delete()
         db_sess.commit()
 
     @staticmethod
-    def reset(db_sess: Session):
+    def get_winner(db_sess: Session):
         game = Game.get(db_sess)
-        game.startTime = None
-        game.clicks1 = 0
-        game.clicks2 = 0
-        game.winner = 0
+        if game.winner == 1:
+            return game.oponent1Id
+        if game.winner == 2:
+            return game.oponent2Id
+        return -1
+
+    @staticmethod
+    def hideGame(db_sess: Session):
+        game = Game.get(db_sess)
+        game.showGame = False
         db_sess.commit()
 
     @staticmethod
@@ -53,9 +68,12 @@ class Game(SqlAlchemyBase, IdMixin):
         game = Game.get(db_sess) if game is None else game
         state = {
             "state": GameState.wait,
+            "oponent1Id": game.oponent1Id,
+            "oponent2Id": game.oponent2Id,
             "start": game.startStr,
             "counter": 0,
             "winner": game.winner,
+            "showGame": game.showGame,
         }
         if game.startTime is None:
             return state

@@ -70,7 +70,7 @@ def start_game_at_node(db_sess: Session, user: User):
     if r == -2:
         return response_msg("node hasnt children", 400)
     if r == -3:
-        return response_msg("node children is unset", 400)
+        return response_msg("node children is unwon", 400)
     return response_msg("err", 400)
 
 
@@ -92,8 +92,15 @@ def select_next_game(db_sess: Session, user: User):
 @permission_required(Operations.manage_games)
 def start_game(db_sess: Session, user: User):
     tourney = Tourney.get(db_sess)
-    tourney.start_game()
-    return tourney.get_dict()
+    r = tourney.start_game()
+    if r >= 0:
+        return tourney.get_dict()
+
+    if r == -1:
+        return response_msg("cur game not selected", 400)
+    if r == -2 or r == -2:
+        return response_msg(f"wrong cur game selected {r=}", 400)
+    return response_msg("err", 400)
 
 
 @blueprint.post("/api/tourney/end_game")

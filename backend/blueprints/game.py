@@ -81,26 +81,6 @@ def set_startStr(db_sess: Session, user: User):
     return {"startStr": game.startStr}
 
 
-@blueprint.post("/api/game/start")
-@jwt_required()
-@use_db_session()
-@use_user()
-@permission_required(Operations.manage_games)
-def start(db_sess: Session, user: User):
-    Game.start(db_sess)
-    return response_msg("ok")
-
-
-@blueprint.post("/api/game/reset")
-@jwt_required()
-@use_db_session()
-@use_user()
-@permission_required(Operations.manage_games)
-def reset(db_sess: Session, user: User):
-    Game.reset(db_sess)
-    return response_msg("ok"), 200
-
-
 @blueprint.route("/api/game/state")
 @use_db_session()
 def state(db_sess: Session):

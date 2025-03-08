@@ -9,6 +9,7 @@ export interface TourneyData
 	tree: TreeNode,
 	third: number,
 	curGameNodeId: number,
+	showGame: boolean,
 }
 
 export interface TreeNode

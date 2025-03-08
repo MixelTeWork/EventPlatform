@@ -54,6 +54,10 @@
 	font-size: 1rem;
 	text-decoration: none;
 }
+.start:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
 
 .tourney {
 	display: flex;

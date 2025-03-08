@@ -13,7 +13,7 @@ import PopupConfirm from "../../../components/PopupConfirm";
 
 export default function TourneyEdit()
 {
-	const tourney = useTourneyData()
+	const tourney = useTourneyData();
 	const characters = useTourneyCharacters();
 
 	const curGame = findNode(tourney.data?.tree, tourney.data?.curGameNodeId || 0, tourney.data?.third || -1);
