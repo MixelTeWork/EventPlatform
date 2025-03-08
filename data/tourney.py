@@ -145,7 +145,11 @@ class Tourney(SqlAlchemyBase, IdMixin):
         logging.info(f"end_game {winner=} {err=} {oponent1Id=} {oponent2Id=}")
 
     def reset(self):
+        db_sess = Session.object_session(self)
+        self.curGameNodeId = -1
+        self.showGame = False
         self.gen_new_tree()
+        Game.reset(db_sess)
         logging.info("reset")
 
     def get_dict(self):
