@@ -7,12 +7,15 @@ def init_values(dev=False, cmd=False):
     if cmd:
         add_parent_to_path()
 
-    from bfs import db_session, Log, get_datetime_now, randstr
+    from bfs import db_session, Log, get_datetime_now, randstr, init_db_values
     from data.dialog import Dialog
     from data.game import Game
     from data.quest import Quest
     from data.tourney import Tourney
     from data.user import User
+
+    if cmd or not dev:
+        init_db_values(dev)
 
     db_session.global_init(dev)
     db_sess = db_session.create_session()
