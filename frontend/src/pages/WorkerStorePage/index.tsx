@@ -17,7 +17,7 @@ export default function WorkerStorePage()
 	const selectedItem = useStateObj<StoreItemFull | null>(null, popupOpen.setT);
 
 	return (
-		<Layout centeredPage gap="1rem" height100 homeBtn>
+		<Layout centeredPage gap="1rem" height100 homeBtn forStaff>
 			<h1>Продажа</h1>
 			{items.isLoading && <Spinner />}
 			{displayError(items)}

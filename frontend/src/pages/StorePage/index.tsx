@@ -18,7 +18,7 @@ export default function StorePage()
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
 			{items.isLoading && <Spinner />}
-			<h1 className={classNames("title", styles.title)}>Индикон</h1>
+			<h1 className={classNames("title", styles.title)}>Underparty</h1>
 			<StyledWindow title="Магазин" className={styles.list}>
 				<div className={styles.items}>
 					{displayError(items)}

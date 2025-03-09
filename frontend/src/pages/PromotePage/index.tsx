@@ -19,7 +19,7 @@ export default function PromotePage({ role }: PromoteProps)
 	if (!roleText) return <Layout>Ошибка!</Layout>;
 
 	return (
-		<Layout centered gap="1rem" height100 className={styles.root} homeBtn>
+		<Layout centered gap="1rem" height100 className={styles.root} homeBtn forStaff>
 			<h1>Повышение до {roleText}</h1>
 			<div className={styles.qr}>
 				<QrCode code={`promote_${role}_${user.data?.id}`} colorBg="#ffffff00" scale={13} />

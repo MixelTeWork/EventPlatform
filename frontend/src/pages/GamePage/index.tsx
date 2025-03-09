@@ -97,7 +97,7 @@ export default function GamePage()
 			{displayError(state)}
 			{selectTeam.isLoading && <Spinner />}
 			{displayError(selectTeam)}
-			<h1 className={classNames("title", styles.title)}>Индикон</h1>
+			<h1 className={classNames("title", styles.title)}>Underparty</h1>
 			<StyledWindow className={styles.window}>
 				{(state.isLoading || state.data?.state == "wait") && <>
 					<div className={styles.text}>

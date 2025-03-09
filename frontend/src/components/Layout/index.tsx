@@ -2,9 +2,9 @@ import classNames from "../../utils/classNames";
 import Header from "../Header";
 import styles from "./styles.module.css"
 
-export default function Layout({ children, className, homeBtn = false, styles: el_styles, centered = false, centeredPage = false, height100 = false, gap = 0, header, footer }: LayoutProps)
+export default function Layout({ children, className, forStaff = false, forDev = false, homeBtn = false, styles: el_styles, centered = false, centeredPage = false, height100 = false, gap = 0, header, footer }: LayoutProps)
 {
-	if (header === undefined) header = <Header homeBtn={homeBtn} />
+	if (header === undefined) header = <Header homeBtn={homeBtn} forStaff={forStaff} forDev={forDev} />
 
 	return (
 		<div className={classNames(styles.root, !!footer && styles.hasFooter)} style={{ ...el_styles, maxHeight: height100 ? "100dvh" : "" }}>
@@ -14,6 +14,8 @@ export default function Layout({ children, className, homeBtn = false, styles: e
 					styles.body, className,
 					centered && styles.body_centered,
 					centeredPage && styles.body_centeredPage,
+					forStaff && "forStaff",
+					forDev && "forDev",
 				)}
 				style={{ gap, maxHeight: height100 ? "100%" : "" }}
 			>
@@ -28,6 +30,8 @@ interface LayoutProps extends React.PropsWithChildren
 {
 	centeredPage?: boolean,
 	centered?: boolean,
+	forStaff?: boolean,
+	forDev?: boolean,
 	height100?: boolean,
 	gap?: number | string,
 	className?: string,

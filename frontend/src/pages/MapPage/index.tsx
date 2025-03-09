@@ -74,7 +74,7 @@ export default function MapPage()
 			{dialog.el()}
 			<GameDialogGreetings />
 			{quests.isLoading && <Spinner />}
-			<h1 className={classNames("title", styles.title)}>Индикон</h1>
+			<h1 className={classNames("title", styles.title)}>Underparty</h1>
 			<StyledWindow className={styles.window} onClose={() => openedQuest.set(null)}>
 				{displayError(quests)}
 				<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>

@@ -10,7 +10,7 @@ export default function UsersPage()
 	const users = useUsers()
 
 	return (
-		<Layout centeredPage homeBtn gap={8} styles={{ fontFamily: "'PT Sans', Arial", background: "#1e1e1e" }}>
+		<Layout centeredPage homeBtn gap={8} forDev>
 			{users.isLoading && <h3>Загрузка</h3>}
 			{displayError(users)}
 			{users.data?.map(v => <div className={styles.user} key={v.id}>

@@ -14,7 +14,7 @@ export default function LogPage()
 	const log = useLog(page.v);
 	const logLen = useLogLen().data?.len ?? 0;
 
-	return <Layout centeredPage styles={{ fontFamily: "'PT Sans', Arial", background: "#1e1e1e" }} homeBtn>
+	return <Layout centeredPage homeBtn forDev>
 		{displayError(log)}
 		<div className={styles.btns}>
 			<button disabled={log.isFetching} className="button button_small" onClick={() => { clearCache(); page.set(0); log.refetch(); }}>Update</button>

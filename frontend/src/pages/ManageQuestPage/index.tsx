@@ -17,7 +17,7 @@ export default function ManageQuestPage()
 	const quests = useQuestsFull();
 
 	return (
-		<Layout centeredPage gap="0.5rem" homeBtn>
+		<Layout centeredPage gap="0.5rem" homeBtn forStaff>
 			<div className="calmBack"></div>
 			{quests.isLoading && <Spinner />}
 			{displayError(quests)}

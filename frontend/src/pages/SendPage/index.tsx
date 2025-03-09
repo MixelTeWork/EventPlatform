@@ -31,7 +31,7 @@ export default function SendPage()
 	}
 
 	return (
-		<Layout centered homeBtn>
+		<Layout centered homeBtn forStaff>
 			<h2>Казначейство</h2>
 			{mutation.isLoading && <Spinner />}
 			{mutationCheck.isLoading && <Spinner />}

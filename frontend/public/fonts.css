@@ -4,6 +4,11 @@
 }
 
 @font-face {
+	font-family: "monsterfriendforerusbylya";
+	src: url("fonts/monsterfriendforerusbylya.otf") format("opentype");
+}
+
+@font-face {
 	font-family: "PT Sans";
 	src: url("fonts/PT_Sans/PTSans-Regular.ttf") format('truetype');
 	font-weight: normal;

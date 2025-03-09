@@ -20,7 +20,7 @@ export default function TimetablePage()
 
 	return (
 		<Layout centeredPage className={styles.root} footer={<Footer curPage="timetable" />}>
-			<h1 className={classNames("title", styles.title)}>Индикон</h1>
+			<h1 className={classNames("title", styles.title)}>Underparty</h1>
 			<div className={styles.body}>
 				<StyledWindow className={styles.list} scrollUpdate={timetable.v}>
 					<div className={styles.items}>

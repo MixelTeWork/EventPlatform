@@ -9,7 +9,7 @@ import classNames from "../../utils/classNames";
 import hasPermission from "../../api/operations";
 import IconHome from "../../icons/home";
 
-export default function Header({ homeBtn = false }: HeaderProps)
+export default function Header({ homeBtn = false, forStaff = false, forDev = false }: HeaderProps)
 {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Header({ homeBtn = false }: HeaderProps)
 	const user = useUser();
 
 	return (
-		<div className={styles.root}>
+		<div className={classNames(styles.root, forStaff && styles.forStaff, forDev && styles.forDev)}>
 			<Link to={"/"} className={styles.home}>
 				{homeBtn && <IconHome />}
 			</Link>
@@ -49,4 +49,6 @@ export default function Header({ homeBtn = false }: HeaderProps)
 interface HeaderProps
 {
 	homeBtn?: boolean
+	forStaff?: boolean,
+	forDev?: boolean,
 }

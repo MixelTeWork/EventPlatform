@@ -68,7 +68,7 @@ export default function GameScreenPage()
 					{game.titleType == "wait" && <span>Скоро начало!</span>}
 					{game.titleType == "counter" && <span>{game.getCounter()}</span>}
 					{game.titleType == "winner" && <>
-						<span>Победил </span>
+						<span>Побеждает </span>
 						<span className="title" style={{ marginLeft: "0.25em" }}>{characterWinner?.name}</span>
 						<span>!</span>
 					</>}

@@ -3,9 +3,7 @@
 	inset: 0;
 	display: flex;
 	background-color: black;
-	background: repeating-linear-gradient(90deg, var(--_strokeColor) 0px, var(--_strokeColor) var(--_strokeWidth), transparent var(--_strokeWidth), transparent var(--_cellSize)),
-		repeating-linear-gradient(0deg, var(--_strokeColor) 0px, var(--_strokeColor) var(--_strokeWidth), transparent var(--_strokeWidth), transparent var(--_cellSize)),
-		linear-gradient(0deg, #3035dc, #120cbc);
+	background: linear-gradient(0deg, #ffe87e, #ffdb6c);
 	z-index: 100;
 	justify-content: center;
 }

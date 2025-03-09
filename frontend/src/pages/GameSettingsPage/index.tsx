@@ -21,7 +21,7 @@ export default function GameSettingsPage()
 	const tourney = useTourneyData();
 
 	return (
-		<Layout centeredPage homeBtn gap="2rem">
+		<Layout centeredPage homeBtn gap="2rem" forStaff>
 			<h1>Настройки игры</h1>
 			{tourney.isLoading && <Spinner />}
 			{displayError(tourney)}

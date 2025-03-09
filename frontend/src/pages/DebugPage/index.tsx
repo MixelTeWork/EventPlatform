@@ -25,7 +25,7 @@ export default function DebugPage()
 	}
 
 	return (
-		<Layout centered gap="1rem" className={styles.root} homeBtn>
+		<Layout centered gap="1rem" className={styles.root} homeBtn forDev>
 			<Link to="/users">Users</Link>
 			<Link to="/log">Log</Link>
 			<button onClick={viewLog("Log errors", "/api/debug/log_errors")}>Log errors</button>
