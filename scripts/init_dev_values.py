@@ -27,6 +27,7 @@ def init_dev_values(dev=False, cmd=False):
     user_admin.balance = 100
 
     now = get_datetime_now()
+    os.makedirs("images", exist_ok=True)
     shutil.copy("scripts/dev_init_data/1.jpeg", "images/1.jpeg")
     shutil.copy("scripts/dev_init_data/2.jpeg", "images/2.jpeg")
     shutil.copy("scripts/dev_init_data/3.png", "images/3.png")

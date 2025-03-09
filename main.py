@@ -13,7 +13,6 @@ app, run = create_app(__name__, AppConfig(
     DEV_MODE="dev" in sys.argv,
     DELAY_MODE="delay" in sys.argv,
 )
-    .add_data_folder("FONTS_FOLDER", "fonts")
     .add_secret_key("API_SECRET_KEY", "secret_key_api.txt")
     .add_secret_key("VK_SECRET_KEY", "secret_key_vk.txt")
 )
