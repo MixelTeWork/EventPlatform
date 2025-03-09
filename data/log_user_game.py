@@ -9,6 +9,7 @@ class UserGameLog(SqlAlchemyBase, IdMixin):
 
     gameId = Column(Integer)
     userId = Column(Integer)
+    team = Column(Integer)
     clicks = Column(Integer)
     lastClick = Column(DateTime)
     hackAlert = Column(Integer)

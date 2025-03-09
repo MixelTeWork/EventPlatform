@@ -121,19 +121,19 @@ class Tourney(SqlAlchemyBase, IdMixin):
     def start_game(self):
         db_sess = Session.object_session(self)
 
-        err, oponent1Id, oponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
+        err, opponent1Id, opponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
         if err < 0:
             return err
 
         self.showGame = True
-        Game.start_new(db_sess, oponent1Id, oponent2Id)
-        logging.info(f"start_game {oponent1Id=} {oponent2Id=}")
+        Game.start_new(db_sess, opponent1Id, opponent2Id)
+        logging.info(f"start_game {opponent1Id=} {opponent2Id=}")
         return 0
 
     def end_game(self):
         db_sess = Session.object_session(self)
 
-        winner = Game.get_winner(db_sess)
+        winner = Game.end_game(db_sess)
         node = find_node(self.data["tree"], self.curGameNodeId)
         err, oponent1Id, oponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
         if err >= 0 and (winner == oponent1Id or winner == oponent2Id):
@@ -141,7 +141,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
             flag_modified(self, "data")
 
         self.showGame = False
-        Game.hideGame(db_sess)
+        db_sess.commit()
         logging.info(f"end_game {winner=} {err=} {oponent1Id=} {oponent2Id=}")
 
     def reset(self):

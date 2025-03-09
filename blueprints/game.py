@@ -1,8 +1,8 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bfs import get_json_values_from_req, permission_required, response_msg, use_db_session, use_user
+from bfs import get_json_values_from_req, permission_required, use_db_session, use_user, use_user_optional
 from data._operations import Operations
 from data.game import Game, GameState
 from data.user import User
@@ -83,8 +83,9 @@ def set_startStr(db_sess: Session, user: User):
 
 @blueprint.route("/api/game/state")
 @use_db_session()
-def state(db_sess: Session):
-    return jsonify(Game.get_state(db_sess)), 200
+@use_user_optional()
+def state(db_sess: Session, user: User):
+    return Game.get_state(db_sess, user=user)
 
 
 @blueprint.route("/api/game/state_full")
@@ -93,7 +94,7 @@ def state(db_sess: Session):
 @use_user()
 @permission_required(Operations.manage_games)
 def state_full(db_sess: Session, user: User):
-    return jsonify(Game.get_state_update(db_sess)), 200
+    return Game.get_state_update(db_sess)
 
 
 @blueprint.post("/api/game/click")
@@ -102,8 +103,18 @@ def state_full(db_sess: Session, user: User):
 @use_user()
 def click(db_sess: Session, user: User):
     count = get_json_values_from_req("count")
-    state = Game.get_state(db_sess)
+    state = Game.get_state(db_sess, user=user)
     if state["state"] == GameState.going:
         if not UserGame.click(user, count):
             return "", 429
-    return jsonify(state)
+    return state
+
+
+@blueprint.post("/api/game/select_team")
+@jwt_required()
+@use_db_session()
+@use_user()
+def select_team(db_sess: Session, user: User):
+    team = get_json_values_from_req("team")
+    UserGame.set_team(user, team)
+    return Game.get_state(db_sess, user=user)
