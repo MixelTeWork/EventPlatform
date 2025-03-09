@@ -149,7 +149,10 @@ class Tourney(SqlAlchemyBase, IdMixin):
         node = find_node(self.data["tree"], self.curGameNodeId)
         err, oponent1Id, oponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
         if err >= 0 and (winner == oponent1Id or winner == oponent2Id):
-            node["characterId"] = winner
+            if self.curGameNodeId == -3:
+                self.data["third"] = winner
+            elif node:
+                node["characterId"] = winner
             flag_modified(self, "data")
 
         self.showGame = False
@@ -191,7 +194,7 @@ def find_node(tree, id: int):
             return r
     if tree["right"]:
         return find_node(tree["right"], id)
-    return False
+    return None
 
 
 def get_not_winner(tree):
