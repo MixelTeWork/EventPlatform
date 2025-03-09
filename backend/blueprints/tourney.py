@@ -128,9 +128,7 @@ def reset(db_sess: Session, user: User):
 @blueprint.route("/api/tourney/characters")
 @jwt_required()
 @use_db_session()
-@use_user()
-@permission_required(Operations.manage_games)
-def characters(db_sess: Session, user: User):
+def characters(db_sess: Session):
     characters = TourneyCharacter.all(db_sess)
     return jsonify_list(characters)
 

@@ -51,7 +51,11 @@ class Game(SqlAlchemyBase, IdMixin):
     @staticmethod
     def reset(db_sess: Session):
         game = Game.get(db_sess)
+        game.showGame = False
         game.startTime = None
+        game.clicks1 = 0
+        game.clicks2 = 0
+        game.winner = 0
         db_sess.commit()
 
     @staticmethod

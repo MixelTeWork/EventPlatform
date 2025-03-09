@@ -79,6 +79,8 @@ function EditWinnerBtn({ tourney, winner, oponent1, oponent2 }: { tourney: UseQu
 				winnerId.v == oponent2?.id ? oponent2.name : "отсутствует";
 
 	return <>
+		{editNode.isLoading && <Spinner />}
+		{displayError(editNode)}
 		{!editing.v ? <>
 			<span className={styles.characterName}>{winnerName}</span>
 			{oponent1 && oponent2 &&

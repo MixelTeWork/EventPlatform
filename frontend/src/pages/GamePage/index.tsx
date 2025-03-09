@@ -135,7 +135,7 @@ export default function GamePage()
 				</>}
 				{state.data?.state == "end" && <>
 					<div className={styles.text}>
-						<div className={styles.title2}>{characterWinner?.name || "N/A"} побеждает!</div>
+						<div className={styles.title2}>{characterWinner?.name || "..."} побеждает!</div>
 						<h1 className={styles.title3}>
 							{state.data.winner == 0 ? "Игра завершена!" :
 								state.data.team == state.data.winner ? "Победа!" : "Проигрыш!"}

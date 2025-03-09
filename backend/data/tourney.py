@@ -61,6 +61,18 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
         node["characterId"] = characterId
 
+        if self.curGameNodeId != -1:
+            err, opponent1, opponent2 = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
+            if err >= 0 and (opponent1 == characterId or opponent2 == characterId or characterId == -1):
+                game = Game.get(db_sess)
+                if game and game.opponent1Id == opponent1 and game.opponent2Id == opponent2:
+                    if characterId == game.opponent1Id:
+                        game.winner = 1
+                    elif characterId == game.opponent2Id:
+                        game.winner = 2
+                    else:
+                        game.winner = 0
+
         flag_modified(self, "data")
         db_sess.commit()
         logging.info(f"edit_node {node_id=} {characterId=}")
