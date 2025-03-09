@@ -114,6 +114,28 @@ def end_game(db_sess: Session, user: User):
     return tourney.get_dict()
 
 
+@blueprint.post("/api/tourney/end_tourney")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def end_tourney(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.end_tourney()
+    return tourney.get_dict()
+
+
+@blueprint.post("/api/tourney/unend_tourney")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def unend_tourney(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.unend_tourney()
+    return tourney.get_dict()
+
+
 @blueprint.post("/api/tourney/reset")
 @jwt_required()
 @use_db_session()

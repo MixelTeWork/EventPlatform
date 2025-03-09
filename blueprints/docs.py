@@ -252,6 +252,14 @@ def docs():
             "__desc__": "End current game",
             "response": "Tourney",
         },
+        "/api/tourney/tourney/end_tourney POST": {
+            "__desc__": "End tourney",
+            "response": "Tourney",
+        },
+        "/api/tourney/tourney/unend_tourney POST": {
+            "__desc__": "Cancel tourney end",
+            "response": "Tourney",
+        },
         "/api/tourney/tourney/reset POST": {
             "__desc__": "Full reset",
             "response": "Tourney",
@@ -376,13 +384,14 @@ def docs():
             "tree": "TourneyTreeNode",
             "third": "number",
             "curGameNodeId": "number",
+            "showGame": "boolean",
+            "ended": "boolean",
         },
         "TourneyTreeNode": {
             "id": "number",
             "characterId": "number",
             "left": "TourneyTreeNode | null",
             "right": "TourneyTreeNode | null",
-            "showGame": "boolean",
         },
         "TourneyCharacter": {
             "id": "number",
