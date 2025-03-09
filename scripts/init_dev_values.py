@@ -32,6 +32,7 @@ def init_dev_values(dev=False, cmd=False):
     shutil.copy("scripts/dev_init_data/2.jpeg", "images/2.jpeg")
     shutil.copy("scripts/dev_init_data/3.png", "images/3.png")
     shutil.copy("scripts/dev_init_data/4.png", "images/4.png")
+    shutil.copy("scripts/dev_init_data/5.png", "images/5.png")
     db_sess.add(Image(id=1, name="img1", type="jpeg", creationDate=now, createdById=user_admin.id))
     db_sess.add(Image(id=2, name="img2", type="jpeg", creationDate=now, createdById=user_admin.id))
     db_sess.add(Image(id=3, name="img3", type="png", creationDate=now, createdById=user_admin.id))
