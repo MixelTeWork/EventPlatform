@@ -4,28 +4,34 @@ import classNames from "../../utils/classNames";
 import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
 import useStateObj from "../../utils/useStateObj";
-import { useGameState, useMutationSendClick } from "../../api/game";
+import { useGameState, useMutationGameSelectTeam, useMutationSendClick } from "../../api/game";
 import Spinner from "../../components/Spinner";
 import displayError from "../../utils/displayError";
 import { useEffect } from "react";
-import useUser from "../../api/user";
 import StyledWindow from "../../components/StyledWindow";
 import { useDisableZoom } from "../../utils/useDisableZoom";
 import randomInt from "../../utils/randomInt";
 import GameDialogGame from "../../components/GameDialogGame";
+import { useTourneyCharacters } from "../../api/tourney";
 
 
 export default function GamePage()
 {
 	useTitle("Игра");
 	useDisableZoom();
-	const user = useUser();
 	const state = useGameState();
+	const characters = useTourneyCharacters();
 	const counter = useStateObj(0);
 	const clicks = useStateObj(0);
 	const sendDelay = useStateObj(0);
 	const lastClickSend = useStateObj(Date.now());
 	const sendClick = useMutationSendClick(() => lastClickSend.set(Date.now()), () => lastClickSend.set(Date.now()));
+	const selectTeam = useMutationGameSelectTeam();
+
+	const characterLeft = characters.data?.find(ch => ch.id == state.data?.opponent1Id);
+	const characterRight = characters.data?.find(ch => ch.id == state.data?.opponent2Id);
+	const characterWinner = state.data?.winner == 1 ? characterLeft : state.data?.winner == 2 ? characterRight : null;
+	const characterTeam = state.data?.team == 1 ? characterLeft : state.data?.team == 2 ? characterRight : null;
 
 	useEffect(() =>
 	{
@@ -63,20 +69,30 @@ export default function GamePage()
 	useEffect(() =>
 	{
 		if (state.data?.state != "going") return;
-		if (clicks.v <= 0 || sendClick.isLoading) return;
-		if (Date.now() - lastClickSend.v < sendDelay.v) return;
+
+		const t = setInterval(() =>
+		{
+			state.refetch();
+		}, 5000);
+		const ct = () => clearInterval(t);
+
+		if (clicks.v <= 0 || sendClick.isLoading) return ct;
+		if (Date.now() - lastClickSend.v < sendDelay.v) return ct;
 
 		sendClick.mutate(clicks.v);
 		clicks.set(0);
 		sendDelay.set(randomInt(1000, 3000));
+		return ct;
 		// eslint-disable-next-line
-	}, [clicks.v]);
+	}, [clicks.v, state.data?.state]);
 
 	return (<>
 		{state.data?.state == "start" && <GameDialogGame />}
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
 			{state.isLoading && <Spinner />}
 			{displayError(state)}
+			{selectTeam.isLoading && <Spinner />}
+			{displayError(selectTeam)}
 			<h1 className={classNames("title", styles.title)}>Индикон</h1>
 			<StyledWindow className={styles.window}>
 				{(state.isLoading || state.data?.state == "wait") && <>
@@ -87,32 +103,42 @@ export default function GamePage()
 						</div>
 					</div>
 				</>}
-				{state.data?.state == "start" && <>
+				{state.data?.team == 0 && (state.data?.state == "start" || state.data?.state == "going") ? <>
 					<div className={styles.text}>
-						<div className={styles.title2}>Персонажи должны {user.data?.group == 1 ? "вернуться" : "остаться"}</div>
-						<h2 className={styles.subtitle}>Дождитесь начала</h2>
-						<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
+						<div className={styles.title2}>Победить должен</div>
+						<div className={styles.chooseTeam}>
+							<button onClick={() => selectTeam.mutate(1)}>{characterLeft?.name || "N/A"}</button>
+							<button onClick={() => selectTeam.mutate(2)}>{characterRight?.name || "N/A"}</button>
+						</div>
 					</div>
+				</> : <>
+					{state.data?.state == "start" && <>
+						<div className={styles.text}>
+							<div className={styles.title2}>{characterTeam?.name || "N/A"} победит!</div>
+							<h2 className={styles.subtitle}>Дождитесь начала</h2>
+							<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
+						</div>
+					</>}
+					{state.data?.state == "going" && <button
+						className={styles.press}
+						onClick={e =>
+						{
+							animateBtnPress(e.target as HTMLElement);
+							clicks.set(v => v + 1);
+						}}
+					>
+						<h1 className={styles.title2}>{characterTeam?.name || "N/A"} победит!</h1>
+						{/* <h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1> */}
+						{/* <h1 className={styles.title}>{clicks.v}</h1> */}
+						<div className={classNames("title", styles.press__btn)}>Жми!!!</div>
+					</button>}
 				</>}
-				{state.data?.state == "going" && <button
-					className={styles.press}
-					onClick={e =>
-					{
-						animateBtnPress(e.target as HTMLElement);
-						clicks.set(v => v + 1);
-					}}
-				>
-					<h1 className={styles.title2}>Персонажи должны {user.data?.group == 1 ? "вернуться" : "остаться"}</h1>
-					{/* <h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1> */}
-					{/* <h1 className={styles.title}>{clicks.v}</h1> */}
-					<div className={classNames("title", styles.press__btn)}>Жми!!!</div>
-				</button>}
 				{state.data?.state == "end" && <>
 					<div className={styles.text}>
-						<div className={styles.title2}>Персонажи должны {state.data.winner == 1 ? "вернуться" : "остаться"}</div>
+						<div className={styles.title2}>{characterWinner?.name || "N/A"} побеждает!</div>
 						<h1 className={styles.title3}>
 							{state.data.winner == 0 ? "Игра завершена!" :
-								user.data?.group == state.data.winner ? "Победа!" : "Проигрыш!"}
+								state.data.team == state.data.winner ? "Победа!" : "Проигрыш!"}
 						</h1>
 					</div>
 				</>}

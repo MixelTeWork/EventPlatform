@@ -28,8 +28,8 @@ class GameLog(SqlAlchemyBase, IdMixin):
             startStr=game.startStr,
             duration=game.duration,
             counter=game.counter,
-            oponent1Id=game.oponent1Id,
-            oponent2Id=game.oponent2Id,
+            oponent1Id=game.opponent1Id,
+            oponent2Id=game.opponent2Id,
             startTime=game.startTime,
             clicks1=game.clicks1,
             clicks2=game.clicks2,
@@ -42,6 +42,7 @@ class GameLog(SqlAlchemyBase, IdMixin):
             db_sess.add(UserGameLog(
                 gameId=game_id,
                 userId=v.userId,
+                team=v.team,
                 clicks=v.clicks,
                 lastClick=v.lastClick,
                 hackAlert=v.hackAlert,

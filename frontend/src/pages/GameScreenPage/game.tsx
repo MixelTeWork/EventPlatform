@@ -10,8 +10,8 @@ class Game
 	public barPercent = "50";
 	public error: string | null = null;
 	public get isGoing() { return this.state?.state == "going"; }
-	public get opponentLeftId() { return this.state?.oponent1Id || -1; }
-	public get opponentRightId() { return this.state?.oponent2Id || -1; }
+	public get opponentLeftId() { return this.state?.opponent1Id || -1; }
+	public get opponentRightId() { return this.state?.opponent2Id || -1; }
 	public get winnerId() { return this.state?.winner == 1 ? this.opponentLeftId : this.state?.winner == 2 ? this.opponentRightId : -1; }
 	public get titleType()
 	{
@@ -37,6 +37,7 @@ class Game
 	{
 		this.stoped = false;
 		this.startI++;
+		this.state = null;
 		this.navigate = navigate;
 		this.updateScreen = updateScreen;
 		this.updateState(this.startI);

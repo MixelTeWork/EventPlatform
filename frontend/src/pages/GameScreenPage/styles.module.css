@@ -69,7 +69,6 @@ body:has(.root) {
 .bar > div {
 	position: relative;
 	display: flex;
-	flex-basis: 50%;
 	align-items: center;
 	min-width: 40vw;
 	padding: 3vw;
@@ -95,13 +94,15 @@ body:has(.root) {
 
 .barLeft {
 	--color: #fea45c;
-	flex-grow: calc(var(--bar) * 2);
+	flex-basis: calc(var(--bar) * 1%);
+	/* flex-grow: calc(var(--bar) * 2); */
 	justify-content: flex-end;
 	border-right: 0.5vw solid white;
 }
 .barRight {
 	--color: #85c3ee;
-	flex-grow: calc((100 - var(--bar)) * 2);
+	flex-basis: calc((100 - var(--bar)) * 1%);
+	/* flex-grow: calc((100 - var(--bar)) * 2); */
 	border-left: 0.5vw solid white;
 }
 .barLeft::after,

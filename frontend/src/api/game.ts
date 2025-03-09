@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { fetchJsonGet, fetchJsonPost, fetchPost } from "../utils/fetch";
+import { fetchJsonGet, fetchJsonPost } from "../utils/fetch";
 import type { UserGroup } from "./user";
 
 export type State = "wait" | "start" | "going" | "end";
@@ -7,12 +7,13 @@ export type State = "wait" | "start" | "going" | "end";
 export interface GameState
 {
 	state: State,
-	oponent1Id: number | null,
-	oponent2Id: number | null,
+	opponent1Id: number | null,
+	opponent2Id: number | null,
 	winner: UserGroup,
 	counter: number,
 	start: string,
 	showGame: boolean,
+	team: number,
 }
 export interface GameStateFull extends GameState
 {
@@ -127,6 +128,22 @@ export function useMutationGameStartStr(onSuccess?: (data: GameStartStr) => void
 		{
 			queryClient.setQueryData("gameStartStr", data);
 			onSuccess?.(data);
+		},
+		onError,
+	});
+	return mutation;
+}
+
+export function useMutationGameSelectTeam(onSuccess?: () => void, onError?: (err: any) => void)
+{
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: async (team: number) =>
+			await fetchJsonPost<GameState>("/api/game/select_team", { team }),
+		onSuccess: (data: GameState) =>
+		{
+			queryClient.setQueryData("gameState", data);
+			onSuccess?.();
 		},
 		onError,
 	});
