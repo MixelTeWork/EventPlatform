@@ -106,7 +106,7 @@ class Tourney
 			});
 			this.tree = new Tree(this.state, characters);
 		}
-		if (this.state.showGame)
+		if (!this.state.ended && this.state.showGame)
 			this.navigate?.("/game_screen");
 	}
 

@@ -10,6 +10,7 @@ export interface TourneyData
 	third: number,
 	curGameNodeId: number,
 	showGame: boolean,
+	ended: boolean,
 }
 
 export interface TreeNode
@@ -131,6 +132,16 @@ export function useMutationTourneyStartGame(onSuccess?: () => void, onError?: (e
 export function useMutationTourneyEndGame(onSuccess?: () => void, onError?: (err: any) => void)
 {
 	return useMutationAction(() => `/api/tourney/end_game`, onSuccess, onError);
+}
+
+export function useMutationTourneyEndTourney(onSuccess?: () => void, onError?: (err: any) => void)
+{
+	return useMutationAction(() => `/api/tourney/end_tourney`, onSuccess, onError);
+}
+
+export function useMutationTourneyUnendTourney(onSuccess?: () => void, onError?: (err: any) => void)
+{
+	return useMutationAction(() => `/api/tourney/unend_tourney`, onSuccess, onError);
 }
 
 export function useMutationTourneyReset(onSuccess?: () => void, onError?: (err: any) => void)

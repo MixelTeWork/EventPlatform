@@ -67,7 +67,11 @@
 .tourney > :first-child {
 	text-align: center;
 }
-.tourney > :last-child {
+.tourney > div {
 	display: flex;
 	gap: 0.5rem;
+}
+
+.hidden {
+	display: none;
 }

@@ -33,6 +33,10 @@ export default function GamePage()
 	const characterWinner = state.data?.winner == 1 ? characterLeft : state.data?.winner == 2 ? characterRight : null;
 	const characterTeam = state.data?.team == 1 ? characterLeft : state.data?.team == 2 ? characterRight : null;
 
+	const characterTourneyWinner1 = characters.data?.find(ch => ch.id == state.data?.tourneyWinner1);
+	const characterTourneyWinner2 = characters.data?.find(ch => ch.id == state.data?.tourneyWinner2);
+	const characterTourneyWinner3 = characters.data?.find(ch => ch.id == state.data?.tourneyWinner3);
+
 	useEffect(() =>
 	{
 		if (state.isFetching) return;
@@ -140,6 +144,28 @@ export default function GamePage()
 							{state.data.winner == 0 ? "Игра завершена!" :
 								state.data.team == state.data.winner ? "Победа!" : "Проигрыш!"}
 						</h1>
+					</div>
+				</>}
+				{state.data?.state == "tourneyEnd" && <>
+					<div className={styles.text}>
+						<div className={styles.title2}>Турнир завершён!</div>
+						<div className={styles.tourney_winners}>
+							<div>
+								<img src={characterTourneyWinner1?.img} alt={characterTourneyWinner1?.name || "N/A"} />
+								<div>1 место</div>
+								<div>{characterTourneyWinner1?.name || "N/A"}</div>
+							</div>
+							<div>
+								<img src={characterTourneyWinner2?.img} alt={characterTourneyWinner2?.name || "N/A"} />
+								<div>2 место</div>
+								<div>{characterTourneyWinner2?.name || "N/A"}</div>
+							</div>
+							<div>
+								<img src={characterTourneyWinner3?.img} alt={characterTourneyWinner3?.name || "N/A"} />
+								<div>3 место</div>
+								<div>{characterTourneyWinner3?.name || "N/A"}</div>
+							</div>
+						</div>
 					</div>
 				</>}
 			</StyledWindow>

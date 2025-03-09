@@ -22,6 +22,7 @@ class Game(SqlAlchemyBase, IdMixin):
     clicks2 = Column(Integer, DefaultClause("0"), nullable=False)
     winner = Column(Integer, DefaultClause("0"), nullable=False)
     showGame = Column(Boolean, DefaultClause("0"), nullable=False)
+    tourneyEnded = Column(Boolean, DefaultClause("0"), nullable=False)
 
     @staticmethod
     def init(db_sess: Session):
@@ -51,6 +52,7 @@ class Game(SqlAlchemyBase, IdMixin):
     @staticmethod
     def reset(db_sess: Session):
         game = Game.get(db_sess)
+        game.tourneyEnded = False
         game.showGame = False
         game.startTime = None
         game.clicks1 = 0
@@ -97,12 +99,26 @@ class Game(SqlAlchemyBase, IdMixin):
             "winner": game.winner,
             "showGame": game.showGame,
             "team": 0,
+            "tourneyWinner1": -1,
+            "tourneyWinner2": -1,
+            "tourneyWinner3": -1,
         }
         if user:
             state["team"] = UserGame.get_team(user)
+
+        if game.tourneyEnded:
+            state["state"] = GameState.tourneyEnd
+            from data.tourney import Tourney
+            winner1, winner2, winner3 = Tourney.get_winners(db_sess)
+            state["tourneyWinner1"] = winner1
+            state["tourneyWinner2"] = winner2
+            state["tourneyWinner3"] = winner3
+            return state
+
         if game.winner != 0:
             state["state"] = GameState.end
             return state
+
         if game.startTime is None:
             return state
 
@@ -162,3 +178,4 @@ class GameState:
     start = "start"
     going = "going"
     end = "end"
+    tourneyEnd = "tourneyEnd"

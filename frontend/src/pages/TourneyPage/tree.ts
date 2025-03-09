@@ -9,6 +9,7 @@ export class Tree
 	private anim: ((dt: number, w: number, h: number) => boolean)[] = [];
 
 	private readonly RECT = { x: -10.5 * TreeNode.S, y: -5.5 * TreeNode.S, w: 24 * TreeNode.S, h: 12 * TreeNode.S };
+	private readonly RECT_ENDEN = { x: -1 * TreeNode.S, y: -2 * TreeNode.S, w: 5 * TreeNode.S, h: 7.5 * TreeNode.S };
 	private showRect = this.RECT;
 
 	constructor(
@@ -60,7 +61,11 @@ export class Tree
 			}
 		}
 		let newRect = this.showRect;
-		if (data.curGameNodeId >= 0)
+		if (data.ended)
+		{
+			newRect = this.RECT_ENDEN;
+		}
+		else if (data.curGameNodeId >= 0)
 		{
 			const rect = this.tree.getBounds(data.curGameNodeId);
 			if (rect) newRect = rect;
@@ -212,12 +217,6 @@ class TreeNode
 			ctx.fillStyle = "magenta";
 			ctx.fillText(character.name, imgRight ? this.S * 0.1 : this.S * 1.1, this.S / 2 + 10, this.S * 1.9);
 		}
-		else if (type == 1)
-		{
-			ctx.font = "20px ZeroCool, Arial";
-			ctx.fillStyle = "magenta";
-			ctx.fillText("Winner", this.S * 1.1, this.S / 2 + 10, this.S * 1.9);
-		}
 
 		ctx.strokeStyle = "gray";
 		if (character) ctx.strokeStyle = character.color;
@@ -230,10 +229,27 @@ class TreeNode
 		// ctx.fillText(`${type}`, this.S * 0.1, this.S / 2 - 10, this.S * 0.8);
 		// ctx.fillText(`${this.data.id}`, this.S * 0.1, this.S / 2 + 30, this.S * 0.8);
 
-		if (this.parent && this.parent.data.characterId != -1 && this.parent.data.characterId != this.data.characterId)
+		ctx.font = "20px ZeroCool, Arial";
+		ctx.fillStyle = "magenta";
+		if (type == 1 && this.data.characterId != -1)
 		{
-			ctx.fillStyle = "#00000055";
-			ctx.fillRect(0, 0, this.S * 3, this.S);
+			ctx.fillText("Победитель", this.S * 1.1, 30, this.S * 1.9);
+		}
+		if (type == -1 && this.data.characterId != -1)
+		{
+			ctx.fillText("Третье место", this.S * 1.1, 30, this.S * 1.9);
+		}
+		if (this.parent && this.parent.data.characterId != -1)
+		{
+			if ((type == 2 || type == 3) && this.parent.data.characterId != this.data.characterId)
+			{
+				ctx.fillText("Второе место", this.S * 1.1, 30, this.S * 1.9);
+			}
+			else if (this.parent.data.characterId != this.data.characterId)
+			{
+				ctx.fillStyle = "#00000055";
+				ctx.fillRect(0, 0, this.S * 3, this.S);
+			}
 		}
 
 		ctx.strokeStyle = "gray";

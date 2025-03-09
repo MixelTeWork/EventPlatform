@@ -10,9 +10,10 @@ import displayError from "../../utils/displayError";
 import { useEffect } from "react";
 import { useTitle } from "../../utils/useTtile";
 import TourneyEdit from "./TourneyEdit";
-import { useMutationTourneyEndGame, useMutationTourneyReset, useMutationTourneySelectNextGame, useMutationTourneyStartGame, useTourneyData } from "../../api/tourney";
+import { useMutationTourneyEndGame, useMutationTourneyEndTourney, useMutationTourneyReset, useMutationTourneySelectNextGame, useMutationTourneyStartGame, useMutationTourneyUnendTourney, useTourneyData } from "../../api/tourney";
 import ConfirmingButton from "../../components/ConfirmingButton";
 import type { UseMutationResult, UseQueryResult } from "react-query";
+import classNames from "../../utils/classNames";
 
 export default function GameSettingsPage()
 {
@@ -35,6 +36,11 @@ export default function GameSettingsPage()
 					<ConfirmingButton className={styles.start} h="Выбрать следующую игру?" bt="Выбрать" rt="Игра выбрана!" disabled={!tourney.data || tourney.data?.showGame} mutation={useMutationTourneySelectNextGame}>Выбрать следующую игру</ConfirmingButton>
 					<ConfirmingButton className={styles.start} h="Запустить игру?" bt="Запустить" rt="Игра запущена!" disabled={!tourney.data || tourney.data?.showGame || tourney.data.curGameNodeId == -1} mutation={useMutationTourneyStartGame}>Запустить игру</ConfirmingButton>
 					<ConfirmingButton className={styles.start} h="Завершить игру?" bt="Завершить" rt="Игра завершена!" disabled={!tourney.data?.showGame} mutation={useMutationTourneyEndGame}>Завершить игру</ConfirmingButton>
+				</div>
+				<div>
+					<div style={{ flexGrow: 1 }}></div>
+					<ConfirmingButton className={classNames(styles.start, !tourney.data?.ended && styles.hidden)} h="Отменить завершение турнира?" bt="Отменить" rt="Завершение турнира отменено!" mutation={useMutationTourneyUnendTourney}>Отменить завершение турнира</ConfirmingButton>
+					<ConfirmingButton className={classNames(styles.start, tourney.data?.ended && styles.hidden)} h="Завершить турнир?" bt="Завершить" rt="Турнир завершён!" mutation={useMutationTourneyEndTourney}>Завершить турнир</ConfirmingButton>
 				</div>
 			</div>
 			<TourneyEdit />

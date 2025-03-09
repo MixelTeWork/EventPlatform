@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { fetchJsonGet, fetchJsonPost } from "../utils/fetch";
 import type { UserGroup } from "./user";
 
-export type State = "wait" | "start" | "going" | "end";
+export type State = "wait" | "start" | "going" | "end" | "tourneyEnd";
 
 export interface GameState
 {
@@ -14,6 +14,9 @@ export interface GameState
 	start: string,
 	showGame: boolean,
 	team: number,
+	tourneyWinner1: number,
+	tourneyWinner2: number,
+	tourneyWinner3: number,
 }
 export interface GameStateFull extends GameState
 {

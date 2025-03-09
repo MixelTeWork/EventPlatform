@@ -15,11 +15,12 @@ class Tourney(SqlAlchemyBase, IdMixin):
     data = Column(JSON, nullable=False)
     curGameNodeId = Column(Integer, DefaultClause("-1"), nullable=False)
     showGame = Column(Boolean, DefaultClause("0"), nullable=False)
+    ended = Column(Boolean, DefaultClause("0"), nullable=False)
 
     @staticmethod
     def init(db_sess: Session):
-        game = Tourney.get(db_sess)
-        if game is not None:
+        tourney = Tourney.get(db_sess)
+        if tourney is not None:
             return
         db_sess.add(Tourney(id=1, data=INIT_DATA))
         db_sess.commit()
@@ -27,6 +28,15 @@ class Tourney(SqlAlchemyBase, IdMixin):
     @staticmethod
     def get(db_sess: Session):
         return db_sess.get(Tourney, 1)
+
+    @staticmethod
+    def get_winners(db_sess: Session):
+        tourney = Tourney.get(db_sess)
+        tree = tourney.data["tree"]
+        winner1 = tree["characterId"]
+        winner2 = get_not_winner(tree)
+        winner3 = tourney.data["third"]
+        return winner1, winner2, winner3
 
     def gen_new_tree(self):
         db_sess = Session.object_session(self)
@@ -159,10 +169,25 @@ class Tourney(SqlAlchemyBase, IdMixin):
         db_sess.commit()
         logging.info(f"end_game {winner=} {err=} {oponent1Id=} {oponent2Id=}")
 
+    def end_tourney(self):
+        db_sess = Session.object_session(self)
+        game = Game.get(db_sess)
+        game.tourneyEnded = True
+        self.ended = True
+        db_sess.commit()
+
+    def unend_tourney(self):
+        db_sess = Session.object_session(self)
+        game = Game.get(db_sess)
+        game.tourneyEnded = False
+        self.ended = False
+        db_sess.commit()
+
     def reset(self):
         db_sess = Session.object_session(self)
         self.curGameNodeId = -1
         self.showGame = False
+        self.ended = False
         self.gen_new_tree()
         Game.reset(db_sess)
         logging.info("reset")
@@ -173,6 +198,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
             "third": self.data["third"],
             "curGameNodeId": self.curGameNodeId,
             "showGame": self.showGame,
+            "ended": self.ended,
         }
 
 

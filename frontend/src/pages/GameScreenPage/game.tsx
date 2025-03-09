@@ -21,8 +21,9 @@ class Game
 			start: "counter",
 			going: "counter",
 			end: "winner",
+			tourneyEnd: "tourneyEnd",
 			"": ""
-		}[this.state?.state || ""] || "load") as "error" | "wait" | "counter" | "winner" | "load";
+		}[this.state?.state || ""] || "load") as "error" | "wait" | "counter" | "winner" | "load" | "tourneyEnd";
 	}
 
 	private updateScreen?: () => void;
@@ -101,7 +102,7 @@ class Game
 		if (Math.abs(this.counterV - this.state.counter) > 2)
 			this.counterV = this.state.counter;
 
-		if (!this.state.showGame)
+		if (!this.state.showGame || this.state.state == "tourneyEnd")
 			this.navigate?.("/tourney_screen");
 	}
 

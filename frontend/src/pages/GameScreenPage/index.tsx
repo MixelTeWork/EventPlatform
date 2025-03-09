@@ -52,10 +52,12 @@ export default function GameScreenPage()
 				<div className={styles.bar}>
 					<div className={styles.barLeft} style={{ "--color": characterLeft?.color } as React.CSSProperties}>
 						<span>{characterLeft?.name}</span>
+						<div className={styles.bar__img}><img src={characterLeft?.img} alt={characterLeft?.name} /></div>
 						<div className={styles.nums}></div>
 					</div>
 					<div className={styles.barRight} style={{ "--color": characterRight?.color } as React.CSSProperties}>
-						{characterRight?.name}
+						<div className={styles.bar__img}><img src={characterRight?.img} alt={characterRight?.name} /></div>
+						<span>{characterRight?.name}</span>
 					</div>
 				</div>
 			</div>
