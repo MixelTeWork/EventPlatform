@@ -1,8 +1,8 @@
 """v1
 
-Revision ID: cde6535461b1
+Revision ID: 09c1097e2e1e
 Revises: 
-Create Date: 2025-03-09 13:53:49.388799
+Create Date: 2025-03-09 14:17:48.906721
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'cde6535461b1'
+revision: str = '09c1097e2e1e'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -40,6 +40,18 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_GameLog')),
     sa.UniqueConstraint('id', name=op.f('uq_GameLog_id'))
+    )
+    op.create_table('Log',
+    sa.Column('date', sa.DateTime(), nullable=False),
+    sa.Column('actionCode', sa.String(length=16), nullable=False),
+    sa.Column('userId', sa.Integer(), nullable=False),
+    sa.Column('userName', sa.String(length=64), nullable=False),
+    sa.Column('tableName', sa.String(length=16), nullable=False),
+    sa.Column('recordId', sa.Integer(), nullable=False),
+    sa.Column('changes', sa.JSON(), nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_Log')),
+    sa.UniqueConstraint('id', name=op.f('uq_Log_id'))
     )
     op.create_table('Operation',
     sa.Column('id', sa.String(length=32), nullable=False),
@@ -105,19 +117,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['createdById'], ['User.id'], name=op.f('fk_Image_createdById_User')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Image')),
     sa.UniqueConstraint('id', name=op.f('uq_Image_id'))
-    )
-    op.create_table('Log',
-    sa.Column('date', sa.DateTime(), nullable=False),
-    sa.Column('actionCode', sa.String(length=16), nullable=False),
-    sa.Column('userId', sa.Integer(), nullable=False),
-    sa.Column('userName', sa.String(length=64), nullable=False),
-    sa.Column('tableName', sa.String(length=16), nullable=False),
-    sa.Column('recordId', sa.Integer(), nullable=False),
-    sa.Column('changes', sa.JSON(), nullable=False),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.ForeignKeyConstraint(['userId'], ['User.id'], name=op.f('fk_Log_userId_User')),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_Log')),
-    sa.UniqueConstraint('id', name=op.f('uq_Log_id'))
     )
     op.create_table('Permission',
     sa.Column('roleId', sa.Integer(), nullable=False),
@@ -268,7 +267,6 @@ def downgrade() -> None:
     op.drop_table('Send')
     op.drop_table('Quest')
     op.drop_table('Permission')
-    op.drop_table('Log')
     op.drop_table('Image')
     op.drop_table('UserGameLog')
     with op.batch_alter_table('User', schema=None) as batch_op:
@@ -278,6 +276,7 @@ def downgrade() -> None:
     op.drop_table('Tourney')
     op.drop_table('Role')
     op.drop_table('Operation')
+    op.drop_table('Log')
     op.drop_table('GameLog')
     op.drop_table('Dialog')
     # ### end Alembic commands ###
