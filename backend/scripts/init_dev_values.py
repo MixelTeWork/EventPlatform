@@ -68,7 +68,7 @@ def init_dev_values(dev=False, cmd=False):
     quest1.dialog1Id = dialog.id
 
     for i in range(15):
-        item = StoreItem(id=i, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50, id_big=randstr(8))
+        item = StoreItem(id=i + 1, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50, id_big=randstr(8))
         Log.added(item, user_admin, [("name", item.name), ("price", item.price), ("count", item.count), ("imgId", item.imgId)], commit=False)
         db_sess.add(item)
 
