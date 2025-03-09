@@ -17,7 +17,7 @@ CLIENT_ID = "51848582"
 REDIRECT_URI = "https://www.underparty.fun/auth_vk"
 TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
 TICKETS_API_URL += "api/event_platform/"
-EVENT_ID = 3 if "dev" in sys.argv else 8
+EVENT_ID = 3 if "dev" in sys.argv else 4
 
 
 @blueprint.post("/api/auth")
