@@ -50,19 +50,20 @@ class UserGame(SqlAlchemyBase):
         ug = UserGame.get(user)
 
         now = get_datetime_now().replace(tzinfo=None)
-        hackAlert = int(ug.hackAlert)
+        now_hack = False
         if ug.lastClick is None:
             if clicks > 100:
-                hackAlert |= 1
+                now_hack = True
         else:
             td: timedelta = now - ug.lastClick
             dt = td.seconds + td.microseconds / 1000000
             if clicks / dt > 16:
-                hackAlert |= 2
+                now_hack = True
 
         ug.lastClick = now
-        if hackAlert != 0:
-            ug.hackAlert = hackAlert
+        if ug.hackAlert >= 10 or now_hack:
+            if now_hack:
+                ug.hackAlert += 1
             db_sess.commit()
             return False
 
