@@ -164,6 +164,8 @@ class Game(SqlAlchemyBase, IdMixin):
         return {(f"clicks{v[0]}"): safeDiv(int(v[1]), int(v[2])) for v in db_sess
                 .query(UserGame.team, func.sum(UserGame.clicks), func.count(UserGame.userId))
                 .group_by(UserGame.team)
+                .filter(UserGame.hackAlert < 10)
+                .filter(UserGame.clicks > 0)
                 .all()}
 
 
