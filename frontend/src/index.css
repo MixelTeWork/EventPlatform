@@ -16,28 +16,27 @@ body {
 		sans-serif;
 
 	/* background: radial-gradient(circle at 100% 50%, #6868ff, transparent 60%), linear-gradient(45deg, #7e6ed3, #95cdff); */
-	--_cellSize: 25px;
-	--_strokeWidth: 2px;
-	--_strokeColor: #ffffff11;
-	background: linear-gradient(0deg, #ffe87e, #ffdb6c);
-	color: black;
+	--background: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	--color: black;
+	background: var(--background);
+	color: var(--color);
 }
 body:has(.calmBack) {
-	background: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	--background: linear-gradient(0deg, #ffe87e, #ffdb6c);
 }
 body:has(.forStaff) {
 	font-family: "ZeroCool", "PT Sans", Arial;
-	background: linear-gradient(0deg, #00093b, #001b3b);
-	color: white;
+	--background: linear-gradient(0deg, #00093b, #001b3b);
+	--color: white;
 }
 body:has(.forDev) {
 	font-family: "PT Sans", Arial;
-	background: #1e1e1e;
-	color: #d4d4d4;
+	--background: #1e1e1e;
+	--color: #d4d4d4;
 }
 .forDev pre {
-	background-color: #1e1e1e;
-	color: #d4d4d4;
+	background-color: var(--background);
+	color: var(--color);
 	width: max-content;
 }
 .calmBack {

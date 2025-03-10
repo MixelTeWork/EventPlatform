@@ -7,7 +7,8 @@
 	"settings": {
         "editor.insertSpaces": true,
         "editor.formatOnSave": true,
-        "editor.formatOnType": true
+        "editor.formatOnType": true,
+        "debugpy.debugJustMyCode": false,
 	},
 	"launch": {
 		"version": "0.2.0",

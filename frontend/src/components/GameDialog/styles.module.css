@@ -3,7 +3,7 @@
 	inset: 0;
 	display: flex;
 	background-color: black;
-	background: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	background: var(--background);
 	z-index: 100;
 	justify-content: center;
 }

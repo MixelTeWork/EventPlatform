@@ -5,7 +5,7 @@
 	justify-content: center;
 	pointer-events: none;
 	user-select: none;
-	background: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	background: var(--background);
 	opacity: 0;
 	transform: scaleY(0);
 	transition: transform 500ms, opacity 100ms;

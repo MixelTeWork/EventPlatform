@@ -1,8 +1,8 @@
 .root {
 	--c-back: #ffe87e;
 	--c-border: #3f0000;
-	--c-text: #3f0000;
-	--c-text2: #a42142;
+	--c-text: #fff2b5;
+	--c-text2: #3f0000;
 	position: relative;
 	width: 100%;
 	height: 1.8rem;
@@ -80,7 +80,8 @@
 .menu > * {
 	background-color: transparent;
 	border: 2px solid var(--c-text);
-	font-size: 1rem;
+	font-size: 0.8rem;
+	padding: 0.2rem 0.1rem;
 	color: var(--c-text);
 	text-align: center;
 	cursor: pointer;
