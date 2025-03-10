@@ -19,9 +19,11 @@ export default function TourneyEdit()
 	const characters = useTourneyCharacters();
 
 	const curGame = findNode(tourney.data?.tree, tourney.data?.curGameNodeId || 0, tourney.data?.third || -1);
-	const curGameWinner = characters.data?.find(ch => ch.id == curGame?.characterId);
-	const curGameCharacterLeft = characters.data?.find(ch => ch.id == curGame?.left?.characterId);
-	const curGameCharacterRight = characters.data?.find(ch => ch.id == curGame?.right?.characterId);
+	const curGameWinner = characterById(characters.data, curGame?.characterId);
+	const curGameCharacterLeft = characterById(characters.data, curGame?.left?.characterId);
+	const curGameCharacterRight = characterById(characters.data, curGame?.right?.characterId);
+
+	const errors = tourney.data?.tree && characters.data && checkTreeForErrors(tourney.data.tree, characters.data);
 
 	return (
 		<div className={styles.root}>
@@ -42,12 +44,18 @@ export default function TourneyEdit()
 					</span>
 				</div>
 				<div style={{ marginTop: "0.5rem" }}>Турнирная таблица:</div>
+				{errors && errors.map(e => <h3 style={{ color: "tomato" }}>{e}</h3>)}
 				<Tree tree={tourney.data.tree} characters={characters.data} />
 				<div style={{ marginTop: "0.5rem" }}>Третье место:</div>
 				<ThirdPlace tree={tourney.data.tree} third={tourney.data.third} characters={characters.data} />
 			</>}
 		</div>
 	);
+}
+
+function characterById(characters: TourneyCharacter[] | undefined | null, id: number | undefined | null)
+{
+	return characters?.find(ch => ch.id == id);
 }
 
 function CancelGameBtn()
@@ -118,8 +126,8 @@ function Tree({ tree, characters, c = false }: { tree: TreeNode, characters: Tou
 	const character = characters.find(ch => ch.id == characterId.v);
 	const editNode = useMutationTourneyEditNode(tree.id);
 
-	const characterLeft = characters.find(ch => ch.id == tree.left?.characterId);
-	const characterRight = characters.find(ch => ch.id == tree.right?.characterId);
+	const characterLeft = characterById(characters, tree.left?.characterId);
+	const characterRight = characterById(characters, tree.right?.characterId);
 
 	// eslint-disable-next-line
 	useEffect(() => { characterId.set(tree.characterId) }, [tree.characterId]);
@@ -177,13 +185,13 @@ function ThirdPlace({ tree, third, characters }: { tree: TreeNode, third: number
 {
 	const starting = useStateBool(false);
 	const characterId = useStateObj(third);
-	const character = characters.find(ch => ch.id == characterId.v);
+	const character = characterById(characters, characterId.v);
 	const editNode = useMutationTourneyEditThird();
 
 	const characterLeftId = !tree.left?.characterId || tree.left?.characterId == -1 ? null : tree.left.left?.characterId == tree.left?.characterId ? tree.left.right?.characterId : tree.left.left?.characterId;
 	const characterRightId = !tree.right?.characterId || tree.right?.characterId == -1 ? null : tree.right.left?.characterId == tree.right?.characterId ? tree.right.right?.characterId : tree.right.left?.characterId;
-	const characterLeft = characters.find(ch => ch.id == characterLeftId);
-	const characterRight = characters.find(ch => ch.id == characterRightId);
+	const characterLeft = characterById(characters, characterLeftId);
+	const characterRight = characterById(characters, characterRightId);
 
 	// eslint-disable-next-line
 	useEffect(() => { characterId.set(third) }, [third]);
@@ -242,4 +250,33 @@ function ThirdPlace({ tree, third, characters }: { tree: TreeNode, third: number
 			</div>
 		</div>
 	);
+}
+
+function checkTreeForErrors(tree: TreeNode, characters: TourneyCharacter[])
+{
+	let parents = [tree];
+	let children = [] as TreeNode[];
+	let errors = [];
+	while (parents.length != 0)
+	{
+		for (const node of parents)
+		{
+			const same = parents.filter(n => n.characterId == node.characterId);
+			if (same.length > 1)
+				errors.push(`Ноды с id=[${same.map(n => n.id).join(", ")}] имеют одинакового противника: ${characterById(characters, node.characterId)?.name}`);
+		}
+		parents.forEach(p =>
+		{
+			if (p.left) children.push(p.left);
+			if (p.right) children.push(p.right);
+			if (p.characterId != -1 && (p.left || p.right))
+			{
+				if (p.characterId != p.left?.characterId && p.characterId != p.right?.characterId)
+					errors.push(`Победитель ноды id=${p.id} не совпадает с противниками: ${characterById(characters, p.characterId)?.name} != [${characterById(characters, p.left?.characterId)?.name}, ${characterById(characters, p.right?.characterId)?.name}]`);
+			}
+		});
+		parents = children;
+		children = [];
+	}
+	return Array.from(new Set(errors));
 }
