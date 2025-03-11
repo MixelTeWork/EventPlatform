@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bfs import get_json_values_from_req, permission_required, use_db_session, use_user, use_user_optional
+from bfs import get_json_values_from_req, permission_required, use_db_session, use_user, use_userId, use_userId_optional, use_user_optional
 from data._operations import Operations
 from data.game import Game, GameState
 from data.user import User
@@ -83,9 +83,9 @@ def set_startStr(db_sess: Session, user: User):
 
 @blueprint.route("/api/game/state")
 @use_db_session()
-@use_user_optional()
-def state(db_sess: Session, user: User):
-    return Game.get_state(db_sess, user=user)
+@use_userId_optional()
+def state(db_sess: Session, userId: int):
+    return Game.get_state(db_sess, userId=userId)
 
 
 @blueprint.route("/api/game/state_full")
@@ -100,12 +100,14 @@ def state_full(db_sess: Session, user: User):
 @blueprint.post("/api/game/click")
 @jwt_required()
 @use_db_session()
-@use_user()
-def click(db_sess: Session, user: User):
+@use_userId()
+def click(db_sess: Session, userId: int):
     count = get_json_values_from_req("count")
-    state = Game.get_state(db_sess, user=user)
+    usergame = {"v": None}
+    state = Game.get_state(db_sess, userId=userId, usergame=usergame)
     if state["state"] == GameState.going:
-        if not UserGame.click(user, count):
+        ug: UserGame = usergame["v"]
+        if ug and not ug.click(count):
             return "", 429
     return state
 
@@ -113,8 +115,13 @@ def click(db_sess: Session, user: User):
 @blueprint.post("/api/game/select_team")
 @jwt_required()
 @use_db_session()
-@use_user()
-def select_team(db_sess: Session, user: User):
+@use_userId()
+def select_team(db_sess: Session, userId: int):
     team = get_json_values_from_req("team")
-    UserGame.set_team(user, team)
-    return Game.get_state(db_sess, user=user)
+    usergame = {"v": None}
+    state = Game.get_state(db_sess, userId=userId, usergame=usergame)
+    ug: UserGame = usergame["v"]
+    if ug:
+        ug.set_team(team)
+        state["team"] = team
+    return state
