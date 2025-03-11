@@ -20,49 +20,36 @@ class UserGame(SqlAlchemyBase):
         return f"<UserGame> user: {self.userId}"
 
     @staticmethod
-    def get(user: User):
-        db_sess = Session.object_session(user)
-        ug = db_sess.get(UserGame, user.id)
+    def get(db_sess: Session, userId: int):
+        ug = db_sess.get(UserGame, userId)
         if ug is None:
-            ug = UserGame(userId=user.id, clicks=0, hackAlert=0)
+            ug = UserGame(userId=userId, clicks=0, hackAlert=0, team=0)
             db_sess.add(ug)
 
         return ug
 
-    @staticmethod
-    def get_team(user: User):
-        db_sess = Session.object_session(user)
-        r = db_sess.query(UserGame.team).where(UserGame.userId == user.id).first()
-        if r:
-            return r[0]
-        return 0
-
-    @staticmethod
-    def set_team(user: User, team: int):
-        db_sess = Session.object_session(user)
-        ug = UserGame.get(user)
+    def set_team(ug, team: int):
+        db_sess = Session.object_session(ug)
         ug.team = team
         db_sess.commit()
 
-    @staticmethod
-    def click(user: User, clicks: int):
-        db_sess = Session.object_session(user)
-        ug = UserGame.get(user)
+    def click(ug, clicks: int):
+        db_sess = Session.object_session(ug)
 
         now = get_datetime_now().replace(tzinfo=None)
-        now_hack = False
+        now_hack = 0
         if ug.lastClick is None:
             if clicks > 100:
-                now_hack = True
+                now_hack = 1
         else:
             td: timedelta = now - ug.lastClick
             dt = td.seconds + td.microseconds / 1000000
             if clicks / dt > 16:
-                now_hack = True
+                now_hack = 2
 
         ug.lastClick = now
-        if ug.hackAlert >= 10 or now_hack:
-            if now_hack:
+        if ug.hackAlert >= 10 or now_hack > 0:
+            if now_hack >= 2:
                 ug.hackAlert += 1
             db_sess.commit()
             return False

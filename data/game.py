@@ -88,7 +88,7 @@ class Game(SqlAlchemyBase, IdMixin):
         return -1
 
     @staticmethod
-    def get_state(db_sess: Session, game: "Game" = None, user: User = None):
+    def get_state(db_sess: Session, game: "Game" = None, userId: int = None, usergame: dict = None):
         game = Game.get(db_sess) if game is None else game
         state = {
             "state": GameState.wait,
@@ -103,8 +103,11 @@ class Game(SqlAlchemyBase, IdMixin):
             "tourneyWinner2": -1,
             "tourneyWinner3": -1,
         }
-        if user:
-            state["team"] = UserGame.get_team(user)
+        if userId is not None:
+            ug = UserGame.get(db_sess, userId)
+            if usergame is not None:
+                usergame["v"] = ug
+            state["team"] = ug.team
 
         if game.tourneyEnded:
             state["state"] = GameState.tourneyEnd
