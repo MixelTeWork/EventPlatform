@@ -7,6 +7,7 @@ import { useTitle } from "../../utils/useTtile";
 import classNames from "../../utils/classNames";
 import { useGame } from "./game";
 import { useTourneyCharacters } from "../../api/tourney";
+import { characterById } from "../../api/tourney";
 
 export default function GameScreenPage()
 {
@@ -17,9 +18,9 @@ export default function GameScreenPage()
 	const soundEnable = useStateBool(false);
 	const rectsEl = useRef<HTMLDivElement>(null);
 
-	const characterLeft = characters.data?.find(ch => ch.id == game.opponentLeftId);
-	const characterRight = characters.data?.find(ch => ch.id == game.opponentRightId);
-	const characterWinner = characters.data?.find(ch => ch.id == game.winnerId);
+	const characterLeft = characterById(characters.data, game.opponentLeftId);
+	const characterRight = characterById(characters.data, game.opponentRightId);
+	const characterWinner = characterById(characters.data, game.winnerId);
 
 	useEffect(() =>
 	{

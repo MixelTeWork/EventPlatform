@@ -12,6 +12,7 @@ import IconPlay from "../../../icons/play";
 import PopupConfirm from "../../../components/PopupConfirm";
 import IconEdit from "../../../icons/edit";
 import { type UseQueryResult } from "react-query";
+import { characterById } from "../../../api/tourney";
 
 export default function TourneyEdit()
 {
@@ -51,11 +52,6 @@ export default function TourneyEdit()
 			</>}
 		</div>
 	);
-}
-
-function characterById(characters: TourneyCharacter[] | undefined | null, id: number | undefined | null)
-{
-	return characters?.find(ch => ch.id == id);
 }
 
 function CancelGameBtn()

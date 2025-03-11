@@ -28,6 +28,12 @@ export function useTourneyCharacters()
 	);
 }
 
+export function characterById(characters: TourneyCharacter[] | undefined | null, id: number | undefined | null)
+{
+	return characters?.find(ch => ch.id == id);
+}
+
+
 export function useTourneyData()
 {
 	return useQuery("tourney", async () =>

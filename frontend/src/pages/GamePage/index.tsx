@@ -13,6 +13,7 @@ import { useDisableZoom } from "../../utils/useDisableZoom";
 import randomInt from "../../utils/randomInt";
 import GameDialogGame from "../../components/GameDialogGame";
 import { useTourneyCharacters } from "../../api/tourney";
+import { characterById } from "../../api/tourney";
 
 
 export default function GamePage()
@@ -28,20 +29,21 @@ export default function GamePage()
 	const sendClick = useMutationSendClick(() => lastClickSend.set(Date.now()), () => lastClickSend.set(Date.now()));
 	const selectTeam = useMutationGameSelectTeam();
 
-	const characterLeft = characters.data?.find(ch => ch.id == state.data?.opponent1Id);
-	const characterRight = characters.data?.find(ch => ch.id == state.data?.opponent2Id);
+	const characterLeft = characterById(characters.data, state.data?.opponent1Id);
+	const characterRight = characterById(characters.data, state.data?.opponent2Id);
 	const characterWinner = state.data?.winner == 1 ? characterLeft : state.data?.winner == 2 ? characterRight : null;
 	const characterTeam = state.data?.team == 1 ? characterLeft : state.data?.team == 2 ? characterRight : null;
 
-	const characterTourneyWinner1 = characters.data?.find(ch => ch.id == state.data?.tourneyWinner1);
-	const characterTourneyWinner2 = characters.data?.find(ch => ch.id == state.data?.tourneyWinner2);
-	const characterTourneyWinner3 = characters.data?.find(ch => ch.id == state.data?.tourneyWinner3);
+	const characterTourneyWinner1 = characterById(characters.data, state.data?.tourneyWinner1);
+	const characterTourneyWinner2 = characterById(characters.data, state.data?.tourneyWinner2);
+	const characterTourneyWinner3 = characterById(characters.data, state.data?.tourneyWinner3);
 
 	useEffect(() =>
 	{
 		if (state.isFetching) return;
 		if (state.data?.state == "going") return;
 
+		if (clicks.v != 0) clicks.set(0);
 		const t = setTimeout(() => state.refetch(), 5000);
 
 		return () => clearTimeout(t);
