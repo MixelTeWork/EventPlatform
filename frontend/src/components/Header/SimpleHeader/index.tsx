@@ -31,6 +31,7 @@ export default function SimpleHeader({ homeBtn = false, forStaff = false, forDev
 				<img className={styles.img} src={user.data?.photo || avatar} alt="avatar" />
 			</button>
 			<div className={classNames(styles.menu, menuOpen.v && styles.menuVisible)}>
+				<Link to={"/"}><IconHome /></Link>
 				{/* <button onClick={() => navigate("/profile")}>
 					Профиль
 				</button> */}
