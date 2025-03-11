@@ -1,8 +1,8 @@
 """v1
 
-Revision ID: 09c1097e2e1e
+Revision ID: a5e54a362a9f
 Revises: 
-Create Date: 2025-03-09 14:17:48.906721
+Create Date: 2025-03-12 01:19:38.959374
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '09c1097e2e1e'
+revision: str = 'a5e54a362a9f'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -70,6 +70,7 @@ def upgrade() -> None:
     sa.Column('data', sa.JSON(), nullable=False),
     sa.Column('curGameNodeId', sa.Integer(), server_default='-1', nullable=False),
     sa.Column('showGame', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('ended', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Tourney')),
     sa.UniqueConstraint('id', name=op.f('uq_Tourney_id'))
@@ -244,6 +245,7 @@ def upgrade() -> None:
     sa.Column('clicks2', sa.Integer(), server_default='0', nullable=False),
     sa.Column('winner', sa.Integer(), server_default='0', nullable=False),
     sa.Column('showGame', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('tourneyEnded', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['opponent1Id'], ['TourneyCharacter.id'], name=op.f('fk_Game_opponent1Id_TourneyCharacter')),
     sa.ForeignKeyConstraint(['opponent2Id'], ['TourneyCharacter.id'], name=op.f('fk_Game_opponent2Id_TourneyCharacter')),
