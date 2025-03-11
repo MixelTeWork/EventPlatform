@@ -2,14 +2,12 @@ import styles from "./styles.module.css"
 import map1 from "./map1.png";
 import map2 from "./map2.png";
 import map3 from "./map3.png";
-import map4 from "./map4.png";
-import map5 from "./map5.png";
-import mark_mady from "./marks/mady.png";
-import mark_info from "./marks/info.png";
-import mark_indi from "./marks/indi.png";
-import mark_game from "./marks/game.png";
-import mark_stand from "./marks/stand.png";
-import mark_banner from "./marks/banner.png";
+import mark_0 from "./marks/0.png";
+import mark_1_1 from "./marks/1_1.png";
+import mark_1_2 from "./marks/1_2.png";
+import mark_1_3 from "./marks/1_3.png";
+import mark_2_1 from "./marks/2_1.png";
+import mark_2_2 from "./marks/2_2.png";
 import Layout from "../../components/Layout";
 import Footer from "../../components/Footer";
 import useStateObj, { useStateObjExt } from "../../utils/useStateObj";
@@ -32,7 +30,7 @@ export default function MapPage()
 {
 	useTitle("Карта");
 	usePreloadGameDialogImgs();
-	usePreloadImgs(map1, map2, map3, map4, map5, mark_mady, mark_info, mark_indi, mark_game, mark_stand, mark_banner);
+	usePreloadImgs(map1, map2, map3, mark_0, mark_1_1, mark_1_2, mark_1_3, mark_2_1, mark_2_2);
 	const dialog = useGameDialog();
 	const mutationOpen = useMutationOpenQuest();
 	const openedQuest = useStateObjExt<Quest | null>(null, v =>
@@ -80,47 +78,47 @@ export default function MapPage()
 				{displayError(quests)}
 				<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
 					<InteractiveMap
-						img={[map1, map2, map3, map4, map5][map.v]}
-						imgW={[2150, 2150, 1600, 1600, 1600][map.v]}
-						imgH={[1512, 1512, 1125, 1142, 1395][map.v]}
+						img={[map1, map2, map3][map.v]}
+						imgW={[2366, 2366, 1971][map.v]}
+						imgH={[2560, 2560, 1841][map.v]}
 						zoomMin={1}
 						disablePadding
 						fillOnStart
 						// objectsOpacity={0.5}
 						objects={quests.isSuccess ? [[
-							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
-							questMark(2, mark_info, 56.5, 75.3, 21.2, 17.1),
-							questMarkDepends(2, 3, mark_info, 56.5, 75.3, 21.2, 17.1),
+							questMark(1, mark_0, 1.4, 1.7, 13, 9.8),
+							questMark(2, mark_1_1, 30, 30, 12, 9.8),
+							questMark(3, mark_1_2, 40, 40, 12, 9.8),
+							questMark(4, mark_1_3, 30, 70, 12, 9.8),
 						], [
-							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
-							questMark(4, mark_indi, 4.7, 26.3, 17.9, 35.5),
-							questMark(5, mark_game, 24.8, 35.4, 11.7, 20.2),
-							questMark(6, mark_stand, 37.5, 49.9, 9.2, 17.4),
-							questMark(7, mark_banner, 64.7, 51.5, 7, 14.8),
-						], [
-							questMark(1, mark_mady, 3.6, 6.9, 11.2, 14,),
+							questMark(1, mark_0, 1.4, 1.7, 13, 9.8),
+							questMark(5, mark_2_1, 80, 20, 16, 9.8),
+							questMark(6, mark_2_2, 40, 30, 20, 9.8),
 						], [], []][map.v] : []}
 					/>
 				</div>
 				{openedQuest.v &&
 					<div className={styles.quest}>
-						<div className={classNames("title", styles.quest__title)}>
+						<Textbox small btn className={styles.quest__back}>
+							<button className={"clearBtn"} onClick={() => openedQuest.set(null)}>назад</button>
+						</Textbox>
+						<div className={styles.quest__title}>
 							<span>{openedQuest.v.name}</span>
-							<span>{openedQuest.v.reward}М</span>
+							<span>{openedQuest.v.reward} М</span>
 						</div>
-						<Textbox dark>
+						<Textbox small>
 							<div className={styles.quest__description}>{openedQuest.v.description || "Нет описания"}</div>
 						</Textbox>
 						{openedQuest.v.dialogId != null &&
-							<Textbox btn>
+							<Textbox small btn>
 								<button
-									className={classNames("title", styles.quest__dialog)}
+									className={classNames(styles.quest__dialog, "clearBtn")}
 									onClick={() => openedQuest.v && openedQuest.v.dialogId != null && dialog.run(openedQuest.v.dialogId)}
 								>Вступление</button>
 							</Textbox>
 						}
 						<div className={styles.quest__spacer}></div>
-						<Textbox btn className={styles.quest__scanner}>
+						<Textbox small btn className={styles.quest__scanner}>
 							<Link to="/scanner" className={styles.quest__scanner__link}>
 								<div className="title">Сдать</div>
 							</Link>
