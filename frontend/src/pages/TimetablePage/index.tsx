@@ -36,12 +36,12 @@ export default function TimetablePage()
 					<Textbox small btn highlight={timetable.v == 0}>
 						<button onClick={() => timetable.set(0)} className={classNames(styles.btn, "title")}>Сцены</button>
 					</Textbox>
-					<Textbox small btn highlight={timetable.v == 1}>
+					{/* <Textbox small btn highlight={timetable.v == 1}>
 						<button onClick={() => timetable.set(1)} className={classNames(styles.btn, "title")}>Автограф</button>
 					</Textbox>
 					<Textbox small btn highlight={timetable.v == 2}>
 						<button onClick={() => timetable.set(2)} className={classNames(styles.btn, "title")}>Лекции</button>
-					</Textbox>
+					</Textbox> */}
 					<Textbox small btn highlight={timetable.v == 3}>
 						<button onClick={() => timetable.set(3)} className={classNames(styles.btn, "title")}>Турниры</button>
 					</Textbox>

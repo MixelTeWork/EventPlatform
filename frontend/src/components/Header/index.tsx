@@ -36,7 +36,7 @@ export default function Header({ homeBtn = false, forStaff = false, forDev = fal
 			</div>
 			<div className={styles.gap}></div>
 			<div className={styles.text}>
-				<div>{user.data?.name}</div>
+				<div>{user.data?.name || "Войти ->"}</div>
 				<div>{user.data?.balance} М</div>
 			</div>
 			<button className={classNames(styles.img, "clearBtn")} onClick={() => user.data?.auth ? menuOpen.set(v => !v) : navigate("/")}>
