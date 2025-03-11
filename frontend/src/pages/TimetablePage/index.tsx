@@ -6,6 +6,7 @@ import { useTitle } from "../../utils/useTtile";
 import useStateObj from "../../utils/useStateObj";
 import Textbox from "../../components/Textbox";
 import classNames from "../../utils/classNames";
+import Title from "../../components/Title";
 
 export default function TimetablePage()
 {
@@ -20,14 +21,14 @@ export default function TimetablePage()
 
 	return (
 		<Layout centeredPage className={styles.root} footer={<Footer curPage="timetable" />}>
-			<h1 className={classNames("title", styles.title)}>Underparty</h1>
+			<Title className={styles.title} />
 			<div className={styles.body}>
 				<StyledWindow className={styles.list} scrollUpdate={timetable.v}>
 					<div className={styles.items}>
 						{items.map((el, i) => el.title ?
-							<div className={classNames("title", styles.item_title)} key={i}>{el.text}</div>
+							<div className={styles.item_title} key={i}>{el.text}</div>
 							:
-							<Textbox dark key={i}><div className={styles.item}>{el.text}</div></Textbox>
+							<Textbox small dark key={i}><div className={styles.item}>{el.text}</div></Textbox>
 						)}
 					</div>
 				</StyledWindow>
@@ -58,39 +59,40 @@ interface TimetableData
 
 const data_timetable: TimetableData[] = [
 	{ text: "Главная сцена:", title: true },
-	{ text: "12:50 - Церемония открытия" },
-	{ text: "13:00 - Музыкальные номера" },
-	{ text: "13:30 - 1 блок косплей дефиле" },
-	{ text: "14:00 - Shima Nori. Инди игры на фортепиано" },
-	{ text: "14:30 - Аукцион" },
-	{ text: "14:50 - Undertale Сценка: Underdogs" },
-	{ text: "15:00 - 2 блок косплей дефиле" },
-	{ text: "15:40 - Музыкальные номера" },
-	{ text: "16:15 - Блок Анимации: АнтиКек, BDP, CornMayor" },
-	{ text: "17:00 - Выступление музыкальных групп" },
-	{ text: "18:10 - Финальная Битва" },
-	{ text: "18:25 - Награждение" },
-	{ text: "18:50 - Анимации" },
-	{ text: "19:50 - Закрытие сцены" },
+	{ text: "12:50 - Открытие" },
+	{ text: "13:00 - Шима Нори - Undertale на рояле" },
+	{ text: "13:30 - Косплей дефиле блок 1" },
+	{ text: "14:00 - Музыкальный блок гостей" },
+	{ text: "14:30 - Косплей дефиле блок 2" },
+	{ text: "15:00 - Музыкальный блок участников" },
+	{ text: "15:30 - Аукцион" },
+	{ text: "16:00 - Выступление Empire of Geese" },
+	{ text: "17:00 - Underevent презентация" },
+	{ text: "17:30 - Голосование за лучшего Санса" },
+	{ text: "18:00 - Награждение" },
+	{ text: "18:40 - Блок анимаций" },
+	{ text: "19:40 - Закрытие" },
 	{ text: "Малая сцена:", title: true },
-	{ text: "12:00 - Ответы на вопросы от Ютуберов" },
+	{ text: "12:00 - Ответы на вопросы от ютуберов" },
 	{ text: "12:40 - Лотерея" },
-	{ text: "13:30 - QWIZ Инди хорроры" },
-	{ text: "14:00 - EVRYBODY SWITCH" },
+	{ text: "13:00 - Undertale Quiz AU" },
+	{ text: "13:30 - Jackbox с ютуберами" },
+	{ text: "14:20 - WonderNope автограф сессия" },
+	{ text: "14:40 - Игорь Чай автограф сессия" },
 	{ text: "15:00 - Лотерея" },
-	{ text: "15:30 - QWIZ пиксельные РПГ" },
-	{ text: "16:00 - Турнир: Overcooked 2" },
-	{ text: "16:40 - Турнир: Your Only Move Is HUSTLE" },
-	{ text: "17:20 - Турнир: Rival of Aether" },
-	{ text: "18:00 - Лотерея" },
-	{ text: "18:45 - Дискотека" },
-	{ text: "19:45 - Закрытие сцены" },
-	{ text: "Инди Сцена:", title: true },
-	{ text: "13:00 - Презентации инди-игр" },
-	{ text: "14:00 - Презентации Game Jam" },
-	{ text: "15:00 - Презентации инди-игр" },
-	{ text: "16:00 - Результаты джема" },
-	{ text: "16:30 - Презентации инди-игр" },
+	{ text: "15:10 - Марсильез автограф сессия" },
+	{ text: "15:30 - Предпоказ песни FolkStudio" },
+	{ text: "15:40 - Sirus и Folkstudio автограф сессия" },
+	{ text: "16:00 - презентация игры Insult Goatbro" },
+	{ text: "16:10 - InkBlot презентация вселенной и автограф сессия" },
+	{ text: "16:40 - Undertale quiz original" },
+	{ text: "17:00 - Лотерея" },
+	{ text: "17:30 - Marina aka mari презентация вселенной Kamitale" },
+	{ text: "17:50 - Sansация Презентация фильма" },
+	{ text: "18:00 - Итоги конкурсов маркета" },
+	{ text: "18:10 - Everybody 1-2 switch" },
+	{ text: "19:00 - Дискотека" },
+	{ text: "19:50 - Закрытие" },
 ];
 
 const data_autograph: TimetableData[] = [
@@ -114,12 +116,12 @@ const data_lections: TimetableData[] = [
 ];
 
 const data_tournaments: TimetableData[] = [
-	{ text: "Инди Турниры (на малой сцене):", title: true },
-	{ text: "16:00 - Overcooked 2" },
-	{ text: "16:40 - Your Only Move Is HUSTLE" },
-	{ text: "17:20 - Rival of Aether" },
-	{ text: "Ретро Турниры (на гейм зоне):", title: true },
-	{ text: "13:00 - Super Tetris 3" },
-	{ text: "14:00 - Tekken 3" },
-	{ text: "15:00 - Mortal Combat 3" },
+	{ text: "Турниры:", title: true },
+	{ text: "Unfair Undyne 11:00 - 17:30" },
+	{ text: "Endless Sans 11:00 - 17:30" },
+	{ text: "Underverse Battles 14:00" },
+	{ text: "Ретро турниры:", title: true },
+	{ text: "Sega - Ultimate Mortal Combat 3 - 13:00" },
+	{ text: "Ps 1 - Tekken 3 - 15:00" },
+	{ text: "Snes - Super Tetris 3 - 17:00" },
 ]
