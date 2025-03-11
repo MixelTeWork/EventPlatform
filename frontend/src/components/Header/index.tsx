@@ -4,46 +4,46 @@ import avatar from "./avatar.png";
 import { useMutationLogout } from "../../api/auth";
 import useUser from "../../api/user";
 import Spinner from "../Spinner";
-import { useState } from "react";
 import classNames from "../../utils/classNames";
 import hasPermission from "../../api/operations";
 import IconHome from "../../icons/home";
+import SimpleHeader from "./SimpleHeader";
+import useStateBool from "../../utils/useStateBool";
+import IconExit from "../../icons/exit";
+import IconCode from "../../icons/code";
+import IconWidgets from "../../icons/widgets";
 
 export default function Header({ homeBtn = false, forStaff = false, forDev = false }: HeaderProps)
 {
-	const [menuOpen, setMenuOpen] = useState(false);
+	const menuOpen = useStateBool(false);
 	const navigate = useNavigate();
-	const mutation = useMutationLogout(() =>
-	{
-		setMenuOpen(false);
-	});
+	const logout = useMutationLogout(menuOpen.setF);
 	const user = useUser();
 
-	return (
-		<div className={classNames(styles.root, forStaff && styles.forStaff, forDev && styles.forDev)}>
-			<Link to={"/"} className={styles.home}>
-				{homeBtn && <IconHome />}
-			</Link>
-			<span className={styles.block}>
-				<div className={classNames(styles.balance, "title")}>{user.data?.balance || 0}М</div>
-				<button className={classNames(styles.user, "title")} onClick={() => user.data?.auth ? setMenuOpen(v => !v) : navigate("/")}>
-					<span>{user.data?.auth ? user.data?.name : "Войти"}</span>
-					<img className={styles.img} src={user.data?.photo || avatar} alt="avatar" />
-				</button>
-				<div className={classNames(styles.menu, menuOpen && styles.menuVisible)}>
-					{/* <button onClick={() => navigate("/profile")}>
-						Профиль
-					</button> */}
-					{hasPermission(user, "page_debug") && <Link to="/debug">{`</>`}</Link>}
-					{hasPermission(user, "page_worker") && <Link to="/worker">[-^-]</Link>}
-					<button onClick={() => mutation.mutate()} disabled={mutation.status != "idle" && mutation.status != "error"}>
-						Выйти
+	return (forStaff || forDev) ? <SimpleHeader homeBtn={homeBtn} forStaff={forStaff} forDev={forDev} /> :
+		<div className={styles.root}>
+			<div className={styles.menu}>
+				<Link to={"/"} className={styles.home}>
+					{homeBtn && <IconHome />}
+				</Link>
+				{menuOpen.v && <>
+					<button className="clearBtn" onClick={() => logout.mutate()} disabled={logout.status != "idle" && logout.status != "error"}>
+						<IconExit />
 					</button>
-				</div>
-			</span>
-			{mutation.status == "loading" && <Spinner />}
+					{hasPermission(user, "page_debug") && <Link to="/debug"><IconCode /></Link>}
+					{hasPermission(user, "page_worker") && <Link to="/worker"><IconWidgets /></Link>}
+				</>}
+			</div>
+			<div className={styles.gap}></div>
+			<div className={styles.text}>
+				<div>{user.data?.name}</div>
+				<div>{user.data?.balance} М</div>
+			</div>
+			<button className={classNames(styles.img, "clearBtn")} onClick={() => user.data?.auth ? menuOpen.set(v => !v) : navigate("/")}>
+				<img src={user.data?.photo || avatar} alt="avatar" />
+			</button>
 		</div>
-	);
+
 }
 
 interface HeaderProps

@@ -13,7 +13,7 @@ export default function GameCharactersPage()
 	const characters = useTourneyCharacters();
 
 	return (
-		<Layout centeredPage gap="0.5rem" homeBtn>
+		<Layout centeredPage gap="0.5rem" homeBtn forStaff>
 			<div className="calmBack"></div>
 			{characters.isLoading && <Spinner />}
 			{displayError(characters)}

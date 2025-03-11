@@ -1,0 +1,13 @@
+.root {
+	font-size: 2rem;
+	text-transform: uppercase;
+	color: #fff2b5;
+	text-shadow: 0.1em 0 #380000, -0.1em 0 #380000, 0 0.1em #380000, 0 -0.1em #380000,
+		0.05em 0.05em #380000, -0.05em -0.05em #380000, 0.05em -0.05em #380000, -0.05em 0.05em #380000;
+}
+
+@media screen and (max-width: 355px) {
+	.root {
+		font-size: 1.8rem;
+	}
+}

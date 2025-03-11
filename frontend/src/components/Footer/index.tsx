@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css"
 import Textbox from "../Textbox";
-import classNames from "../../utils/classNames";
 
 export default function Footer({ curPage = "" }: FooterProps)
 {
@@ -9,16 +8,16 @@ export default function Footer({ curPage = "" }: FooterProps)
 		<div className={styles.root}>
 			<div>
 				<Textbox small btn highlight={curPage == "map"}>
-					<Link className={classNames(styles.btn, "title")} to={"/map"}>Карта</Link>
+					<Link className={styles.btn} to={"/map"}>Карта</Link>
 				</Textbox>
 				<Textbox small btn highlight={curPage == "timetable"}>
-					<Link className={classNames(styles.btn, "title")} to={"/timetable"}>План</Link>
+					<Link className={styles.btn} to={"/timetable"}>План</Link>
 				</Textbox>
 				<Textbox small btn highlight={curPage == "store"}>
-					<Link className={classNames(styles.btn, "title")} to={"/store"}>Магаз</Link>
+					<Link className={styles.btn} to={"/store"}>Магаз</Link>
 				</Textbox>
 				<Textbox small btn highlight={curPage == "game"}>
-					<Link className={classNames(styles.btn, "title")} to={"/game"}>Игра</Link>
+					<Link className={styles.btn} to={"/game"}>Игра</Link>
 				</Textbox>
 			</div>
 		</div>

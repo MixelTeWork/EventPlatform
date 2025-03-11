@@ -1,94 +1,51 @@
 .root {
-	--c-back: #ffe87e;
-	--c-border: #3f0000;
-	--c-text: #fff2b5;
-	--c-text2: #3f0000;
 	position: relative;
 	width: 100%;
-	height: 1.8rem;
+	max-width: 800px;
+	height: 5.6em;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	padding-right: 1rem;
-	background-color: var(--c-back);
-	border-bottom: 2px solid var(--c-border);
+	gap: 0.5em;
+	padding: 0.3em;
+	margin-inline: auto;
+	font-size: 1rem;
+	background-color: #3e0000;
+	color: #fffeda;
+	border: 4px solid #fffeda;
 	z-index: 10;
-}
-.forStaff {
-	--c-back: #194659;
-	--c-border: #7fffd4;
-	--c-text: #7fffd4;
-	--c-text2: #001046;
-}
-.forDev {
-	--c-back: #1e1e1e;
-	--c-border: #d4d4d4;
-	--c-text: #d4d4d4;
-	--c-text2: #383838;
-}
-
-.home {
-	width: 3rem;
-	height: 100%;
-	text-decoration: none;
-	color: white;
-	font-size: 1.5rem;
-	padding: 0.05rem;
-}
-
-.block {
-	height: 100%;
-	display: flex;
-	align-items: center;
-	gap: 1.2rem;
-}
-
-.balance {
-	font-size: 1.4rem;
-}
-
-.user {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	background-color: transparent;
-	border: none;
-	font-size: 1.4rem;
-	cursor: pointer;
-	padding: 0;
-}
-
-.img {
-	height: 1.7rem;
-	border-radius: 0.25rem;
 }
 
 .menu {
-	position: absolute;
-	display: none;
-	flex-direction: column;
-	gap: 0.5em;
-	background-color: var(--c-back);
-	top: 100%;
-	right: 0;
-	border-bottom-left-radius: 0.5em;
-	border-left: 2px solid var(--c-border);
-	border-bottom: 2px solid var(--c-border);
-	padding: 1em 2em;
-}
-
-.menu > * {
-	background-color: transparent;
-	border: 2px solid var(--c-text);
-	font-size: 0.8rem;
-	padding: 0.2rem 0.1rem;
-	color: var(--c-text);
-	text-align: center;
-	cursor: pointer;
-	text-decoration: none;
-	filter: drop-shadow(0 0 2px var(--c-text2));
-}
-
-.menuVisible {
 	display: flex;
+	flex-direction: column;
+    align-items: center;
+    justify-content: center;
+	flex-wrap: wrap;
+	max-height: 100%;
+	gap: 0.2em;
+	font-size: 1.6em;
+}
+.home {
+	width: 1em;
+	height: 1em;
+}
+
+.gap {
+	flex-grow: 1;
+}
+
+.text {
+	display: flex;
+	flex-direction: column;
+	align-items: end;
+	gap: 0.7em;
+}
+
+.img {
+	width: 4em;
+}
+.img img {
+	width: 100%;
+	height: 100%;
+	user-select: none;
 }

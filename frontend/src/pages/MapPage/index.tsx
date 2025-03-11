@@ -26,6 +26,7 @@ import displayError from "../../utils/displayError";
 import { Link } from "react-router-dom";
 import usePreloadGameDialogImgs from "../../components/GameDialog/usePreloadGameDialogImgs";
 import usePreloadImgs from "../../utils/usePreloadImgs";
+import Title from "../../components/Title";
 
 export default function MapPage()
 {
@@ -74,7 +75,7 @@ export default function MapPage()
 			{dialog.el()}
 			<GameDialogGreetings />
 			{quests.isLoading && <Spinner />}
-			<h1 className={classNames("title", styles.title)}>Underparty</h1>
+			<Title className={styles.title} />
 			<StyledWindow className={styles.window} onClose={() => openedQuest.set(null)}>
 				{displayError(quests)}
 				<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
@@ -126,26 +127,16 @@ export default function MapPage()
 						</Textbox>
 					</div>}
 			</StyledWindow>
-			<div className={styles.btns__block}>
-				<div className={styles.btns}>
-					<Textbox small btn highlight={map.v == 0}>
-						<button onClick={() => map.set(0)} className={classNames(styles.btn, "title")}>Этаж 1</button>
-					</Textbox>
-					<Textbox small btn highlight={map.v == 1}>
-						<button onClick={() => map.set(1)} className={classNames(styles.btn, "title")}>Этаж 2</button>
-					</Textbox>
-					<Textbox small btn highlight={map.v == 2}>
-						<button onClick={() => map.set(2)} className={classNames(styles.btn, "title")}>Этаж 3</button>
-					</Textbox>
-				</div>
-				<div className={styles.btns}>
-					<Textbox small btn highlight={map.v == 3}>
-						<button onClick={() => map.set(3)} className={classNames(styles.btn, "title")}>Инди</button>
-					</Textbox>
-					<Textbox small btn highlight={map.v == 4}>
-						<button onClick={() => map.set(4)} className={classNames(styles.btn, "title")}>Маркет</button>
-					</Textbox>
-				</div>
+			<div className={styles.btns}>
+				<Textbox small btn highlight={map.v == 0}>
+					<button onClick={() => map.set(0)} className={classNames(styles.btn, "clearBtn")}>Этаж 1</button>
+				</Textbox>
+				<Textbox small btn highlight={map.v == 1}>
+					<button onClick={() => map.set(1)} className={classNames(styles.btn, "clearBtn")}>Этаж 2</button>
+				</Textbox>
+				<Textbox small btn highlight={map.v == 2}>
+					<button onClick={() => map.set(2)} className={classNames(styles.btn, "clearBtn")}>маркет</button>
+				</Textbox>
 			</div>
 		</Layout>
 	);

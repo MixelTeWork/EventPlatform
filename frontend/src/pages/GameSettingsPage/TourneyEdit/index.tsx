@@ -261,7 +261,7 @@ function checkTreeForErrors(tree: TreeNode, characters: TourneyCharacter[])
 			if (same.length > 1)
 				errors.push(`Ноды с id=[${same.map(n => n.id).join(", ")}] имеют одинакового противника: ${characterById(characters, node.characterId)?.name}`);
 		}
-		parents.forEach(p =>
+		for (const p of parents)
 		{
 			if (p.left) children.push(p.left);
 			if (p.right) children.push(p.right);
@@ -270,7 +270,7 @@ function checkTreeForErrors(tree: TreeNode, characters: TourneyCharacter[])
 				if (p.characterId != p.left?.characterId && p.characterId != p.right?.characterId)
 					errors.push(`Победитель ноды id=${p.id} не совпадает с противниками: ${characterById(characters, p.characterId)?.name} != [${characterById(characters, p.left?.characterId)?.name}, ${characterById(characters, p.right?.characterId)?.name}]`);
 			}
-		});
+		}
 		parents = children;
 		children = [];
 	}

@@ -1,5 +1,4 @@
 import styles from "./styles.module.css"
-import buttons from "./buttons.png";
 import classNames from "../../utils/classNames";
 import { useEffect, useRef } from "react";
 

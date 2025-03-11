@@ -2,13 +2,8 @@
 	padding-inline: 0;
 }
 
-.title {
-	font-size: 2rem;
-	text-transform: uppercase;
-}
-
 .window {
-	margin: 1rem 1rem 0.5rem 0.5rem;
+	margin: 1rem;
 	flex-grow: 1;
 }
 
@@ -19,15 +14,12 @@
 .btns {
 	display: flex;
 	justify-content: center;
-	gap: 0.8rem;
+	gap: 0.4rem;
 }
 
 .btn {
 	font-size: 0.8rem;
 	padding: 0.5em 1em;
-	border: none;
-	color: inherit;
-	background: transparent;
 }
 
 .quest {
@@ -71,6 +63,12 @@
 	font-size: 1.2rem;
 }
 
+@media screen and (max-width: 355px) {
+	.btn {
+		font-size: 0.7rem;
+	}
+}
+
 @media screen and (max-height: 500px) {
 	.root {
 		flex-direction: row;
@@ -85,23 +83,17 @@
 		transform: translateY(1rem);
 	}
 	.window {
-		margin-bottom: -1rem;
-	}
-	.btns__block {
-		align-self: center;
+		margin-bottom: 0.5rem;
 	}
 	.btns {
 		flex-direction: column;
 		gap: 0.25rem;
-	}
-	.btns:first-child {
-		margin-bottom: 0.25rem;
+		margin-right: 0.25rem;
 	}
 }
 
 @media screen and (max-height: 650px) and (min-height: 500px) {
-	.btns__block {
-		margin-top: -1rem;
+	.btns {
 		margin-bottom: -1rem;
 	}
 	.btn {
