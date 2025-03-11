@@ -16,25 +16,13 @@ export default function StyledWindow({ children, title = "Underparty", footer, c
 
 	return (
 		<div className={classNames(styles.root, className)}>
-			<div className={styles.shadow}><div></div></div>
-			<div className={styles.rootInner}>
-				<div className={styles.header}>
-					{/* <div>{title}</div> */}
-					<div></div>
-					<button onClick={onClose}>
-						<img src={buttons} alt="close" />
-					</button>
+			<div className={styles.body}>
+				<div ref={contentRef}>
+					{children}
 				</div>
-				<div className={styles.bodyOuter}>
-					<div className={styles.body}>
-						<div ref={contentRef}>
-							{children}
-						</div>
-					</div>
-					<div>
-						{footer}
-					</div>
-				</div>
+			</div>
+			<div>
+				{footer}
 			</div>
 		</div>
 	);
