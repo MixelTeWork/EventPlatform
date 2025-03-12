@@ -9,6 +9,7 @@ import useStateBool from "../../utils/useStateBool";
 import useStateObj from "../../utils/useStateObj";
 import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
+import Title from "../../components/Title";
 
 export default function ScannerPage()
 {
@@ -46,7 +47,7 @@ export default function ScannerPage()
 			</StyledWindow>
 			<Popup title="Активировано" open={popupOpen.v} close={popupOpen.setF}>
 				{res.v?.action == "quest" && <>
-					<h1>Квест завершён!</h1>
+					<Title small text="Квест завершён!" />
 					<br />
 					<h2>{res.v.msg}</h2>
 					<br />
@@ -56,7 +57,7 @@ export default function ScannerPage()
 					</h2>
 				</>}
 				{res.v?.action == "store" && <>
-					<h1>Куплено!</h1>
+					<Title small text="Куплено!" />
 					<br />
 					<h2>{res.v.msg}</h2>
 					<br />
@@ -66,12 +67,12 @@ export default function ScannerPage()
 					</h2>
 				</>}
 				{res.v?.action == "send" && <>
-					<h1>{res.v.value > 0 ? "Пополнено" : "Вычтено"}</h1>
+					<Title small text={res.v.value > 0 ? "Пополнено" : "Вычтено"} />
 					<br />
 					<h1 className={styles.gold}>{res.v.value > 0 ? "+" : ""}{res.v.value}М</h1>
 				</>}
 				{res.v?.action == "promote" && <>
-					<h1>Назначение</h1>
+					<Title small text="Назначение" />
 					<br />
 					<h2>Теперь вы {{
 						"worker": "волонтёр",

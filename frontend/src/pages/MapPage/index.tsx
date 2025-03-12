@@ -55,18 +55,18 @@ export default function MapPage()
 			onClick: () => openedQuest.set(quest),
 		}
 	}
-	function questMarkDepends(dependsOnId: number, id: number, img: string, x: number, y: number, w: number, h: number)
-	{
-		if (!quests.isSuccess) return null;
-		const questDepends = quests.data.find(v => v.id == dependsOnId);
-		if (!questDepends?.completed) return null;
-		const quest = quests.data.find(v => v.id == id);
-		if (!quest || quest.completed) return null;
-		return {
-			img, x, y, w, h,
-			onClick: () => openedQuest.set(quest),
-		}
-	}
+	// function questMarkDepends(dependsOnId: number, id: number, img: string, x: number, y: number, w: number, h: number)
+	// {
+	// 	if (!quests.isSuccess) return null;
+	// 	const questDepends = quests.data.find(v => v.id == dependsOnId);
+	// 	if (!questDepends?.completed) return null;
+	// 	const quest = quests.data.find(v => v.id == id);
+	// 	if (!quest || quest.completed) return null;
+	// 	return {
+	// 		img, x, y, w, h,
+	// 		onClick: () => openedQuest.set(quest),
+	// 	}
+	// }
 
 	return (
 		<Layout centeredPage className={styles.root} footer={<Footer curPage="map" />}>
@@ -87,13 +87,13 @@ export default function MapPage()
 						// objectsOpacity={0.5}
 						objects={quests.isSuccess ? [[
 							questMark(1, mark_0, 1.4, 1.7, 13, 9.8),
-							questMark(2, mark_1_1, 30, 30, 12, 9.8),
-							questMark(3, mark_1_2, 40, 40, 12, 9.8),
-							questMark(4, mark_1_3, 30, 70, 12, 9.8),
+							questMark(2, mark_1_1, 22.8, 38.4, 10.8, 9.6),
+							questMark(3, mark_1_2, 49.7, 42.3, 10.9, 9.7),
+							questMark(4, mark_1_3, 31.7, 80.8, 10.9, 9.7),
 						], [
 							questMark(1, mark_0, 1.4, 1.7, 13, 9.8),
-							questMark(5, mark_2_1, 80, 20, 16, 9.8),
-							questMark(6, mark_2_2, 40, 30, 20, 9.8),
+							questMark(5, mark_2_1, 82.4, 9.2, 16.1, 10.3),
+							questMark(6, mark_2_2, 48.1, 21.5, 20.7, 10),
 						], [], []][map.v] : []}
 					/>
 				</div>

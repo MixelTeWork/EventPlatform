@@ -1,3 +1,7 @@
+.root {
+	font-size: 0.8rem;
+}
+
 .back {
 	position: fixed;
 	top: 1rem;
@@ -7,7 +11,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #ffffff66;
+	color: #00000066;
 	border: 2px solid currentColor;
 	border-radius: 0.5rem;
 }

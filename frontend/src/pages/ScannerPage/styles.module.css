@@ -1,4 +1,6 @@
-.root {}
+.root {
+	color: var(--c-secondary);
+}
 
 .background {
 	position: fixed;

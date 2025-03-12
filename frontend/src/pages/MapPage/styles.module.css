@@ -1,5 +1,6 @@
 .root {
 	padding-inline: 0;
+	padding-bottom: 0;
 }
 
 .window {
@@ -98,9 +99,6 @@
 }
 
 @media screen and (max-height: 650px) and (min-height: 500px) {
-	.btns {
-		margin-bottom: -1rem;
-	}
 	.btn {
 		font-size: 0.7rem;
 	}

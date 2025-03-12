@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import classNames from "../../utils/classNames";
 import { useTitle } from "../../utils/useTtile";
 import Textbox from "../../components/Textbox";
+import Title from "../../components/Title";
 
 export default function StorePage()
 {
@@ -18,7 +19,7 @@ export default function StorePage()
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="store" />}>
 			{items.isLoading && <Spinner />}
-			<h1 className={classNames("title", styles.title)}>Underparty</h1>
+			<Title className={styles.title} />
 			<StyledWindow title="Магазин" className={styles.list}>
 				<div className={styles.items}>
 					{displayError(items)}
@@ -29,8 +30,8 @@ export default function StorePage()
 									{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
 								</div>
 							</div>
-							<Textbox small dark btn>
-								<div className={styles.item__desc}>
+							<Textbox small dark btn className={styles.item__desc}>
+								<div className={styles.item__desc__inner}>
 									<span>{item.name} - </span>
 									<span>{item.price}М</span>
 								</div>

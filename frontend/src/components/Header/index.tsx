@@ -20,7 +20,7 @@ export default function Header({ homeBtn = false, forStaff = false, forDev = fal
 	const logout = useMutationLogout(menuOpen.setF);
 	const user = useUser();
 
-	return (forStaff || forDev) ? <SimpleHeader homeBtn={homeBtn} forStaff={forStaff} forDev={forDev} /> :
+	return (forStaff || forDev) ? <SimpleHeader homeBtn={homeBtn} /> :
 		<div className={styles.root}>
 			<div className={styles.menu}>
 				<Link to={"/"} className={styles.home}>
@@ -42,8 +42,8 @@ export default function Header({ homeBtn = false, forStaff = false, forDev = fal
 			<button className={classNames(styles.img, "clearBtn")} onClick={() => user.data?.auth ? menuOpen.set(v => !v) : navigate("/")}>
 				<img src={user.data?.photo || avatar} alt="avatar" />
 			</button>
+			{logout.status == "loading" && <Spinner />}
 		</div>
-
 }
 
 interface HeaderProps

@@ -5,7 +5,7 @@
 	left: 50%;
 	transform: translateX(-50%);
 	max-width: 80%;
-	background-color: white;
+	background-color: #fffeda;
 	padding: 0.5rem;
 	border-radius: 0.7rem;
 	z-index: 9999;
@@ -47,8 +47,9 @@
 }
 
 .message {
-	background-color: black;
-	color: white;
+	background-color: #4a0001;
+	color: #fffeda;
 	padding: 0.5rem 1rem;
 	border-radius: 0.3rem;
+	font-size: 0.9rem;
 }

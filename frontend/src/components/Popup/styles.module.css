@@ -19,8 +19,8 @@
 }
 
 .popup {
-	background: linear-gradient(114deg, #88c2f3, #2c86d1);
-	box-shadow: 0 10px 20px #000d4b;
+	background: var(--background);
+	border: 2px solid var(--c-secondary);
 	padding: 1rem;
 	border-radius: 0.5rem;
 	max-height: 100dvh;
@@ -39,6 +39,7 @@
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;
+	color: var(--color);
 }
 .header > :first-child {
 	align-self: center;
@@ -46,8 +47,8 @@
 
 .close {
 	position: relative;
-	background-color: rgb(52, 52, 231);
-	border: none;
+	background-color: var(--c-primary);
+	border: 2px solid var(--c-secondary);
 	border-radius: 0.25rem;
 	font-size: 1rem;
 	width: 1.5rem;
@@ -62,10 +63,10 @@
 .close::after {
 	content: "";
 	position: absolute;
-	background-color: tomato;
+	background-color: var(--c-text);
 	width: 0.8rem;
 	height: 2px;
-	border-radius: 4px;
+	/* border-radius: 4px; */
 }
 .close::before {
 	transform: rotate(45deg);
@@ -76,21 +77,4 @@
 
 .body {
 	overflow: auto;
-}
-
-
-.popup {
-	background: #120cbc;
-	border: 2px solid white;
-	box-shadow: none;
-	border-radius: 0;
-}
-
-.close {
-	background-color: white;
-	border-radius: 0;
-}
-.close::before,
-.close::after {
-	background-color: black;
 }

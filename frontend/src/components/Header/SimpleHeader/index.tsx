@@ -12,7 +12,7 @@ import IconExit from "../../../icons/exit";
 import IconCode from "../../../icons/code";
 import IconWidgets from "../../../icons/widgets";
 
-export default function SimpleHeader({ homeBtn = false, forStaff = false, forDev = false }: SimpleHeaderProps)
+export default function SimpleHeader({ homeBtn = false }: SimpleHeaderProps)
 {
 	const menuOpen = useStateBool(false);
 	const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function SimpleHeader({ homeBtn = false, forStaff = false, forDev
 	const user = useUser();
 
 	return (
-		<div className={classNames(styles.root, forStaff && styles.forStaff, forDev && styles.forDev)}>
+		<div className={classNames(styles.root)}>
 			<Link to={"/"} className={styles.home}>
 				{homeBtn && <IconHome />}
 			</Link>
@@ -49,6 +49,4 @@ export default function SimpleHeader({ homeBtn = false, forStaff = false, forDev
 interface SimpleHeaderProps
 {
 	homeBtn?: boolean
-	forStaff?: boolean,
-	forDev?: boolean,
 }

@@ -23,7 +23,7 @@ export default function AuthPage()
 	}
 
 	return (
-		<Layout header={null} centered centeredPage gap="2em">
+		<Layout header={null} centered centeredPage gap="2em" className={styles.root}>
 			<Link to="/" className={styles.back}></Link>
 			<h2>Получено достижение!</h2>
 			<h3>Вы не должны были это увидеть</h3>

@@ -16,8 +16,13 @@ body {
 		sans-serif;
 
 	/* background: radial-gradient(circle at 100% 50%, #6868ff, transparent 60%), linear-gradient(45deg, #7e6ed3, #95cdff); */
-	--background: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	--background_main: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	--background: var(--background_main);
 	--color: black;
+	--c-back: #ffe87e;
+	--c-primary: #f4ad51;
+	--c-secondary: #3f0000;
+	--c-text: #fff2b5;
 	background: var(--background);
 	color: var(--color);
 }
@@ -28,11 +33,19 @@ body:has(.forStaff) {
 	font-family: "ZeroCool", "PT Sans", Arial;
 	--background: linear-gradient(0deg, #00093b, #001b3b);
 	--color: white;
+	--c-back: #194659;
+	--c-primary: #194659;
+	--c-secondary: #7fffd4;
+	--c-text: #fff;
 }
 body:has(.forDev) {
 	font-family: "PT Sans", Arial;
 	--background: #1e1e1e;
 	--color: #d4d4d4;
+	--c-back: #1e1e1e;
+	--c-primary: #1e1e1e;
+	--c-secondary: #d4d4d4;
+	--c-text: #d4d4d4;
 }
 .forDev pre {
 	background-color: var(--background);

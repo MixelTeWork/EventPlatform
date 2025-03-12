@@ -3,7 +3,7 @@
 	inset: 0;
 	display: flex;
 	background-color: black;
-	background: var(--background);
+	background: var(--background_main);
 	z-index: 100;
 	justify-content: center;
 }
@@ -69,13 +69,15 @@
 }
 .dialog {
 	position: relative;
-	background-color: black;
+	background: linear-gradient(0deg, #4a0001, #380000);
+	color: #fffeda;
 	margin: 0.5rem;
 	max-width: calc(800px - 1rem);
 	flex-grow: 1;
 }
 .dialog__title {
-	background-color: #1b6bcc;
+	background-color: #fffeda;
+	color: #F3AD51;
 	padding: 0.25rem 1rem;
 	font-size: 1.1rem;
 }
@@ -92,10 +94,8 @@
 }
 .dialog__next,
 .dialog__prev {
-	background-color: #1b6bcc;
-	color: white;
 	font-size: 1rem;
-	border: 1px solid white;
+	border: 1px solid #fffeda;
 	padding: 0.25rem 1rem;
 }
 .dialog__prev {

@@ -1,7 +1,7 @@
 .root {
 	position: fixed;
 	inset: 0;
-	background: linear-gradient(0deg, #3035dc, #120cbc);
+	background: var(--background);
 	z-index: 100;
 	display: flex;
 	justify-content: center;

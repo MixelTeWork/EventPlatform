@@ -109,13 +109,13 @@ function GameDialog({ data, characters, close }: GameDialogProps)
 						<p className={styles.dialog__text}>{node.text}</p>
 						<div className={styles.dialog__btns}>
 							{nodeI > 0 ?
-								<button className={styles.dialog__prev} onClick={() => setNodeI(v => v - 1)}>&lt;-</button>
+								<button className={classNames(styles.dialog__prev, "clearBtn")} onClick={() => setNodeI(v => v - 1)}>&lt;-</button>
 								: <div></div>
 							}
 							{nodeI < data.nodes.length - 1 ?
-								<button className={styles.dialog__next} onClick={() => setNodeI(v => v + 1)}>Далее</button>
+								<button className={classNames(styles.dialog__next, "clearBtn")} onClick={() => setNodeI(v => v + 1)}>Далее</button>
 								:
-								<button className={styles.dialog__next} onClick={close}>Конец</button>
+								<button className={classNames(styles.dialog__next, "clearBtn")} onClick={close}>Конец</button>
 							}
 						</div>
 					</div>

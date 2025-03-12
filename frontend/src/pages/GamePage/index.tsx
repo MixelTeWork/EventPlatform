@@ -14,6 +14,8 @@ import randomInt from "../../utils/randomInt";
 import GameDialogGame from "../../components/GameDialogGame";
 import { useTourneyCharacters } from "../../api/tourney";
 import { characterById } from "../../api/tourney";
+import Title from "../../components/Title";
+import Textbox from "../../components/Textbox";
 
 
 export default function GamePage()
@@ -95,11 +97,11 @@ export default function GamePage()
 	return (<>
 		{state.data?.state == "start" && <GameDialogGame />}
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer curPage="game" />}>
+			<Title className={styles.title} />
 			{state.isLoading && <Spinner />}
 			{displayError(state)}
 			{selectTeam.isLoading && <Spinner />}
 			{displayError(selectTeam)}
-			<h1 className={classNames("title", styles.title)}>Underparty</h1>
 			<StyledWindow className={styles.window}>
 				{(state.isLoading || state.data?.state == "wait") && <>
 					<div className={styles.text}>
@@ -113,8 +115,12 @@ export default function GamePage()
 					<div className={styles.text}>
 						<div className={styles.title2}>Победить должен</div>
 						<div className={styles.chooseTeam}>
-							<button onClick={() => selectTeam.mutate(1)}>{characterLeft?.name || "N/A"}</button>
-							<button onClick={() => selectTeam.mutate(2)}>{characterRight?.name || "N/A"}</button>
+							<Textbox small btn className={styles.chooseTeam__btn}>
+								<button className="clearBtn" onClick={() => selectTeam.mutate(1)}>{characterLeft?.name || "N/A"}</button>
+							</Textbox>
+							<Textbox small btn className={styles.chooseTeam__btn}>
+								<button className="clearBtn" onClick={() => selectTeam.mutate(2)}>{characterRight?.name || "N/A"}</button>
+							</Textbox>
 						</div>
 					</div>
 				</> : <>
@@ -126,7 +132,7 @@ export default function GamePage()
 						</div>
 					</>}
 					{state.data?.state == "going" && <button
-						className={styles.press}
+						className={classNames(styles.press, "clearBtn")}
 						onClick={e =>
 						{
 							animateBtnPress(e.target as HTMLElement);
@@ -136,7 +142,7 @@ export default function GamePage()
 						<h1 className={styles.title2}>{characterTeam?.name || "N/A"} победит!</h1>
 						{/* <h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1> */}
 						{/* <h1 className={styles.title}>{clicks.v}</h1> */}
-						<div className={classNames("title", styles.press__btn)}>Жми!!!</div>
+						<div className={styles.press__btn}>Жми!!!</div>
 					</button>}
 				</>}
 				{state.data?.state == "end" && <>
@@ -152,21 +158,21 @@ export default function GamePage()
 					<div className={styles.text}>
 						<div className={styles.title2}>Турнир завершён!</div>
 						<div className={styles.tourney_winners}>
-							<div>
+							<Textbox small className={styles.tourney_winner}>
 								<img src={characterTourneyWinner1?.img} alt={characterTourneyWinner1?.name || "N/A"} />
 								<div>1 место</div>
 								<div>{characterTourneyWinner1?.name || "N/A"}</div>
-							</div>
-							<div>
+							</Textbox>
+							<Textbox small className={styles.tourney_winner}>
 								<img src={characterTourneyWinner2?.img} alt={characterTourneyWinner2?.name || "N/A"} />
 								<div>2 место</div>
 								<div>{characterTourneyWinner2?.name || "N/A"}</div>
-							</div>
-							<div>
+							</Textbox>
+							<Textbox small className={styles.tourney_winner}>
 								<img src={characterTourneyWinner3?.img} alt={characterTourneyWinner3?.name || "N/A"} />
 								<div>3 место</div>
 								<div>{characterTourneyWinner3?.name || "N/A"}</div>
-							</div>
+							</Textbox>
 						</div>
 					</div>
 				</>}

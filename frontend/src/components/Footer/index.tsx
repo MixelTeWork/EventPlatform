@@ -17,7 +17,7 @@ export default function Footer({ curPage = "" }: FooterProps)
 					<Link className={styles.btn} to={"/store"}>Магаз</Link>
 				</Textbox>
 				<Textbox small btn highlight={curPage == "game"}>
-					<Link className={styles.btn} to={"/game"}>Игра</Link>
+					<Link className={styles.btn} to={"/game"}>Бой</Link>
 				</Textbox>
 			</div>
 		</div>

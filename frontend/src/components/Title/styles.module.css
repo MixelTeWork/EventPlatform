@@ -6,8 +6,16 @@
 		0.05em 0.05em #380000, -0.05em -0.05em #380000, 0.05em -0.05em #380000, -0.05em 0.05em #380000;
 }
 
+.small {
+	font-size: 1.5rem;
+}
+
 @media screen and (max-width: 355px) {
 	.root {
 		font-size: 1.8rem;
+	}
+
+	.small {
+		font-size: 1.3rem;
 	}
 }
