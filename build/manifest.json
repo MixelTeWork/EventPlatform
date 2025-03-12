@@ -1,6 +1,6 @@
 {
-  "short_name": "Индикон",
-  "name": "ИНДИКОН: BIG Update",
+  "short_name": "Underparty",
+  "name": "Underparty: Multiverse",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#78c2fd",
-  "background_color": "#130ebd"
+  "theme_color": "#ffdb6c",
+  "background_color": "#ffefbd"
 }
