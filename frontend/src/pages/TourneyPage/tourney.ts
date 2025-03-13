@@ -168,7 +168,7 @@ class Tourney
 	{
 		if (!this.canvas || !this.ctx || !this.state || !this.characters) return;
 
-		this.ctx.fillRect(this.x, this.y, this.s, this.s);
+		// this.ctx.fillRect(this.x, this.y, this.s, this.s);
 
 		this.tree?.draw(this.ctx);
 	}

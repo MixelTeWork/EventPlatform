@@ -10,6 +10,7 @@ import useStateObj from "../../utils/useStateObj";
 import { useTitle } from "../../utils/useTtile";
 import styles from "./styles.module.css"
 import Title from "../../components/Title";
+import Textbox from "../../components/Textbox";
 
 export default function ScannerPage()
 {
@@ -49,7 +50,7 @@ export default function ScannerPage()
 				{res.v?.action == "quest" && <>
 					<Title small text="Квест завершён!" />
 					<br />
-					<h2>{res.v.msg}</h2>
+					<Textbox small className={styles.tb}>{res.v.msg}</Textbox>
 					<br />
 					<h2>
 						<span>Награда: </span>
@@ -59,7 +60,7 @@ export default function ScannerPage()
 				{res.v?.action == "store" && <>
 					<Title small text="Куплено!" />
 					<br />
-					<h2>{res.v.msg}</h2>
+					<Textbox small className={styles.tb}>{res.v.msg}</Textbox>
 					<br />
 					<h2>
 						<span>Потрачено: </span>
