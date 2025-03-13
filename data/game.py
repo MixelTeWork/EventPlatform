@@ -12,7 +12,7 @@ from data.user_game import UserGame
 class Game(SqlAlchemyBase, IdMixin):
     __tablename__ = Tables.Game
 
-    startStr = Column(String(8), DefaultClause("16:30"), nullable=False)
+    startStr = Column(String(8), DefaultClause("17:30"), nullable=False)
     duration = Column(Integer, DefaultClause("60"), nullable=False)
     counter = Column(Integer, DefaultClause("150"), nullable=False)
     opponent1Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
