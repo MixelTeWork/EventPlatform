@@ -30,6 +30,7 @@ Roles.ROLES = {
             Operations.page_worker,
             Operations.page_worker_quest,
             Operations.page_worker_store,
+            Operations.page_stats,
             Operations.send_any,
             Operations.manage_games,
         ]
