@@ -131,7 +131,7 @@
 	background: rgba(238, 130, 238, 0.2);
 }
 .select option {
-	background-color: #3035dc;
+	background-color: var(--c-back);
 	color: white;
 	font-size: 0.8rem;
 }

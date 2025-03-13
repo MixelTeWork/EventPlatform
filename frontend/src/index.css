@@ -16,7 +16,13 @@ body {
 		sans-serif;
 
 	/* background: radial-gradient(circle at 100% 50%, #6868ff, transparent 60%), linear-gradient(45deg, #7e6ed3, #95cdff); */
-	--background_main: linear-gradient(0deg, #ffe87e, #ffdb6c);
+	--bcsize: 5px;
+	--bssize: 3.5px;
+	--background_main:
+		linear-gradient(0deg, transparent, #ffdb6c),
+		radial-gradient(circle at var(--bcsize) var(--bcsize), #fff6a7 var(--bssize), transparent var(--bssize)) 0px 0px / calc(var(--bcsize) * 4) calc(var(--bcsize) * 4),
+		radial-gradient(circle at calc(var(--bcsize) * 3) calc(var(--bcsize) * 3), #fff6a7 var(--bssize), transparent var(--bssize)) 0px 0px / calc(var(--bcsize) * 4) calc(var(--bcsize) * 4),
+		linear-gradient(0deg, #ffe87e, #ffdb6c);
 	--background: var(--background_main);
 	--color: black;
 	--c-back: #ffe87e;

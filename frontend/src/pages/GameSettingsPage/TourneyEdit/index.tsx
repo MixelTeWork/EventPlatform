@@ -257,6 +257,7 @@ function checkTreeForErrors(tree: TreeNode, characters: TourneyCharacter[])
 	{
 		for (const node of parents)
 		{
+			if (node.characterId == -1) continue;
 			const same = parents.filter(n => n.characterId == node.characterId);
 			if (same.length > 1)
 				errors.push(`Ноды с id=[${same.map(n => n.id).join(", ")}] имеют одинакового противника: ${characterById(characters, node.characterId)?.name}`);

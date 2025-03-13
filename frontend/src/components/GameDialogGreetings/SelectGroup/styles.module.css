@@ -42,6 +42,7 @@
 	padding-inline: 0.5em;
 	-webkit-tap-highlight-color: transparent;
 	border-radius: 2px;
+	border: 3.5px solid currentColor;
 }
 
 .grid__img1 {
@@ -56,6 +57,7 @@
 	justify-content: flex-end;
 	background-color: #ffead1;
 	color: #81231f;
+	box-shadow: 4px 4px 0 currentColor;
 }
 
 .grid__img2 {
@@ -69,4 +71,5 @@
 	justify-self: flex-start;
 	background-color: #160008;
 	color: #ff6365;
+	box-shadow: -4px 4px 0 currentColor;
 }

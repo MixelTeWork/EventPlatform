@@ -15,7 +15,7 @@ export default function SelectGroup({ close }: SelectGroupProps)
 		<div className={styles.root}>
 			{setGroup.isLoading && <Spinner />}
 			<div className={styles.body}>
-				<Title text="Вселенную нужно" />
+				<Title text="Вселенную нужно:" />
 				{displayError(setGroup, e => <>
 					<h3 style={{ color: "tomato" }}>{e}</h3>
 					<button className={styles.close} onClick={close}>Продолжить как гость</button>

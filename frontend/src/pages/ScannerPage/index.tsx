@@ -20,7 +20,7 @@ export default function ScannerPage()
 
 	return (
 		<Layout centeredPage gap="1em" className={styles.root} footer={<Footer />} homeBtn>
-			<div className={styles.background}></div>
+			{/* <div className={styles.background}></div> */}
 			<StyledWindow title="QR-Активатор" disableScroll className={styles.body} onClose={() => navigate(-1)}>
 				<Scanner
 					useMutation={useMutationScanner}

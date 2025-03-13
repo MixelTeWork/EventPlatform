@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-export function useTitle(title: string | (string | undefined | null | false)[], prefix = "Индикон")
+export function useTitle(title: string | (string | undefined | null | false)[], prefix = "Underparty")
 {
 	useEffect(() =>
 	{
