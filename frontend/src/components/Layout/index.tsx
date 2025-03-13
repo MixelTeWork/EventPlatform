@@ -1,9 +1,11 @@
 import classNames from "../../utils/classNames";
+import { useMetaColor } from "../../utils/useMetaColor";
 import Header from "../Header";
 import styles from "./styles.module.css"
 
 export default function Layout({ children, className, forStaff = false, forDev = false, homeBtn = false, styles: el_styles, centered = false, centeredPage = false, height100 = false, gap = 0, header, footer }: LayoutProps)
 {
+	useMetaColor(forStaff ? "#194659" : forDev ? "#1e1e1e" : null);
 	if (header === undefined) header = <Header homeBtn={homeBtn} forStaff={forStaff} forDev={forDev} />
 
 	return (
