@@ -7,6 +7,7 @@ class Operations(OperationsBase):
     page_worker = ("page_worker", "Страница для персонала")
     page_worker_quest = ("page_worker_quest", "Страница кодов квестов")
     page_worker_store = ("page_worker_store", "Страница кодов товаров")
+    page_stats = ("page_stats", "Страница статистики")
 
     promote_worker = ("promote_worker", "Повысить до волонтёра")
     promote_manager = ("promote_manager", "Повысить до управляющего")
