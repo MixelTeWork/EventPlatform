@@ -14,6 +14,7 @@ export interface User
 	operations: string[];
 	group: UserGroup;
 	gameOpened: boolean;
+	ticketTId: number;
 }
 
 export interface UserFull
@@ -31,6 +32,7 @@ export interface UserFull
 	operations: string[];
 	group: UserGroup;
 	gameOpened: boolean;
+	ticketTId: number;
 }
 
 export type UserGroup = -1 | 0 | 1 | 2;
@@ -42,7 +44,7 @@ export interface UserWithPwd extends User
 
 export function createEmptyUser(): User
 {
-	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1, gameOpened: false };
+	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1, gameOpened: false, ticketTId: -1 };
 }
 
 export function useUpdateUser()

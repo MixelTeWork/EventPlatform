@@ -299,6 +299,7 @@ def docs():
             "operations": "string[]",
             "group": "number",
             "gameOpened": "boolean",
+            "ticketTId": "number",
         },
         "UserFull": {
             "id": "number",

@@ -68,6 +68,7 @@ class User(UserBase, BigIdMixin):
             "operations": self.get_operations(),
             "group": self.group,
             "gameOpened": self.gameOpened,
+            "ticketTId": self.ticketTId,
         }
 
     def get_dict_full(self):
@@ -84,4 +85,5 @@ class User(UserBase, BigIdMixin):
             "operations": self.get_operations(),
             "group": self.group,
             "gameOpened": self.gameOpened,
+            "ticketTId": self.ticketTId,
         }
