@@ -28,7 +28,7 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 					<div className={styles.msg2}>
 						<img src={avatar} alt="Avatar" />
 						<h2 className="title">Админ</h2>
-						<span>текст</span>
+						<span>Добро пожаловать на Underparty "игрок"! Для того, чтобы попасть на сайт мероприятия, загрузи свой билет</span>
 					</div>
 				</Textbox>
 				<Textbox type2 className={classNames(styles.msg2box, styles.msg_error, error.v && styles.msg_error_open)}>

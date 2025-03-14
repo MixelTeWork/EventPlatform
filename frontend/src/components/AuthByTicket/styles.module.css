@@ -80,7 +80,8 @@
 	grid-row: 2;
 	padding: 8px;
 	padding-left: 10px;
-	font-size: 0.8rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
 }
 
 .root .msg_error {

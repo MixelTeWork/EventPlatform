@@ -126,7 +126,7 @@ export default function GamePage()
 				</> : <>
 					{state.data?.state == "start" && <>
 						<div className={styles.text}>
-							<div className={styles.title2}>{characterTeam?.name || "N/A"} победит!</div>
+							<div className={styles.title2}>Ваш выбор {characterTeam?.name || "N/A"}</div>
 							<h2 className={styles.subtitle}>Дождитесь начала</h2>
 							<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
 						</div>
@@ -139,7 +139,7 @@ export default function GamePage()
 							clicks.set(v => v + 1);
 						}}
 					>
-						<h1 className={styles.title2}>{characterTeam?.name || "N/A"} победит!</h1>
+						<h1 className={styles.title2}>Ваш выбор {characterTeam?.name || "N/A"}</h1>
 						{/* <h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1> */}
 						{/* <h1 className={styles.title}>{clicks.v}</h1> */}
 						<div className={styles.press__btn}>Жми!!!</div>
