@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from bfs import get_json_values_from_req, randstr, response_msg, use_db_session
 from data._roles import Roles
+from data.other import Other
 from data.user import User
 
 
@@ -46,6 +47,11 @@ def logout():
 @use_db_session()
 def login_ticket(db_sess: Session):
     code = get_json_values_from_req("code")
+
+    obj = Other.get(db_sess)
+    if not obj.ticketLoginEnabled:
+        return response_msg("Вход по билету пока отключен, войти на сайт можно будет во время мероприятия", 400)
+
     user = User.get_by_login(db_sess, f"ticket_{code}", includeDeleted=True)
     if user is None:
         user = create_user_by_ticket(db_sess, code)

@@ -16,6 +16,7 @@ Roles.ROLES = {
             Operations.promote_manager,
             Operations.manage_store,
             Operations.manage_quest,
+            Operations.site_config,
         ]
     },
     Roles.manager: {
