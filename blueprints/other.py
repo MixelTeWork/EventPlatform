@@ -27,10 +27,8 @@ def startStr(db_sess: Session):
 @permission_required(Operations.site_config)
 def set_startStr(db_sess: Session, user: User):
     value = get_json_values_from_req("value")
-    obj = Other.get(db_sess)
-    obj.ticketLoginEnabled = value
-    db_sess.commit()
-    return {"value": obj.ticketLoginEnabled}
+    Other.set_ticketLoginEnabled(db_sess, value)
+    return {"value": value}
 
 
 @blueprint.route("/api/other/stats")

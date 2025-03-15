@@ -91,8 +91,7 @@ def create_user_by_ticket(db_sess: Session, code: str):
     typeName = data.get("typeName", "")
     personName = data.get("personName", "Инкогнито")
 
-    admin = User.get_admin(db_sess)
-    user = User.new(admin, f"ticket_{code}", randstr(8), personName, [Roles.visitor])
+    user = User.new(User.get_fake_system(), f"ticket_{code}", randstr(8), personName, [Roles.visitor], db_sess=db_sess)
     user.ticketTId = typeId
     user.ticketType = typeName
     db_sess.commit()
@@ -175,8 +174,7 @@ def create_vk_user(db_sess: Session, user_id: int, access_token: str):
     first_name = response.get("first_name", "Инкогнито")
     last_name = response.get("last_name", "Инкогнито")
 
-    admin = User.get_admin(db_sess)
-    user = User.new(admin, f"vk_{user_id}", randstr(8), first_name, [Roles.visitor])
+    user = User.new(User.get_fake_system(), f"vk_{user_id}", randstr(8), first_name, [Roles.visitor])
     user.lastName = last_name
     user.imageUrl = photo
     db_sess.commit()

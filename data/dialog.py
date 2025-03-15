@@ -15,14 +15,14 @@ class Dialog(SqlAlchemyBase, ObjMixin):
         return f"<Dialog> [{self.id}]"
 
     @staticmethod
-    def new(creator: User, data: object, id: int = None):
-        db_sess = Session.object_session(creator)
+    def new(creator: User, data: object, id: int = None, db_sess: Session = None):
+        db_sess = db_sess if db_sess else Session.object_session(creator)
         dialog = Dialog(data=data)
         if id is not None:
             dialog.id = id
         db_sess.add(dialog)
 
-        Log.added(dialog, creator, [("data", dialog.data)])
+        Log.added(dialog, creator, [("data", dialog.data)], db_sess=db_sess)
 
         return dialog
 

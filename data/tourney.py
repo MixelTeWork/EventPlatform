@@ -62,6 +62,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
         self.data["third"] = -1
         flag_modified(self, "data")
         db_sess.commit()
+        logging.info("gen_new_tree")
 
     def edit_node(self, node_id: int, characterId: int):
         db_sess = Session.object_session(self)
@@ -125,16 +126,10 @@ class Tourney(SqlAlchemyBase, IdMixin):
         node_id = -1
         if len(next_nodes) == 2 and self.data["third"] == -1:
             node_id = -3
-            # if True:
-            #     self.data["third"] = get_not_winner(self.data["tree"]["left"])
-            #     flag_modified(self, "data")
         else:
             next_node = next((n for n in nodes if n["characterId"] == -1), None)
             if next_node:
                 node_id = next_node["id"]
-                # if True:
-                #     next_node["characterId"] = next_node["left"]["characterId"]
-                #     flag_modified(self, "data")
 
         self.curGameNodeId = node_id
         db_sess.commit()
@@ -172,6 +167,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
     def show_pretourney(self):
         db_sess = Session.object_session(self)
         Game.reset(db_sess)
+        logging.info("show_pretourney")
 
     def end_tourney(self):
         db_sess = Session.object_session(self)
@@ -179,6 +175,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
         game.tourneyEnded = True
         self.ended = True
         db_sess.commit()
+        logging.info("end_tourney")
 
     def unend_tourney(self):
         db_sess = Session.object_session(self)
@@ -186,6 +183,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
         game.tourneyEnded = False
         self.ended = False
         db_sess.commit()
+        logging.info("unend_tourney")
 
     def reset(self):
         db_sess = Session.object_session(self)

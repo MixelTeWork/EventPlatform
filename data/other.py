@@ -1,3 +1,4 @@
+import logging
 from sqlalchemy import Boolean, Column, DefaultClause
 from sqlalchemy.orm import Session
 
@@ -21,3 +22,10 @@ class Other(SqlAlchemyBase, IdMixin):
     @staticmethod
     def get(db_sess: Session):
         return db_sess.get(Other, 1)
+
+    @staticmethod
+    def set_ticketLoginEnabled(db_sess: Session, value: bool):
+        obj = Other.get(db_sess)
+        obj.ticketLoginEnabled = value
+        db_sess.commit()
+        logging.info(f"set_ticketLoginEnabled {value=}")

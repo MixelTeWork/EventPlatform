@@ -97,7 +97,6 @@ class Game(SqlAlchemyBase, IdMixin):
             "start": game.startStr,
             "counter": 0,
             "winner": game.winner,
-            "showGame": game.showGame,
             "team": 0,
             "tourneyWinner1": -1,
             "tourneyWinner2": -1,
@@ -129,12 +128,12 @@ class Game(SqlAlchemyBase, IdMixin):
         dt: timedelta = now - game.startTime
         if dt < timedelta(seconds=game.counter):
             state["state"] = GameState.start
-            state["counter"] = game.counter - dt.seconds
+            state["counter"] = max(0, game.counter - dt.seconds)
             return state
 
         if dt < timedelta(seconds=game.counter + game.duration):
             state["state"] = GameState.going
-            state["counter"] = game.counter + game.duration - dt.seconds
+            state["counter"] = max(0, game.counter + game.duration - dt.seconds)
             return state
 
         state["state"] = GameState.end
@@ -146,6 +145,8 @@ class Game(SqlAlchemyBase, IdMixin):
         state = Game.get_state(db_sess, game)
         state["clicks1"] = game.clicks1
         state["clicks2"] = game.clicks2
+        state["showGame"] = game.showGame
+
         if state["state"] != GameState.going and state["state"] != GameState.end:
             return state
 
