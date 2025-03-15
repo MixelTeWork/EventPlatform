@@ -1,8 +1,8 @@
 import styles from "./styles.module.css"
-import ost from "./ost.mp3"
+// import ost from "./ost.mp3"
 import { useEffect, useRef } from "react";
 import useStateBool from "../../utils/useStateBool";
-import useSound from "../../utils/useSound";
+// import useSound from "../../utils/useSound";
 import { useTitle } from "../../utils/useTtile";
 import classNames from "../../utils/classNames";
 import { useGame } from "./game";
@@ -14,24 +14,24 @@ export default function GameScreenPage()
 	useTitle("Игра");
 	const game = useGame();
 	const characters = useTourneyCharacters();
-	const ostSound = useSound(ost, true);
-	const soundEnable = useStateBool(false);
+	// const ostSound = useSound(ost, true);
+	const soundEnable = useStateBool(true);
 	const rectsEl = useRef<HTMLDivElement>(null);
 
 	const characterLeft = characterById(characters.data, game.opponentLeftId);
 	const characterRight = characterById(characters.data, game.opponentRightId);
 	const characterWinner = characterById(characters.data, game.winnerId);
 
-	useEffect(() =>
-	{
-		if (!soundEnable.v) return;
+	// useEffect(() =>
+	// {
+	// 	if (!soundEnable.v) return;
 
-		if (game.isGoing)
-			ostSound.play();
-		else
-			ostSound.stop();
-		// eslint-disable-next-line
-	}, [game.isGoing, soundEnable.v])
+	// 	if (game.isGoing)
+	// 		ostSound.play(soundEnable.set);
+	// 	else
+	// 		ostSound.stop();
+	// 	// eslint-disable-next-line
+	// }, [game.isGoing, soundEnable.v])
 
 	useEffect(() =>
 	{
@@ -63,23 +63,21 @@ export default function GameScreenPage()
 				</div>
 			</div>
 			<div className={styles.msg}>
-				<div>
-					{game.titleType == "error" && <h3 style={{ color: "tomato", textAlign: "center" }}>{game.error}</h3>}
-					{game.titleType == "load" && <span>Загрузка...</span>}
-					{game.titleType == "wait" && <span>Скоро начало!</span>}
-					{game.titleType == "counter" && <span>{game.getCounter()}</span>}
-					{game.titleType == "winner" && <>
-						<span>Побеждает </span>
-						<span className="title" style={{ marginLeft: "0.25em" }}>{characterWinner?.name}</span>
-						<span>!</span>
-					</>}
-					{!soundEnable.v && <button
-						className={styles.soundBtn}
-						onClick={soundEnable.setT}
-					>
-						Включить звук
-					</button>}
-				</div>
+				{game.titleType == "error" && <h3 style={{ color: "tomato", textAlign: "center" }}>{game.error}</h3>}
+				{game.titleType == "load" && <span>Загрузка...</span>}
+				{game.titleType == "wait" && <span>Скоро начало!</span>}
+				{game.titleType == "counter" && <span>{game.getCounter()}</span>}
+				{game.titleType == "winner" && <>
+					<span>Побеждает </span>
+					<span className="title" style={{ marginLeft: "0.25em" }}>{characterWinner?.name}</span>
+					<span>!</span>
+				</>}
+				{!soundEnable.v && <button
+					className={styles.soundBtn}
+					onClick={soundEnable.setT}
+				>
+					Включить звук
+				</button>}
 			</div>
 		</div>
 	);

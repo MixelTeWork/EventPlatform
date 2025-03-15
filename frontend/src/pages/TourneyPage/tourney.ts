@@ -16,6 +16,7 @@ class Tourney
 	private navigate: NavigateFunction | null = null;
 
 	private state: TourneyData | null = null;
+	private stateIsFresh = false;
 	private characters?: TourneyCharacter[] | null;
 	private tree?: Tree;
 
@@ -29,6 +30,7 @@ class Tourney
 	{
 		this.navigate = navigate;
 		this.stoped = false;
+		this.stateIsFresh = false;
 		this.error = "";
 		this.startI++;
 		this.loadCharacters();
@@ -53,6 +55,7 @@ class Tourney
 			if (startI != this.startI) return;
 			this.state = newState;
 			this.error = "";
+			this.stateIsFresh = true;
 		}
 		catch (e)
 		{
@@ -79,6 +82,7 @@ class Tourney
 		try
 		{
 			this.characters = await fetchJsonGet<TourneyCharacter[]>(`/api/tourney/characters`);
+			this.onNewState();
 		}
 		catch (e)
 		{
@@ -106,7 +110,7 @@ class Tourney
 			});
 			this.tree = new Tree(this.state, characters);
 		}
-		if (!this.state.ended && this.state.showGame)
+		if (this.stateIsFresh && !this.state.ended && this.state.showGame)
 			this.navigate?.("/game_screen");
 	}
 
@@ -128,7 +132,7 @@ class Tourney
 				if (this.ctx)
 				{
 					this.ctx.save();
-					this.ctx.font = "3em ZeroCool, Arial";
+					this.ctx.font = "3em monsterfriendforerusbylya, ZeroCool, Arial";
 					this.ctx.fillStyle = "orange";
 					const tm = this.ctx.measureText(this.error);
 					this.ctx.fillText(this.error, Math.max(0, (w - tm.width) / 2), (h - tm.actualBoundingBoxAscent) / 2, w);
@@ -140,7 +144,7 @@ class Tourney
 				if (this.ctx)
 				{
 					this.ctx.save();
-					this.ctx.font = "3em ZeroCool, Arial";
+					this.ctx.font = "3em monsterfriendforerusbylya, ZeroCool, Arial";
 					this.ctx.fillStyle = "orange";
 					const text = "Загрузка";
 					const tm = this.ctx.measureText(text);

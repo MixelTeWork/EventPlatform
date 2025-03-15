@@ -12,7 +12,6 @@ export interface GameState
 	winner: UserGroup,
 	counter: number,
 	start: string,
-	showGame: boolean,
 	team: number,
 	tourneyWinner1: number,
 	tourneyWinner2: number,
@@ -20,6 +19,7 @@ export interface GameState
 }
 export interface GameStateFull extends GameState
 {
+	showGame: boolean,
 	clicks1: number,
 	clicks2: number,
 }

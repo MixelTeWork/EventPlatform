@@ -10,8 +10,6 @@
 	color: #ffffdb;
 }
 body:has(.root) {
-	--_cellSize: 3.13vw;
-	--_strokeWidth: 0.2vw;
 	animation: back 250ms linear infinite;
 
 }
@@ -20,7 +18,7 @@ body:has(.root) {
 		background-position: 0 0;
 	}
 	100% {
-		background-position: calc(var(--_cellSize) + var(--_strokeWidth)) 0;
+		background-position: calc(var(--bcsize) * 4) 0;
 	}
 }
 
@@ -184,26 +182,22 @@ body:has(.root) {
 	left: 4%;
 	right: 4%;
 	height: 20%;
-	background: linear-gradient(0deg, #fdcf66, #fdcf66 50%, #fea45c 50%, #fea45c);
-	border: 0.3vw solid #9d1a42;
-	padding: 1vw;
-	font-size: 3vw;
-}
-.msg > div {
-	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: #85c3ee;
-	border: 0.3vw solid #9d1a42;
+	background: linear-gradient(0deg, #4a0001, #380000);
+	border: 0.5vw solid #fffeda;
+	color: #fffeda;
+	padding: 1vw;
+	font-size: 3vw;
 }
 .soundBtn {
 	position: absolute;
-	top: -4px;
+	top: -0.5vw;
 	left: 50%;
-	background-color: #85c3ee;
-	border: 0.3vw solid #9d1a42;
-	color: white;
+	background: linear-gradient(0deg, #4a0001, #380000);
+	border: 0.5vw solid #fffeda;
+	color: #fffeda;
 	font-size: 1.5rem;
 	padding: 0.5rem 1rem;
 	z-index: 10;

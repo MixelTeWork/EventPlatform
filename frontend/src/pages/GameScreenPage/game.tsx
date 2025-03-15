@@ -48,6 +48,7 @@ class Game
 	public stop()
 	{
 		this.stoped = true;
+		this.state = null;
 		this.startI++;
 		clearInterval(this.counterTimer);
 	}
