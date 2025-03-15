@@ -1,6 +1,6 @@
 import { ImgData } from "../api/dataTypes";
 
-export default async function imagefileToData(file: File, name: string)
+export default async function imagefileToData(file: File, name?: string)
 {
 	try
 	{
@@ -23,7 +23,7 @@ export default async function imagefileToData(file: File, name: string)
 		}
 		return {
 			data: imgBase64.result,
-			name,
+			name: name || file.name,
 			error: "",
 		} as ImgData
 	}

@@ -61,7 +61,7 @@ export default function Character({ character, deleteNew }: CharacterProps)
 					onChange={async e =>
 					{
 						imgData.set({ data: "", name: "" });
-						imgData.set(await imagefileToData(e.target?.files?.[0]!, ""));
+						imgData.set(await imagefileToData(e.target?.files?.[0]!));
 						e.target.value = "";
 					}}
 				/>

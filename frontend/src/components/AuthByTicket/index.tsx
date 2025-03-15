@@ -49,7 +49,7 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 							onChange={async e =>
 							{
 								error.set("");
-								const imgData = await imagefileToData(e.target?.files?.[0]!, "")
+								const imgData = await imagefileToData(e.target?.files?.[0]!)
 								e.target.value = "";
 								if (!imgData) return;
 
