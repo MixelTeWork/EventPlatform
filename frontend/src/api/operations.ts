@@ -9,6 +9,7 @@ const Operations = {
 	page_worker_quest: "page_worker_quest",
 	page_worker_store: "page_worker_store",
 	page_stats: "page_stats",
+	site_config: "site_config",
 	promote_worker: "promote_worker",
 	promote_manager: "promote_manager",
 	manage_store: "manage_store",

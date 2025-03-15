@@ -6,6 +6,7 @@ class Tables(TablesBase):
     DialogCharacter = "DialogCharacter"
     Game = "Game"
     GameLog = "GameLog"
+    Other = "Other"
     Quest = "Quest"
     Send = "Send"
     StoreItem = "StoreItem"

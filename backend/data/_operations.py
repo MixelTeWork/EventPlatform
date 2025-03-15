@@ -18,3 +18,4 @@ class Operations(OperationsBase):
 
     add_any_image = ("add_any_image", "Добавление картинок")
     send_any = ("send_any", "Любые пересылки")
+    site_config = ("site_config", "Настройка сайта")

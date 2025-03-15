@@ -16,6 +16,7 @@ export default function WorkerPage()
 			{useHasPermission("promote_manager") && <Link to={"/promote_manager"} className={styles.btn}>Повысить до управляющего</Link>}
 			{useHasPermission("manage_games") && <Link to={"/game_settings"} className={styles.btn}>Игра</Link>}
 			{useHasPermission("page_stats") && <Link to={"/stats"} className={styles.btn}>Статистика</Link>}
+			{useHasPermission("site_config") && <Link to={"/config"} className={styles.btn}>Настройки сайта</Link>}
 		</Layout>
 	);
 }

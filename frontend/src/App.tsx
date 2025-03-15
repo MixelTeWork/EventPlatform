@@ -34,6 +34,7 @@ import GameScreenPage from "./pages/GameScreenPage";
 import GameCharactersPage from "./pages/GameCharactersPage";
 import TourneyPage from "./pages/TourneyPage";
 import StatsPage from "./pages/StatsPage";
+import ConfigPage from "./pages/ConfigPage";
 
 export default function App()
 {
@@ -77,6 +78,7 @@ export default function App()
 				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
 				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("page_stats", "/stats", <StatsPage />)}
+				{ProtectedRoute("site_config", "/config", <ConfigPage />)}
 				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}
 				{ProtectedRoute("promote_manager", "/promote_manager", <PromotePage role="manager" />)}
 				{ProtectedRoute("send_any", "/send", <SendPage />)}

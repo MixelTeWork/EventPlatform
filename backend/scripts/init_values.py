@@ -10,6 +10,7 @@ def init_values(dev=False, cmd=False):
     from bfs import db_session, Log, get_datetime_now, randstr, init_db_values
     from data.dialog import Dialog
     from data.game import Game
+    from data.other import Other
     from data.quest import Quest
     from data.tourney import Tourney
     from data.user import User
@@ -21,6 +22,7 @@ def init_values(dev=False, cmd=False):
     db_sess = db_session.create_session()
     user_admin = User.get_admin(db_sess)
 
+    Other.init(db_sess)
     Game.init(db_sess)
     Tourney.init(db_sess)
     Dialog.new(user_admin, {"nodes": []}, 1)
