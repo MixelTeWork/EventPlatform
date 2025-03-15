@@ -20,13 +20,13 @@ def init_values(dev=False, cmd=False):
 
     db_session.global_init(dev)
     db_sess = db_session.create_session()
-    user_admin = User.get_admin(db_sess)
+    user_system = User.get_fake_system()
 
     Other.init(db_sess)
     Game.init(db_sess)
     Tourney.init(db_sess)
-    Dialog.new(user_admin, {"nodes": []}, 1)
-    Dialog.new(user_admin, {"nodes": []}, 2)
+    Dialog.new(user_system, {"nodes": []}, 1, db_sess=db_sess)
+    Dialog.new(user_system, {"nodes": []}, 2, db_sess=db_sess)
 
     quests = [
         (1, "Чудик в углу"),
@@ -39,7 +39,7 @@ def init_values(dev=False, cmd=False):
     now = get_datetime_now()
     for (i, name) in quests:
         quest = Quest(id=i, name=name, description="", reward=0, hidden=False, id_big=randstr(8))
-        Log.added(quest, user_admin, quest.get_creation_changes(), now=now, commit=False)
+        Log.added(quest, user_system, quest.get_creation_changes(), now=now, commit=False, db_sess=db_sess)
         db_sess.add(quest)
 
     db_sess.commit()
