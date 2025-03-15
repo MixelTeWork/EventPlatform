@@ -2,25 +2,33 @@ import { ImgData } from "../api/dataTypes";
 
 export default async function imagefileToData(file: File, name: string)
 {
-	const imgBase64 = await new Promise((resolve: (a: { result: string | ArrayBuffer | null, error: string | DOMException | null }) => void) =>
+	try
 	{
-		var reader = new FileReader();
-		reader.addEventListener("loadend", e =>
+		const imgBase64 = await new Promise((resolve: (a: { result: string | ArrayBuffer | null, error: string | DOMException | null }) => void) =>
 		{
-			resolve({
-				result: reader.result,
-				error: reader.error,
+			var reader = new FileReader();
+			reader.addEventListener("loadend", e =>
+			{
+				resolve({
+					result: reader.result,
+					error: reader.error,
+				});
 			});
+			reader.readAsDataURL(file);
 		});
-		reader.readAsDataURL(file);
-	});
-	if (imgBase64.error)
+		if (imgBase64.error)
+		{
+			console.error(imgBase64.error);
+			return null;
+		}
+		return {
+			data: imgBase64.result,
+			name,
+			error: "",
+		} as ImgData
+	}
+	catch
 	{
-		console.error(imgBase64.error);
 		return null;
 	}
-	return {
-		data: imgBase64.result,
-		name,
-	} as ImgData
 }
