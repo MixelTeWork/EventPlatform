@@ -140,6 +140,11 @@ export function useMutationTourneyEndGame(onSuccess?: () => void, onError?: (err
 	return useMutationAction(() => `/api/tourney/end_game`, onSuccess, onError);
 }
 
+export function useMutationTourneyShowPretourney(onSuccess?: () => void, onError?: (err: any) => void)
+{
+	return useMutationAction(() => `/api/tourney/show_pretourney`, onSuccess, onError);
+}
+
 export function useMutationTourneyEndTourney(onSuccess?: () => void, onError?: (err: any) => void)
 {
 	return useMutationAction(() => `/api/tourney/end_tourney`, onSuccess, onError);

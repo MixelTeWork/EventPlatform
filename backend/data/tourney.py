@@ -169,6 +169,10 @@ class Tourney(SqlAlchemyBase, IdMixin):
         db_sess.commit()
         logging.info(f"end_game {winner=} {err=} {oponent1Id=} {oponent2Id=}")
 
+    def show_pretourney(self):
+        db_sess = Session.object_session(self)
+        Game.reset(db_sess)
+
     def end_tourney(self):
         db_sess = Session.object_session(self)
         game = Game.get(db_sess)

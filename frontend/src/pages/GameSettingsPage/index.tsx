@@ -10,7 +10,7 @@ import displayError from "../../utils/displayError";
 import { useEffect } from "react";
 import { useTitle } from "../../utils/useTtile";
 import TourneyEdit from "./TourneyEdit";
-import { useMutationTourneyEndGame, useMutationTourneyEndTourney, useMutationTourneyReset, useMutationTourneySelectNextGame, useMutationTourneyStartGame, useMutationTourneyUnendTourney, useTourneyData } from "../../api/tourney";
+import { useMutationTourneyEndGame, useMutationTourneyEndTourney, useMutationTourneyReset, useMutationTourneySelectNextGame, useMutationTourneyShowPretourney, useMutationTourneyStartGame, useMutationTourneyUnendTourney, useTourneyData } from "../../api/tourney";
 import ConfirmingButton from "../../components/ConfirmingButton";
 import type { UseMutationResult, UseQueryResult } from "react-query";
 import classNames from "../../utils/classNames";
@@ -39,6 +39,7 @@ export default function GameSettingsPage()
 				</div>
 				<div>
 					<div style={{ flexGrow: 1 }}></div>
+					<ConfirmingButton className={styles.start} h="Отобразить предтурнирный экран?" bt="Отобразить" rt="Предтурнирный экран отображён!" mutation={useMutationTourneyShowPretourney}>Отобразить предтурнирный экран</ConfirmingButton>
 					<ConfirmingButton className={classNames(styles.start, !tourney.data?.ended && styles.hidden)} h="Отменить завершение турнира?" bt="Отменить" rt="Завершение турнира отменено!" mutation={useMutationTourneyUnendTourney}>Отменить завершение турнира</ConfirmingButton>
 					<ConfirmingButton className={classNames(styles.start, tourney.data?.ended && styles.hidden)} h="Завершить турнир?" bt="Завершить" rt="Турнир завершён!" mutation={useMutationTourneyEndTourney}>Завершить турнир</ConfirmingButton>
 				</div>

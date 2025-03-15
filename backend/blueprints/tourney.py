@@ -114,6 +114,17 @@ def end_game(db_sess: Session, user: User):
     return tourney.get_dict()
 
 
+@blueprint.post("/api/tourney/show_pretourney")
+@jwt_required()
+@use_db_session()
+@use_user()
+@permission_required(Operations.manage_games)
+def show_pretourney(db_sess: Session, user: User):
+    tourney = Tourney.get(db_sess)
+    tourney.show_pretourney()
+    return tourney.get_dict()
+
+
 @blueprint.post("/api/tourney/end_tourney")
 @jwt_required()
 @use_db_session()
