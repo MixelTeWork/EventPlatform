@@ -76,7 +76,7 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
         self.count = count - v
 
         if actor is None:
-            actor = User(id=1, actor="system")
+            actor = User(id=1, name="system")
         Log.updated(self, actor, [("count", count, self.count)], db_sess=Session.object_session(self))
 
     def get_dict(self):
