@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 
 from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
 from data._tables import Tables
-from data.user import User
 from data.user_game import UserGame
 
 
@@ -14,7 +13,7 @@ class Game(SqlAlchemyBase, IdMixin):
 
     startStr = Column(String(8), DefaultClause("17:30"), nullable=False)
     duration = Column(Integer, DefaultClause("60"), nullable=False)
-    counter = Column(Integer, DefaultClause("150"), nullable=False)
+    counter = Column(Integer, DefaultClause("150"), nullable=False)  # rename to countdown
     opponent1Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
     opponent2Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
     startTime = Column(DateTime, nullable=True)
