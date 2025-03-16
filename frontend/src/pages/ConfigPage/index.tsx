@@ -7,6 +7,7 @@ import { useMutationTicketLoginEnabled, useTicketLoginEnabled } from "../../api/
 import useStateBool from "../../utils/useStateBool";
 import IconSave from "../../icons/save";
 import IconCancel from "../../icons/cancel";
+import { useEffect } from "react";
 
 export default function ConfigPage()
 {
@@ -14,6 +15,8 @@ export default function ConfigPage()
 	const ticketLoginEnabled_data = useTicketLoginEnabled();
 	const ticketLoginEnabled = useStateBool(ticketLoginEnabled_data.data?.value || false)
 	const mutateTicketLoginEnabled = useMutationTicketLoginEnabled();
+
+	useEffect(() => ticketLoginEnabled.set(ticketLoginEnabled_data.data?.value || false), [ticketLoginEnabled_data.data?.value]);
 
 	return (
 		<Layout centered homeBtn gap="1rem" height100 className={styles.root} forStaff>
