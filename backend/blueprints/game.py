@@ -35,22 +35,22 @@ def set_duration(db_sess: Session, user: User):
     return {"duration": game.duration}
 
 
-@blueprint.route("/api/game/counter")
+@blueprint.route("/api/game/countdown")
 @jwt_required()
 @use_db_session()
 @use_user()
 @permission_required(Operations.manage_games)
-def counter(db_sess: Session, user: User):
+def countdown(db_sess: Session, user: User):
     game = Game.get(db_sess)
     return {"counter": game.counter}
 
 
-@blueprint.post("/api/game/counter")
+@blueprint.post("/api/game/countdown")
 @jwt_required()
 @use_db_session()
 @use_user()
 @permission_required(Operations.manage_games)
-def set_counter(db_sess: Session, user: User):
+def set_countdown(db_sess: Session, user: User):
     counter = get_json_values_from_req("counter")
     game = Game.get(db_sess)
     game.counter = counter

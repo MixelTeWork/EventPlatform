@@ -77,7 +77,7 @@ export function useGameDuration()
 export function useGameCounter()
 {
 	return useQuery("gameCounter", async () =>
-		await fetchJsonGet<GameCounter>("/api/game/counter")
+		await fetchJsonGet<GameCounter>("/api/game/countdown")
 	);
 }
 
@@ -110,7 +110,7 @@ export function useMutationGameCounter(onSuccess?: (data: GameCounter) => void, 
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (counter: number) =>
-			await fetchJsonPost<GameCounter>("/api/game/counter", { counter }),
+			await fetchJsonPost<GameCounter>("/api/game/countdown", { counter }),
 		onSuccess: (data: GameCounter) =>
 		{
 			queryClient.setQueryData("gameCounter", data);
