@@ -1,7 +1,7 @@
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, IdMixin
+from bafser import SqlAlchemyBase, IdMixin
 from data._tables import Tables
 from data.game import Game
 from data.log_user_game import UserGameLog

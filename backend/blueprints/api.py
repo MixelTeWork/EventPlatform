@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bfs import log_frontend_error, use_db_session, use_user
+from bafser import log_frontend_error, use_db_session, use_user
 from data.user import User
 
 

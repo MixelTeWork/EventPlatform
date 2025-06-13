@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, Integer, orm
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
+from bafser import SqlAlchemyBase, IdMixin, get_datetime_now
 from data._tables import Tables
 from data.user import User
 from utils import BigIdMixin

@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, ForeignKey, Integer
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, Log, get_datetime_now
+from bafser import SqlAlchemyBase, Log, get_datetime_now
 from data._tables import Tables
 from data.user import User
 from data.quest import Quest

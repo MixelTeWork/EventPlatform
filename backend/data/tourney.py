@@ -3,7 +3,7 @@ from sqlalchemy import JSON, Boolean, Column, DefaultClause, Integer
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
-from bfs import SqlAlchemyBase, IdMixin
+from bafser import SqlAlchemyBase, IdMixin
 from data._tables import Tables
 from data.game import Game
 from data.tourney_character import TourneyCharacter

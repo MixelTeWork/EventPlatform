@@ -3,7 +3,7 @@ from datetime import timedelta
 from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, func, Integer, String
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, IdMixin, get_datetime_now
+from bafser import SqlAlchemyBase, IdMixin, get_datetime_now
 from data._tables import Tables
 from data.user_game import UserGame
 

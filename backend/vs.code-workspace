@@ -5,10 +5,11 @@
 		}
 	],
 	"settings": {
-        "editor.insertSpaces": true,
-        "editor.formatOnSave": true,
-        "editor.formatOnType": true,
-        "debugpy.debugJustMyCode": false,
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		"debugpy.debugJustMyCode": false,
+		"python.analysis.typeCheckingMode": "off",
 	},
 	"launch": {
 		"version": "0.2.0",
@@ -20,7 +21,10 @@
 				// "program": "${file}",
 				"program": "main.py",
 				"console": "integratedTerminal",
-                "args": ["delay", "dev"]
+				"args": [
+					"delay",
+					"dev"
+				]
 			}
 		]
 	}

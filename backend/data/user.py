@@ -3,7 +3,7 @@ from __future__ import annotations
 from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
 from sqlalchemy.orm import Session
 
-from bfs import UserBase, Log
+from bafser import UserBase, Log
 from utils import BigIdMixin
 
 

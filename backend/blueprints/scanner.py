@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bfs import get_json_values_from_req, use_db_session, use_user
+from bafser import get_json_values_from_req, use_db_session, use_user
 from data._operations import Operations
 from data._roles import Roles
 from data.quest import Quest

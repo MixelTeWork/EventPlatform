@@ -10,7 +10,7 @@ def init_dev_values(dev=False, cmd=False):
 
     import shutil
     from random import randint, seed
-    from bfs import db_session, Log, Image, randstr, get_datetime_now
+    from bafser import db_session, Log, Image, randstr, get_datetime_now
     from data._roles import Roles
     from data.dialog import Dialog
     from data.dialog_character import DialogCharacter
