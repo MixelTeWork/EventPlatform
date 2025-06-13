@@ -7,7 +7,7 @@ def init_values(dev=False, cmd=False):
     if cmd:
         add_parent_to_path()
 
-    from bfs import db_session, Log, get_datetime_now, randstr, init_db_values
+    from bafser import db_session, Log, get_datetime_now, randstr, init_db_values
     from data.dialog import Dialog
     from data.game import Game
     from data.other import Other

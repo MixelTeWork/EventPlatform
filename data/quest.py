@@ -3,7 +3,7 @@ from typing import Literal, Union
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, orm, String
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, Log, ObjMixin
+from bafser import SqlAlchemyBase, Log, ObjMixin
 from data._tables import Tables
 from data.dialog import Dialog
 from data.user import User

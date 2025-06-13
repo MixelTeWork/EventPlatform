@@ -2,7 +2,7 @@ from typing import Type, TypeVar
 from sqlalchemy import Column, String
 from sqlalchemy.orm import Session
 
-from bfs import ObjMixin, randstr
+from bafser import ObjMixin, randstr
 
 T = TypeVar("T", bound="BigIdMixin")
 

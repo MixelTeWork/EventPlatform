@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, orm
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase
+from bafser import SqlAlchemyBase
 from data._tables import Tables
 from data.send import Send
 from data.user import User

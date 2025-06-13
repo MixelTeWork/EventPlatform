@@ -2,7 +2,7 @@ from flask import Blueprint, abort
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bfs import Image, get_json_values_from_req, permission_required, response_msg, use_db_session, use_user
+from bafser import Image, get_json_values_from_req, permission_required, response_msg, use_db_session, use_user
 from data._operations import Operations
 from data.user import User
 

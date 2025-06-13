@@ -6,7 +6,7 @@ from flask import Blueprint, abort, current_app, jsonify, redirect, request
 from flask_jwt_extended import create_access_token, unset_jwt_cookies, set_access_cookies
 from sqlalchemy.orm import Session
 
-from bfs import get_json_values_from_req, randstr, response_msg, use_db_session
+from bafser import get_json_values_from_req, randstr, response_msg, use_db_session
 from data._roles import Roles
 from data.other import Other
 from data.user import User

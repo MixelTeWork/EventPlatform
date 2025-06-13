@@ -2,7 +2,7 @@ import logging
 from sqlalchemy import Boolean, Column, DefaultClause
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, IdMixin
+from bafser import SqlAlchemyBase, IdMixin
 from data._tables import Tables
 
 

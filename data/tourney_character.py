@@ -5,7 +5,7 @@ from flask import url_for
 from sqlalchemy import Column, ForeignKey, Integer, orm, String
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, Log, ObjMixin, Image
+from bafser import SqlAlchemyBase, Log, ObjMixin, Image
 from data._tables import Tables
 from data.user import User
 

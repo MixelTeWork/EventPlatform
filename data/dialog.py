@@ -1,7 +1,7 @@
 from sqlalchemy import Column, JSON
 from sqlalchemy.orm import Session
 
-from bfs import SqlAlchemyBase, Log, ObjMixin
+from bafser import SqlAlchemyBase, Log, ObjMixin
 from data._tables import Tables
 from data.user import User
 

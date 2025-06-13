@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, Integer
 
-from bfs import SqlAlchemyBase, IdMixin
+from bafser import SqlAlchemyBase, IdMixin
 from data._tables import Tables
 
 

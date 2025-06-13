@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bfs import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any, response_msg,
+from bafser import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any, response_msg,
                  response_not_found, use_db_session, use_user, use_user_optional)
 from data._operations import Operations
 from data.quest import Quest
