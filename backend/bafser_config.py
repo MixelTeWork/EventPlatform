@@ -1,5 +1,6 @@
 db_dev_path = "db/dev.db"
 db_path = "platformevent:UR2hqJDbSfQ@platformevent.mysql.pythonanywhere-services.com/platformevent$default"
+db_mysql = True
 sql_echo = False
 
 log_info_path = "logs/log_info.csv"

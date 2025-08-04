@@ -38,7 +38,7 @@ export function relativeDate(date: Date, nowBreak: "second" | "minute" | "hour" 
 	{
 		const sv = (v: string) => [v, ["", "", ""]] as [string, [string, string, string]];
 		if (dY != 0) return [dY, ["год", "года", "лет"]];
-		if (dM != 0) return [dM, ["месяц", "месяца", "месяцов"]];
+		if (dM != 0) return [dM, ["месяц", "месяца", "месяцев"]];
 		if (dD != 0) return [dD, ["день", "дня", "дней"]];
 		if (nowBreak == "day") return sv("Сегодня");
 		if (dh != 0) return [dh, ["час", "часа", "часов"]];

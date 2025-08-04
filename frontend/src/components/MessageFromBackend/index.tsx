@@ -12,10 +12,10 @@ export default function MessageFromBackend()
 	{
 		const timer = setInterval(() =>
 		{
-			const msgCur = getMsg();
+			const msgCur = getMsg() || "";
 			if (msgCur != msg)
 			{
-				msg = msgCur || "";
+				msg = msgCur;
 				setMessage(msg);
 			}
 		}, 1000);
@@ -38,8 +38,8 @@ export default function MessageFromBackend()
 
 function trimQuotes(str: string)
 {
-	if (str.at(0) == '"') str = str.slice(1);
-	if (str.at(-1) == '"') str = str.slice(0, -1);
+	if (str.slice(0, 1) == '"') str = str.slice(1);
+	if (str.slice(-1) == '"') str = str.slice(0, -1);
 	return str;
 }
 
