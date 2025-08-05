@@ -1,0 +1,9 @@
+body {
+	font-family: var(--font-ZeroCool), Arial, Helvetica, sans-serif;
+	--color: white;
+	--c-back: #194659;
+	--c-primary: #194659;
+	--c-secondary: #7fffd4;
+	--c-text: #fff;
+	color: var(--color);
+}

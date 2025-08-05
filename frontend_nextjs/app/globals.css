@@ -1,0 +1,46 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	color: inherit;
+	font: inherit;
+	padding: 0;
+	margin: 0;
+}
+
+html,
+body {
+	min-height: 100vh;
+	min-height: 100dvh;
+}
+
+body {
+	min-width: 320px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-decoration-skip-ink: none;
+	font-family: var(--font-PTSans), Arial, Helvetica, sans-serif;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+button {
+	cursor: pointer;
+	border: none;
+	background-color: transparent;
+}
+button:disabled {
+	cursor: default;
+}
+
+::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: gray;
+}

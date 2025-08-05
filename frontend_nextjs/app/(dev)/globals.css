@@ -1,0 +1,8 @@
+body {
+	--color: #d4d4d4;
+	--c-back: #1e1e1e;
+	--c-primary: #1e1e1e;
+	--c-secondary: #d4d4d4;
+	--c-text: #d4d4d4;
+	color: var(--color);
+}
