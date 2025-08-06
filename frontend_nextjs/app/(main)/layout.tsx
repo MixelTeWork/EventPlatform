@@ -1,10 +1,5 @@
 import "./globals.css";
-import type { Viewport } from "next";
 
-
-export const viewport: Viewport = {
-	themeColor: "#ffdb6c",
-}
 
 export default function Layout({
 	children,

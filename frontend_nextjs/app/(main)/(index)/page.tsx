@@ -7,7 +7,7 @@ import Image from "next/image";
 import useStateBool from "@/utils/useStateBool";
 import AuthByTicket from "./AuthByTicket";
 
-export default function()
+export default function ()
 {
 	const authOpen = useStateBool(false);
 

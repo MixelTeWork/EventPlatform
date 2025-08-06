@@ -7,7 +7,7 @@ import Spinner from "@/components/Spinner";
 import { Form, FormField } from "@/components/Form";
 import { useTitle } from "@/utils/useTtile";
 
-export default function AuthPage()
+export default function ()
 {
 	useTitle("Авторизация");
 	const [error, setError] = useState("");

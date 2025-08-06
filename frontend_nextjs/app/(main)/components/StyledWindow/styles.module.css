@@ -1,0 +1,31 @@
+.root {
+	position: relative;
+	display: flex;
+	min-height: 200px;
+	padding: 8px;
+	border: 5px solid var(--c-text);
+	border-radius: 5px;
+	background: var(--c-secondary);
+	box-shadow: 8px 8px 0 0 var(--c-primary);
+}
+
+.body {
+	position: relative;
+	flex-grow: 1;
+	min-height: 0px;
+	height: 100%;
+}
+
+.body > div {
+	overflow-y: scroll;
+	width: calc(100% + 6px);
+	height: 100%;
+}
+
+.body > div::-webkit-scrollbar {
+	width: 6px;
+}
+.body > div::-webkit-scrollbar-thumb {
+	background: #444;
+	background: linear-gradient(90deg, transparent 3px, var(--c-primary) 3px);
+}

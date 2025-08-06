@@ -1,7 +1,7 @@
 .root {
 	margin: 6px;
 	display: flex;
-	background: linear-gradient(0deg, var(--c-secondary), var(--c-secondary-lighter));
+	background: linear-gradient(0deg, var(--c-secondary-light), var(--c-secondary));
 	color: var(--c-text);
 	border: 4px solid var(--c-text);
 	border-radius: 1px;
@@ -19,5 +19,5 @@
 }
 
 .highlight {
-	outline: 4px solid var(--c-secondary);
+	outline: 4px solid var(--c-secondary-light);
 }

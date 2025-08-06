@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local"
 import "./globals.css";
 import clsx from "@/utils/clsx";
@@ -25,6 +25,10 @@ export const metadata: Metadata = {
 		url: url,
 	},
 };
+
+export const viewport: Viewport = {
+	themeColor: "#ffdb6c",
+}
 
 export default function RootLayout({
 	children,

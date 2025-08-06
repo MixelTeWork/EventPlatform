@@ -10,7 +10,9 @@ import useStateObj from "@/utils/useStateObj";
 import Spinner from "@/components/Spinner";
 import Textbox from "@mCmps/Textbox";
 
-export default function AuthByTicket({ open }: AuthByTicketProps)
+export default function AuthByTicket({ open }: {
+	open: boolean;
+})
 {
 	const error = useStateObj("");
 	// const mutation = useMutationAuthByTicket(error.set);
@@ -79,9 +81,4 @@ export default function AuthByTicket({ open }: AuthByTicketProps)
 			</div>
 		</div>
 	);
-}
-
-interface AuthByTicketProps
-{
-	open: boolean;
 }
