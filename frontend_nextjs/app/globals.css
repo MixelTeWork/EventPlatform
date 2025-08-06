@@ -21,6 +21,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	text-decoration-skip-ink: none;
 	font-family: var(--font-PTSans), Arial, Helvetica, sans-serif;
+	font-size: 1rem;
 }
 
 a {
@@ -30,6 +31,9 @@ a {
 
 h1 {
 	font-size: 2rem;
+}
+h2 {
+	font-size: 1.25rem;
 }
 
 button {

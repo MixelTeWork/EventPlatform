@@ -10,7 +10,8 @@ body {
 	--color: black;
 	--c-back: #ffe87e;
 	--c-primary: #f4ad51;
-	--c-secondary: #3f0000;
-	--c-text: #fff2b5;
+	--c-secondary: #4a0000;
+	--c-secondary-lighter: #380000;
+	--c-text: #fffeda;
 	color: var(--color);
 }

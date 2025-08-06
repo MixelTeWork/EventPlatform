@@ -74,8 +74,8 @@
 	text-align: left;
 	padding: 0.4em 0.4em;
 	font-size: 1rem;
-	color: #F3AD51;
-	background-color: #fffeda;
+	color: var(--c-primary);
+	background-color: var(--c-text);
 }
 .msg2 span {
 	grid-column: 1;

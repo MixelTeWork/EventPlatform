@@ -1,0 +1,54 @@
+.root {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1.8rem;
+}
+
+.back {
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #00000066;
+	border: 2px solid currentColor;
+	border-radius: 0.5rem;
+}
+.back::before {
+	content: "";
+	width: 40%;
+	height: 40%;
+	border: 2px solid currentColor;
+	border-bottom: none;
+	border-right: none;
+	transform: translateX(25%) rotate(-45deg);
+}
+
+.form {
+	background-color: #eeeeee88;
+	border-radius: 0.5em;
+	box-shadow: 0 0 5px 2px #eeeeee88;
+}
+
+.form input {
+	background-color: transparent;
+	border: none;
+	border-bottom: 2px solid gray;
+	border-radius: 0.2rem;
+	max-width: 15em;
+	margin-top: 0.25em;
+	padding: 0.2em;
+	font-size: 0.8rem;
+}
+
+.form button {
+	background-color: #00000011;
+	border-radius: 0.2rem;
+	padding: 0.2em;
+}
