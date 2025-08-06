@@ -43,7 +43,7 @@ export function useMutationAddItem(onSuccess?: (data: StoreItemFull) => void, on
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (itemData: ItemData) =>
-			await fetchJsonPost<StoreItemFull>("/api/store_item", itemData),
+			await fetchJsonPost<StoreItemFull>("/api/store_items", itemData),
 		onSuccess: (data: StoreItemFull) =>
 		{
 			queryListAddItem(queryClient, "storeItemsFull", data);
@@ -68,7 +68,7 @@ export function useMutationEditItem(itemId: number, onSuccess?: (data: StoreItem
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (itemData: ItemData) =>
-			await fetchJsonPost<StoreItemFull>(`/api/store_item/${itemId}`, itemData),
+			await fetchJsonPost<StoreItemFull>(`/api/store_items/${itemId}`, itemData),
 		onSuccess: (data: StoreItemFull) =>
 		{
 			queryListUpdateItem(queryClient, "storeItemsFull", data);
@@ -85,7 +85,7 @@ export function useMutationDecreaseItem(itemId: number, onSuccess?: (data: Store
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () =>
-			await fetchJsonPost<StoreItemFull>(`/api/store_item/${itemId}/decrease`),
+			await fetchJsonPost<StoreItemFull>(`/api/store_items/${itemId}/decrease`),
 		onSuccess: (data: StoreItemFull) =>
 		{
 			queryListUpdateItem(queryClient, "storeItemsFull", data);
@@ -102,7 +102,7 @@ export function useMutationDeleteItem(itemId: number, onSuccess?: () => void, on
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () =>
-			await fetchDelete(`/api/store_item/${itemId}`),
+			await fetchDelete(`/api/store_items/${itemId}`),
 		onSuccess: () =>
 		{
 			queryListDeleteItem(queryClient, "storeItemsFull", itemId);

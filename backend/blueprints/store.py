@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
 from bafser import (Image, get_json_values_from_req, jsonify_list, permission_required, permission_required_any,
-                 response_msg, response_not_found, use_db_session, use_user)
+                    response_msg, response_not_found, use_db_session, use_user)
 from data._operations import Operations
 from data.store_item import StoreItem
 from data.user import User
@@ -29,7 +29,7 @@ def store_items_full(db_sess: Session, user: User):
     return jsonify_list(items, "get_dict_full")
 
 
-@blueprint.post("/api/store_item")
+@blueprint.post("/api/store_items")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -47,7 +47,7 @@ def store_item_add(db_sess: Session, user: User):
     return item.get_dict_full()
 
 
-@blueprint.post("/api/store_item/<int:itemId>")
+@blueprint.post("/api/store_items/<int:itemId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -71,7 +71,7 @@ def store_item_patch(itemId, db_sess: Session, user: User):
     return item.get_dict_full()
 
 
-@blueprint.post("/api/store_item/<int:itemId>/decrease")
+@blueprint.post("/api/store_items/<int:itemId>/decrease")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -86,7 +86,7 @@ def store_item_decrease(itemId, db_sess: Session, user: User):
     return item.get_dict_full()
 
 
-@blueprint.delete("/api/store_item/<int:itemId>")
+@blueprint.delete("/api/store_items/<int:itemId>")
 @jwt_required()
 @use_db_session()
 @use_user()

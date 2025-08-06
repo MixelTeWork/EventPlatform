@@ -118,7 +118,7 @@ def docs():
             "__desc__": "Get full store items",
             "response": "StoreItemFull[]",
         },
-        "/api/store_item POST": {
+        "/api/store_items POST": {
             "__desc__": "Add item to store",
             "request": {
                 "name": "string",
@@ -128,7 +128,7 @@ def docs():
             },
             "response": "StoreItemFull",
         },
-        "/api/store_item/<int:itemId> POST": {
+        "/api/store_items/<int:itemId> POST": {
             "__desc__": "Edit store item",
             "request": {
                 "name": "?string",
@@ -138,11 +138,11 @@ def docs():
             },
             "response": "StoreItemFull",
         },
-        "/api/store_item/<int:itemId>/decrease POST": {
+        "/api/store_items/<int:itemId>/decrease POST": {
             "__desc__": "Decrease item count by one",
             "response": "StoreItemFull",
         },
-        "/api/store_item/<int:itemId> DELETE": {
+        "/api/store_items/<int:itemId> DELETE": {
             "__desc__": "Delete store item",
         },
         "/api/scanner": {
