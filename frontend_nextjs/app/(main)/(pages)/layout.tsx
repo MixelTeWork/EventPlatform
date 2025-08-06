@@ -11,7 +11,9 @@ export default function Layout({
 	return (
 		<div className={styles.root}>
 			<Header />
-			<h1 className={styles.title}>Underparty</h1>
+			<div className={styles.title}>
+				<h1>Underparty</h1>
+			</div>
 			<div className={styles.body}>
 				{children}
 			</div>

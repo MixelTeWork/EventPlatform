@@ -36,7 +36,6 @@ export interface ItemData
 	img?: ImgData,
 }
 
-
 export const useMutationStoreItemAdd = useStdMutation<ItemData, StoreItemFull>(url, (qc, data) =>
 {
 	queryListAddItem(qc, queryKeyFull(), data);

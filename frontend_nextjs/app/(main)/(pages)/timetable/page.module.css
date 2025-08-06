@@ -44,7 +44,7 @@
 	color: inherit;
 	background: transparent;
 }
-
+/*
 @media screen and (max-width: 355px) {
 	.btn {
 		font-size: 0.85rem;
@@ -67,18 +67,6 @@
 @media screen and (max-height: 600px) {
 	.root {
 		flex-direction: row;
-		padding: 0;
-		padding-left: 1rem;
-	}
-	.title {
-		width: 2rem;
-		line-height: 0.8;
-		word-break: break-all;
-		align-self: center;
-		transform: translateY(1rem);
-	}
-	.root {
-		flex-direction: row;
 		margin-bottom: 0;
 	}
 	.list {
@@ -88,4 +76,4 @@
 		flex-direction: column;
 		gap: 0.25rem;
 	}
-}
+} */

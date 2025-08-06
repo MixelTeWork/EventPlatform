@@ -92,20 +92,9 @@
 	content: "Sold!";
 }
 
-@media screen and (max-height: 500px) {
-	.root {
-		flex-direction: row;
-		padding: 0;
-		padding-left: 1rem;
-	}
-	.title {
-		width: 2rem;
-		line-height: 0.8;
-		word-break: break-all;
-		align-self: center;
-		transform: translateY(1rem);
-	}
+/* @media screen and (max-height: 500px) {
 	.list {
 		margin: 1rem 1rem -1rem -0.5rem;
+		margin: 0.25rem 0.25rem 0 0;
 	}
-}
+} */

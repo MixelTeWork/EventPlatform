@@ -63,7 +63,7 @@
 	padding: 0.7em 2em;
 	font-size: 1.2em;
 }
-
+/*
 @media screen and (max-width: 355px) {
 	.btn {
 		font-size: 0.7rem;
@@ -71,11 +71,6 @@
 }
 
 @media screen and (max-height: 500px) {
-	.root {
-		flex-direction: row;
-		padding: 0;
-		padding-left: 1rem;
-	}
 	.window {
 		margin-bottom: 0.5rem;
 	}
@@ -90,4 +85,4 @@
 	.btn {
 		font-size: 0.7rem;
 	}
-}
+} */
