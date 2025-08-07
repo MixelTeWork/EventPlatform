@@ -8,7 +8,7 @@ import { useTitle } from "@/utils/useTtile";
 import { useMutationAuth } from "@/api/user";
 import useRedirectForAuthed from "@/utils/useRedirectForAuthed";
 
-export default function ()
+export default function Page()
 {
 	useTitle("Авторизация");
 	useRedirectForAuthed("/map");

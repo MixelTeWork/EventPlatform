@@ -8,7 +8,7 @@ import useStateBool from "@/utils/useStateBool";
 import AuthByTicket from "./AuthByTicket";
 import useRedirectForAuthed from "@/utils/useRedirectForAuthed";
 
-export default function ()
+export default function Page()
 {
 	useRedirectForAuthed("/map");
 	const authOpen = useStateBool(false);

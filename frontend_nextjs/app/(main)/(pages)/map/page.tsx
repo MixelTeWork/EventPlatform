@@ -23,15 +23,15 @@ import Spinner from "@/components/Spinner";
 import usePreloadImgs from "@/utils/usePreloadImgs";
 import StyledWindow from "@mCmps/StyledWindow";
 
-export default function ()
+export default function Page()
 {
 	useTitle("Карта");
 	// usePreloadGameDialogImgs();
 	usePreloadImgs(map1, map2, map3, mark_0, mark_1_1, mark_1_2, mark_1_3, mark_2_1, mark_2_2);
 	// const dialog = useGameDialog();
-	const dialog = { run: (...a: any) => { throw new Error("Not Implemented"); }, el: () => { } };
+	const dialog = { run: (...a: unknown[]) => { throw new Error("Not Implemented"); }, el: () => { } };
 	// const mutationOpen = useMutationOpenQuest();
-	const mutationOpen = { mutate: (...a: any) => { throw new Error("Not Implemented"); } };
+	const mutationOpen = { mutate: (...a: unknown[]) => { throw new Error("Not Implemented"); } };
 	interface Quest { dialogId: number, opened: boolean, id: number, completed: boolean, name: string, reward: string, description: string }
 	const openedQuest = useStateObjExt<Quest | null>(null, v =>
 	{

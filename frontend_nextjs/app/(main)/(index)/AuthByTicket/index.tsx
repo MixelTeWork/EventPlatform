@@ -31,7 +31,7 @@ export default function AuthByTicket({ open }: {
 					<div className={styles.msg2}>
 						<Image src={avatar} alt="Avatar" />
 						<h2 className="title">Админ</h2>
-						<span>Добро пожаловать на Underparty "игрок"! Для того, чтобы попасть на сайт мероприятия, загрузи свой билет</span>
+						<span>{`Добро пожаловать на Underparty "игрок"! Для того, чтобы попасть на сайт мероприятия, загрузи свой билет`}</span>
 					</div>
 				</Textbox>
 				<Textbox className={clsx(styles.msg2box, styles.msg_error, error.v && styles.msg_error_open)}>
@@ -52,7 +52,9 @@ export default function AuthByTicket({ open }: {
 							onChange={async e =>
 							{
 								error.set("");
-								const imgData = await imagefileToData(e.target?.files?.[0]!)
+								const file = e.target?.files?.[0];
+								if (!file) return;
+								const imgData = await imagefileToData(file);
 								e.target.value = "";
 								if (!imgData) return;
 

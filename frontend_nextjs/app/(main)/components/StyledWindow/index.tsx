@@ -6,7 +6,7 @@ export default function StyledWindow({ children, title = "Underparty", footer, c
 	title?: string,
 	footer?: React.ReactNode,
 	className?: string,
-	scrollUpdate?: any,
+	scrollUpdate?: unknown,
 	onClose?: () => void,
 } & React.PropsWithChildren)
 {

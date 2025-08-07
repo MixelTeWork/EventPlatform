@@ -18,7 +18,7 @@ export default function Layout({
 		if (user.isPending) return;
 		if (user.data?.auth) return;
 		router.push("/");
-	}, [user.status, user.data?.auth])
+	}, [user.isPending, user.data?.auth, router])
 	if (user.data?.auth) return children;
 	return <Loading />
 }

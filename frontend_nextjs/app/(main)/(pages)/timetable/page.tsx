@@ -5,7 +5,7 @@ import useStateObj from "@/utils/useStateObj";
 import StyledWindow from "@mCmps/StyledWindow";
 import Textbox from "@mCmps/Textbox";
 
-export default function ()
+export default function Page()
 {
 	useTitle("Расписание");
 	const timetable = useStateObj(0);

@@ -8,6 +8,7 @@ from scripts.init_dev_values import init_dev_values
 
 app, run = create_app(__name__, AppConfig(
     CACHE_MAX_AGE=604800,
+    PAGE404="404.html",
     JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=24),
     MESSAGE_TO_FRONTEND="",
     DEV_MODE="dev" in sys.argv,

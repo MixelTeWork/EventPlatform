@@ -1,6 +1,7 @@
 "use client"
 import styles from "./page.module.css"
 import Link from "next/link";
+import Image from "next/image";
 import clsx from "@/utils/clsx";
 import displayError from "@/utils/displayError";
 import { useTitle } from "@/utils/useTtile";
@@ -9,7 +10,7 @@ import StyledWindow from "@mCmps/StyledWindow";
 import Textbox from "@mCmps/Textbox";
 import { useStoreItems } from "@/api/store";
 
-export default function ()
+export default function Page()
 {
 	useTitle("Магазин");
 	const items = useStoreItems();
@@ -23,7 +24,7 @@ export default function ()
 					<Link href="/scanner" className={clsx(styles.item, item.count == "few" && styles.item_few, item.count == "no" && styles.item_ended)} key={item.id}>
 						<div className={styles.item__img}>
 							<div>
-								{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
+								{item.img ? <Image src={item.img} alt="Товар" /> : <div></div>}
 							</div>
 						</div>
 						<Textbox small btn className={styles.item__desc}>

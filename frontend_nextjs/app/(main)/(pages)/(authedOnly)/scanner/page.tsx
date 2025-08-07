@@ -10,7 +10,7 @@ import Textbox from "@mCmps/Textbox";
 import { useMutationScanner, type ScannerRes } from "@/api/scanner";
 import Scanner from "./Scanner";
 
-export default function ()
+export default function Page()
 {
 	useTitle("Сканер");
 	const popupOpen = useStateBool(false);

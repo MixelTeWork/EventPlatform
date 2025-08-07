@@ -51,7 +51,7 @@ export default function Header({ homeBtn = false }: {
 				<div>{user.data?.balance} М</div>
 			</div>
 			<button className={styles.img} onClick={() => user.data?.auth ? menuOpen.set(v => !v) : router.push("/")}>
-				<Image src={TTYPES[user.data?.ticketTId!] || avatar} alt="avatar" />
+				<Image src={TTYPES[user.data?.ticketTId ?? 0] || avatar} alt="avatar" />
 			</button>
 		</div>
 	)

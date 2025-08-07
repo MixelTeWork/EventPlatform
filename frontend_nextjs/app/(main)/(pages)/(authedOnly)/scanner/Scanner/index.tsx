@@ -58,7 +58,7 @@ export default function Scanner<Res, Data>({ useMutation, onScan, formatMsg, onR
 
 interface ScannerProps<Res, Data>
 {
-	useMutation: (onSuccess: (data: Res) => void, onError: (err: any) => void) => UseMutationResult<Res, any, Data, unknown>,
+	useMutation: (onSuccess: (data: Res) => void, onError: (err: unknown) => void) => UseMutationResult<Res, unknown, Data, unknown>,
 	onScan: (scanned: string) => Data | null,
 	onRes?: (res: Res) => void,
 	formatMsg: (res: Res) => string,
