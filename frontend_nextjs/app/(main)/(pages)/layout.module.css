@@ -25,9 +25,9 @@
 .title h1 {
 	font-size: 2rem;
 	text-transform: uppercase;
-	color: #fff2b5;
-	text-shadow: 0.1em 0 #380000, -0.1em 0 #380000, 0 0.1em #380000, 0 -0.1em #380000,
-		0.05em 0.05em #380000, -0.05em -0.05em #380000, 0.05em -0.05em #380000, -0.05em 0.05em #380000;
+	color: var(--c-text);
+	text-shadow: 0.1em 0 var(--c-secondary), -0.1em 0 var(--c-secondary), 0 0.1em var(--c-secondary), 0 -0.1em var(--c-secondary),
+		0.05em 0.05em var(--c-secondary), -0.05em -0.05em var(--c-secondary), 0.05em -0.05em var(--c-secondary), -0.05em 0.05em var(--c-secondary);
 }
 
 @media screen and (max-width: 355px) {

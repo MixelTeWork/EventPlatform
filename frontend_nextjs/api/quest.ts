@@ -1,6 +1,7 @@
-import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem, useStdQuery } from "@/utils/query";
+import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem, stdQuery } from "@/utils/query";
 import { itemDeleteMutation, itemMutation, stdMutation, stdMutationNoRes } from "@/utils/mutations";
-// import type { GameDialogData } from "./dialog";
+import type { GameDialogData } from "./dialog";
+import { queryKey as queryKeyDialog } from "./dialog"
 
 export interface Quest
 {
@@ -27,11 +28,11 @@ export interface QuestFull
 
 const url = "/api/quests"
 const urlFull = "/api/quests_full"
-const queryKey = () => ["quests"];
+export const queryKey = () => ["quests"];
 const queryKeyFull = () => ["quests_full"];
 
-export const useQuests = useStdQuery<Quest[]>(queryKey(), url);
-export const useQuestsFull = useStdQuery<QuestFull[]>(queryKeyFull(), urlFull);
+export const useQuests = stdQuery<Quest[]>(queryKey(), url);
+export const useQuestsFull = stdQuery<QuestFull[]>(queryKeyFull(), urlFull);
 
 export interface QuestData
 {
@@ -39,28 +40,28 @@ export interface QuestData
 	description: string,
 	reward: number,
 	hidden: boolean,
-	// dialog1?: GameDialogData | false,
-	// dialog2?: GameDialogData | false,
+	dialog1?: GameDialogData | false,
+	dialog2?: GameDialogData | false,
 }
 
-export const useMutationAddQuest = stdMutation<QuestData, QuestFull>(url, (qc, data) =>
+export const useMutationQuestAdd = stdMutation<QuestData, QuestFull>(url, (qc, data) =>
 {
 	queryListAddItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
 });
 
-export const useMutationEditQuest = itemMutation<QuestData, QuestFull>(url, (qc, data) =>
+export const useMutationQuestEdit = itemMutation<QuestData, QuestFull>(url, (qc, data) =>
 {
 	queryListUpdateItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
-	// queryInvalidate(qc, ["dialogs", data.dialog1Id]);
-	// queryInvalidate(qc, ["dialogs", data.dialog2Id]);
+	if (data.dialog1Id != null) queryInvalidate(qc, queryKeyDialog(data.dialog1Id));
+	if (data.dialog2Id != null) queryInvalidate(qc, queryKeyDialog(data.dialog2Id));
 });
 
-export const useMutationDeleteQuest = itemDeleteMutation(url, (qc, id) =>
+export const useMutationQuestDelete = itemDeleteMutation(url, (qc, id) =>
 {
 	queryListDeleteItem(qc, queryKeyFull(), id);
 	queryInvalidate(qc, queryKey());
 });
 
-export const useMutationOpenQuest = stdMutationNoRes<number>(id => `${url}/${id}/open`);
+export const useMutationQuestOpen = stdMutationNoRes<number>(id => `${url}/${id}/open`);

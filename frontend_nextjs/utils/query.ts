@@ -1,12 +1,26 @@
 import { useQuery, type QueryClient, type QueryKey } from "@tanstack/react-query";
 import { fetchJsonGet } from "./fetch";
 
-export function useStdQuery<T>(queryKey: QueryKey, url: string)
+export function stdQuery<T>(queryKey: QueryKey, url: string)
 {
 	return () => useQuery({
 		queryKey: queryKey,
 		queryFn: async () => await fetchJsonGet<T>(url)
 	});
+}
+export function itemQuery<T>(queryKey: (id: number) => QueryKey, url: TItemUrl)
+{
+	return (id: number, enabled = true) => useQuery({
+		queryKey: queryKey(id),
+		queryFn: async () => await fetchJsonGet<T>(itemUrl(url, id)),
+		enabled: enabled && id >= 0,
+	});
+}
+
+type TItemUrl = string | ((id: number) => string);
+function itemUrl(url: TItemUrl, id: number)
+{
+	return typeof url == "function" ? url(id) : `${url}/${id}`;
 }
 
 export function queryInvalidate(queryClient: QueryClient, queryKey: QueryKey, exact = true)

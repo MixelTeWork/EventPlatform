@@ -1,4 +1,4 @@
-import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem, useStdQuery } from "@/utils/query";
+import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem, stdQuery } from "@/utils/query";
 import { itemDeleteMutation, itemMutation, stdMutation } from "@/utils/mutations";
 import type { ImgData } from "./dataTypes";
 
@@ -26,8 +26,8 @@ const urlFull = "/api/store_items_full"
 const queryKey = () => ["storeItems"];
 const queryKeyFull = () => ["storeItemsFull"];
 
-export const useStoreItems = useStdQuery<StoreItem[]>(queryKey(), url);
-export const useStoreItemsFull = useStdQuery<StoreItemFull[]>(queryKeyFull(), urlFull);
+export const useStoreItems = stdQuery<StoreItem[]>(queryKey(), url);
+export const useStoreItemsFull = stdQuery<StoreItemFull[]>(queryKeyFull(), urlFull);
 
 export interface ItemData
 {

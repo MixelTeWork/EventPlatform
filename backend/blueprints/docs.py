@@ -194,7 +194,7 @@ def docs():
             "__desc__": "Get all dialog characters",
             "response": "DialogCharacter[]",
         },
-        "/api/dialog/character POST": {
+        "/api/dialog/characters POST": {
             "__desc__": "Add character",
             "request": {
                 "name": "string",
@@ -203,7 +203,7 @@ def docs():
             },
             "response": "DialogCharacter",
         },
-        "/api/dialog/character/<int:characterId> POST": {
+        "/api/dialog/characters/<int:characterId> POST": {
             "__desc__": "Edit character",
             "request": {
                 "name": "?string",
@@ -212,7 +212,7 @@ def docs():
             },
             "response": "DialogCharacter",
         },
-        "/api/dialog/character/<int:characterId> DELETE": {
+        "/api/dialog/characters/<int:characterId> DELETE": {
             "__desc__": "Delete character",
         },
         "/api/tourney": {

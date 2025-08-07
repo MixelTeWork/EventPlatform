@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, ResponseMsg } from "./dataTypes";
-import { queryInvalidate, useStdQuery } from "@/utils/query";
+import { queryInvalidate, stdQuery } from "@/utils/query";
 import { stdMutation, stdMutationNoRes } from "@/utils/mutations";
 import { fetchJsonPost } from "@/utils/fetch";
+import { queryKey as queryKeyQuest } from "./quest"
 // turn to class and blend with operations.ts
 export interface User
 {
@@ -49,10 +50,9 @@ const urlList = "/api/users"
 const queryKey = () => ["user"];
 const queryKeyList = () => ["users"];
 
-export function createEmptyUser(): User
-{
-	return { auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1, gameOpened: false, ticketTId: -1 };
-}
+export const createEmptyUser: (() => User) = () =>
+	({ auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1, gameOpened: false, ticketTId: -1 });
+
 
 export function useUpdateUser()
 {
@@ -79,7 +79,7 @@ export function useUser()
 	});
 }
 
-export const useUsers = useStdQuery<UserFull[]>(queryKeyList(), urlList);
+export const useUsers = stdQuery<UserFull[]>(queryKeyList(), urlList);
 
 interface ChangePasswordData { password: string; }
 export const useMutationChangePassword = stdMutationNoRes<ChangePasswordData>(`${url}/change_password`);
@@ -94,7 +94,7 @@ interface SetGroup { group: UserGroup; }
 export const useMutationSetGroup = stdMutation<SetGroup, SetGroup>(`${url}/set_group`, (qc, data) =>
 {
 	qc.setQueryData(queryKey(), (user?: User) => (user ? { ...user, group: data.group } : undefined));
-	// queryInvalidate(qc, "quests");
+	queryInvalidate(qc, queryKeyQuest());
 });
 
 export const useMutationOpenGame = stdMutationNoRes<void>(`${url}/open_game`, qc =>

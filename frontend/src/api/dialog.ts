@@ -94,7 +94,7 @@ export function useMutationAddCharacter(onSuccess?: (data: GameDialogCharacter) 
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (characterData: CharacterData) =>
-			await fetchJsonPost<GameDialogCharacter>("/api/dialog/character", characterData),
+			await fetchJsonPost<GameDialogCharacter>("/api/dialog/characters", characterData),
 		onSuccess: (data: GameDialogCharacter) =>
 		{
 			if (queryClient.getQueryState("dialogCharacters")?.status == "success")
@@ -124,7 +124,7 @@ export function useMutationEditCharacter(characterId: number, onSuccess?: (data:
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (characterData: CharacterData) =>
-			await fetchJsonPost<GameDialogCharacter>(`/api/dialog/character/${characterId}`, characterData),
+			await fetchJsonPost<GameDialogCharacter>(`/api/dialog/characters/${characterId}`, characterData),
 		onSuccess: (data: GameDialogCharacter) =>
 		{
 			if (queryClient.getQueryState("dialogCharacters")?.status == "success")
@@ -147,7 +147,7 @@ export function useMutationDeleteCharacter(characterId: number, onSuccess?: () =
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () =>
-			await fetchDelete(`/api/dialog/character/${characterId}`),
+			await fetchDelete(`/api/dialog/characters/${characterId}`),
 		onSuccess: () =>
 		{
 			if (queryClient.getQueryState("dialogCharacters")?.status == "success")
