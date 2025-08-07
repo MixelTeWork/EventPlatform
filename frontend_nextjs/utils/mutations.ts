@@ -1,14 +1,14 @@
 import { QueryClient, useQueryClient, useMutation } from "@tanstack/react-query";
 import { fetchDelete, fetchJsonPost, fetchPost } from "./fetch";
 
-export function stdMutation<TData, TRes>(url: string, onSuccessM?: (queryClient: QueryClient, data: TRes) => void)
+export function stdMutation<TData, TRes>(url: TUrl<TData>, onSuccessM?: (queryClient: QueryClient, data: TRes) => void)
 {
 	return (onSuccess?: (data: TRes) => void, onError?: (err: any) => void) =>
 	{
 		const queryClient = useQueryClient();
 		const mutation = useMutation({
 			mutationFn: async (data: TData) =>
-				await fetchJsonPost<TRes>(url, data),
+				await fetchJsonPost<TRes>(getUrl(url, data), data),
 			onSuccess: (data: TRes) =>
 			{
 				onSuccessM?.(queryClient, data);
@@ -20,7 +20,7 @@ export function stdMutation<TData, TRes>(url: string, onSuccessM?: (queryClient:
 	}
 }
 
-export function stdMutationNoRes<TData>(url: string, onSuccessM?: (queryClient: QueryClient, data: TData) => void)
+export function stdMutationNoRes<TData>(url: TUrl<TData>, onSuccessM?: (queryClient: QueryClient, data: TData) => void)
 {
 	return (onSuccess?: () => void, onError?: (err: any) => void) =>
 	{
@@ -28,7 +28,7 @@ export function stdMutationNoRes<TData>(url: string, onSuccessM?: (queryClient: 
 		const mutation = useMutation({
 			mutationFn: async (data: TData) =>
 			{
-				await fetchPost(url, data);
+				await fetchPost(getUrl(url, data), data);
 				return data;
 			},
 			onSuccess: (data: TData) =>
@@ -40,6 +40,12 @@ export function stdMutationNoRes<TData>(url: string, onSuccessM?: (queryClient: 
 		});
 		return mutation;
 	}
+}
+
+type TUrl<T> = string | ((data: T) => string);
+function getUrl<T>(url: TUrl<T>, data: T)
+{
+	return typeof url == "function" ? url(data) : url;
 }
 
 type TItemUrl = string | ((id: number) => string);

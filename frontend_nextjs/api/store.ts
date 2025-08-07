@@ -41,19 +41,22 @@ export const useMutationStoreItemAdd = stdMutation<ItemData, StoreItemFull>(url,
 {
 	queryListAddItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
-})
+});
+
 export const useMutationStoreItemEdit = itemMutation<ItemData, StoreItemFull>(url, (qc, data) =>
 {
 	queryListUpdateItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
-})
+});
+
 export const useMutationStoreItemDecrease = itemMutation<void, StoreItemFull>(id => `${url}/${id}/decrease`, (qc, data) =>
 {
 	queryListUpdateItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
-})
+});
+
 export const useMutationStoreItemDelete = itemDeleteMutation(url, (qc, id) =>
 {
 	queryListDeleteItem(qc, queryKeyFull(), id);
 	queryInvalidate(qc, queryKey());
-})
+});

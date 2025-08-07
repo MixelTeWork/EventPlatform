@@ -10,18 +10,18 @@ import mark_1_3 from "./marks/1_3.png";
 import mark_2_1 from "./marks/2_1.png";
 import mark_2_2 from "./marks/2_2.png";
 import InteractiveMap from "./InteractiveMap";
-// import useGameDialog from "../../components/GameDialog";
-// import { useMutationOpenQuest, useQuests, type Quest } from "../../api/quest";
-// import displayError from "../../utils/displayError";
-// import usePreloadGameDialogImgs from "../../components/GameDialog/usePreloadGameDialogImgs";
-import { useTitle } from "@/utils/useTtile";
-import useStateObj, { useStateObjExt } from "@/utils/useStateObj";
 import type { StaticImageData } from "next/image";
 import Link from "next/link";
-import Textbox from "@mCmps/Textbox";
-import Spinner from "@/components/Spinner";
+// import useGameDialog from "../../components/GameDialog";
+// import usePreloadGameDialogImgs from "../../components/GameDialog/usePreloadGameDialogImgs";
+import displayError from "@/utils/displayError";
 import usePreloadImgs from "@/utils/usePreloadImgs";
+import useStateObj, { useStateObjExt } from "@/utils/useStateObj";
+import { useTitle } from "@/utils/useTtile";
+import Spinner from "@/components/Spinner";
+import Textbox from "@mCmps/Textbox";
 import StyledWindow from "@mCmps/StyledWindow";
+import { useMutationOpenQuest, useQuests, type Quest } from "@/api/quest";
 
 export default function Page()
 {
@@ -30,9 +30,7 @@ export default function Page()
 	usePreloadImgs(map1, map2, map3, mark_0, mark_1_1, mark_1_2, mark_1_3, mark_2_1, mark_2_2);
 	// const dialog = useGameDialog();
 	const dialog = { run: (...a: unknown[]) => { throw new Error("Not Implemented"); }, el: () => { } };
-	// const mutationOpen = useMutationOpenQuest();
-	const mutationOpen = { mutate: (...a: unknown[]) => { throw new Error("Not Implemented"); } };
-	interface Quest { dialogId: number, opened: boolean, id: number, completed: boolean, name: string, reward: string, description: string }
+	const mutationOpen = useMutationOpenQuest();
 	const openedQuest = useStateObjExt<Quest | null>(null, v =>
 	{
 		if (v && v.dialogId != null && !v.opened)
@@ -42,8 +40,7 @@ export default function Page()
 				v.opened = true;
 			});
 	});
-	// const quests = useQuests();
-	const quests = { isLoading: false, isSuccess: false, data: [] as Quest[] };
+	const quests = useQuests();
 	const map = useStateObj(0, () => openedQuest.set(null));
 
 	function questMark(id: number, img: StaticImageData, x: number, y: number, w: number, h: number)
@@ -74,7 +71,7 @@ export default function Page()
 		{/* <GameDialogGreetings /> */}
 		{quests.isLoading && <Spinner />}
 		<StyledWindow className={styles.window} onClose={() => openedQuest.set(null)}>
-			{/* {displayError(quests)} */}
+			{displayError(quests)}
 			<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
 				<InteractiveMap
 					img={[map1, map2, map3][map.v]}

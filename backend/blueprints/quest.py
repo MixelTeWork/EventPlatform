@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
 from bafser import (get_json_values_from_req, jsonify_list, permission_required, permission_required_any, response_msg,
-                 response_not_found, use_db_session, use_user, use_user_optional)
+                    response_not_found, use_db_session, use_user, use_user_optional)
 from data._operations import Operations
 from data.quest import Quest
 from data.user import User
@@ -33,7 +33,7 @@ def quests_full(db_sess: Session, user: User):
     return jsonify_list(quests, "get_dict_full")
 
 
-@blueprint.post("/api/quest")
+@blueprint.post("/api/quests")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -46,7 +46,7 @@ def quest_add(db_sess: Session, user: User):
     return quest.get_dict_full()
 
 
-@blueprint.post("/api/quest/<int:questId>")
+@blueprint.post("/api/quests/<int:questId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -64,7 +64,7 @@ def quest_edit(questId, db_sess: Session, user: User):
     return quest.get_dict_full()
 
 
-@blueprint.delete("/api/quest/<int:questId>")
+@blueprint.delete("/api/quests/<int:questId>")
 @jwt_required()
 @use_db_session()
 @use_user()
@@ -79,7 +79,7 @@ def quest_delete(questId, db_sess: Session, user: User):
     return response_msg("ok")
 
 
-@blueprint.post("/api/quest/<int:questId>/open")
+@blueprint.post("/api/quests/<int:questId>/open")
 @jwt_required()
 @use_db_session()
 @use_user()

@@ -82,7 +82,7 @@ def docs():
             "__desc__": "Get full quests",
             "response": "QuestFull[]",
         },
-        "/api/quest POST": {
+        "/api/quests POST": {
             "__desc__": "Add quest to store",
             "request": {
                 "name": "string",
@@ -92,7 +92,7 @@ def docs():
             },
             "response": "QuestFull",
         },
-        "/api/quest/<int:questId> POST": {
+        "/api/quests/<int:questId> POST": {
             "__desc__": "Edit quest",
             "request": {
                 "name": "?string",
@@ -104,10 +104,10 @@ def docs():
             },
             "response": "QuestFull",
         },
-        "/api/quest/<int:questId>/open POST": {
+        "/api/quests/<int:questId>/open POST": {
             "__desc__": "Mark quest as opened",
         },
-        "/api/quest/<int:questId> DELETE": {
+        "/api/quests/<int:questId> DELETE": {
             "__desc__": "Delete quest",
         },
         "/api/store_items": {

@@ -46,7 +46,7 @@ export function useMutationAddQuest(onSuccess?: (data: QuestFull) => void, onErr
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (questData: QuestData) =>
-			await fetchJsonPost<QuestFull>("/api/quest", questData),
+			await fetchJsonPost<QuestFull>("/api/quests", questData),
 		onSuccess: (data: QuestFull) =>
 		{
 			queryListAddItem(queryClient, "quests_full", data);
@@ -73,7 +73,7 @@ export function useMutationEditQuest(questId: number, onSuccess?: (data: QuestFu
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async (questData: QuestData) =>
-			await fetchJsonPost<QuestFull>(`/api/quest/${questId}`, questData),
+			await fetchJsonPost<QuestFull>(`/api/quests/${questId}`, questData),
 		onSuccess: (data: QuestFull) =>
 		{
 			queryListUpdateItem(queryClient, "quests_full", data);
@@ -92,7 +92,7 @@ export function useMutationDeleteQuest(questId: number, onSuccess?: () => void, 
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () =>
-			await fetchDelete(`/api/quest/${questId}`),
+			await fetchDelete(`/api/quests/${questId}`),
 		onSuccess: () =>
 		{
 			queryListDeleteItem(queryClient, "quests_full", questId);
@@ -109,7 +109,7 @@ export function useMutationOpenQuest(onSuccess?: () => void, onError?: (err: any
 {
 	const mutation = useMutation({
 		mutationFn: async (questId: number) =>
-			await fetchPost(`/api/quest/${questId}/open`),
+			await fetchPost(`/api/quests/${questId}/open`),
 		onSuccess,
 		onError,
 	});
