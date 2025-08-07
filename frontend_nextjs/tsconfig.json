@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@mCmps/*": ["./app/(main)/components/*"],
+      "@sCmps/*": ["./app/(staff)/components/*"],
       "@icons/*": ["./components/icons/*"],
       "@/*": ["./*"],
     }

@@ -1,5 +1,6 @@
-import "./globals.css";
+import styles from "./layout.module.css"
 import type { Viewport } from "next";
+import Header from "@sCmps/Header";
 
 
 export const viewport: Viewport = {
@@ -13,9 +14,12 @@ export default function Layout({
 }>)
 {
 	return (
-		<>
+		<div className={styles.root}>
+			<Header />
 			<style>{`body { background: linear-gradient(0deg, #00093b, #001b3b); }`}</style>
-			{children}
-		</>
+			<div className={styles.body}>
+				{children}
+			</div>
+		</div>
 	);
 }

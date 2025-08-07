@@ -22,6 +22,21 @@ body {
 	text-decoration-skip-ink: none;
 	font-family: var(--font-PTSans), Arial, Helvetica, sans-serif;
 	font-size: 1rem;
+	--bcsize: 5px;
+	--bssize: 3.5px;
+	--background:
+		linear-gradient(0deg, transparent, #ffdb6c),
+		radial-gradient(circle at var(--bcsize) var(--bcsize), #fff6a7 var(--bssize), transparent var(--bssize)) 0px 0px / calc(var(--bcsize) * 4) calc(var(--bcsize) * 4),
+		radial-gradient(circle at calc(var(--bcsize) * 3) calc(var(--bcsize) * 3), #fff6a7 var(--bssize), transparent var(--bssize)) 0px 0px / calc(var(--bcsize) * 4) calc(var(--bcsize) * 4),
+		linear-gradient(0deg, #ffe87e, #ffdb6c);
+	font-family: var(--font-MFFRBL), Arial, Helvetica, sans-serif;
+	--color: black;
+	--c-back: #ffe87e;
+	--c-primary: #f4ad51;
+	--c-secondary: #380000;
+	--c-secondary-light: #4a0000;
+	--c-text: #fffeda;
+	color: var(--color);
 }
 
 a {

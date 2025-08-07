@@ -27,7 +27,7 @@ def quests(db_sess: Session, user: Union[User, None]):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required_any(Operations.page_worker_quest, Operations.manage_quest)
+@permission_required_any(Operations.page_staff_quest, Operations.manage_quest)
 def quests_full(db_sess: Session, user: User):
     quests = Quest.all(db_sess, includeHidden=True)
     return jsonify_list(quests, "get_dict_full")

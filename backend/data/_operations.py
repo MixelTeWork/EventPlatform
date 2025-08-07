@@ -4,12 +4,12 @@ from bafser import OperationsBase
 class Operations(OperationsBase):
     page_users = ("page_users", "Страница пользователей")
     page_debug = ("page_debug", "Страница отладки")
-    page_worker = ("page_worker", "Страница для персонала")
-    page_worker_quest = ("page_worker_quest", "Страница кодов квестов")
-    page_worker_store = ("page_worker_store", "Страница кодов товаров")
+    page_staff = ("page_staff", "Страница для персонала")
+    page_staff_quest = ("page_staff_quest", "Страница кодов квестов")
+    page_staff_store = ("page_staff_store", "Страница кодов товаров")
     page_stats = ("page_stats", "Страница статистики")
 
-    promote_worker = ("promote_worker", "Повысить до волонтёра")
+    promote_staff = ("promote_staff", "Повысить до волонтёра")
     promote_manager = ("promote_manager", "Повысить до управляющего")
 
     manage_store = ("manage_store", "Управление товарами")

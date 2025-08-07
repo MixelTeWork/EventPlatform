@@ -42,7 +42,7 @@ export default function Header({ homeBtn = false }: {
 						<IconExit />
 					</button>
 					{hasPermission(user, "page_debug") && <Link href="/debug"><IconCode /></Link>}
-					{hasPermission(user, "page_worker") && <Link href="/worker"><IconWidgets /></Link>}
+					{hasPermission(user, "page_staff") && <Link href="/staff"><IconWidgets /></Link>}
 				</>}
 			</div>
 			<div className={styles.gap}>{displayError(logout)}</div>

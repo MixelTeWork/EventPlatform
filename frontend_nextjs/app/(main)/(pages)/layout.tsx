@@ -1,5 +1,5 @@
-import Footer from "@mCmps/Footer";
 import styles from "./layout.module.css"
+import Footer from "@mCmps/Footer";
 import Header from "@mCmps/Header";
 import Title from "@mCmps/Title";
 

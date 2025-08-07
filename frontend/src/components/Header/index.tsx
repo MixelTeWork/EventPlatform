@@ -37,7 +37,7 @@ export default function Header({ homeBtn = false, forStaff = false, forDev = fal
 						<IconExit />
 					</button>
 					{hasPermission(user, "page_debug") && <Link to="/debug"><IconCode /></Link>}
-					{hasPermission(user, "page_worker") && <Link to="/worker"><IconWidgets /></Link>}
+					{hasPermission(user, "page_staff") && <Link to="/worker"><IconWidgets /></Link>}
 				</>}
 			</div>
 			<div className={styles.gap}></div>

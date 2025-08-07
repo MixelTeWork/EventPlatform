@@ -23,7 +23,7 @@ def store_items(db_sess: Session):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required_any(Operations.page_worker_store, Operations.manage_store)
+@permission_required_any(Operations.page_staff_store, Operations.manage_store)
 def store_items_full(db_sess: Session, user: User):
     items = StoreItem.all(db_sess)
     return jsonify_list(items, "get_dict_full")

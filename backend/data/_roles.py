@@ -22,15 +22,15 @@ Roles.ROLES = {
     Roles.manager: {
         "name": "Управляющий",
         "operations": [
-            Operations.promote_worker,
+            Operations.promote_staff,
         ]
     },
     Roles.worker: {
         "name": "Персонал",
         "operations": [
-            Operations.page_worker,
-            Operations.page_worker_quest,
-            Operations.page_worker_store,
+            Operations.page_staff,
+            Operations.page_staff_quest,
+            Operations.page_staff_store,
             Operations.page_stats,
             Operations.send_any,
             Operations.manage_games,

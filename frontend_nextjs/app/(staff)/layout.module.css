@@ -1,0 +1,22 @@
+.root {
+	font-family: var(--font-ZeroCool), Arial, Helvetica, sans-serif;
+	--color: white;
+	--c-back: #194659;
+	--c-primary: #194659;
+	--c-secondary: #7fffd4;
+	--c-text: #fff;
+	min-height: 100%;
+	width: 100%;
+	display: grid;
+	grid-template-rows: max-content auto;
+}
+
+.body {
+	min-height: 0;
+	min-width: 0;
+	width: 100%;
+	max-width: 820px;
+	display: flex;
+	flex-direction: column;
+	justify-self: center;
+}

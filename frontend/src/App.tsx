@@ -68,18 +68,18 @@ export default function App()
 				{ProtectedRoute(null, "/game", <GamePage />)}
 				{ProtectedRoute(null, "/scanner", <ScannerPage />)}
 				{/* {ProtectedRoute(null, "/profile", <ProfilePage />)} */}
-				{ProtectedRoute("page_worker", "/worker", <WorkerPage />)}
+				{ProtectedRoute("page_staff", "/worker", <WorkerPage />)}
 				{ProtectedRoute("manage_store", "/manage_store", <ManageStorePage />)}
 				{ProtectedRoute("manage_quest", "/manage_quest", <ManageQuestPage />)}
 				{ProtectedRoute("manage_games", "/game_characters", <GameCharactersPage />)}
 				{ProtectedRoute("manage_games", "/game_settings", <GameSettingsPage />)}
 				{ProtectedRoute("manage_games", "/game_screen", <GameScreenPage />)}
 				{ProtectedRoute("manage_games", "/tourney_screen", <TourneyPage />)}
-				{ProtectedRoute("page_worker_quest", "/worker_quest", <WorkerQuestPage />)}
-				{ProtectedRoute("page_worker_store", "/worker_store", <WorkerStorePage />)}
+				{ProtectedRoute("page_staff_quest", "/worker_quest", <WorkerQuestPage />)}
+				{ProtectedRoute("page_staff_store", "/worker_store", <WorkerStorePage />)}
 				{ProtectedRoute("page_stats", "/stats", <StatsPage />)}
 				{ProtectedRoute("site_config", "/config", <ConfigPage />)}
-				{ProtectedRoute("promote_worker", "/promote_worker", <PromotePage role="worker" />)}
+				{ProtectedRoute("promote_staff", "/promote_worker", <PromotePage role="worker" />)}
 				{ProtectedRoute("promote_manager", "/promote_manager", <PromotePage role="manager" />)}
 				{ProtectedRoute("send_any", "/send", <SendPage />)}
 				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
