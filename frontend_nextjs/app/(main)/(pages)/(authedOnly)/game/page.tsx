@@ -12,7 +12,6 @@ import Textbox from "@mCmps/Textbox";
 import { characterById, useTourneyCharacters } from "@/api/tourney";
 import { useGameState, useMutationGameSelectTeam, useMutationSendClick } from "@/api/game";
 import GameDialogGame from "./GameDialogGame";
-// import GameDialogGame from "../../components/GameDialogGame";
 
 
 export default function GamePage()

@@ -4,6 +4,7 @@ import "./globals.css";
 import clsx from "@/utils/clsx";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import UserLoader from "@/components/UserLoader";
+import MessageFromBackend from "@/components/MessageFromBackend";
 
 const font_PTSans = localFont({
 	src: [
@@ -41,6 +42,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={clsx(font_PTSans.variable, font_ZeroCool.variable, font_MFFRBL.variable)}>
+				<MessageFromBackend />
 				<ReactQueryProvider>
 					<UserLoader />
 					{children}
