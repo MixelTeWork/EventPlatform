@@ -4,6 +4,7 @@ import ink from "./ink.png";
 import { useMutationSetGroup } from "@/api/user";
 import Spinner from "@/components/Spinner";
 import displayError from "@/utils/displayError";
+import Title from "@mCmps/Title";
 import Image from "next/image";
 
 export default function SelectGroup({ close }: SelectGroupProps)
@@ -14,7 +15,7 @@ export default function SelectGroup({ close }: SelectGroupProps)
 		<div className={styles.root}>
 			{setGroup.isPending && <Spinner />}
 			<div className={styles.body}>
-				<h1 className={styles.title}>Вселенную нужно:</h1>
+				<Title text="Вселенную нужно:" />
 				{displayError(setGroup, e => <>
 					<h3 style={{ color: "tomato" }}>{e}</h3>
 					<button className={styles.close} onClick={close}>Продолжить как гость</button>

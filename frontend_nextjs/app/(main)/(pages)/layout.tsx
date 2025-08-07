@@ -1,6 +1,7 @@
 import Footer from "@mCmps/Footer";
 import styles from "./layout.module.css"
 import Header from "@mCmps/Header";
+import Title from "@mCmps/Title";
 
 export default function Layout({
 	children,
@@ -12,7 +13,7 @@ export default function Layout({
 		<div className={styles.root}>
 			<Header />
 			<div className={styles.title}>
-				<h1>Underparty</h1>
+				<Title className={styles.title__text} text="Underparty" />
 			</div>
 			<div className={styles.body}>
 				{children}

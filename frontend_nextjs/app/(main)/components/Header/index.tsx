@@ -46,7 +46,7 @@ export default function Header({ homeBtn = false }: {
 				</>}
 			</div>
 			<div className={styles.gap}>{displayError(logout)}</div>
-			<div className={styles.text}>
+			<div className={styles.text} suppressHydrationWarning>
 				<div>{user.data?.name || "Войти ->"}</div>
 				<div>{user.data?.balance} М</div>
 			</div>

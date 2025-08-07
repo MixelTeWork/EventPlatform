@@ -7,6 +7,7 @@ import useStateObj from "@/utils/useStateObj";
 import Popup from "@/components/Popup";
 import StyledWindow from "@mCmps/StyledWindow";
 import Textbox from "@mCmps/Textbox";
+import Title from "@mCmps/Title";
 import { useMutationScanner, type ScannerRes } from "@/api/scanner";
 import Scanner from "./Scanner";
 
@@ -45,7 +46,7 @@ export default function Page()
 		</StyledWindow>
 		<Popup title="Активировано" open={popupOpen.v} close={popupOpen.setF}>
 			{res.v?.action == "quest" && <>
-				<h1 className={styles.title}>Квест завершён!</h1>
+				<Title text="Квест завершён!" />
 				<br />
 				<Textbox small className={styles.tb}>{res.v.msg}</Textbox>
 				<br />
@@ -55,7 +56,7 @@ export default function Page()
 				</h2>
 			</>}
 			{res.v?.action == "store" && <>
-				<h1 className={styles.title}>Куплено!</h1>
+				<Title text="Куплено!" />
 				<br />
 				<Textbox small className={styles.tb}>{res.v.msg}</Textbox>
 				<br />
@@ -65,12 +66,12 @@ export default function Page()
 				</h2>
 			</>}
 			{res.v?.action == "send" && <>
-				<h1 className={styles.title}>{res.v.value > 0 ? "Пополнено" : "Вычтено"}</h1>
+				<Title text={res.v.value > 0 ? "Пополнено" : "Вычтено"} />
 				<br />
 				<h2 className={styles.gold}>{res.v.value > 0 ? "+" : ""}{res.v.value}М</h2>
 			</>}
 			{res.v?.action == "promote" && <>
-				<h1 className={styles.title}>Назначение</h1>
+				<Title text="Назначение" />
 				<br />
 				<h2>Теперь вы {{
 					"worker": "волонтёр",

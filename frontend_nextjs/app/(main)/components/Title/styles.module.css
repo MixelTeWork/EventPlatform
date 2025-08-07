@@ -1,0 +1,22 @@
+.root {
+	font-size: 2rem;
+	text-align: center;
+	text-transform: uppercase;
+	color: var(--c-text);
+	text-shadow: 0.1em 0 var(--c-secondary), -0.1em 0 var(--c-secondary), 0 0.1em var(--c-secondary), 0 -0.1em var(--c-secondary),
+		0.05em 0.05em var(--c-secondary), -0.05em -0.05em var(--c-secondary), 0.05em -0.05em var(--c-secondary), -0.05em 0.05em var(--c-secondary);
+}
+
+.small {
+	font-size: 1.5rem;
+}
+
+@media screen and (max-width: 355px) {
+	.root {
+		font-size: 1.8rem;
+	}
+
+	.small {
+		font-size: 1.3rem;
+	}
+}
