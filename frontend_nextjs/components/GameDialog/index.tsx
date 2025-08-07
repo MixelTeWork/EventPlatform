@@ -51,7 +51,11 @@ export default function useGameDialog()
 	return dialog.v;
 }
 
-function GameDialogWithLoader({ dialogId, characters, close }: GameDialogWithLoaderProps)
+function GameDialogWithLoader({ dialogId, characters, close }: {
+	dialogId: number;
+	characters: UseQueryResult<{ [id: number]: GameDialogCharacter; }, unknown>;
+	close: () => void;
+})
 {
 	const dialog = useDialog(dialogId);
 
@@ -66,14 +70,11 @@ function GameDialogWithLoader({ dialogId, characters, close }: GameDialogWithLoa
 		;
 }
 
-interface GameDialogWithLoaderProps
-{
-	dialogId: number;
+function GameDialog({ data, characters, close }: {
+	data: GameDialogData;
 	characters: UseQueryResult<{ [id: number]: GameDialogCharacter; }, unknown>;
 	close: () => void;
-}
-
-function GameDialog({ data, characters, close }: GameDialogProps)
+})
 {
 	const [nodeI, setNodeI] = useState(0);
 	const node = data.nodes[nodeI];
@@ -123,11 +124,4 @@ function GameDialog({ data, characters, close }: GameDialogProps)
 			</div>
 		</div>
 	);
-}
-
-interface GameDialogProps
-{
-	data: GameDialogData;
-	characters: UseQueryResult<{ [id: number]: GameDialogCharacter; }, unknown>;
-	close: () => void;
 }

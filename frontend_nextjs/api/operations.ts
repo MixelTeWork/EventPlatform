@@ -23,9 +23,3 @@ export default function hasPermission(user: UseQueryResult<User, unknown>, opera
 {
 	return !!(user.data?.auth && user.data?.operations.includes(operation));
 }
-
-export function useHasPermission(operation: Operation)
-{
-	const user = useUser();
-	return hasPermission(user, operation);
-}

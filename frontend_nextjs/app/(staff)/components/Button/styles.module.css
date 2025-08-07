@@ -1,0 +1,23 @@
+.root {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(from var(--c-primary) r g b / 0.2);
+	border: 1px solid var(--c-primary);
+	color: var(--c-secondary);
+	border-radius: 0.25rem;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 50ms;
+}
+
+/* Enable hover only on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+	.root:hover, .root:focus-visible {
+		background-color: rgba(from var(--c-primary) r g b / 0.3);
+	}
+}
+
+.root:active {
+	background-color: rgba(from var(--c-primary) r g b / 0.15);
+}

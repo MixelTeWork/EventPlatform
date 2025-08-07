@@ -1,11 +1,11 @@
 "use client"
 import { useRouter } from "next/navigation";
-import { useUser } from "@/api/user";
 import { useEffect } from "react";
-import Loading from "@/components/Loading";
+import { useUser } from "@/api/user";
+import Loading from "../loading";
 
 
-export default function Layout({
+export default function LayoutInner({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -19,6 +19,5 @@ export default function Layout({
 		if (user.data?.auth) return;
 		router.push("/");
 	}, [user.isPending, user.data?.auth])
-	if (user.data?.auth) return children;
-	return <Loading />
+	return user.data?.auth ? children : <Loading />;
 }

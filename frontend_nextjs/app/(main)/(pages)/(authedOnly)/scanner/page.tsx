@@ -44,7 +44,7 @@ export default function Page()
 				}}
 			/>
 		</StyledWindow>
-		<Popup title="Активировано" open={popupOpen.v} close={popupOpen.setF}>
+		<Popup title="Активировано" openState={popupOpen}>
 			{res.v?.action == "quest" && <>
 				<Title text="Квест завершён!" />
 				<br />

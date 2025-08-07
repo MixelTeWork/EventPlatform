@@ -1,9 +1,19 @@
 import styles from "./styles.module.css"
 import { useEffect, useRef, useState } from "react";
 import clsx from "@/utils/clsx";
+import type { StateBool } from "@/utils/useStateBool";
 
-export default function Popup({ children, open = false, close, title = "", footer, closeOnOutclick = false }: CustomPopupProps)
+export default function Popup({ children, open = false, close, openState, title = "", footer, closeOnOutclick = false }: {
+	open?: boolean,
+	close?: () => void,
+	title?: string | React.ReactNode,
+	closeOnOutclick?: boolean,
+	footer?: React.ReactNode,
+	openState?: StateBool,
+} & React.PropsWithChildren)
 {
+	open = openState?.v || open;
+	close = (openState?.setF && close) ? () => { openState.setF(); close?.(); } : openState?.setF || close;
 	const ref = useRef<HTMLDivElement>(null)
 	const [isOpen, setIsOpen] = useState(open);
 	const [hidden, setHidden] = useState(!open);
@@ -48,14 +58,3 @@ export default function Popup({ children, open = false, close, title = "", foote
 		</div>
 	);
 }
-
-export interface PopupProps
-{
-	open?: boolean,
-	close?: () => void,
-	title?: string | React.ReactNode,
-	closeOnOutclick?: boolean,
-	footer?: React.ReactNode,
-}
-
-type CustomPopupProps = PopupProps & React.PropsWithChildren;

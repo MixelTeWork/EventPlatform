@@ -1,0 +1,11 @@
+.root {
+	background-color: transparent;
+	color: white;
+	border: 1px solid transparent;
+	border-bottom: 1px solid var(--c-secondary);
+	border-radius: 0.2rem;
+	outline: none;
+}
+.root:focus-visible {
+	background: rgba(from var(--c-secondary) r g b / 0.15);
+}

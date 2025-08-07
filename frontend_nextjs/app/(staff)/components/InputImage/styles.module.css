@@ -1,0 +1,17 @@
+.root {
+	display: flex;
+	width: 5rem;
+	aspect-ratio: 1;
+	border-radius: 0.5rem;
+	flex-shrink: 0;
+	padding: 0;
+	background: var(--img);
+	border: none;
+	cursor: pointer;
+}
+.root img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 0.5rem;
+}
