@@ -17,7 +17,7 @@ export default function useScanner(pause = false, afterScanTimeout = 500)
 	{
 		scannerEl = document.createElement("div");
 		document.body.appendChild(scannerEl);
-		scannerEl.style.display = "flex";
+		scannerEl.style.display = "none";
 		scannerEl.style.backgroundColor = "black";
 
 		const video = document.createElement("video");
@@ -87,9 +87,10 @@ export default function useScanner(pause = false, afterScanTimeout = 500)
 			<div
 				ref={ref =>
 				{
-					if (!ref) return;
+					if (!ref || !scannerEl) return;
 					ref.innerHTML = "";
-					ref.appendChild(scannerEl!);
+					ref.appendChild(scannerEl);
+					scannerEl.style.display = "flex";
 				}}
 				className={styles.video}
 			></div>

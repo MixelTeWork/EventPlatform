@@ -1,4 +1,3 @@
-// import { useMutationAuthByTicket } from "../../api/auth";
 import styles from "./styles.module.css"
 import avatar from "./avatar.png";
 import logo from "./logo.png";
@@ -9,21 +8,18 @@ import imagefileToData from "@/utils/imagefileToData";
 import useStateObj from "@/utils/useStateObj";
 import Spinner from "@/components/Spinner";
 import Textbox from "@mCmps/Textbox";
+import { useMutationAuthByTicket } from "@/api/user";
 
 export default function AuthByTicket({ open }: {
 	open: boolean;
 })
 {
 	const error = useStateObj("");
-	// const mutation = useMutationAuthByTicket(error.set);
-	const mutation = {
-		isLoading: false,
-		mutate: (obj: any) => { throw new Error("Not Implemented") },
-	}
+	const mutation = useMutationAuthByTicket(error.set);
 
 	return (
 		<div className={clsx(styles.root, open && styles.open)}>
-			{mutation.isLoading && <Spinner />}
+			{mutation.isPending && <Spinner />}
 			<div className={styles.body}>
 				<Textbox className={styles.msgWide}>
 					<div className={styles.msg1}>
@@ -52,7 +48,7 @@ export default function AuthByTicket({ open }: {
 							type="file"
 							style={{ display: "none" }}
 							accept="image/png, image/jpeg, image/gif"
-							disabled={mutation.isLoading}
+							disabled={mutation.isPending}
 							onChange={async e =>
 							{
 								error.set("");

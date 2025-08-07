@@ -6,9 +6,11 @@ import Link from "next/link";
 import Image from "next/image";
 import useStateBool from "@/utils/useStateBool";
 import AuthByTicket from "./AuthByTicket";
+import useRedirectForAuthed from "@/utils/useRedirectForAuthed";
 
 export default function ()
 {
+	useRedirectForAuthed("/map");
 	const authOpen = useStateBool(false);
 
 	return (

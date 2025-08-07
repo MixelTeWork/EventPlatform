@@ -1,5 +1,5 @@
 import { queryInvalidate, queryListAddItem, queryListDeleteItem, queryListUpdateItem, useStdQuery } from "@/utils/query";
-import { useItemDeleteMutation, useItemMutation, useStdMutation } from "@/utils/mutations";
+import { itemDeleteMutation, itemMutation, stdMutation } from "@/utils/mutations";
 import type { ImgData } from "./dataTypes";
 
 export interface StoreItem
@@ -22,11 +22,12 @@ export interface StoreItemFull
 }
 
 const url = "/api/store_items"
+const urlFull = "/api/store_items_full"
 const queryKey = () => ["storeItems"];
 const queryKeyFull = () => ["storeItemsFull"];
 
 export const useStoreItems = useStdQuery<StoreItem[]>(queryKey(), url);
-export const useStoreItemsFull = useStdQuery<StoreItemFull[]>(queryKeyFull(), url + "_full");
+export const useStoreItemsFull = useStdQuery<StoreItemFull[]>(queryKeyFull(), urlFull);
 
 export interface ItemData
 {
@@ -36,22 +37,22 @@ export interface ItemData
 	img?: ImgData,
 }
 
-export const useMutationStoreItemAdd = useStdMutation<ItemData, StoreItemFull>(url, (qc, data) =>
+export const useMutationStoreItemAdd = stdMutation<ItemData, StoreItemFull>(url, (qc, data) =>
 {
 	queryListAddItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
 })
-export const useMutationStoreItemEdit = useItemMutation<ItemData, StoreItemFull>(url, (qc, data) =>
+export const useMutationStoreItemEdit = itemMutation<ItemData, StoreItemFull>(url, (qc, data) =>
 {
 	queryListUpdateItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
 })
-export const useMutationStoreItemDecrease = useItemMutation<void, StoreItemFull>(id => `${url}/${id}/decrease`, (qc, data) =>
+export const useMutationStoreItemDecrease = itemMutation<void, StoreItemFull>(id => `${url}/${id}/decrease`, (qc, data) =>
 {
 	queryListUpdateItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
 })
-export const useMutationStoreItemDelete = useItemDeleteMutation(url, (qc, id) =>
+export const useMutationStoreItemDelete = itemDeleteMutation(url, (qc, id) =>
 {
 	queryListDeleteItem(qc, queryKeyFull(), id);
 	queryInvalidate(qc, queryKey());

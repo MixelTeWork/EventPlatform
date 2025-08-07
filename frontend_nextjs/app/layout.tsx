@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local"
 import "./globals.css";
 import clsx from "@/utils/clsx";
-import ReactQueryProvider from "@/utils/ReactQueryProvider";
+import ReactQueryProvider from "@/components/ReactQueryProvider";
+import UserLoader from "@/components/UserLoader";
 
 const font_PTSans = localFont({
 	src: [
@@ -41,6 +42,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={clsx(font_PTSans.variable, font_ZeroCool.variable, font_MFFRBL.variable)}>
 				<ReactQueryProvider>
+					<UserLoader />
 					{children}
 				</ReactQueryProvider>
 			</body>

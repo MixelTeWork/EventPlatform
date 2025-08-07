@@ -17,10 +17,9 @@ import IconHome from "@icons/home";
 import IconExit from "@icons/exit";
 import IconCode from "@icons/code";
 import IconWidgets from "@icons/widgets";
-// import { useMutationLogout } from "../../api/auth";
-// import useUser from "../../api/user";
-// import hasPermission from "../../api/operations";
-function hasPermission(...p: any) { return false }
+import { useMutationLogout, useUser } from "@/api/user";
+import hasPermission from "@/api/operations";
+import displayError from "@/utils/displayError";
 
 export default function Header({ homeBtn = false }: {
 	homeBtn?: boolean
@@ -28,27 +27,25 @@ export default function Header({ homeBtn = false }: {
 {
 	const menuOpen = useStateBool(false);
 	const router = useRouter();
-	// const logout = useMutationLogout(menuOpen.setF);
-	const logout = { mutate: () => { menuOpen.setF(); throw new Error("Not Implemented"); }, isLoading: false, isSuccess: false };
-	// const user = useUser();
-	const user = { data: { name: "", balance: 0, auth: false, ticketTId: 0 } };
+	const logout = useMutationLogout(menuOpen.setF);
+	const user = useUser();
 
 	return (
 		<div className={styles.root}>
-			{logout.isLoading && <Spinner />}
+			{logout.isPending && <Spinner />}
 			<div className={styles.menu}>
 				<Link href={"/"} className={styles.home}>
 					{homeBtn && <IconHome />}
 				</Link>
 				{menuOpen.v && <>
-					<button onClick={() => logout.mutate()} disabled={logout.isLoading || logout.isSuccess}>
+					<button onClick={() => logout.mutate()} disabled={logout.isPending || logout.isSuccess}>
 						<IconExit />
 					</button>
 					{hasPermission(user, "page_debug") && <Link href="/debug"><IconCode /></Link>}
 					{hasPermission(user, "page_worker") && <Link href="/worker"><IconWidgets /></Link>}
 				</>}
 			</div>
-			<div className={styles.gap}></div>
+			<div className={styles.gap}>{displayError(logout)}</div>
 			<div className={styles.text}>
 				<div>{user.data?.name || "Войти ->"}</div>
 				<div>{user.data?.balance} М</div>

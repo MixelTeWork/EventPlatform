@@ -1,5 +1,5 @@
 import { queryInvalidate } from "@/utils/query";
-import { useStdMutation } from "@/utils/mutations";
+import { stdMutation } from "@/utils/mutations";
 // import { createEmptyUser, type User } from "./user";
 
 export interface ScannerRes
@@ -18,7 +18,7 @@ export interface ScannerData
 
 const url = "/api/scanner"
 
-export const useMutationScanner = useStdMutation<ScannerData, ScannerRes>(url, (qc, data) =>
+export const useMutationScanner = stdMutation<ScannerData, ScannerRes>(url, (qc, data) =>
 {
 	// qc.setQueryData<User>("user", user =>
 	// {

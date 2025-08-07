@@ -9,9 +9,9 @@ export function useStdQuery<T>(queryKey: QueryKey, url: string)
 	});
 }
 
-export function queryInvalidate(queryClient: QueryClient, queryKey: QueryKey)
+export function queryInvalidate(queryClient: QueryClient, queryKey: QueryKey, exact = true)
 {
-	queryClient.invalidateQueries({ queryKey, exact: true });
+	queryClient.invalidateQueries({ queryKey, exact });
 }
 
 export function queryListAddItem<T>(queryClient: QueryClient, queryKey: QueryKey, item: T)

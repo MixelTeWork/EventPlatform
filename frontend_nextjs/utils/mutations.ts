@@ -1,14 +1,14 @@
 import { QueryClient, useQueryClient, useMutation } from "@tanstack/react-query";
-import { fetchDelete, fetchJsonPost } from "./fetch";
+import { fetchDelete, fetchJsonPost, fetchPost } from "./fetch";
 
-export function useStdMutation<TData, TRes>(url: string, onSuccessM?: (queryClient: QueryClient, data: TRes) => void)
+export function stdMutation<TData, TRes>(url: string, onSuccessM?: (queryClient: QueryClient, data: TRes) => void)
 {
-	function useMutationFn(onSuccess?: (data: TRes) => void, onError?: (err: any) => void)
+	return (onSuccess?: (data: TRes) => void, onError?: (err: any) => void) =>
 	{
 		const queryClient = useQueryClient();
 		const mutation = useMutation({
-			mutationFn: async (itemData: TData) =>
-				await fetchJsonPost<TRes>(url, itemData),
+			mutationFn: async (data: TData) =>
+				await fetchJsonPost<TRes>(url, data),
 			onSuccess: (data: TRes) =>
 			{
 				onSuccessM?.(queryClient, data);
@@ -18,7 +18,28 @@ export function useStdMutation<TData, TRes>(url: string, onSuccessM?: (queryClie
 		});
 		return mutation;
 	}
-	return useMutationFn;
+}
+
+export function stdMutationNoRes<TData>(url: string, onSuccessM?: (queryClient: QueryClient, data: TData) => void)
+{
+	return (onSuccess?: () => void, onError?: (err: any) => void) =>
+	{
+		const queryClient = useQueryClient();
+		const mutation = useMutation({
+			mutationFn: async (data: TData) =>
+			{
+				await fetchPost(url, data);
+				return data;
+			},
+			onSuccess: (data: TData) =>
+			{
+				onSuccessM?.(queryClient, data);
+				onSuccess?.();
+			},
+			onError: onError,
+		});
+		return mutation;
+	}
 }
 
 type TItemUrl = string | ((id: number) => string);
@@ -27,14 +48,14 @@ function itemUrl(url: TItemUrl, id: number)
 	return typeof url == "function" ? url(id) : `${url}/${id}`;
 }
 
-export function useItemMutation<TData, TRes>(url: TItemUrl, onSuccessM?: (queryClient: QueryClient, data: TRes) => void)
+export function itemMutation<TData, TRes>(url: TItemUrl, onSuccessM?: (queryClient: QueryClient, data: TRes) => void)
 {
-	function useMutationFn(id: number, onSuccess?: (data: TRes) => void, onError?: (err: any) => void)
+	return (id: number, onSuccess?: (data: TRes) => void, onError?: (err: any) => void) =>
 	{
 		const queryClient = useQueryClient();
 		const mutation = useMutation({
-			mutationFn: async (itemData: TData) =>
-				await fetchJsonPost<TRes>(itemUrl(url, id), itemData),
+			mutationFn: async (data: TData) =>
+				await fetchJsonPost<TRes>(itemUrl(url, id), data),
 			onSuccess: (data: TRes) =>
 			{
 				onSuccessM?.(queryClient, data);
@@ -44,12 +65,11 @@ export function useItemMutation<TData, TRes>(url: TItemUrl, onSuccessM?: (queryC
 		});
 		return mutation;
 	}
-	return useMutationFn;
 }
 
-export function useItemDeleteMutation(url: TItemUrl, onSuccessM?: (queryClient: QueryClient, id: number) => void)
+export function itemDeleteMutation(url: TItemUrl, onSuccessM?: (queryClient: QueryClient, id: number) => void)
 {
-	function useMutationFn(id: number, onSuccess?: () => void, onError?: (err: any) => void)
+	return (id: number, onSuccess?: () => void, onError?: (err: any) => void) =>
 	{
 		const queryClient = useQueryClient();
 		const mutation = useMutation({
@@ -64,5 +84,4 @@ export function useItemDeleteMutation(url: TItemUrl, onSuccessM?: (queryClient: 
 		});
 		return mutation;
 	}
-	return useMutationFn;
 }
