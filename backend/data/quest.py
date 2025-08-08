@@ -14,7 +14,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
     __tablename__ = Tables.Quest
 
     name = Column(String(128), nullable=False)
-    description = Column(String(256), nullable=False)
+    description = Column(String(512), nullable=False)
     reward = Column(Integer, nullable=False)
     hidden = Column(Boolean, nullable=False)
     dialog1Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)

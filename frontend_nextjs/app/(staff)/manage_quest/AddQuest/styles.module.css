@@ -1,0 +1,7 @@
+.description_count {
+	display: flex;
+	justify-content: flex-end;
+}
+.description_count_too_many {
+	color: tomato;
+}

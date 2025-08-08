@@ -1,7 +1,7 @@
 import styles from "./styles.module.css"
 import { useEffect } from "react";
 import useStateBool from "@/utils/useStateBool";
-import useStateObj from "@/utils/useStateObj";
+import useStateObj, { useStateObjNull } from "@/utils/useStateObj";
 import clsx from "@/utils/clsx";
 import displayError from "@/utils/displayError";
 import Spinner from "@/components/Spinner";
@@ -22,7 +22,7 @@ export default function StoreItem({ item }: {
 	const changed = useStateBool(false);
 	const deleting = useStateBool(false);
 	const decreasing = useStateBool(false);
-	const imgData = useStateObj<ImgData | null>(null, changed.setT);
+	const imgData = useStateObjNull<ImgData>(null, changed.setT);
 	const name = useStateObj(item.name, changed.setT);
 	const count = useStateObj(item.count, changed.setT);
 	const price = useStateObj(item.price, changed.setT);
@@ -31,11 +31,11 @@ export default function StoreItem({ item }: {
 
 	function reset(newitem?: StoreItemFull)
 	{
-		imgData.set(null);
 		const data = newitem || item;
-		name.set(data.name);
-		count.set(data.count);
-		price.set(data.price);
+		imgData.setSilent(null);
+		name.setSilent(data.name);
+		count.setSilent(data.count);
+		price.setSilent(data.price);
 		changed.setF();
 	}
 

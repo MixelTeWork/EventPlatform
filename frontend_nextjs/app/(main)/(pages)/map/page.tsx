@@ -14,7 +14,7 @@ import type { StaticImageData } from "next/image";
 import Link from "next/link";
 import displayError from "@/utils/displayError";
 import usePreloadImgs from "@/utils/usePreloadImgs";
-import useStateObj, { useStateObjExt } from "@/utils/useStateObj";
+import useStateObj, { useStateObjNull } from "@/utils/useStateObj";
 import { useTitle } from "@/utils/useTtile";
 import Spinner from "@/components/Spinner";
 import useGameDialog from "@/components/GameDialog";
@@ -31,7 +31,7 @@ export default function Page()
 	usePreloadImgs(map1, map2, map3, mark_0, mark_1_1, mark_1_2, mark_1_3, mark_2_1, mark_2_2);
 	const dialog = useGameDialog();
 	const mutationOpen = useMutationQuestOpen();
-	const openedQuest = useStateObjExt<Quest | null>(null, v =>
+	const openedQuest = useStateObjNull<Quest>(null, v =>
 	{
 		if (v && v.dialogId != null && !v.opened)
 			dialog.run(v.dialogId, () =>
@@ -41,7 +41,7 @@ export default function Page()
 			});
 	});
 	const quests = useQuests();
-	const map = useStateObj(0, () => openedQuest.set(null));
+	const map = useStateObj(0, openedQuest.setNull);
 
 	function questMark(id: number, img: StaticImageData, x: number, y: number, w: number, h: number)
 	{
@@ -70,7 +70,7 @@ export default function Page()
 		{dialog.el()}
 		<GameDialogGreetings />
 		{quests.isPending && <Spinner />}
-		<StyledWindow className={styles.window} onClose={() => openedQuest.set(null)}>
+		<StyledWindow className={styles.window} onClose={openedQuest.setNull}>
 			{displayError(quests)}
 			<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
 				<InteractiveMap
@@ -96,7 +96,7 @@ export default function Page()
 			{openedQuest.v &&
 				<div className={styles.quest}>
 					<Textbox small btn className={styles.quest__back}>
-						<button className={"clearBtn"} onClick={() => openedQuest.set(null)}>назад</button>
+						<button className={"clearBtn"} onClick={openedQuest.setNull}>назад</button>
 					</Textbox>
 					<div className={styles.quest__title}>
 						<span>{openedQuest.v.name}</span>

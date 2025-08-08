@@ -12,6 +12,7 @@
 	--c-back: #194659;
 	--c-primary: violet;
 	--c-secondary: aquamarine;
+	--c-secondary-light: hsl(from aquamarine h s 40%);
 	--c-text: #fff;
 	color: var(--color);
 	min-height: 100%;

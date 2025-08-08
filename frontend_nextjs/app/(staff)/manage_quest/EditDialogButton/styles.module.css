@@ -1,0 +1,15 @@
+.root {
+	display: grid;
+	grid-template-columns: 1fr 3rem;
+}
+
+.root button:first-child {
+	padding-left: 3.4rem;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.root button:last-child {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	margin-left: -1px;
+}

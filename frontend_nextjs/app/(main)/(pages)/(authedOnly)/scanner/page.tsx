@@ -3,7 +3,7 @@ import styles from "./page.module.css"
 import { useRouter } from "next/navigation";
 import { useTitle } from "@/utils/useTtile";
 import useStateBool from "@/utils/useStateBool";
-import useStateObj from "@/utils/useStateObj";
+import { useStateObjNull } from "@/utils/useStateObj";
 import Popup from "@/components/Popup";
 import StyledWindow from "@mCmps/StyledWindow";
 import Textbox from "@mCmps/Textbox";
@@ -15,7 +15,7 @@ export default function Page()
 {
 	useTitle("Сканер");
 	const popupOpen = useStateBool(false);
-	const res = useStateObj<ScannerRes | null>(null, popupOpen.setT);
+	const res = useStateObjNull<ScannerRes>(null, popupOpen.setT);
 	const router = useRouter();
 
 	return (<>

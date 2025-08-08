@@ -1,0 +1,14 @@
+.root {
+	min-height: 5rem;
+	min-width: 15rem;
+	margin-block: 1rem;
+	background-color: transparent;
+	color: var(--c-text);
+	border: 1px solid var(--c-secondary);
+	border-radius: 0.25rem;
+	outline: none;
+	transition: background-color 100ms;
+}
+.root:focus-visible {
+	background-color: rgba(from var(--c-secondary) r g b / 0.04);
+}

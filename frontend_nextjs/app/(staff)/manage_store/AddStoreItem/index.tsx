@@ -1,6 +1,6 @@
 import styles from "./styles.module.css"
 import { useRef } from "react";
-import useStateObj from "@/utils/useStateObj";
+import { useStateObjNull } from "@/utils/useStateObj";
 import useStateBool from "@/utils/useStateBool";
 import displayError from "@/utils/displayError";
 import Popup from "@/components/Popup";
@@ -14,7 +14,7 @@ import InputImage from "@sCmps/InputImage";
 
 export default function AddStoreItem()
 {
-	const imgData = useStateObj<ImgData | null>(null);
+	const imgData = useStateObjNull<ImgData>();
 	const nameRef = useRef<HTMLInputElement>(null);
 	const priceRef = useRef<HTMLInputElement>(null);
 	const countRef = useRef<HTMLInputElement>(null);
@@ -22,15 +22,12 @@ export default function AddStoreItem()
 	const popupSuccessOpen = useStateBool(false);
 	const mutationAdd = useMutationStoreItemAdd(() =>
 	{
-		imgData.set(null);
+		imgData.setNull();
 		popupOpen.setF();
 		popupSuccessOpen.setT();
-		if (nameRef.current)
-			nameRef.current.value = "";
-		if (priceRef.current)
-			priceRef.current.value = "";
-		if (countRef.current)
-			countRef.current.value = "";
+		if (nameRef.current) nameRef.current.value = "";
+		if (priceRef.current) priceRef.current.value = "";
+		if (countRef.current) countRef.current.value = "";
 	});
 
 	return <>

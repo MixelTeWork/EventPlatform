@@ -1,10 +1,10 @@
 "use client"
 import { useEffect } from "react";
-import useStateObj from "./useStateObj";
+import { useStateObjNull } from "./useStateObj";
 
 export default function useSound(url: string, loop = false)
 {
-	const audio = useStateObj<HTMLAudioElement | null>(null);
+	const audio = useStateObjNull<HTMLAudioElement>();
 
 	useEffect(() =>
 	{

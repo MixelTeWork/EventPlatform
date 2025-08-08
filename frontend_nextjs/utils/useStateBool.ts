@@ -1,31 +1,19 @@
-import { useState } from "react";
+import useStateObj, { type StateObj } from "./useStateObj";
 
 export default function useStateBool(initialState: boolean | (() => boolean), onSet?: (v: boolean) => void): StateBool
 {
-	const [v, set] = useState(initialState)
-	let setFn = set;
-	if (onSet)
-		setFn = (v: boolean | ((prevState: boolean) => boolean)) =>
-			set(pv =>
-			{
-				const nv = v instanceof Function ? v(pv) : v;
-				onSet(nv);
-				return nv;
-			});
+	const state = useStateObj(initialState, onSet);
 
 	return {
-		v,
-		set: setFn,
-		setT: () => setFn(true),
-		setF: () => setFn(false),
-		toggle: () => setFn(v => !v),
+		...state,
+		setT: () => state.set(true),
+		setF: () => state.set(false),
+		toggle: () => state.set(v => !v),
 	};
 }
 
-export interface StateBool
+export interface StateBool extends StateObj<boolean>
 {
-	v: boolean;
-	set: React.Dispatch<React.SetStateAction<boolean>>;
 	setT: () => void;
 	setF: () => void;
 	toggle: () => void;

@@ -1,0 +1,127 @@
+.root {
+	padding: 1rem 0.5rem;
+	border: 2px solid aquamarine;
+	border-radius: 0.5rem;
+	display: grid;
+	gap: 0.5rem;
+	grid-template-columns: 15% 1fr auto;
+}
+
+.root img {
+	width: 100%;
+	height: fit-content;
+	aspect-ratio: 9/16;
+	object-fit: cover;
+	border-radius: 0.25rem;
+	align-self: center;
+}
+
+.body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.selectName {
+	background-color: transparent;
+	color: white;
+	font-size: 1.17rem;
+	border: 1px solid transparent;
+	border-bottom: 1px solid aquamarine;
+	border-radius: 0.2rem;
+	outline: none;
+}
+.selectName:focus-visible {
+	background: rgba(238, 130, 238, 0.2);
+}
+.selectName option {
+	background-color: #3035dc;
+	color: white;
+	font-size: 1rem;
+}
+
+.textarea {
+	flex-grow: 1;
+	resize: none;
+	background-color: transparent;
+	color: white;
+	border: 1px solid transparent;
+	border-radius: 0.2rem;
+	font-size: 0.9rem;
+	outline: none;
+	padding: 0.3rem;
+}
+.textarea:focus-visible {
+	border: 1px solid aquamarine;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.25rem;
+}
+.buttons button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(238, 130, 238, 0.2);
+	border: 1px solid violet;
+	color: aquamarine;
+	border-radius: 0.25rem;
+	padding: 0;
+	width: 1.8rem;
+	height: 1.8rem;
+	font-size: 1rem;
+	cursor: pointer;
+}
+.buttons button:hover {
+	background: rgba(238, 130, 238, 0.4);
+}
+
+.btnUp::before,
+.btnDown::before {
+	content: "";
+	width: 0.7rem;
+	height: 0.7rem;
+	border: 2px solid aquamarine;
+	border-top: none;
+	border-left: none;
+	border-bottom-right-radius: 0.25rem;
+}
+.btnUp::before {
+	transform: translateY(20%) rotate(-135deg);
+}
+.btnDown::before {
+	transform: translateY(-20%) rotate(45deg);
+}
+
+.btnPlus {
+	position: relative;
+}
+.btnPlus::before,
+.btnPlus::after {
+	content: "";
+	position: absolute;
+	width: 0.7rem;
+	height: 2px;
+	background-color: aquamarine;
+	border-radius: 2px;
+}
+.btnPlus::after {
+	transform: rotate(90deg);
+}
+
+.doubleBtn button {
+	height: 1.1rem;
+}
+.doubleBtn > :first-child {
+	border-bottom: none;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.doubleBtn > :last-child {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
