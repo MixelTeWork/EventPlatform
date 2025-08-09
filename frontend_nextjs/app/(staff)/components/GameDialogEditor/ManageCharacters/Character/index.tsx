@@ -8,10 +8,13 @@ import useStateBool from "@/utils/useStateBool";
 import useStateObj, { useStateObjNull } from "@/utils/useStateObj";
 import displayError from "@/utils/displayError";
 import type { ImgData } from "@/api/dataTypes";
-import imagefileToData from "@/utils/imagefileToData";
 import clsx from "@/utils/clsx";
 import Spinner from "@/components/Spinner";
 import PopupConfirm from "@sCmps/PopupConfirm";
+import Button from "@sCmps/Button";
+import InputImage from "@sCmps/InputImage";
+import Input from "@sCmps/Input";
+import Select from "@sCmps/Select";
 
 export default function Character({ character, deleteNew }: {
 	character: GameDialogCharacter;
@@ -45,44 +48,28 @@ export default function Character({ character, deleteNew }: {
 			{mutationAdd.isPending && <Spinner block r="0.5rem" />}
 			{displayError(mutationAdd, err => <div className={styles.error}>
 				<div>{err}</div>
-				<button onClick={() => mutationAdd.reset()}>ОК</button>
+				<Button text="ОК" padding onClick={() => mutationAdd.reset()} />
 			</div>)}
 			{mutationEdit.isPending && <Spinner block r="0.5rem" />}
 			{displayError(mutationEdit, err => <div className={styles.error}>
 				<div>{err}</div>
-				<button onClick={() => mutationEdit.reset()}>ОК</button>
+				<Button text="ОК" padding onClick={() => mutationEdit.reset()} />
 			</div>)}
 
-			<PopupConfirm title={"Удалить персонажа: " + name.v} itemId={character.id} mutationFn={useMutationCharacterDelete} open={deleting.v} close={deleting.setF} />
+			<PopupConfirm title={"Удалить персонажа: " + name.v} itemId={character.id} mutationFn={useMutationCharacterDelete} openState={deleting} />
 			<div className={styles.id}>{character.id}</div>
-			<label className={styles.img}>
-				{(character.img || imgData.v) && <img src={imgData.v?.data || character.img} alt="Картинка" />}
-				<input
-					type="file"
-					style={{ display: "none" }}
-					accept="image/png, image/jpeg, image/gif"
-					onChange={async e =>
-					{
-						imgData.set({ data: "", name: "" });
-						imgData.set(await imagefileToData(e.target?.files?.[0]!));
-						e.target.value = "";
-					}}
-				/>
-			</label>
+			<InputImage imgData={imgData} curImg={character.img} />
 			<div className={styles.inputs}>
 				<div>Имя</div>
-				<input type="text" value={name.v} onChange={inp => name.set(inp.target.value)} />
+				<Input type="text" stateObj={name} />
 				<span>Ориен</span>
-				<select className={styles.select} value={orien.v} onChange={e => orien.set(parseInt(e.target.value, 10))}>
-					<option value={0}>Слева</option>
-					<option value={2}>Центр</option>
-					<option value={1}>Справа</option>
-				</select>
+				<Select values={{ 0: "Слева", 2: "Центр", 1: "Справа" }} item={it => it} stateObj={orien} />
 			</div>
 			<div className={styles.buttons}>
 				{id.v > 0 ? <>
-					{!changed.v && <button onClick={deleting.setT}><IconDelete /></button>}
-					{changed.v && <button
+					{!changed.v && <Button text={<IconDelete />} onClick={deleting.setT} />}
+					{changed.v && <Button
+						text={<IconSave />}
 						onClick={() =>
 						{
 							mutationEdit.mutate({
@@ -91,12 +78,11 @@ export default function Character({ character, deleteNew }: {
 								orien: orien.v,
 							});
 						}}
-					>
-						<IconSave />
-					</button>}
-					{changed.v && <button onClick={() => reset()}><IconCancel /></button>}
+					/>}
+					{changed.v && <Button text={<IconCancel />} onClick={() => reset()} />}
 				</> : <>
-					<button
+					<Button
+						text={<IconSave />}
 						onClick={() =>
 						{
 							mutationAdd.mutate({
@@ -105,10 +91,8 @@ export default function Character({ character, deleteNew }: {
 								orien: orien.v,
 							});
 						}}
-					>
-						<IconSave />
-					</button>
-					<button onClick={deleteNew}><IconDelete /></button>
+					/>
+					<Button text={<IconDelete />} onClick={deleteNew} />
 				</>}
 			</div>
 		</div>

@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useDialogCharacters, type GameDialogNode } from "@/api/dialog";
 import useStateObj from "@/utils/useStateObj";
 import IconDelete from "@icons/delete";
+import Select from "@sCmps/Select";
+import Button from "@sCmps/Button";
 
 export default function DialogNode({ data, deleteNode, moveUp, addUp, moveDown, addDown }: {
 	data: GameDialogNode;
@@ -30,9 +32,7 @@ export default function DialogNode({ data, deleteNode, moveUp, addUp, moveDown, 
 		<div className={styles.root}>
 			<img src={character?.img} alt={character?.name} />
 			<div className={styles.body}>
-				<select className={styles.selectName} value={characterId.v} onChange={e => characterId.set(parseInt(e.target.value, 10))}>
-					{Object.values(characters.data || {}).map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-				</select>
+				<Select className={styles.selectName} values={characters.data} item={it => it.name} stateObj={characterId} />
 				<textarea
 					className={styles.textarea}
 					placeholder="Речь персонажа"
@@ -42,13 +42,13 @@ export default function DialogNode({ data, deleteNode, moveUp, addUp, moveDown, 
 			</div>
 			<div className={styles.buttons}>
 				<span className={styles.doubleBtn}>
-					<button className={styles.btnUp} onClick={moveUp}></button>
-					<button className={styles.btnPlus} onClick={addUp}></button>
+					<Button className={styles.btnUp} onClick={moveUp} />
+					<Button className={styles.btnPlus} onClick={addUp} />
 				</span>
-				<button onClick={deleteNode}><IconDelete /></button>
+				<Button text={<IconDelete />} onClick={deleteNode} />
 				<span className={styles.doubleBtn}>
-					<button className={styles.btnPlus} onClick={addDown}></button>
-					<button className={styles.btnDown} onClick={moveDown}></button>
+					<Button className={styles.btnPlus} onClick={addDown} />
+					<Button className={styles.btnDown} onClick={moveDown} />
 				</span>
 			</div>
 		</div>

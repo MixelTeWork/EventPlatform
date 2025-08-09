@@ -1,0 +1,10 @@
+.addBtn {
+	width: 100%;
+}
+
+.characters {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}

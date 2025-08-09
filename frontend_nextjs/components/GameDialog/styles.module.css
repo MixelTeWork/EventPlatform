@@ -2,7 +2,7 @@
 	position: fixed;
 	inset: 0;
 	display: flex;
-	background: var(--background);
+	background: var(--m-background);
 	z-index: 100;
 	justify-content: center;
 }
@@ -14,7 +14,7 @@
 	position: fixed;
 	top: 0.5rem;
 	right: 0.5rem;
-	background-color: var(--c-secondary-light);
+	background-color: var(--m-c-secondary-light);
 	border: none;
 	border-radius: 0;
 	font-size: 1rem;
@@ -30,7 +30,7 @@
 .close::after {
 	content: "";
 	position: absolute;
-	background-color: var(--c-text);
+	background-color: var(--m-c-text);
 	width: 0.8rem;
 	height: 2px;
 	border-radius: 4px;
@@ -68,15 +68,15 @@
 }
 .dialog {
 	position: relative;
-	background: linear-gradient(0deg, var(--c-secondary-light), var(--c-secondary));
-	color: var(--c-text);
+	background: linear-gradient(0deg, var(--m-c-secondary-light), var(--m-c-secondary));
+	color: var(--m-c-text);
 	margin: 0.5rem;
 	max-width: calc(800px - 1rem);
 	flex-grow: 1;
 }
 .dialog__title {
-	background-color: var(--c-text);
-	color: var(--c-primary);
+	background-color: var(--m-c-text);
+	color: var(--m-c-primary);
 	padding: 0.25rem 1rem;
 	font-size: 1.1rem;
 }
@@ -94,7 +94,7 @@
 .dialog__next,
 .dialog__prev {
 	font-size: 1rem;
-	border: 1px solid var(--c-text);
+	border: 1px solid var(--m-c-text);
 	padding: 0.25rem 1rem;
 }
 .dialog__prev {

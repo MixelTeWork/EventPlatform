@@ -37,6 +37,13 @@ body {
 	--c-secondary-light: #4a0000;
 	--c-text: #fffeda;
 	color: var(--color);
+	--m-background: var(--background);
+	--m-color: var(--color);
+	--m-c-back: var(--c-back);
+	--m-c-primary: var(--c-primary);
+	--m-c-secondary: var(--c-secondary);
+	--m-c-secondary-light: var(--c-secondary-light);
+	--m-c-text: var(--c-text);
 }
 
 a {

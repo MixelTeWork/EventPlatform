@@ -1,6 +1,6 @@
 .root {
 	min-height: 5rem;
-	min-width: 15rem;
+	min-width: 13rem;
 	margin-block: 1rem;
 	background-color: transparent;
 	color: var(--c-text);

@@ -20,7 +20,7 @@ export default function Page()
 	usePreloadGameDialogImgs();
 	const quests = useQuestsFull();
 
-	return (<>
+	return <>
 		{quests.isLoading && <Spinner />}
 		{displayError(quests)}
 
@@ -33,5 +33,5 @@ export default function Page()
 		<div className={styles.quests}>
 			{quests.data?.map(quest => <Quest key={quest.id} quest={quest} />)}
 		</div>
-	</>);
+	</>;
 }

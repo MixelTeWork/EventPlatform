@@ -3,7 +3,8 @@ import { createEmptyDialogNode, useDialogCharacters, type GameDialogData } from 
 import displayError from "@/utils/displayError";
 import useStateBool from "@/utils/useStateBool";
 import useStateObj from "@/utils/useStateObj";
-import Spinner from "../Spinner";
+import Spinner from "@/components/Spinner";
+import Button from "@sCmps/Button";
 import DialogNode from "./DialogNode";
 import ManageCharacters from "./ManageCharacters";
 
@@ -66,7 +67,7 @@ function GameDialogEditor({ data, close }: {
 		<div className={styles.root}>
 			{characters.isLoading && <Spinner />}
 			{displayError(characters)}
-			<button className={styles.close} onClick={close}></button>
+			<Button className={styles.close} onClick={close} />
 			<div className={styles.body}>
 				<h1>Редактирование диалога</h1>
 				<ManageCharacters />
@@ -81,11 +82,11 @@ function GameDialogEditor({ data, close }: {
 						addDown={() => addNode(i + 1)}
 					/>)}
 				</div>
-				<button className={styles.addBtn} onClick={() =>
+				<Button text="Добавить реплику" onClick={() =>
 				{
 					data.nodes.push(createEmptyDialogNode());
 					update.toggle();
-				}}>Добавить реплику</button>
+				}} />
 			</div>
 		</div>
 	);

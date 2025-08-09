@@ -6,7 +6,7 @@ import { useStateObjNull } from "@/utils/useStateObj";
 import copyObj from "@/utils/copyObj";
 import useGameDialog from "@/components/GameDialog";
 import Spinner from "@/components/Spinner";
-import useGameDialogEditor from "@/components/GameDialogEditor";
+import useGameDialogEditor from "@sCmps/GameDialogEditor";
 import IconEdit from "@icons/edit";
 import PopupConfirm from "@sCmps/PopupConfirm";
 import Button from "@sCmps/Button";

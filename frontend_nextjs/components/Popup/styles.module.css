@@ -68,6 +68,9 @@
 	align-items: center;
 	cursor: pointer;
 }
+:global(.simplePopup) .close {
+	border-width: 1px;
+}
 
 .close::before,
 .close::after {
@@ -77,6 +80,10 @@
 	width: 0.8em;
 	height: 2px;
 	/* border-radius: 4px; */
+}
+:global(.simplePopup) .close::before,
+:global(.simplePopup) .close::after {
+	background-color: var(--c-secondary);
 }
 .close::before {
 	transform: rotate(45deg);
