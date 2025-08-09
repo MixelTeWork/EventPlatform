@@ -1,4 +1,6 @@
 .root {
+	min-width: 2em;
+	font-size: 0.85rem;
 	background-color: transparent;
 	color: white;
 	border: 1px solid transparent;

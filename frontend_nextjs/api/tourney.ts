@@ -47,17 +47,17 @@ export interface TourneyCharacterData
 	color: string,
 	img?: ImgData,
 }
-export const useMutationAddTourneyCharacter = stdMutation<TourneyCharacterData, TourneyCharacter>(urlCharacters, (qc, data) =>
+export const useMutationTourneyCharacterAdd = stdMutation<TourneyCharacterData, TourneyCharacter>(urlCharacters, (qc, data) =>
 {
 	queryListAddItem(qc, queryKeyCharacters(), data);
 });
 
-export const useMutationEditTourneyCharacter = itemMutation<TourneyCharacterData, TourneyCharacter>(urlCharacters, (qc, data) =>
+export const useMutationTourneyCharacterEdit = itemMutation<TourneyCharacterData, TourneyCharacter>(urlCharacters, (qc, data) =>
 {
 	queryListUpdateItem(qc, queryKeyCharacters(), data);
 });
 
-export const useMutationDeleteTourneyCharacter = itemDeleteMutation(urlCharacters, (qc, id) =>
+export const useMutationTourneyCharacterDelete = itemDeleteMutation(urlCharacters, (qc, id) =>
 {
 	queryListDeleteItem(qc, queryKeyCharacters(), id);
 });

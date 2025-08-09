@@ -49,14 +49,9 @@
 	display: flex;
 	align-items: center;
 	gap: 0.25rem;
-	min-width: 4.25rem;
 }
-
-@media screen and (((max-width: 710px) and (min-width: 631px)) or (max-width: 360px)) {
-	.root > .buttons {
-		min-width: auto;
-		flex-direction: column;
-	}
+.root > .buttons {
+	flex-direction: column;
 }
 
 .buttons button {
@@ -81,7 +76,7 @@
 	outline: none;
 	border-bottom: 1px solid var(--c-secondary);
 }
-.changed .inputs .description{
+.changed .inputs .description {
 	border: 1px solid var(--c-secondary);
 }
 .description:focus-visible {
@@ -96,9 +91,6 @@
 	color: tomato;
 }
 
-.dialogBtns {
-	min-width: auto;
-}
 .dialogBtns button {
 	width: 1.5rem;
 	height: 1.5rem;
