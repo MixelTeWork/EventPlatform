@@ -1,12 +1,13 @@
-import React from "react"
+import React, { type MouseEventHandler } from "react"
 import styles from "./styles.module.css"
 import clsx from "@/utils/clsx";
 import type { StateObj } from "@/utils/useStateObj";
 
-export default function Select<T>({ className, ref, onChange, value, stateObj, values, item }: {
+export default function Select<T>({ className, ref, onChange, value, stateObj, values, item, onClick }: {
 	className?: string,
 	ref?: React.Ref<HTMLSelectElement>,
 	onChange?: React.ChangeEventHandler<HTMLSelectElement>,
+	onClick?: MouseEventHandler<HTMLSelectElement>,
 } & ({
 	stateObj?: StateObj<number>,
 	value?: never,
@@ -34,6 +35,7 @@ export default function Select<T>({ className, ref, onChange, value, stateObj, v
 				stateObj?.set(parseInt(e.target.value, 10));
 				onChange?.(e);
 			}}
+			onClick={onClick}
 		>
 			{items.map(it => <option key={it.id} value={it.id}>{it.text}</option>)}
 		</select>

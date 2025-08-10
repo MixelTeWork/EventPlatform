@@ -1,11 +1,11 @@
-import Popup from "@/components/Popup";
-import styles from "./styles.module.css"
+import type { UseMutationResult } from "@tanstack/react-query";
 import { useEffect } from "react";
 import displayError from "@/utils/displayError";
+import Popup from "@/components/Popup";
 import Spinner from "@/components/Spinner";
 import { Form } from "@/components/Form";
-import type { UseMutationResult } from "@tanstack/react-query";
 import type { StateBool } from "@/utils/useStateBool";
+import Button from "@sCmps/Button";
 
 export default function PopupConfirm<TD, TE, TV>({ title, mutationFn, mutatateParams, itemId, onSuccess, onError, open, close, openState }: {
 	title: string | React.ReactNode,
@@ -42,7 +42,7 @@ export default function PopupConfirm<TD, TE, TV>({ title, mutationFn, mutatatePa
 				mutation.mutate(mutatateParams!);
 			}}>
 				{typeof title == "string" ? <h2>{title}</h2> : title}
-				<button type="submit" className={styles.button}>Подтвердить</button>
+				<Button text="Подтвердить" type="submit" danger />
 			</Form>
 		</Popup>
 	);

@@ -1,9 +1,10 @@
 .root {
+	--_color: var(--c-primary);
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: rgba(from var(--c-primary) r g b / 0.2);
-	border: 1px solid var(--c-primary);
+	background-color: rgba(from var(--_color) r g b / 0.2);
+	border: 1px solid var(--_color);
 	color: var(--c-secondary);
 	border-radius: 0.25rem;
 	font-size: 1rem;
@@ -11,13 +12,25 @@
 	transition: background-color 50ms;
 }
 
+.calm {
+	color: var(--c-text);
+}
+
+.danger {
+	--_color: tomato;
+}
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
-	.root:hover, .root:focus-visible {
-		background-color: rgba(from var(--c-primary) r g b / 0.3);
+	.root:not(:disabled):hover, .root:not(:disabled):focus-visible {
+		background-color: rgba(from var(--_color) r g b / 0.3);
 	}
 }
 
-.root:active {
-	background-color: rgba(from var(--c-primary) r g b / 0.15);
+.root:not(:disabled):active {
+	background-color: rgba(from var(--_color) r g b / 0.15);
+}
+
+.root:disabled {
+	opacity: 0.5;
 }

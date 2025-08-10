@@ -42,3 +42,7 @@
 	padding-top: 0.5rem;
 	padding-bottom: 1rem;
 }
+
+.body:has(:global(.layout_gap)) {
+	gap: 2rem;
+}

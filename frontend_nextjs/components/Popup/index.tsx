@@ -1,7 +1,8 @@
 import styles from "./styles.module.css"
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import clsx from "@/utils/clsx";
 import type { StateBool } from "@/utils/useStateBool";
+import useStateBool from "@/utils/useStateBool";
 
 export default function Popup({ children, open = false, close, openState, title = "", footer, closeOnOutclick = false }: {
 	open?: boolean,
@@ -15,25 +16,36 @@ export default function Popup({ children, open = false, close, openState, title 
 	open = openState?.v || open;
 	close = (openState?.setF && close) ? () => { openState.setF(); close?.(); } : openState?.setF || close;
 	const ref = useRef<HTMLDivElement>(null)
-	const [isOpen, setIsOpen] = useState(open);
-	const [hidden, setHidden] = useState(!open);
+	const isOpen = useStateBool(open);
+	const hidden = useStateBool(!open);
 	useEffect(() =>
 	{
 		if (open)
 		{
-			setHidden(false);
-			const timeout = setTimeout(() => setIsOpen(true), 100);
+			hidden.setF();
+			const timeout = setTimeout(isOpen.setT, 100);
 			return () => clearTimeout(timeout);
 		}
-		setIsOpen(false);
-		const timeout = setTimeout(() => setHidden(true), 250);
+		isOpen.setF();
+		const timeout = setTimeout(hidden.setT, 250);
 		return () => clearTimeout(timeout);
 	}, [open]);
+
+	useEffect(() =>
+	{
+		function keydown(e: KeyboardEvent)
+		{
+			if (e.key === "Escape" && open && closeOnOutclick)
+				close?.();
+		};
+		window.addEventListener("keydown", keydown);
+		return () => { window.removeEventListener("keydown", keydown); };
+	}, [close, closeOnOutclick]);
 
 	return (
 		<div
 			ref={ref}
-			className={clsx(styles.root, isOpen && styles.open, hidden && styles.hidden)}
+			className={clsx(styles.root, isOpen.v && styles.open, hidden.v && styles.hidden)}
 			onClick={e =>
 			{
 				if (closeOnOutclick && e.target == ref.current)
