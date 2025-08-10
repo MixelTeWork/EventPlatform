@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useUser } from "@/api/user";
 import hasPermission from "@/api/operations";
 import { useTitle } from "@/utils/useTtile";
+import useSecuredPage from "@/utils/useSecuredPage";
 
 export default function Page()
 {
 	useTitle("Управление");
+	useSecuredPage("page_staff");
 	const user = useUser();
 	return (
 		<div className={styles.root}>

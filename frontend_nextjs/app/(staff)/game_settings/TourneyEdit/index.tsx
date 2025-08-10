@@ -176,28 +176,30 @@ function TreeNodeData({ characters, characterIdTree, editNode, collapse, start }
 	useEffect(() => { characterId.set(characterIdTree) }, [characterIdTree]);
 	return (
 		<div className={styles.nodeData} onClick={collapse ?? undefined}>
-			{character ? <>
+			{character ? <div>
 				<img src={character.img} alt={character.name} />
-				<div>{character.name}</div>
-			</> : <>
+				<span>{character.name}</span>
+			</div> : <div>
 				<div className={styles.nodeData__img}></div>
-				<div>Нет победителя</div>
-			</>}
+				<span>Нет победителя</span>
+			</div>}
 			<div style={{ flexGrow: 1 }}></div>
-			{editNode.isPending && <Spinner block />}
-			{displayError(editNode)}
-			{characterId.v != characterIdTree && <span className={styles.ctrlBtns} onClick={e => e.stopPropagation()}>
-				<Button text={<IconSave />} size="1.4rem" onClick={() => editNode.mutate({ characterId: characterId.v })} />
-				<Button text={<IconCancel />} size="1.4rem" onClick={() => { characterId.set(characterIdTree); editNode.reset(); }} />
-			</span>}
-			{start && <Button text={<IconPlay />} size="1.4rem" onClick={e => { e.stopPropagation(); start(); }} />}
-			<Select
-				values={[{ id: -1, name: "Нет победителя" }, ...characters]}
-				item={it => ({ id: it.id, text: it.name })}
-				stateObj={characterId}
-				onClick={e => e.stopPropagation()}
-			/>
-			{collapse && <Button size="1.4rem" className={styles.collapseBtn} />}
+			<div>
+				{editNode.isPending && <Spinner block />}
+				{displayError(editNode)}
+				{characterId.v != characterIdTree && <span className={styles.ctrlBtns} onClick={e => e.stopPropagation()}>
+					<Button text={<IconSave />} size="1.4rem" onClick={() => editNode.mutate({ characterId: characterId.v })} />
+					<Button text={<IconCancel />} size="1.4rem" onClick={() => { characterId.set(characterIdTree); editNode.reset(); }} />
+				</span>}
+				{start && <Button text={<IconPlay />} size="1.4rem" onClick={e => { e.stopPropagation(); start(); }} />}
+				<Select
+					values={[{ id: -1, name: "Нет победителя" }, ...characters]}
+					item={it => ({ id: it.id, text: it.name })}
+					stateObj={characterId}
+					onClick={e => e.stopPropagation()}
+				/>
+				{collapse && <Button size="1.4rem" className={styles.collapseBtn} />}
+			</div>
 		</div>
 	);
 }

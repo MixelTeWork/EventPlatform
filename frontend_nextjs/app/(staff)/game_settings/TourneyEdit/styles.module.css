@@ -20,6 +20,15 @@
 	gap: 0.5rem;
 }
 
+@media screen and (max-width: 500px) {
+	.curGameState {
+		grid-template-columns: 1fr;
+	}
+	.curGameState * {
+		word-break: break-all;
+	}
+}
+
 .characterName {
 	display: inline-flex;
 	gap: 0.25em;
@@ -63,14 +72,36 @@
 }
 
 .nodeData {
-	display: flex;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
 	align-items: center;
 	gap: 1rem;
 	padding-top: 0.75rem;
 }
+@media screen and (max-width: 550px) {
+	.nodeData {
+		grid-template-columns: auto;
+		gap: 0.4rem;
+	}
+	.nodeData > div {
+		flex-wrap: wrap;
+	}
+	.nodeData > div:last-child {
+		justify-self: end;
+	}
+	.collapseBtn {
+		display: none !important;
+	}
+}
 
-.nodeData img,
-.nodeData__img {
+.nodeData > div {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.nodeData > div:first-child img,
+.nodeData > div:first-child div {
 	width: 2rem;
 	height: 2rem;
 	border: 1px solid var(--c-secondary);
@@ -90,7 +121,7 @@
 	border-left: none;
 	transform: translateY(-0.05rem) rotate(45deg);
 }
-.nodeCollapsed > * > .collapseBtn::before {
+.nodeCollapsed > * > * > .collapseBtn::before {
 	transform: translateX(-0.05rem) rotate(-45deg);
 }
 
