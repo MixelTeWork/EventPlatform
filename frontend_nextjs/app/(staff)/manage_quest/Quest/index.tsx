@@ -21,6 +21,7 @@ import Input from "@sCmps/Input";
 import Checkbox from "@sCmps/Checkbox";
 import Textarea from "@sCmps/Textarea";
 import getDialog from "../getDialog";
+import useGameDialogEditor from "@sCmps/GameDialogEditor";
 
 export default function Quest({ quest }:
 {
@@ -45,8 +46,7 @@ export default function Quest({ quest }:
 	const dialog2Changed = useStateBool(false, changed.setT);
 
 	const dialog = useGameDialog();
-	// const editor = useGameDialogEditor();
-	const editor = { el: () => null, open: (d: any) => { } };
+	const editor = useGameDialogEditor();
 	const mutationEdit = useMutationQuestEdit(quest.id, reset, () => reset());
 
 	// eslint-disable-next-line

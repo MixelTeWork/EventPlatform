@@ -4,7 +4,7 @@ import { queryInvalidate, stdQuery } from "@/utils/query";
 import { stdMutation, stdMutationNoRes } from "@/utils/mutations";
 import { fetchJsonPost } from "@/utils/fetch";
 import { queryKey as queryKeyQuest } from "./quest"
-// turn to class and blend with operations.ts
+
 export interface User
 {
 	auth: boolean;

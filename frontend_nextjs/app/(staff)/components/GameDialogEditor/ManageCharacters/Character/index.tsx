@@ -40,6 +40,7 @@ export default function Character({ character, deleteNew }: {
 		id.setSilent(data.id);
 		name.setSilent(data.name);
 		orien.setSilent(data.orien);
+		imgData.setSilent(null);
 		changed.setF();
 	}
 

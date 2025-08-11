@@ -54,8 +54,8 @@ export const useMutationQuestEdit = itemMutation<QuestData, QuestFull>(url, (qc,
 {
 	queryListUpdateItem(qc, queryKeyFull(), data);
 	queryInvalidate(qc, queryKey());
-	if (data.dialog1Id != null) queryInvalidate(qc, queryKeyDialog(data.dialog1Id));
-	if (data.dialog2Id != null) queryInvalidate(qc, queryKeyDialog(data.dialog2Id));
+	if (data.dialog1Id != null) qc.removeQueries({ queryKey: queryKeyDialog(data.dialog1Id), exact: true });
+	if (data.dialog2Id != null) qc.removeQueries({ queryKey: queryKeyDialog(data.dialog2Id), exact: true });
 });
 
 export const useMutationQuestDelete = itemDeleteMutation(url, (qc, id) =>
