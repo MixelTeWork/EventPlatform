@@ -5,14 +5,5 @@
 	align-items: center;
 	justify-content: center;
 	gap: 1rem;
-	padding: 1rem;
-}
-
-.qr {
-	text-align: center;
-}
-.qr > * {
-	background-color: white;
-	border-radius: 0.5rem;
-	max-width: 300px;
+	font-size: 1.2rem;
 }

@@ -35,7 +35,7 @@ export default function SimpleHeader({ homeBtn = false }: SimpleHeaderProps)
 				{/* <button onClick={() => navigate("/profile")}>
 					Профиль
 				</button> */}
-				{hasPermission(user, "page_debug") && <Link to="/debug"><IconCode /></Link>}
+				{hasPermission(user, "page_dev") && <Link to="/debug"><IconCode /></Link>}
 				{hasPermission(user, "page_staff") && <Link to="/worker"><IconWidgets /></Link>}
 				<button className="clearBtn" onClick={() => logout.mutate()} disabled={logout.status != "idle" && logout.status != "error"}>
 					<IconExit />

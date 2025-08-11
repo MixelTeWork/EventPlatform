@@ -14,7 +14,7 @@ blueprint = Blueprint("user", __name__)
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_users)
+@permission_required(Operations.page_dev)
 def users(db_sess: Session, user: User):
     users = User.all(db_sess, includeDeleted=True)
     return jsonify_list(users, "get_dict_full")

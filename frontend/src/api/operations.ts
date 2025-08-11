@@ -3,7 +3,7 @@ import { User } from "./user";
 import useUser from "./user";
 
 const Operations = {
-	page_debug: "page_debug",
+	page_dev: "page_dev",
 	page_users: "page_users",
 	page_staff: "page_staff",
 	page_staff_quest: "page_staff_quest",

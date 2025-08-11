@@ -14,7 +14,7 @@ import IconCode from "@icons/code";
 import IconWidgets from "@icons/widgets";
 import IconExit from "@icons/exit";
 
-export default function Header()
+export default function Header({ dev = false }: { dev?: boolean })
 {
 	const router = useRouter();
 	const pathname = usePathname()
@@ -22,10 +22,12 @@ export default function Header()
 	const logout = useMutationLogout(menuOpen.setF);
 	const user = useUser();
 
+	const homepage = dev ? "/dev" : "/staff";
+
 	return (
 		<div className={styles.root}>
 			{logout.isPending && <Spinner />}
-			<Link href={pathname == "/staff" ? "/" : "/staff"} className={styles.home}>
+			<Link href={pathname == homepage ? "/" : homepage} className={styles.home}>
 				<IconHome />
 			</Link>
 			<div className={styles.gap}></div>
@@ -36,8 +38,8 @@ export default function Header()
 			</button>
 			<div className={clsx(styles.menu, menuOpen.v && styles.menuVisible)}>
 				<Link href={"/"}><IconHome /></Link>
-				{hasPermission(user, "page_debug") && <Link href="/debug"><IconCode /></Link>}
-				{hasPermission(user, "page_staff") && <Link href="/worker"><IconWidgets /></Link>}
+				{hasPermission(user, "page_dev") && <Link href="/dev"><IconCode /></Link>}
+				{hasPermission(user, "page_staff") && <Link href="/staff"><IconWidgets /></Link>}
 				<button className="clearBtn" onClick={() => logout.mutate()} disabled={logout.isPending || logout.isSuccess}>
 					<IconExit />
 				</button>

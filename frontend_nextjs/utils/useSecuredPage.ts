@@ -12,7 +12,9 @@ export default function useSecuredPage(operation: Operation)
 	useEffect(() =>
 	{
 		if (user.isPending) return;
-		if (!hasPermission(user, operation))
+		if (!user.data?.auth)
 			router.push("/");
+		else if (!hasPermission(user, operation))
+			router.replace("/403");
 	}, [user.isPending, user.data?.auth])
 }

@@ -6,8 +6,8 @@
 	background-color: rgba(from var(--_color) r g b / 0.2);
 	border: 1px solid var(--_color);
 	color: var(--c-secondary);
-	border-radius: 0.25rem;
-	font-size: 1rem;
+	border-radius: 0.25em;
+	font-size: 1em;
 	cursor: pointer;
 	transition: background-color 50ms;
 }

@@ -41,7 +41,7 @@ export default function Header({ homeBtn = false }: {
 					<button onClick={() => logout.mutate()} disabled={logout.isPending || logout.isSuccess}>
 						<IconExit />
 					</button>
-					{hasPermission(user, "page_debug") && <Link href="/debug"><IconCode /></Link>}
+					{hasPermission(user, "page_dev") && <Link href="/dev"><IconCode /></Link>}
 					{hasPermission(user, "page_staff") && <Link href="/staff"><IconWidgets /></Link>}
 				</>}
 			</div>

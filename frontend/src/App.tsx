@@ -82,8 +82,8 @@ export default function App()
 				{ProtectedRoute("promote_staff", "/promote_worker", <PromotePage role="worker" />)}
 				{ProtectedRoute("promote_manager", "/promote_manager", <PromotePage role="manager" />)}
 				{ProtectedRoute("send_any", "/send", <SendPage />)}
-				{ProtectedRoute("page_debug", "/debug", <DebugPage />)}
-				{ProtectedRoute("page_debug", "/log", <LogPage />)}
+				{ProtectedRoute("page_dev", "/debug", <DebugPage />)}
+				{ProtectedRoute("page_dev", "/log", <LogPage />)}
 				{ProtectedRoute("page_users", "/users", <UsersPage />)}
 				<Route path="*" element={<NotFoundPage />} />
 			</Routes>

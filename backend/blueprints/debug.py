@@ -17,7 +17,7 @@ PSIZE = 100
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_debug)
+@permission_required(Operations.page_dev)
 def debug_log(db_sess: Session, user: User):
     p = request.args.get("p", 0, type=int)
     if p < 0:
@@ -30,7 +30,7 @@ def debug_log(db_sess: Session, user: User):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_debug)
+@permission_required(Operations.page_dev)
 def debug_log_len(db_sess: Session, user: User):
     count = db_sess.query(Log).count()
     return {"len": math.ceil(count / PSIZE)}
@@ -40,7 +40,7 @@ def debug_log_len(db_sess: Session, user: User):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_debug)
+@permission_required(Operations.page_dev)
 def debug_log_info(db_sess: Session, user: User):
     return last_n_lines(get_log_fpath(bafser_config.log_info_path), 256)
 
@@ -49,7 +49,7 @@ def debug_log_info(db_sess: Session, user: User):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_debug)
+@permission_required(Operations.page_dev)
 def debug_log_requests(db_sess: Session, user: User):
     return last_n_lines(get_log_fpath(bafser_config.log_requests_path), 256)
 
@@ -58,7 +58,7 @@ def debug_log_requests(db_sess: Session, user: User):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_debug)
+@permission_required(Operations.page_dev)
 def debug_log_errors(db_sess: Session, user: User):
     return last_n_lines(get_log_fpath(bafser_config.log_errors_path), 256)
 
@@ -67,7 +67,7 @@ def debug_log_errors(db_sess: Session, user: User):
 @jwt_required()
 @use_db_session()
 @use_user()
-@permission_required(Operations.page_debug)
+@permission_required(Operations.page_dev)
 def debug_log_frontend(db_sess: Session, user: User):
     return last_n_lines(get_log_fpath(bafser_config.log_frontend_path), 256)
 

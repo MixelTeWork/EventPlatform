@@ -1,0 +1,60 @@
+.btns {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+.btns > :first-child {
+	flex-grow: 1;
+}
+
+.table {
+	border-collapse: collapse;
+}
+
+.table td {
+	vertical-align: top;
+}
+
+.table tr:nth-child(2n - 1) td {
+	background-color: #00000037;
+}
+
+.changes {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	overflow: auto;
+}
+
+.changes > input {
+	position: absolute;
+	pointer-events: none;
+	opacity: 0;
+}
+
+.changes > div {
+	overflow: hidden;
+	height: 1.2rem;
+}
+.changes > div > div {
+	width: fit-content;
+	word-break: break-all;
+}
+
+.changes > input:checked ~ div {
+	height: auto;
+}
+
+.changes > label {
+	align-self: start;
+	user-select: none;
+}
+
+.btn {
+	background-color: #444;
+	color: #d4d4d4;
+	border: none;
+	border-radius: 4px;
+	padding: 0px 4px;
+	cursor: pointer;
+}

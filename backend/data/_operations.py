@@ -2,8 +2,7 @@ from bafser import OperationsBase
 
 
 class Operations(OperationsBase):
-    page_users = ("page_users", "Страница пользователей")
-    page_debug = ("page_debug", "Страница отладки")
+    page_dev = ("page_dev", "Страница отладки")
     page_staff = ("page_staff", "Страница для персонала")
     page_staff_quest = ("page_staff_quest", "Страница кодов квестов")
     page_staff_store = ("page_staff_store", "Страница кодов товаров")

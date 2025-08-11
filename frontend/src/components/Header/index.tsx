@@ -36,7 +36,7 @@ export default function Header({ homeBtn = false, forStaff = false, forDev = fal
 					<button className="clearBtn" onClick={() => logout.mutate()} disabled={logout.status != "idle" && logout.status != "error"}>
 						<IconExit />
 					</button>
-					{hasPermission(user, "page_debug") && <Link to="/debug"><IconCode /></Link>}
+					{hasPermission(user, "page_dev") && <Link to="/debug"><IconCode /></Link>}
 					{hasPermission(user, "page_staff") && <Link to="/worker"><IconWidgets /></Link>}
 				</>}
 			</div>

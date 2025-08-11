@@ -1,8 +1,8 @@
 import type { UseQueryResult } from "@tanstack/react-query";
-import { User, useUser } from "./user";
+import { User } from "./user";
 
 const Operations = {
-	page_debug: "page_debug",
+	page_dev: "page_dev",
 	page_users: "page_users",
 	page_staff: "page_staff",
 	page_staff_quest: "page_staff_quest",

@@ -1,0 +1,38 @@
+.root {
+	max-height: 100vh;
+	max-height: 100dvh;
+	font-family: var(--font-PTSans), Arial, Helvetica, sans-serif;
+	--background: #1e1e1e;
+	--color: #d4d4d4;
+	--c-back: #1e1e1e;
+	--c-primary: #666;
+	--c-secondary: #d4d4d4;
+	--c-text: #d4d4d4;
+	color: var(--color);
+	min-height: 100%;
+	width: 100%;
+	display: grid;
+	grid-template-rows: max-content auto;
+}
+
+.bodyContainer {
+	display: flex;
+	justify-content: center;
+	overflow: auto;
+}
+
+.body {
+	min-height: fit-content;
+	min-width: 0;
+	width: 100%;
+	max-width: 820px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding-top: 0.5rem;
+	padding-bottom: 1rem;
+}
+
+.body:has(:global(.layout_gap)) {
+	gap: 2rem;
+}
