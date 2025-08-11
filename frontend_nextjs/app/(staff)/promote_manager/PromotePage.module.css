@@ -1,0 +1,19 @@
+.root {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	max-height: 100%;
+	padding: 1rem;
+}
+
+.qr {
+	text-align: center;
+}
+.qr > * {
+	background-color: white;
+	border-radius: 0.5rem;
+	max-width: 300px;
+}

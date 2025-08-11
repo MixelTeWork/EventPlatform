@@ -3,12 +3,13 @@ import React, { type InputHTMLAttributes } from "react"
 import clsx from "@/utils/clsx"
 import type { StateObj } from "@/utils/useStateObj";
 
-export default function Input<T extends React.HTMLInputTypeAttribute>({ className, ref, required = false, type = "text" as T, stateObj, value, onChange, checked }: {
+export default function Input<T extends React.HTMLInputTypeAttribute>({ className, ref, required = false, type = "text" as T, stateObj, value, onChange, onChangeV, checked }: {
 	className?: string,
 	ref?: React.Ref<HTMLInputElement>,
 	required?: boolean,
 	type?: T,
 	onChange?: React.ChangeEventHandler<HTMLInputElement>,
+	onChangeV?: (v: T extends "number" ? number : T extends "checkbox" ? boolean : string) => void,
 } & ({
 	stateObj?: StateObj<T extends "number" ? number : T extends "checkbox" ? boolean : string>,
 	value?: never,
@@ -28,15 +29,12 @@ export default function Input<T extends React.HTMLInputTypeAttribute>({ classNam
 		checked={checked || (typeof stateObj?.v == "boolean" ? stateObj?.v : undefined)}
 		onChange={e =>
 		{
-			if (stateObj)
-			{
-				if (type == "number")
-					stateObj.set(e.target.valueAsNumber as any);
-				else if (type == "checkbox")
-					stateObj.set(e.target.checked as any);
-				else
-					stateObj.set(e.target.value as any);
-			}
+			let value =
+				type == "number" ? e.target.valueAsNumber :
+					type == "checkbox" ? e.target.checked :
+						e.target.value;
+			stateObj?.set(value as any);
+			onChangeV?.(value as any);
 			onChange?.(e);
 		}}
 	/>

@@ -1,0 +1,67 @@
+.root {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	max-height: 100%;
+}
+
+.block {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+	border: 2px solid var(--c-secondary);
+	border-radius: 0.5rem;
+}
+
+.value {
+	font-size: 1.5rem !important;
+	width: 4rem;
+	align-self: center;
+}
+
+.reusable {
+	align-self: center;
+	display: flex;
+	gap: 0.5rem;
+}
+
+.action {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin: 0.5rem;
+	gap: 0.5rem;
+}
+
+.qr {
+	background-color: white;
+	border-radius: 0.5rem;
+}
+.send {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+.send h2 {
+	text-align: center;
+}
+.send h1 {
+	color: yellow;
+}
+
+.check {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 0.5rem;
+}
+.notUsed {
+	color: tomato;
+}
+.used {
+	color: lime;
+}

@@ -1,0 +1,44 @@
+.root {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	max-height: 100%;
+	padding: 1rem;
+}
+
+.inputs {
+	display: grid;
+	grid-template-columns: auto 8rem 4.5rem;
+	grid-template-rows: 2rem;
+	gap: 0.25rem 0.5rem;
+}
+.inputs > :nth-child(2n - 1) {
+	align-self: center;
+}
+.changedHighlight {
+	color: var(--c-secondary);
+}
+
+.changed .inputs input {
+	border: 1px solid var(--c-secondary);
+}
+
+.buttons {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	min-width: 4.25rem;
+}
+
+.buttons button {
+	width: 2rem;
+	height: 2rem;
+}
+
+.checkbox {
+	align-self: center;
+	justify-self: center;
+}
