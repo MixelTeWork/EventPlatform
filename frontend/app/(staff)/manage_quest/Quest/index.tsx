@@ -136,7 +136,7 @@ export default function Quest({ quest }:
 				{changed.v && <Button text={<IconCancel />} onClick={() => reset()} />}
 			</div>
 			<Popup title="Редактирование квеста" openState={popupOpen}>
-				<h2>Описание квеста "{name.v}"</h2>
+				<h2>{`Описание квеста "${name.v}"`}</h2>
 				<Textarea cols={40} rows={10} stateObj={description} />
 				<div className={styles.description_count}>
 					<span>

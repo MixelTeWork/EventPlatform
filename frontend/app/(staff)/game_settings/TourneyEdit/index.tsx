@@ -90,6 +90,7 @@ function EditWinnerBtn({ tourney, winner, oponent1, oponent2 }: {
 	const editing = useStateBool(false);
 	const editNode = useMutationTourneyEditNode(tourney.data?.curGameNodeId || -1);
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => { winnerId.set(winner?.id || -1) }, [winner?.id]);
 
 	const winnerCur =
@@ -165,7 +166,7 @@ function Tree({ tree, characters, c = false }: {
 function TreeNodeData({ characters, characterIdTree, editNode, collapse, start }: {
 	characters: TourneyCharacter[],
 	characterIdTree: number,
-	editNode: UseMutationResult<TourneyData, any, TourneyNodeData, unknown>
+	editNode: UseMutationResult<TourneyData, unknown, TourneyNodeData, unknown>
 	collapse?: (() => void) | null,
 	start?: (() => void) | null,
 })
@@ -173,6 +174,7 @@ function TreeNodeData({ characters, characterIdTree, editNode, collapse, start }
 	const characterId = useStateObj(characterIdTree);
 	const character = characters.find(ch => ch.id == characterId.v);
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => { characterId.set(characterIdTree) }, [characterIdTree]);
 	return (
 		<div className={styles.nodeData} onClick={collapse ?? undefined}>
@@ -256,7 +258,7 @@ function checkTreeForErrors(tree: TreeNode, characters: TourneyCharacter[])
 {
 	let parents = [tree];
 	let children = [] as TreeNode[];
-	let errors = [];
+	const errors = [];
 	while (parents.length != 0)
 	{
 		for (const node of parents)

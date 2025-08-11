@@ -10,7 +10,7 @@ export default function TourneyPage()
 
 	return (
 		<div className={styles.root}>
-			<canvas ref={el => { el && tourney.setCanvas(el) }}></canvas>
+			<canvas ref={el => { if (el) tourney.setCanvas(el) }}></canvas>
 		</div>
 	);
 }

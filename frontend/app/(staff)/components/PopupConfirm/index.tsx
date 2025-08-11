@@ -9,17 +9,17 @@ import Button from "@sCmps/Button";
 
 export default function PopupConfirm<TD, TE, TV>({ title, mutationFn, mutatateParams, itemId, onSuccess, onError, open, close, openState }: {
 	title: string | React.ReactNode,
-	mutationFn: (itemId: number, onSuccess: (item: TD | void) => void, onError?: (err: TE) => void) => UseMutationResult<TD, TE, TV, any>,
+	mutationFn: (itemId: number, onSuccess: (item: TD | void) => void, onError?: (err: TE) => void) => UseMutationResult<TD, TE, TV, unknown>,
 	mutatateParams?: TV,
 	itemId: number,
-	onSuccess?: (item: TD) => void,
+	onSuccess?: (item: TD | void) => void,
 	onError?: (err: TE) => void,
 	open?: boolean,
 	close?: () => void,
 	openState?: StateBool,
 })
 {
-	const mutation = mutationFn(itemId, (item: any) =>
+	const mutation = mutationFn(itemId, (item: TD | void) =>
 	{
 		close?.();
 		openState?.setF();

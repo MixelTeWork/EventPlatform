@@ -18,6 +18,7 @@ export default function Layout({
 		if (user.isPending) return;
 		if (user.data?.auth) return;
 		router.push("/");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user.isPending, user.data?.auth])
 	if (user.data?.auth) return children;
 	return <Loading />

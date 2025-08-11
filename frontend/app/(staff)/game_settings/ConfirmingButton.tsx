@@ -12,7 +12,7 @@ export default function ConfirmingButton({ text, bt, rt, disabled, className, mu
 	rt: string,
 	disabled?: boolean,
 	className?: string | false,
-	mutation: (onSuccess?: () => void, onError?: (err: any) => void) => UseMutationResult<any, any, void, unknown>
+	mutation: (onSuccess?: () => void, onError?: (err: unknown) => void) => UseMutationResult<unknown, unknown, void, unknown>
 })
 {
 	const popupOpen = useStateBool(false);

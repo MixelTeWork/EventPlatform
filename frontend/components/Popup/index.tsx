@@ -29,6 +29,7 @@ export default function Popup({ children, open = false, close, openState, title 
 		isOpen.setF();
 		const timeout = setTimeout(hidden.setT, 250);
 		return () => clearTimeout(timeout);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [open]);
 
 	useEffect(() =>
@@ -40,7 +41,7 @@ export default function Popup({ children, open = false, close, openState, title 
 		};
 		window.addEventListener("keydown", keydown);
 		return () => { window.removeEventListener("keydown", keydown); };
-	}, [close, closeOnOutclick]);
+	}, [close, closeOnOutclick, open]);
 
 	return (
 		<div

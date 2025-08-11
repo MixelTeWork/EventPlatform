@@ -2,7 +2,7 @@ import clsx from "@/utils/clsx";
 import styles from "./styles.module.css"
 import { useEffect, useRef } from "react";
 
-export default function StyledWindow({ children, title = "Underparty", footer, className, scrollUpdate, onClose }: {
+export default function StyledWindow({ children, footer, className, scrollUpdate }: {
 	title?: string,
 	footer?: React.ReactNode,
 	className?: string,
@@ -16,7 +16,6 @@ export default function StyledWindow({ children, title = "Underparty", footer, c
 	{
 		if (contentRef.current)
 			contentRef.current.scrollTo(0, 0);
-		// eslint-disable-next-line
 	}, [scrollUpdate])
 
 	return (

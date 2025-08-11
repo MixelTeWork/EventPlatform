@@ -23,8 +23,10 @@ export default function InputImage({ className, curImg, imgData, width, aspectRa
 				accept="image/png, image/jpeg, image/gif"
 				onChange={async e =>
 				{
+					const file = e.target?.files?.[0];
+					if (!file) return;
 					imgData.set({ data: "", name: "" });
-					imgData.set(await imagefileToData(e.target?.files?.[0]!));
+					imgData.set(await imagefileToData(file));
 					e.target.value = "";
 				}}
 			/>

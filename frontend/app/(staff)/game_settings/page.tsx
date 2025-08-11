@@ -59,7 +59,7 @@ function SettingInput<T, K extends number | string>({ text, type, getv, query, m
 	type: "number" | "text",
 	getv: (data?: T) => K,
 	query: () => UseQueryResult<T, unknown>,
-	mutation: () => UseMutationResult<T, any, K, unknown>,
+	mutation: () => UseMutationResult<T, unknown, K, unknown>,
 })
 {
 	const value = useStateObj(getv());
@@ -76,6 +76,7 @@ function SettingInput<T, K extends number | string>({ text, type, getv, query, m
 			{displayError(queryR)}
 			{displayError(mutate)}
 			<span>{text}</span>
+			{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 			<Input type={type} stateObj={value as any} />
 			{queryR.data && value.v != getv(queryR.data) && <>
 				<Button text={<IconSave />} onClick={() => mutate.mutate(value.v)} />

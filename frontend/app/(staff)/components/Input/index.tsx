@@ -29,11 +29,13 @@ export default function Input<T extends React.HTMLInputTypeAttribute>({ classNam
 		checked={checked || (typeof stateObj?.v == "boolean" ? stateObj?.v : undefined)}
 		onChange={e =>
 		{
-			let value =
+			const value =
 				type == "number" ? e.target.valueAsNumber :
 					type == "checkbox" ? e.target.checked :
 						e.target.value;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			stateObj?.set(value as any);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			onChangeV?.(value as any);
 			onChange?.(e);
 		}}

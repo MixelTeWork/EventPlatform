@@ -12,7 +12,7 @@ export default function ErrorPage({ error, reset }: {
 		{
 			try
 			{
-				let d = error as any;
+				let d = error as unknown;
 				if (d instanceof Error) d = { message: d.message, stack: d.stack };
 				await fetch("/api/frontend_error", {
 					method: "POST",

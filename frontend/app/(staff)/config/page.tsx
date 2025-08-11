@@ -20,6 +20,7 @@ export default function ConfigPage()
 	const ticketLoginEnabled = useStateBool(ticketLoginEnabled_data.data?.value || false)
 	const mutateTicketLoginEnabled = useMutationTicketLoginEnabled();
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => ticketLoginEnabled.set(ticketLoginEnabled_data.data?.value || false), [ticketLoginEnabled_data.data?.value]);
 
 	return (

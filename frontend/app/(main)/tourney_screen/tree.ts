@@ -21,11 +21,11 @@ export class Tree
 		this.tree = new TreeNode(this.characters, { id: -1, characterId: -1 }, -1);
 		this.third = new TreeNode(this.characters, { id: -1, characterId: -1 }, -1);
 		this.updateData(data)
-		// @ts-ignore
+		// @ts-expect-error dev
 		window.setTourneyTransform = (dx: number, dy: number, s: number) => this.transform = { dx, dy, s };
-		// @ts-ignore
+		// @ts-expect-error dev
 		window.setTourneyTransform(-50, -100, 0.35);
-		// @ts-ignore
+		// @ts-expect-error dev
 		window.setTourneyTransform(-50, -100, 0.6);
 	}
 

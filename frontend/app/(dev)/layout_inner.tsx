@@ -22,6 +22,7 @@ export default function LayoutInner({
 			router.push("/");
 		else if (!canSee)
 			router.replace("/403");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user.isPending, user.data?.auth, canSee])
 	return canSee ? children : <Loading />;
 }

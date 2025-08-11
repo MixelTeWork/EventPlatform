@@ -24,7 +24,7 @@ jobs:
         npm run build
     - name: Move build to backend
       run: |
-        mv frontend/build backend/
+        mv frontend/out backend/build
     - name: Deploy with gh-pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
