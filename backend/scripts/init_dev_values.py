@@ -21,7 +21,7 @@ def init_dev_values(db_sess: Session, config: AppConfig):
     user_admin.balance = 100
 
     now = get_datetime_now()
-    os.makedirs("images", exist_ok=True)
+    os.makedirs(config.IMAGES_FOLDER, exist_ok=True)
     for i, ext in enumerate(["jpeg", "jpeg", "png", "png", "png"]):
         id = i + 1
         shutil.copy(f"scripts/dev_init_data/{id}.{ext}", f"{config.IMAGES_FOLDER}/{id}.{ext}")
