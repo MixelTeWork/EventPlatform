@@ -8,6 +8,7 @@
 
 ARG NODE_VERSION=20.16.0
 ARG PYTHON_VERSION=3.9
+ARG PUBLIC_URL=https://eventplatform-mixelte.amvera.io/
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -29,7 +30,8 @@ RUN --mount=type=cache,target=/root/.npm \
 
 # Copy the rest of the source files into the image.
 COPY frontend .
-ENV PUBLIC_URL=http://localhost:3000/
+ARG PUBLIC_URL
+ENV PUBLIC_URL=${PUBLIC_URL}
 # Run the build script.
 RUN npm run build
 

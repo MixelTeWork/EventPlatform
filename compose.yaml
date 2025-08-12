@@ -18,6 +18,8 @@ services:
     environment:
       - API_SECRET_KEY=${API_SECRET_KEY}
       - ADMINPWD=${ADMINPWD}
+    args:
+      PUBLIC_URL: http://localhost:3000/
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
