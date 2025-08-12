@@ -1,4 +1,4 @@
-bafser==1.5.11
+bafser==1.6
 alembic==1.12.1
 Flask-MonitoringDashboard==4.0.4
 python-dotenv

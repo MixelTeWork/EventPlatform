@@ -29,10 +29,6 @@ def docs():
             "__desc__": "Get current user",
             "response": "User",
         },
-        "/api/users": {
-            "__desc__": "Get all users",
-            "response": "UserFull[]",
-        },
         "/api/user/change_password POST": {
             "__desc__": "Set new password",
             "request": {
@@ -56,6 +52,45 @@ def docs():
         },
         "/api/user/open_game POST": {
             "__desc__": "Mark game dialog as opened",
+        },
+        "/api/users": {
+            "__desc__": "Get all users",
+            "response": "UserFull[]",
+        },
+        "/api/users POST": {
+            "__desc__": "Add user",
+            "request": {
+                "login": "string",
+                "password": "string",
+                "name": "string",
+                "roles": "number[]",
+            },
+            "response": "UserFull",
+        },
+        "/api/users/roles": {
+            "__desc__": "Get all roles",
+            "response": "UserRole[]",
+        },
+        "/api/users/<int:itemId>/roles": {
+            "__desc__": "Set user roles",
+            "request": {
+                "roles": "number[]",
+            },
+            "response": "UserFull",
+        },
+        "/api/users/<int:itemId>/set_password": {
+            "__desc__": "Set user password",
+            "request": {
+                "password": "string",
+            },
+            "response": "UserFull",
+        },
+        "/api/users/<int:itemId>/set_name": {
+            "__desc__": "Set user name",
+            "request": {
+                "name": "string",
+            },
+            "response": "UserFull",
         },
         "/api/img/<int:imageId>": {
             "__desc__": "Get image",
@@ -310,11 +345,15 @@ def docs():
             "last_name": "string | null",
             "photo": "string | null",
             "balance": "number",
-            "roles": "string[]",
+            "roles": "UserRole[]",
             "deleted": "boolean",
             "operations": "string[]",
             "group": "number",
             "gameOpened": "boolean",
+        },
+        "UserRole": {
+            "id": "number",
+            "name": "string",
         },
         "Image": {
             "data": "string",

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, ResponseMsg } from "./dataTypes";
-import { queryInvalidate, stdQuery } from "@/utils/query";
-import { stdMutation, stdMutationNoRes } from "@/utils/mutations";
+import { queryInvalidate, queryListAddItem, queryListUpdateItem, stdQuery } from "@/utils/query";
+import { itemMutation, stdMutation, stdMutationNoRes } from "@/utils/mutations";
 import { fetchJsonPost } from "@/utils/fetch";
 import { queryKey as queryKeyQuest } from "./quest"
 
@@ -30,7 +30,7 @@ export interface UserFull
 	last_name: string;
 	photo: string;
 	balance: number;
-	roles: string[];
+	roles: UserRole[];
 	deleted: boolean;
 	operations: string[];
 	group: UserGroup;
@@ -39,6 +39,7 @@ export interface UserFull
 }
 
 export type UserGroup = -1 | 0 | 1 | 2;
+export interface UserRole { id: number, name: string }
 
 export interface UserWithPwd extends User
 {
@@ -49,6 +50,7 @@ const url = "/api/user"
 const urlList = "/api/users"
 const queryKey = () => ["user"];
 const queryKeyList = () => ["users"];
+const queryKeyRoles = () => ["users", "roles"];
 
 export const createEmptyUser: (() => User) = () =>
 	({ auth: false, id: "", balance: 0, roles: [], name: "", last_name: "", photo: "", operations: [], group: -1, gameOpened: false, ticketTId: -1 });
@@ -138,3 +140,20 @@ function authMutation<TAuthData>(url: string)
 		return mutation;
 	}
 }
+
+export const useUsersRoles = stdQuery<UserRole[]>(queryKeyRoles(), urlList + "/roles");
+
+interface NewUserData { login: string; password: string; name: string; roles: number[]; }
+export const useMutationUserAdd = stdMutation<NewUserData, UserFull>(urlList, (qc, data) => queryListAddItem(qc, queryKeyList(), data));
+export const useMutationUserSetRoles = itemMutation<number[], UserFull>(id => `${urlList}/${id}/roles`,
+	(qc, data) => queryListUpdateItem(qc, queryKeyList(), data),
+	roles => ({ roles })
+);
+export const useMutationUserSetPassword = itemMutation<string, UserFull>(id => `${urlList}/${id}/set_password`,
+	(qc, data) => queryListUpdateItem(qc, queryKeyList(), data),
+	password => ({ password })
+);
+export const useMutationUserSetName = itemMutation<string, UserFull>(id => `${urlList}/${id}/set_name`,
+	(qc, data) => queryListUpdateItem(qc, queryKeyList(), data),
+	name => ({ name })
+);
