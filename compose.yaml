@@ -12,13 +12,19 @@ services:
       - API_SECRET_KEY=${API_SECRET_KEY}
       - ADMINPWD=${ADMINPWD}
       - DBPATH=root:${DBPWD}@db:3306/default
+      - DBDASHBOARDPATH=mysql+pymysql://root:${DBPWD}@db:3306/dashboard
     depends_on:
       db:
         condition: service_healthy
 
   db:
     image: mysql:8.4
-    command: "--mysql-native-password=ON --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    # command: --mysql-native-password=ON --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    entrypoint:
+      sh -c "
+        echo 'CREATE DATABASE IF NOT EXISTS dashboard;' > /docker-entrypoint-initdb.d/init.sql;
+        /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      "
     restart: always
     secrets:
       - db-password

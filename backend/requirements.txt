@@ -1,5 +1,6 @@
-bafser==1.5.8
+bafser==1.5.11
 alembic==1.12.1
+Flask-MonitoringDashboard==4.0.4
 python-dotenv
 requests
 gunicorn

@@ -1,4 +1,4 @@
-db_dev_path = "storage/db/dev.db"
+db_dev_path = "storage/dev.db"
 db_path = "ENV:DBPATH"
 db_mysql = True
 sql_echo = False
