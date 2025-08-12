@@ -1,4 +1,5 @@
 .venv
+.env
 *.log
 *.csv
 *.db
@@ -8,3 +9,4 @@ secret_key_vk.txt
 secret_key_api.txt
 /images
 /fonts
+/storage

@@ -99,7 +99,7 @@ def create_user_by_ticket(db_sess: Session, code: str):
     return user
 
 
-@blueprint.route("/auth_vk")
+# @blueprint.route("/auth_vk")
 @use_db_session()
 def auth_vk(db_sess: Session):
     vk_user = get_vk_user()

@@ -1,8 +1,8 @@
 """v1
 
-Revision ID: a5e54a362a9f
+Revision ID: c37e67086221
 Revises: 
-Create Date: 2025-03-12 01:19:38.959374
+Create Date: 2025-08-11 23:34:36.808543
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'a5e54a362a9f'
+revision: str = 'c37e67086221'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,7 +25,9 @@ def upgrade() -> None:
     sa.Column('deleted', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Dialog')),
-    sa.UniqueConstraint('id', name=op.f('uq_Dialog_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Dialog_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('GameLog',
     sa.Column('startStr', sa.String(length=8), nullable=True),
@@ -39,7 +41,9 @@ def upgrade() -> None:
     sa.Column('winner', sa.Integer(), nullable=True),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_GameLog')),
-    sa.UniqueConstraint('id', name=op.f('uq_GameLog_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_GameLog_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Log',
     sa.Column('date', sa.DateTime(), nullable=False),
@@ -51,20 +55,34 @@ def upgrade() -> None:
     sa.Column('changes', sa.JSON(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Log')),
-    sa.UniqueConstraint('id', name=op.f('uq_Log_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Log_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Operation',
     sa.Column('id', sa.String(length=32), nullable=False),
     sa.Column('name', sa.String(length=32), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Operation')),
-    sa.UniqueConstraint('id', name=op.f('uq_Operation_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Operation_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
+    )
+    op.create_table('Other',
+    sa.Column('ticketLoginEnabled', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_Other')),
+    sa.UniqueConstraint('id', name=op.f('uq_Other_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Role',
     sa.Column('name', sa.String(length=32), nullable=False),
     sa.Column('deleted', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Role')),
-    sa.UniqueConstraint('id', name=op.f('uq_Role_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Role_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Tourney',
     sa.Column('data', sa.JSON(), nullable=False),
@@ -73,7 +91,9 @@ def upgrade() -> None:
     sa.Column('ended', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Tourney')),
-    sa.UniqueConstraint('id', name=op.f('uq_Tourney_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Tourney_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('User',
     sa.Column('login', sa.String(length=64), nullable=False),
@@ -91,7 +111,9 @@ def upgrade() -> None:
     sa.Column('id_big', sa.String(length=8), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_User')),
     sa.UniqueConstraint('id', name=op.f('uq_User_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_User_id_big'))
+    sa.UniqueConstraint('id_big', name=op.f('uq_User_id_big')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     with op.batch_alter_table('User', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_User_login'), ['login'], unique=True)
@@ -105,7 +127,9 @@ def upgrade() -> None:
     sa.Column('hackAlert', sa.Integer(), nullable=True),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_UserGameLog')),
-    sa.UniqueConstraint('id', name=op.f('uq_UserGameLog_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_UserGameLog_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Image',
     sa.Column('name', sa.String(length=128), nullable=False),
@@ -117,18 +141,22 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['createdById'], ['User.id'], name=op.f('fk_Image_createdById_User')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Image')),
-    sa.UniqueConstraint('id', name=op.f('uq_Image_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Image_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Permission',
     sa.Column('roleId', sa.Integer(), nullable=False),
     sa.Column('operationId', sa.String(length=32), nullable=False),
     sa.ForeignKeyConstraint(['operationId'], ['Operation.id'], name=op.f('fk_Permission_operationId_Operation')),
     sa.ForeignKeyConstraint(['roleId'], ['Role.id'], name=op.f('fk_Permission_roleId_Role')),
-    sa.PrimaryKeyConstraint('roleId', 'operationId', name=op.f('pk_Permission'))
+    sa.PrimaryKeyConstraint('roleId', 'operationId', name=op.f('pk_Permission')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Quest',
     sa.Column('name', sa.String(length=128), nullable=False),
-    sa.Column('description', sa.String(length=256), nullable=False),
+    sa.Column('description', sa.String(length=512), nullable=False),
     sa.Column('reward', sa.Integer(), nullable=False),
     sa.Column('hidden', sa.Boolean(), nullable=False),
     sa.Column('dialog1Id', sa.Integer(), nullable=True),
@@ -140,7 +168,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['dialog2Id'], ['Dialog.id'], name=op.f('fk_Quest_dialog2Id_Dialog')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Quest')),
     sa.UniqueConstraint('id', name=op.f('uq_Quest_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_Quest_id_big'))
+    sa.UniqueConstraint('id_big', name=op.f('uq_Quest_id_big')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Send',
     sa.Column('date', sa.DateTime(), nullable=False),
@@ -154,7 +184,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['creatorId'], ['User.id'], name=op.f('fk_Send_creatorId_User')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Send')),
     sa.UniqueConstraint('id', name=op.f('uq_Send_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_Send_id_big'))
+    sa.UniqueConstraint('id_big', name=op.f('uq_Send_id_big')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Transaction',
     sa.Column('date', sa.DateTime(), nullable=False),
@@ -167,7 +199,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['fromId'], ['User.id'], name=op.f('fk_Transaction_fromId_User')),
     sa.ForeignKeyConstraint(['toId'], ['User.id'], name=op.f('fk_Transaction_toId_User')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Transaction')),
-    sa.UniqueConstraint('id', name=op.f('uq_Transaction_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Transaction_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('UserGame',
     sa.Column('userId', sa.Integer(), nullable=False),
@@ -176,14 +210,18 @@ def upgrade() -> None:
     sa.Column('lastClick', sa.DateTime(), nullable=True),
     sa.Column('hackAlert', sa.Integer(), server_default='0', nullable=False),
     sa.ForeignKeyConstraint(['userId'], ['User.id'], name=op.f('fk_UserGame_userId_User')),
-    sa.PrimaryKeyConstraint('userId', name=op.f('pk_UserGame'))
+    sa.PrimaryKeyConstraint('userId', name=op.f('pk_UserGame')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('UserRole',
     sa.Column('userId', sa.Integer(), nullable=False),
     sa.Column('roleId', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['roleId'], ['Role.id'], name=op.f('fk_UserRole_roleId_Role')),
     sa.ForeignKeyConstraint(['userId'], ['User.id'], name=op.f('fk_UserRole_userId_User')),
-    sa.PrimaryKeyConstraint('userId', 'roleId', name=op.f('pk_UserRole'))
+    sa.PrimaryKeyConstraint('userId', 'roleId', name=op.f('pk_UserRole')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('DialogCharacter',
     sa.Column('name', sa.String(length=128), nullable=False),
@@ -193,7 +231,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['imgId'], ['Image.id'], name=op.f('fk_DialogCharacter_imgId_Image')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_DialogCharacter')),
-    sa.UniqueConstraint('id', name=op.f('uq_DialogCharacter_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_DialogCharacter_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('StoreItem',
     sa.Column('name', sa.String(length=128), nullable=False),
@@ -206,7 +246,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['imgId'], ['Image.id'], name=op.f('fk_StoreItem_imgId_Image')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_StoreItem')),
     sa.UniqueConstraint('id', name=op.f('uq_StoreItem_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_StoreItem_id_big'))
+    sa.UniqueConstraint('id_big', name=op.f('uq_StoreItem_id_big')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('TourneyCharacter',
     sa.Column('name', sa.String(length=128), nullable=False),
@@ -216,7 +258,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['imgId'], ['Image.id'], name=op.f('fk_TourneyCharacter_imgId_Image')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_TourneyCharacter')),
-    sa.UniqueConstraint('id', name=op.f('uq_TourneyCharacter_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_TourneyCharacter_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('UserQuest',
     sa.Column('userId', sa.Integer(), nullable=False),
@@ -225,17 +269,21 @@ def upgrade() -> None:
     sa.Column('completeDate', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['questId'], ['Quest.id'], name=op.f('fk_UserQuest_questId_Quest')),
     sa.ForeignKeyConstraint(['userId'], ['User.id'], name=op.f('fk_UserQuest_userId_User')),
-    sa.PrimaryKeyConstraint('userId', 'questId', name=op.f('pk_UserQuest'))
+    sa.PrimaryKeyConstraint('userId', 'questId', name=op.f('pk_UserQuest')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('UserSend',
     sa.Column('userId', sa.Integer(), nullable=False),
     sa.Column('sendId', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['sendId'], ['Send.id'], name=op.f('fk_UserSend_sendId_Send')),
     sa.ForeignKeyConstraint(['userId'], ['User.id'], name=op.f('fk_UserSend_userId_User')),
-    sa.PrimaryKeyConstraint('userId', 'sendId', name=op.f('pk_UserSend'))
+    sa.PrimaryKeyConstraint('userId', 'sendId', name=op.f('pk_UserSend')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Game',
-    sa.Column('startStr', sa.String(length=8), server_default='16:30', nullable=False),
+    sa.Column('startStr', sa.String(length=8), server_default='17:30', nullable=False),
     sa.Column('duration', sa.Integer(), server_default='60', nullable=False),
     sa.Column('counter', sa.Integer(), server_default='150', nullable=False),
     sa.Column('opponent1Id', sa.Integer(), nullable=True),
@@ -250,7 +298,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['opponent1Id'], ['TourneyCharacter.id'], name=op.f('fk_Game_opponent1Id_TourneyCharacter')),
     sa.ForeignKeyConstraint(['opponent2Id'], ['TourneyCharacter.id'], name=op.f('fk_Game_opponent2Id_TourneyCharacter')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Game')),
-    sa.UniqueConstraint('id', name=op.f('uq_Game_id'))
+    sa.UniqueConstraint('id', name=op.f('uq_Game_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
     )
     # ### end Alembic commands ###
 
@@ -277,6 +327,7 @@ def downgrade() -> None:
     op.drop_table('User')
     op.drop_table('Tourney')
     op.drop_table('Role')
+    op.drop_table('Other')
     op.drop_table('Operation')
     op.drop_table('Log')
     op.drop_table('GameLog')

@@ -1,3 +1,5 @@
-bafser==1.4
+bafser==1.5.7
 alembic==1.12.1
+python-dotenv
 requests
+gunicorn

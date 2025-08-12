@@ -2,9 +2,14 @@
 pip3.9 install --user bafser
 // git clone -b gh-pages https://github.com/MixelTeWork/EventPlatform.git
 git clone -b gh-pages --single-branch https://github.com/MixelTeWork/EventPlatform.git --depth 1
-python3.9 -m alembic upgrade head
-python3.9 scripts/init_values.py
-python3.9 scripts/change_user_password.py admin
+create .env
+API_SECRET_KEY=
+ADMINPWD=
+// docker compose up
+// gunicorn 'main:app' --bind=0.0.0.0:5000
+// python3.9 main.py
+---
+python3.9 -m bafser change_user_password admin
 ---
 Source code: /home/platformevent/EventPlatform
 Working directory: /home/platformevent/EventPlatform
@@ -27,8 +32,6 @@ zip -r logs.zip logs
 cd EventPlatform
 git restore .
 git pull
-
-python3.9 -m alembic upgrade head
 
 ---- /Update ----
 

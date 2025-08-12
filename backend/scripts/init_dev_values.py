@@ -1,43 +1,31 @@
-import json
-import sys
 import os
+import json
+import shutil
+from random import randint, seed
+
+from sqlalchemy.orm import Session
+from bafser import AppConfig, Log, Image, randstr, get_datetime_now
+
+from data._roles import Roles
+from data.dialog import Dialog
+from data.dialog_character import DialogCharacter
+from data.tourney import Tourney
+from data.tourney_character import TourneyCharacter
+from data.quest import Quest
+from data.store_item import StoreItem
+from data.user import User
 
 
-def init_dev_values(dev=False, cmd=False):
-    print(f"init_dev_values {dev=}")
-    if cmd:
-        add_parent_to_path()
-
-    import shutil
-    from random import randint, seed
-    from bafser import db_session, Log, Image, randstr, get_datetime_now
-    from data._roles import Roles
-    from data.dialog import Dialog
-    from data.dialog_character import DialogCharacter
-    from data.tourney import Tourney
-    from data.tourney_character import TourneyCharacter
-    from data.quest import Quest
-    from data.store_item import StoreItem
-    from data.user import User
-
-    db_session.global_init(dev)
-    db_sess = db_session.create_session()
+def init_dev_values(db_sess: Session, config: AppConfig):
     user_admin = User.get_admin(db_sess)
-
     user_admin.balance = 100
 
     now = get_datetime_now()
     os.makedirs("images", exist_ok=True)
-    shutil.copy("scripts/dev_init_data/1.jpeg", "images/1.jpeg")
-    shutil.copy("scripts/dev_init_data/2.jpeg", "images/2.jpeg")
-    shutil.copy("scripts/dev_init_data/3.png", "images/3.png")
-    shutil.copy("scripts/dev_init_data/4.png", "images/4.png")
-    shutil.copy("scripts/dev_init_data/5.png", "images/5.png")
-    db_sess.add(Image(id=1, name="img1", type="jpeg", creationDate=now, createdById=user_admin.id))
-    db_sess.add(Image(id=2, name="img2", type="jpeg", creationDate=now, createdById=user_admin.id))
-    db_sess.add(Image(id=3, name="img3", type="png", creationDate=now, createdById=user_admin.id))
-    db_sess.add(Image(id=4, name="img4", type="png", creationDate=now, createdById=user_admin.id))
-    db_sess.add(Image(id=5, name="img5", type="png", creationDate=now, createdById=user_admin.id))
+    for i, ext in enumerate(["jpeg", "jpeg", "png", "png", "png"]):
+        id = i + 1
+        shutil.copy(f"scripts/dev_init_data/{id}.{ext}", f"{config.IMAGES_FOLDER}/{id}.{ext}")
+        db_sess.add(Image(id=id, name=f"img{id}", type=ext, creationDate=now, createdById=user_admin.id))
 
     character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1, 1)
     character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2, 1)
@@ -51,7 +39,7 @@ def init_dev_values(dev=False, cmd=False):
         seed(i + 7)
         TourneyCharacter.new(user_admin, f"Бот #{i+1}", f"#{randint(0, 16777215):x}", 5)
     Tourney.get(db_sess).gen_new_tree()
-    # Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
+    Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
 
     dialog = Dialog.new(user_admin, {
         "nodes": [
@@ -77,19 +65,8 @@ def init_dev_values(dev=False, cmd=False):
     User.new(user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
 
     db_sess.commit()
-    db_sess.close()
-
-
-def add_parent_to_path():
-    current = os.path.dirname(os.path.realpath(__file__))
-    parent = os.path.dirname(current)
-    sys.path.append(parent)
 
 
 def read_file(path: str):
     with open(path, "r", encoding="utf8") as f:
         return f.read()
-
-
-if __name__ == "__main__":
-    init_dev_values("dev" in sys.argv, True)
