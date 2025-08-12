@@ -1,8 +1,6 @@
 db_dev_path = "storage/db/dev.db"
-# db_path = "platformevent:UR2hqJDbSfQ@platformevent.mysql.pythonanywhere-services.com/platformevent$default"
-db_path = "storage/db.db"
-# db_mysql = True
-db_mysql = False
+db_path = "ENV:DBPATH"
+db_mysql = True
 sql_echo = False
 
 use_alembic = True

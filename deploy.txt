@@ -2,9 +2,8 @@
 pip3.9 install --user bafser
 // git clone -b gh-pages https://github.com/MixelTeWork/EventPlatform.git
 git clone -b gh-pages --single-branch https://github.com/MixelTeWork/EventPlatform.git --depth 1
-create .env
-API_SECRET_KEY=
-ADMINPWD=
+copy .env.example .env
+configure .env
 // docker compose up
 // gunicorn 'main:app' --bind=0.0.0.0:5000
 // python3.9 main.py
