@@ -105,7 +105,7 @@ def set_user_name(userId, db_sess: Session, user: User):
 def change_password(db_sess: Session, user: User):
     password = get_json_values_from_req("password")
 
-    user.update_password(password)
+    user.update_password(user, password)
 
     return response_msg("ok")
 
@@ -117,7 +117,7 @@ def change_password(db_sess: Session, user: User):
 def change_name(db_sess: Session, user: User):
     name = get_json_values_from_req("name")
 
-    user.update_name(name)
+    user.update_name(user, name)
 
     return response_msg("ok")
 
