@@ -25,4 +25,10 @@ app, run = create_app(__name__, AppConfig(
 
 use_dashboard(app)
 
-run(__name__ == "__main__", init_db, init_dev_values)
+
+def f(d, s):
+    init_db(d, s)
+    init_dev_values(d, s)
+
+
+run(__name__ == "__main__", f)
