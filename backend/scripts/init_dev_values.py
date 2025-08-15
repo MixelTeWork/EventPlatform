@@ -61,7 +61,8 @@ def init_dev_values(db_sess: Session, config: AppConfig):
         Log.added(item, user_admin, [("name", item.name), ("price", item.price), ("count", item.count), ("imgId", item.imgId)], commit=False)
         db_sess.add(item)
 
-    User.new(user_admin, "manager", "manager", "Организатор", [Roles.manager, Roles.worker])
+    User.new(user_admin, "boss", "boss", "Организатор", [Roles.boss, Roles.manager, Roles.worker])
+    User.new(user_admin, "manager", "manager", "Управляющий", [Roles.manager, Roles.worker])
     User.new(user_admin, "worker", "worker", "Волонтёр", [Roles.worker])
 
     db_sess.commit()

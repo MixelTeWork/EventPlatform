@@ -15,7 +15,7 @@ app, run = create_app(__name__, AppConfig(
     PAGE404="404.html",
     JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=24),
     MESSAGE_TO_FRONTEND="",
-    DEV_MODE="dev" in sys.argv,
+    DEV_MODE=True,
     DELAY_MODE="delay" in sys.argv,
     IMAGES_FOLDER="storage/images",
 )
