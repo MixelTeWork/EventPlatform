@@ -23,6 +23,6 @@ app, run = create_app(__name__, AppConfig(
     # .add_secret_key("VK_SECRET_KEY", "secret_key_vk.txt")
 )
 
-# use_dashboard(app)
+use_dashboard(app)
 
 run(__name__ == "__main__", init_db, init_dev_values)
