@@ -1,4 +1,4 @@
-bafser==2.0.7
+bafser==2.0.8
 Flask-MonitoringDashboard==4.0.4
 python-dotenv
 requests

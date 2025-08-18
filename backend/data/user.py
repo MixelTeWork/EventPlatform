@@ -60,7 +60,7 @@ class User(UserBase, BigIdMixin):
 
         return list(map(lambda v: v[0], quests))
 
-    def get_dict(self):
+    def get_dict(self):  # pyright: ignore[reportIncompatibleMethodOverride]
         return {
             "id": self.id_big,
             "name": self.name,
@@ -74,7 +74,7 @@ class User(UserBase, BigIdMixin):
             "ticketTId": self.ticketTId,
         }
 
-    def get_dict_full(self):
+    def get_dict_full(self):  # pyright: ignore[reportIncompatibleMethodOverride]
         return {
             "id": self.id,
             "id_big": self.id_big,
