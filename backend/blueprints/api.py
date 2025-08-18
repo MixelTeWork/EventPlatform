@@ -11,7 +11,7 @@ blueprint = Blueprint("api", __name__)
 
 @blueprint.route("/api/user")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 def user(db_sess: Session, user: User):
     return user.get_dict()

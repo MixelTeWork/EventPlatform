@@ -13,9 +13,9 @@ from data.user import User
 def init_db(db_sess: Session, config: AppConfig):
     user_system = User.get_fake_system()
 
-    Other.init(db_sess)
-    Game.init(db_sess)
-    Tourney.init(db_sess)
+    Other.get(db_sess)
+    Game.get(db_sess)
+    Tourney.get(db_sess)
     Dialog.new(user_system, {"nodes": []}, 1, db_sess=db_sess)
     Dialog.new(user_system, {"nodes": []}, 2, db_sess=db_sess)
 
@@ -29,7 +29,9 @@ def init_db(db_sess: Session, config: AppConfig):
     ]
     now = get_datetime_now()
     for (i, name) in quests:
-        quest = Quest(id=i, name=name, description="", reward=0, hidden=False, id_big=randstr(8))
+        quest = Quest(name=name, description="", reward=0, hidden=False)
+        quest.id = i
+        quest.id_big = randstr(8)
         Log.added(quest, user_system, quest.get_creation_changes(), now=now, commit=False, db_sess=db_sess)
         db_sess.add(quest)
 

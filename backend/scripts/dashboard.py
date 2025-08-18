@@ -16,5 +16,5 @@ def use_dashboard(app: Flask, file="dashboard.cfg", envpwd="ADMINPWD", envdb="DB
     dashboard.config.security_token = randstr(32)
     dashboard.config.password = password
     dashboard.config.database_name = db
-    dashboard.config.group_by = lambda: g.get("userId", "anonym")
+    dashboard.config.group_by = lambda: g.get("userId", "anonym")  # type: ignore
     dashboard.bind(app, schedule=False)

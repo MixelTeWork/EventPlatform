@@ -1,6 +1,6 @@
 from typing import Type, TypeVar
-from sqlalchemy import Column, String
-from sqlalchemy.orm import Session
+from sqlalchemy import String
+from sqlalchemy.orm import Session, Mapped, mapped_column
 
 from bafser import ObjMixin, randstr
 
@@ -8,10 +8,10 @@ T = TypeVar("T", bound="BigIdMixin")
 
 
 class BigIdMixin:
-    id_big = Column(String(8), unique=True, nullable=False)
+    id_big: Mapped[str] = mapped_column(String(8), unique=True, index=True, init=False)
 
     @classmethod
-    def get_by_big_id(cls: Type[T], db_sess: Session, id_big: int, includeDeleted=False) -> T:
+    def get_by_big_id(cls: Type[T], db_sess: Session, id_big: str, includeDeleted=False) -> T | None:
         if issubclass(cls, ObjMixin):
             return cls.query(db_sess, includeDeleted).filter(cls.id_big == id_big).first()
         else:
@@ -22,4 +22,4 @@ class BigIdMixin:
         while t is not None:
             id_big = randstr(8)
             t = self.get_by_big_id(db_sess, id_big, includeDeleted=True)
-        self.id_big = id_big
+        self.id_big = id_big  # pyright: ignore[reportPossiblyUnboundVariable]

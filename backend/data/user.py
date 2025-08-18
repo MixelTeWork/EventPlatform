@@ -1,24 +1,25 @@
-from __future__ import annotations
+from typing import Any, Optional, override
 
-from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
-from sqlalchemy.orm import Session
+from sqlalchemy import String
+from sqlalchemy.orm import Session, Mapped, mapped_column
 
-from bafser import UserBase, Log
+from bafser import UserBase, Log, UserKwargs
 from utils import BigIdMixin
 
 
 class User(UserBase, BigIdMixin):
-    lastName   = Column(String(128), nullable=True)
-    imageUrl   = Column(String(256), nullable=True)
-    ticketType = Column(String(128), nullable=True)
-    ticketTId  = Column(Integer, nullable=True)
-    balance    = Column(Integer, nullable=False)
-    group      = Column(Integer, DefaultClause("0"), nullable=False)
-    gameOpened = Column(Boolean, DefaultClause("0"), nullable=False)
+    lastName: Mapped[Optional[str]] = mapped_column(String(128), default=None)
+    imageUrl: Mapped[Optional[str]] = mapped_column(String(256), default=None)
+    ticketType: Mapped[Optional[str]] = mapped_column(String(128), default=None)
+    ticketTId: Mapped[Optional[int]] = mapped_column(default=None)
+    balance: Mapped[int] = mapped_column(server_default="0", default=0)
+    group: Mapped[int] = mapped_column(server_default="0", default=0)
+    gameOpened: Mapped[bool] = mapped_column(server_default="0", default=False)
 
-    @staticmethod
-    def _new(db_sess: Session, user_kwargs: dict):
-        user = User(**user_kwargs, balance=0)
+    @classmethod
+    @override
+    def _new(cls, db_sess: Session, user_kwargs: UserKwargs, *, balance: int = 0, **kwargs: Any):
+        user = User(**user_kwargs)
         user.set_unique_big_id(db_sess)
         changes = [("balance", 0)]
         return user, changes
@@ -39,6 +40,7 @@ class User(UserBase, BigIdMixin):
         from data.quest import Quest
         from data.user_quest import UserQuest
         db_sess = Session.object_session(self)
+        assert db_sess
         quests = db_sess\
             .query(Quest)\
             .join(UserQuest, UserQuest.questId == Quest.id)\
@@ -50,6 +52,7 @@ class User(UserBase, BigIdMixin):
     def get_complited_quest_ids(self):
         from data.user_quest import UserQuest
         db_sess = Session.object_session(self)
+        assert db_sess
         quests = db_sess\
             .query(UserQuest)\
             .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\

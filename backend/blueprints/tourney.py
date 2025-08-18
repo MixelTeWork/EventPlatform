@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bafser import Image, get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
+from bafser import Image, ImageJson, get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
 from data._operations import Operations
 from data.tourney import Tourney
 from data.tourney_character import TourneyCharacter
@@ -14,7 +14,7 @@ blueprint = Blueprint("tourney", __name__)
 
 @blueprint.route("/api/tourney")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def tourney(db_sess: Session, user: User):
@@ -24,11 +24,11 @@ def tourney(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/nodes/<int:nodeId>")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def edit_node(nodeId, db_sess: Session, user: User):
-    characterId = get_json_values_from_req("characterId")
+    characterId = get_json_values_from_req(("characterId", int))
 
     tourney = Tourney.get(db_sess)
     r = tourney.edit_node(nodeId, characterId)
@@ -40,11 +40,11 @@ def edit_node(nodeId, db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/third")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def set_third(db_sess: Session, user: User):
-    characterId = get_json_values_from_req("characterId")
+    characterId = get_json_values_from_req(("characterId", int))
 
     tourney = Tourney.get(db_sess)
     tourney.set_third(characterId)
@@ -54,11 +54,11 @@ def set_third(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/start_game_at_node")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def start_game_at_node(db_sess: Session, user: User):
-    nodeId = get_json_values_from_req("nodeId")
+    nodeId = get_json_values_from_req(("nodeId", int))
 
     tourney = Tourney.get(db_sess)
     r = tourney.start_game_at_node(nodeId)
@@ -76,7 +76,7 @@ def start_game_at_node(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/select_next_game")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def select_next_game(db_sess: Session, user: User):
@@ -87,7 +87,7 @@ def select_next_game(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/start_game")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def start_game(db_sess: Session, user: User):
@@ -105,7 +105,7 @@ def start_game(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/end_game")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def end_game(db_sess: Session, user: User):
@@ -116,7 +116,7 @@ def end_game(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/show_pretourney")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def show_pretourney(db_sess: Session, user: User):
@@ -127,7 +127,7 @@ def show_pretourney(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/end_tourney")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def end_tourney(db_sess: Session, user: User):
@@ -138,7 +138,7 @@ def end_tourney(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/unend_tourney")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def unend_tourney(db_sess: Session, user: User):
@@ -149,7 +149,7 @@ def unend_tourney(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/reset")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def reset(db_sess: Session, user: User):
@@ -160,7 +160,7 @@ def reset(db_sess: Session, user: User):
 
 @blueprint.route("/api/tourney/characters")
 @jwt_required()
-@use_db_session()
+@use_db_session
 def characters(db_sess: Session):
     characters = TourneyCharacter.all(db_sess)
     return jsonify_list(characters)
@@ -168,15 +168,16 @@ def characters(db_sess: Session):
 
 @blueprint.post("/api/tourney/characters")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def add_character(db_sess: Session, user: User):
-    name, color, img_data = get_json_values_from_req("name", "color", "img")
+    name, color, img_data = get_json_values_from_req(("name", str), ("color", str), ("img", ImageJson))
 
     img, image_error = Image.new(user, img_data)
     if image_error:
         return response_msg(image_error, 400)
+    assert img
 
     character = TourneyCharacter.new(user, name, color, img.id)
 
@@ -185,11 +186,11 @@ def add_character(db_sess: Session, user: User):
 
 @blueprint.post("/api/tourney/characters/<int:characterId>")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def store_item_patch(characterId, db_sess: Session, user: User):
-    name, color, img_data = get_json_values_from_req(("name", None), ("color", None), ("img", None))
+    name, color, img_data = get_json_values_from_req(("name", str, None), ("color", str, None), ("img", ImageJson, None))
 
     character = TourneyCharacter.get(db_sess, characterId)
     if character is None:
@@ -200,6 +201,7 @@ def store_item_patch(characterId, db_sess: Session, user: User):
         img, image_error = Image.new(user, img_data)
         if image_error:
             return response_msg(image_error, 400)
+        assert img
         imgId = img.id
 
     character.update(user, name, color, imgId)
@@ -209,7 +211,7 @@ def store_item_patch(characterId, db_sess: Session, user: User):
 
 @blueprint.delete("/api/tourney/characters/<int:characterId>")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.manage_games)
 def delete_character(characterId, db_sess: Session, user: User):

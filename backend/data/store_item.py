@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Union
+from typing import Optional
 
 from flask import url_for
-from sqlalchemy import Column, ForeignKey, Integer, orm, String
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
 from bafser import SqlAlchemyBase, ObjMixin, Log, Image
 from data._tables import Tables
@@ -14,19 +14,17 @@ from utils import BigIdMixin
 class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
     __tablename__ = Tables.StoreItem
 
-    name = Column(String(128), nullable=False)
-    price = Column(Integer, nullable=False)
-    count = Column(Integer, nullable=False)
-    imgId = Column(Integer, ForeignKey("Image.id"), nullable=True)
+    name: Mapped[str] = mapped_column(String(128))
+    price: Mapped[int]
+    count: Mapped[int]
+    imgId: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Image}.id"), default=None)
 
-    image = orm.relationship("Image")
-
-    def __repr__(self):
-        return f"<StoreItem> [{self.id}] {self.name}"
+    image: Mapped[Image] = relationship(init=False)
 
     @staticmethod
-    def new(creator: User, name: str, price: int, count: int, imgId: Union[int, None]):
+    def new(creator: User, name: str, price: int, count: int, imgId: int | None):
         db_sess = Session.object_session(creator)
+        assert db_sess
         item = StoreItem(name=name, price=price, count=count, imgId=imgId)
         item.set_unique_big_id(db_sess)
 
@@ -40,7 +38,7 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
 
         return item
 
-    def update(self, actor: User, name: Union[str, None], price: Union[int, None], count: Union[int, None], imgId: Union[int, None]):
+    def update(self, actor: User, name: str | None, price: int | None, count: int | None, imgId: int | None):
         changes = []
 
         def updateField(field: str, value):
@@ -50,11 +48,10 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
                 setattr(self, field, value)
 
         if imgId is not None and imgId != self.imgId:
-            old_img: Union[Image, None] = self.image
-            if old_img is None:
+            if self.image is None:
                 changes.append(("imgId", None, imgId))
             else:
-                old_img.delete(actor)
+                self.image.delete(actor)
                 changes.append(("imgId", self.imgId, imgId))
             self.imgId = imgId
 
@@ -64,14 +61,14 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
 
         Log.updated(self, actor, changes)
 
-    def delete(self, actor: User, commit=True, now: datetime = None, db_sess: Session = None):
+    def delete(self, actor: User, commit=True, now: datetime | None = None, db_sess: Session | None = None):  # type: ignore
         super().delete(actor, commit, now, db_sess)
 
         image: Image = self.image
         if image is not None:
             image.delete(actor, commit, now, db_sess)
 
-    def decrease(self, actor: User = None, v=1):
+    def decrease(self, actor: User | None = None, v=1):
         count = self.count
         self.count = count - v
 

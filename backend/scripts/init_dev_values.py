@@ -6,6 +6,7 @@ from random import randint, seed
 from sqlalchemy.orm import Session
 from bafser import AppConfig, Log, Image, randstr, get_datetime_now
 
+import bafser_config
 from data._roles import Roles
 from data.dialog import Dialog
 from data.dialog_character import DialogCharacter
@@ -18,14 +19,17 @@ from data.user import User
 
 def init_dev_values(db_sess: Session, config: AppConfig):
     user_admin = User.get_admin(db_sess)
+    assert user_admin
     user_admin.balance = 100
 
     now = get_datetime_now()
-    os.makedirs(config.IMAGES_FOLDER, exist_ok=True)
+    os.makedirs(bafser_config.images_folder, exist_ok=True)
     for i, ext in enumerate(["jpeg", "jpeg", "png", "png", "png"]):
         id = i + 1
-        shutil.copy(f"scripts/dev_init_data/{id}.{ext}", f"{config.IMAGES_FOLDER}/{id}.{ext}")
-        db_sess.add(Image(id=id, name=f"img{id}", type=ext, creationDate=now, createdById=user_admin.id))
+        shutil.copy(f"scripts/dev_init_data/{id}.{ext}", f"{bafser_config.images_folder}/{id}.{ext}")
+        img = Image(name=f"img{id}", type=ext, creationDate=now, createdById=user_admin.id)
+        img.id = id
+        db_sess.add(img)
 
     character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1, 1)
     character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2, 1)
@@ -37,7 +41,7 @@ def init_dev_values(db_sess: Session, config: AppConfig):
     TourneyCharacter.new(user_admin, "Минь Сулёхен", "#ff0000", 4)
     for i in range(16 - 5):
         seed(i + 7)
-        TourneyCharacter.new(user_admin, f"Бот #{i+1}", f"#{randint(0, 16777215):x}", 5)
+        TourneyCharacter.new(user_admin, f"Бот #{i + 1}", f"#{randint(0, 16777215):x}", 5)
     Tourney.get(db_sess).gen_new_tree()
     Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
 
@@ -54,10 +58,13 @@ def init_dev_values(db_sess: Session, config: AppConfig):
         ]})
 
     quest1 = Quest.get(db_sess, 1)
+    assert quest1
     quest1.dialog1Id = dialog.id
 
     for i in range(15):
-        item = StoreItem(id=i + 1, name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50, id_big=randstr(8))
+        item = StoreItem(name=f"Товар {i + 1}", price=(i + 1) * 5432 % 150 + 50, count=(i + 1) * 2654 % 150 + 50)
+        item.id = i + 1
+        item.id_big = randstr(8)
         Log.added(item, user_admin, [("name", item.name), ("price", item.price), ("count", item.count), ("imgId", item.imgId)], commit=False)
         db_sess.add(item)
 

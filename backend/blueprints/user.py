@@ -13,7 +13,7 @@ blueprint = Blueprint("user", __name__)
 
 @blueprint.route("/api/users")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def users(db_sess: Session, user: User):
@@ -23,11 +23,11 @@ def users(db_sess: Session, user: User):
 
 @blueprint.post("/api/users")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def add_user(db_sess: Session, user: User):
-    login, password, name, roles = get_json_values_from_req("login", "password", "name", "roles")
+    login, password, name, roles = get_json_values_from_req(("login", str), ("password", str), ("name", str), ("roles", list[int]))
 
     u = User.new(user, login, password, name, roles)
 
@@ -36,7 +36,7 @@ def add_user(db_sess: Session, user: User):
 
 @blueprint.route("/api/users/roles")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def roles(db_sess: Session, user: User):
@@ -45,11 +45,11 @@ def roles(db_sess: Session, user: User):
 
 @blueprint.post("/api/users/<int:userId>/roles")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def set_user_roles(userId, db_sess: Session, user: User):
-    roles = get_json_values_from_req("roles")
+    roles = get_json_values_from_req(("roles", list[int]))
 
     u = User.get(db_sess, userId, includeDeleted=True)
     if u is None:
@@ -66,11 +66,11 @@ def set_user_roles(userId, db_sess: Session, user: User):
 
 @blueprint.post("/api/users/<int:userId>/set_password")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def set_user_password(userId, db_sess: Session, user: User):
-    password = get_json_values_from_req("password")
+    password = get_json_values_from_req(("password", str))
 
     u = User.get(db_sess, userId, includeDeleted=True)
     if u is None:
@@ -83,11 +83,11 @@ def set_user_password(userId, db_sess: Session, user: User):
 
 @blueprint.post("/api/users/<int:userId>/set_name")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def set_user_name(userId, db_sess: Session, user: User):
-    name = get_json_values_from_req("name")
+    name = get_json_values_from_req(("name", str))
 
     u = User.get(db_sess, userId, includeDeleted=True)
     if u is None:
@@ -100,10 +100,10 @@ def set_user_name(userId, db_sess: Session, user: User):
 
 @blueprint.post("/api/user/change_password")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 def change_password(db_sess: Session, user: User):
-    password = get_json_values_from_req("password")
+    password = get_json_values_from_req(("password", str))
 
     user.update_password(user, password)
 
@@ -112,10 +112,10 @@ def change_password(db_sess: Session, user: User):
 
 @blueprint.post("/api/user/change_name")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 def change_name(db_sess: Session, user: User):
-    name = get_json_values_from_req("name")
+    name = get_json_values_from_req(("name", str))
 
     user.update_name(user, name)
 
@@ -124,10 +124,10 @@ def change_name(db_sess: Session, user: User):
 
 @blueprint.post("/api/user/set_group")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 def set_group(db_sess: Session, user: User):
-    group = get_json_values_from_req("group")
+    group = get_json_values_from_req(("group", int))
 
     group = user.set_group(group)
 
@@ -136,7 +136,7 @@ def set_group(db_sess: Session, user: User):
 
 @blueprint.post("/api/user/open_game")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 def open_game(db_sess: Session, user: User):
     user.gameOpened = True

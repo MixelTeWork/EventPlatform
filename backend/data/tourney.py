@@ -1,33 +1,24 @@
 import logging
-from sqlalchemy import JSON, Boolean, Column, DefaultClause, Integer
-from sqlalchemy.orm import Session
+from sqlalchemy import JSON
+from sqlalchemy.orm import Session, Mapped, mapped_column
 from sqlalchemy.orm.attributes import flag_modified
 
-from bafser import SqlAlchemyBase, IdMixin
+from bafser import SqlAlchemyBase, SingletonMixin
 from data._tables import Tables
 from data.game import Game
 from data.tourney_character import TourneyCharacter
 
 
-class Tourney(SqlAlchemyBase, IdMixin):
+class Tourney(SqlAlchemyBase, SingletonMixin):
     __tablename__ = Tables.Tourney
 
-    data = Column(JSON, nullable=False)
-    curGameNodeId = Column(Integer, DefaultClause("-1"), nullable=False)
-    showGame = Column(Boolean, DefaultClause("0"), nullable=False)
-    ended = Column(Boolean, DefaultClause("0"), nullable=False)
+    data: Mapped[dict] = mapped_column(JSON, init=False)
+    curGameNodeId: Mapped[int] = mapped_column(default=-1)
+    showGame: Mapped[bool] = mapped_column(default=False)
+    ended: Mapped[bool] = mapped_column(default=False)
 
-    @staticmethod
-    def init(db_sess: Session):
-        tourney = Tourney.get(db_sess)
-        if tourney is not None:
-            return
-        db_sess.add(Tourney(id=1, data=INIT_DATA))
-        db_sess.commit()
-
-    @staticmethod
-    def get(db_sess: Session):
-        return db_sess.get(Tourney, 1)
+    def init(self):
+        self.data = INIT_DATA
 
     @staticmethod
     def get_winners(db_sess: Session):
@@ -40,6 +31,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def gen_new_tree(self):
         db_sess = Session.object_session(self)
+        assert db_sess
         characters = TourneyCharacter.all(db_sess)
         if len(characters) == 0:
             return
@@ -66,6 +58,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def edit_node(self, node_id: int, characterId: int):
         db_sess = Session.object_session(self)
+        assert db_sess
         node = find_node(self.data["tree"], node_id)
         if not node:
             return False
@@ -91,6 +84,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def set_third(self, characterId: int):
         db_sess = Session.object_session(self)
+        assert db_sess
         self.data["third"] = characterId
         flag_modified(self, "data")
         db_sess.commit()
@@ -98,6 +92,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def start_game_at_node(self, node_id: int):
         db_sess = Session.object_session(self)
+        assert db_sess
         if node_id != -1:
             err, _, _ = get_opponents_by_node_id(self.data["tree"], node_id)
             if err < 0:
@@ -111,6 +106,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def select_next_game(self):
         db_sess = Session.object_session(self)
+        assert db_sess
 
         nodes = []
         next_nodes = [self.data["tree"]]
@@ -137,6 +133,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def start_game(self):
         db_sess = Session.object_session(self)
+        assert db_sess
 
         err, opponent1Id, opponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
         if err < 0:
@@ -149,6 +146,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def end_game(self):
         db_sess = Session.object_session(self)
+        assert db_sess
 
         winner = Game.end_game(db_sess)
         node = find_node(self.data["tree"], self.curGameNodeId)
@@ -166,11 +164,13 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def show_pretourney(self):
         db_sess = Session.object_session(self)
+        assert db_sess
         Game.reset(db_sess)
         logging.info("show_pretourney")
 
     def end_tourney(self):
         db_sess = Session.object_session(self)
+        assert db_sess
         game = Game.get(db_sess)
         game.tourneyEnded = True
         self.ended = True
@@ -179,6 +179,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def unend_tourney(self):
         db_sess = Session.object_session(self)
+        assert db_sess
         game = Game.get(db_sess)
         game.tourneyEnded = False
         self.ended = False
@@ -187,6 +188,7 @@ class Tourney(SqlAlchemyBase, IdMixin):
 
     def reset(self):
         db_sess = Session.object_session(self)
+        assert db_sess
         self.curGameNodeId = -1
         self.showGame = False
         self.ended = False

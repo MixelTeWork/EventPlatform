@@ -1,39 +1,28 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
+from typing import Optional
 
-from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, func, Integer, String
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey, func, String
+from sqlalchemy.orm import Session, Mapped, mapped_column
 
-from bafser import SqlAlchemyBase, IdMixin, get_datetime_now
+from bafser import SqlAlchemyBase, SingletonMixin, get_datetime_now
 from data._tables import Tables
 from data.user_game import UserGame
 
 
-class Game(SqlAlchemyBase, IdMixin):
+class Game(SqlAlchemyBase, SingletonMixin):
     __tablename__ = Tables.Game
 
-    startStr = Column(String(8), DefaultClause("17:30"), nullable=False)
-    duration = Column(Integer, DefaultClause("60"), nullable=False)
-    counter = Column(Integer, DefaultClause("150"), nullable=False)  # rename to countdown
-    opponent1Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
-    opponent2Id = Column(Integer, ForeignKey("TourneyCharacter.id"), nullable=True)
-    startTime = Column(DateTime, nullable=True)
-    clicks1 = Column(Integer, DefaultClause("0"), nullable=False)
-    clicks2 = Column(Integer, DefaultClause("0"), nullable=False)
-    winner = Column(Integer, DefaultClause("0"), nullable=False)
-    showGame = Column(Boolean, DefaultClause("0"), nullable=False)
-    tourneyEnded = Column(Boolean, DefaultClause("0"), nullable=False)
-
-    @staticmethod
-    def init(db_sess: Session):
-        game = Game.get(db_sess)
-        if game is not None:
-            return
-        db_sess.add(Game(id=1))
-        db_sess.commit()
-
-    @staticmethod
-    def get(db_sess: Session):
-        return db_sess.get(Game, 1)
+    startStr: Mapped[str] = mapped_column(String(8), default="17:30")
+    duration: Mapped[int] = mapped_column(default="60")
+    countdown: Mapped[int] = mapped_column(default="150")
+    opponent1Id: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.TourneyCharacter}.id"), default=None)
+    opponent2Id: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.TourneyCharacter}.id"), default=None)
+    startTime: Mapped[Optional[datetime]] = mapped_column(default=None)
+    clicks1: Mapped[int] = mapped_column(default=0)
+    clicks2: Mapped[int] = mapped_column(default=0)
+    winner: Mapped[int] = mapped_column(default=0)
+    showGame: Mapped[bool] = mapped_column(default=False)
+    tourneyEnded: Mapped[bool] = mapped_column(default=False)
 
     @staticmethod
     def start_new(db_sess: Session, opponent1Id: int, opponent2Id: int):
@@ -87,7 +76,7 @@ class Game(SqlAlchemyBase, IdMixin):
         return -1
 
     @staticmethod
-    def get_state(db_sess: Session, game: "Game" = None, userId: int = None, usergame: dict = None):
+    def get_state(db_sess: Session, game: "Game | None" = None, userId: int | None = None, usergame: dict | None = None):
         game = Game.get(db_sess) if game is None else game
         state = {
             "state": GameState.wait,
@@ -125,14 +114,14 @@ class Game(SqlAlchemyBase, IdMixin):
 
         now = get_datetime_now().replace(tzinfo=None)
         dt: timedelta = now - game.startTime
-        if dt < timedelta(seconds=game.counter):
+        if dt < timedelta(seconds=game.countdown):
             state["state"] = GameState.start
-            state["counter"] = max(0, game.counter - dt.seconds)
+            state["counter"] = max(0, game.countdown - dt.seconds)
             return state
 
-        if dt < timedelta(seconds=game.counter + game.duration):
+        if dt < timedelta(seconds=game.countdown + game.duration):
             state["state"] = GameState.going
-            state["counter"] = max(0, game.counter + game.duration - dt.seconds)
+            state["counter"] = max(0, game.countdown + game.duration - dt.seconds)
             return state
 
         state["state"] = GameState.end
@@ -172,10 +161,10 @@ class Game(SqlAlchemyBase, IdMixin):
                 .all()}
 
 
-def safeDiv(v1, v2):
+def safeDiv(v1: int, v2: int):
     if v2 == 0:
         return v1
-    return v1 / v2
+    return v1 // v2
 
 
 class GameState:

@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Union
+from typing import Optional
 
 from flask import url_for
-from sqlalchemy import Column, ForeignKey, Integer, orm, String
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
 from bafser import SqlAlchemyBase, Log, ObjMixin, Image
 from data._tables import Tables
@@ -13,15 +13,16 @@ from data.user import User
 class TourneyCharacter(SqlAlchemyBase, ObjMixin):
     __tablename__ = Tables.TourneyCharacter
 
-    name = Column(String(128), nullable=False)
-    color = Column(String(32), nullable=False)
-    imgId = Column(Integer, ForeignKey("Image.id"), nullable=True)
+    name: Mapped[str] = mapped_column(String(128))
+    color: Mapped[str] = mapped_column(String(32))
+    imgId: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Image}.id"), default=None)
 
-    image = orm.relationship("Image")
+    image: Mapped[Image] = relationship(init=False)
 
     @staticmethod
     def new(creator: User, name: str, color: str, imgId: int):
         db_sess = Session.object_session(creator)
+        assert db_sess
         character = TourneyCharacter(name=name, color=color, imgId=imgId)
         db_sess.add(character)
 
@@ -33,7 +34,7 @@ class TourneyCharacter(SqlAlchemyBase, ObjMixin):
 
         return character
 
-    def update(self, actor: User, name: Union[str, None], color: Union[str, None], imgId: Union[int, None]):
+    def update(self, actor: User, name: str | None, color: str | None, imgId: int | None):
         changes = []
 
         if name is not None:
@@ -53,7 +54,7 @@ class TourneyCharacter(SqlAlchemyBase, ObjMixin):
 
         Log.updated(self, actor, changes)
 
-    def delete(self, actor: User, commit=True, now: datetime = None, db_sess: Session = None):
+    def delete(self, actor: User, commit=True, now: datetime | None = None, db_sess: Session | None = None):  # type: ignore
         super().delete(actor, commit, now, db_sess)
 
         image: Image = self.image

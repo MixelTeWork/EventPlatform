@@ -1,5 +1,7 @@
-from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy.orm import Session
+from datetime import datetime
+from typing import Optional
+from sqlalchemy import String
+from sqlalchemy.orm import Session, Mapped, mapped_column
 
 from bafser import SqlAlchemyBase, IdMixin
 from data._tables import Tables
@@ -11,15 +13,15 @@ from data.user_game import UserGame
 class GameLog(SqlAlchemyBase, IdMixin):
     __tablename__ = Tables.GameLog
 
-    startStr = Column(String(8))
-    duration = Column(Integer)
-    counter = Column(Integer)
-    oponent1Id = Column(Integer)
-    oponent2Id = Column(Integer)
-    startTime = Column(DateTime)
-    clicks1 = Column(Integer)
-    clicks2 = Column(Integer)
-    winner = Column(Integer)
+    startStr: Mapped[str] = mapped_column(String(8))
+    duration: Mapped[int]
+    countdown: Mapped[int]
+    opponent1Id: Mapped[Optional[int]]
+    opponent2Id: Mapped[Optional[int]]
+    startTime: Mapped[Optional[datetime]]
+    clicks1: Mapped[int]
+    clicks2: Mapped[int]
+    winner: Mapped[int]
 
     @staticmethod
     def create(db_sess: Session):
@@ -27,9 +29,9 @@ class GameLog(SqlAlchemyBase, IdMixin):
         log = GameLog(
             startStr=game.startStr,
             duration=game.duration,
-            counter=game.counter,
-            oponent1Id=game.opponent1Id,
-            oponent2Id=game.opponent2Id,
+            countdown=game.countdown,
+            opponent1Id=game.opponent1Id,
+            opponent2Id=game.opponent2Id,
             startTime=game.startTime,
             clicks1=game.clicks1,
             clicks2=game.clicks2,

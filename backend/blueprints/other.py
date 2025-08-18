@@ -14,7 +14,7 @@ blueprint = Blueprint("other", __name__)
 
 
 @blueprint.route("/api/other/ticketLoginEnabled")
-@use_db_session()
+@use_db_session
 def startStr(db_sess: Session):
     obj = Other.get(db_sess)
     return {"value": obj.ticketLoginEnabled}
@@ -22,18 +22,18 @@ def startStr(db_sess: Session):
 
 @blueprint.post("/api/other/ticketLoginEnabled")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.site_config)
 def set_startStr(db_sess: Session, user: User):
-    value = get_json_values_from_req("value")
+    value = get_json_values_from_req(("value", bool))
     Other.set_ticketLoginEnabled(db_sess, value)
     return {"value": value}
 
 
 @blueprint.route("/api/other/stats")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_stats)
 def stats(db_sess: Session, user: User):
