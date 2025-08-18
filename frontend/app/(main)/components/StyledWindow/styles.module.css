@@ -1,12 +1,52 @@
 .root {
 	position: relative;
 	display: flex;
+	flex-direction: column;
 	min-height: 200px;
+	padding: 6px;
+	padding-top: 2px;
+	gap: 4px;
+	border: 3px solid var(--c-primary-light);
+	border-radius: 12px;
+	background: var(--c-back-dark);
+	box-shadow: 8px 8px 0 0 var(--c-back-dark);
+	/* margin: 1em; */
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: var(--c-primary-light);
+	font-size: 0.9rem;
+	padding-inline: 8px;
+}
+
+.header span {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.header button {
+	height: 0.9em;
+}
+.header img {
+	height: 100%;
+	width: auto;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	flex-grow: 1;
+	background: linear-gradient(0deg, var(--c-secondary-light), var(--c-secondary));
 	padding: 8px;
-	border: 5px solid var(--c-text);
-	border-radius: 5px;
-	background: var(--c-secondary);
-	box-shadow: 8px 8px 0 0 var(--c-primary);
+	border-radius: 2px 2px 4px 4px;
+}
+.noPad {
+	padding: 0;
 }
 
 .body {
@@ -28,4 +68,9 @@
 .body > div::-webkit-scrollbar-thumb {
 	background: #444;
 	background: linear-gradient(90deg, transparent 3px, var(--c-primary) 3px);
+}
+
+.footer {
+	display: flex;
+	flex-direction: column;
 }

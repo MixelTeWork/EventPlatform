@@ -133,8 +133,8 @@ class Tourney
 				if (this.ctx)
 				{
 					this.ctx.save();
-					this.ctx.font = "3em " + Tree.Font;
-					this.ctx.fillStyle = "orange";
+					this.ctx.font = "4em " + Tree.Font;
+					this.ctx.fillStyle = Tree.Colors.onBack;
 					const tm = this.ctx.measureText(this.error);
 					this.ctx.fillText(this.error, Math.max(0, (w - tm.width) / 2), (h - tm.actualBoundingBoxAscent) / 2, w);
 					this.ctx.restore();
@@ -145,8 +145,8 @@ class Tourney
 				if (this.ctx)
 				{
 					this.ctx.save();
-					this.ctx.font = "3em " + Tree.Font;
-					this.ctx.fillStyle = "orange";
+					this.ctx.font = "5em " + Tree.Font;
+					this.ctx.fillStyle = Tree.Colors.onBack;
 					const text = "Загрузка";
 					const tm = this.ctx.measureText(text);
 					this.ctx.fillText(text, Math.max(0, (w - tm.width) / 2), (h - tm.actualBoundingBoxAscent) / 2, w);
@@ -182,7 +182,7 @@ class Tourney
 	{
 		this.canvas = canvas;
 		const compStyles = getComputedStyle(this.canvas);
-		Tree.Font = compStyles.getPropertyValue("--font-MFFRBL");
+		Tree.Font = compStyles.getPropertyValue("--font-ZeroCool");
 		this.ctx = canvas.getContext("2d");
 		this.draw();
 	}

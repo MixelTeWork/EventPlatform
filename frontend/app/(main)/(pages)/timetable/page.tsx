@@ -11,19 +11,20 @@ export default function Page()
 	const timetable = useStateObj(0);
 	const items = [
 		data_timetable,
-		data_autograph,
-		data_lections,
+		data_zones,
 		data_tournaments,
 	][timetable.v];
 
 	return (
 		<div className={styles.root}>
-			<StyledWindow className={styles.list} scrollUpdate={timetable.v}>
+			<StyledWindow className={styles.list} scrollUpdate={timetable.v}
+				title={"timetable/" + ["scenes", "zones", "tournaments"][timetable.v]}
+			>
 				<div className={styles.items}>
 					{items.map((el, i) => el.isTitle ?
 						<div className={styles.item_title} key={i}>{el.text}</div>
 						:
-						<Textbox small key={i}><div className={styles.item}>{el.text}</div></Textbox>
+						<Textbox small darkbg key={i}><div className={styles.item}>{el.text}</div></Textbox>
 					)}
 				</div>
 			</StyledWindow>
@@ -31,14 +32,11 @@ export default function Page()
 				<Textbox small btn highlight={timetable.v == 0}>
 					<button onClick={() => timetable.set(0)} className={styles.btn}>Сцены</button>
 				</Textbox>
-				{/* <Textbox small btn highlight={timetable.v == 1}>
-						<button onClick={() => timetable.set(1)} className={styles.btn}>Автограф</button>
-					</Textbox>
-					<Textbox small btn highlight={timetable.v == 2}>
-						<button onClick={() => timetable.set(2)} className={styles.btn}>Лекции</button>
-					</Textbox> */}
-				<Textbox small btn highlight={timetable.v == 3}>
-					<button onClick={() => timetable.set(3)} className={styles.btn}>Турниры</button>
+				<Textbox small btn highlight={timetable.v == 1}>
+					<button onClick={() => timetable.set(1)} className={styles.btn}>Зоны</button>
+				</Textbox>
+				<Textbox small btn highlight={timetable.v == 2}>
+					<button onClick={() => timetable.set(2)} className={styles.btn}>Турниры</button>
 				</Textbox>
 			</div>
 		</div>
@@ -53,69 +51,71 @@ interface TimetableData
 
 const data_timetable: TimetableData[] = [
 	{ text: "Главная сцена:", isTitle: true },
-	{ text: "12:50 - Открытие" },
-	{ text: "13:00 - Шима Нори - Undertale на рояле" },
-	{ text: "13:30 - Косплей дефиле блок 1" },
-	{ text: "14:00 - Музыкальный блок гостей" },
-	{ text: "14:30 - Косплей дефиле блок 2" },
-	{ text: "15:00 - Музыкальный блок участников" },
-	{ text: "15:30 - Аукцион" },
-	{ text: "16:00 - Выступление Empire of Geese" },
-	{ text: "17:00 - Underevent презентация" },
-	{ text: "17:30 - Голосование за лучшего Санса" },
-	{ text: "18:00 - Награждение" },
-	{ text: "18:40 - Блок анимаций" },
-	{ text: "19:40 - Закрытие" },
+	{ text: "12:30 - Ответы на вопросы от ютуберов" },
+	{ text: "13:00 - Открытие" },
+	{ text: "13:15 - Косплей дефиле блок 1" },
+	{ text: "14:00 - Предпоказ видео FolkStudio" },
+	{ text: "14:05 - Penka Omori Performance" },
+	{ text: "14:10 - Предпоказ клипа DTV animation" },
+	{ text: "14:15 - Предпоказ аниматика Антикек" },
+	{ text: "14:30 - Эпик Мюзикл" },
+	{ text: "14:45 - Предпоказ проекта BIB Production" },
+	{ text: "15:00 - Аукцион" },
+	{ text: "15:15 - Косплей Дефиле блок 2" },
+	{ text: "16:00 - выступление SayMaxWell" },
+	{ text: "16:30 - Выступление музыкальных групп" },
+	{ text: "17:30 - голосование за лучшую инди игру" },
+	{ text: "18:00 - Награждение косплея" },
+	{ text: "18:30 - Анимации" },
+	{ text: "19:30 - закрытие сцены" },
 	{ text: "Малая сцена:", isTitle: true },
-	{ text: "12:00 - Ответы на вопросы от ютуберов" },
-	{ text: "12:40 - Лотерея" },
-	{ text: "13:00 - Undertale Quiz AU" },
-	{ text: "13:30 - Jackbox с ютуберами" },
-	{ text: "14:20 - WonderNope автограф сессия" },
-	{ text: "14:40 - Игорь Чай автограф сессия" },
-	{ text: "15:00 - Лотерея" },
-	{ text: "15:10 - Марсильез автограф сессия" },
-	{ text: "15:30 - Предпоказ песни FolkStudio" },
-	{ text: "15:40 - Sirus и Folkstudio автограф сессия" },
-	{ text: "16:00 - презентация игры Insult Goatbro" },
-	{ text: "16:10 - InkBlot презентация вселенной и автограф сессия" },
-	{ text: "16:40 - Undertale quiz original" },
-	{ text: "17:00 - Лотерея" },
-	{ text: "17:30 - Marina aka mari презентация вселенной Kamitale" },
-	{ text: "17:50 - Sansация Презентация фильма" },
-	{ text: "18:00 - Итоги конкурсов маркета" },
-	{ text: "18:10 - Everybody 1-2 switch" },
-	{ text: "19:00 - Дискотека" },
-	{ text: "19:50 - Закрытие" },
+	{ text: `12:30 - Открытие сцены` },
+	{ text: `12:45 - Розыгрыш` },
+	{ text: `13:00 - Инди Квиз` },
+	{ text: `13:30 - Лекция "Как геймдизайнеру (не) подсказывать игроку, что делать. Аффорданс."` },
+	{ text: `14:00 - Презентации разработчиков` },
+	{ text: `14:45 - Розыгрыш` },
+	{ text: `15:00 - Лекция Game4Art` },
+	{ text: `15:30 - Лекция "Проведу за руку в мир гейм-дизайна"` },
+	{ text: `16:00 - Презентации разработчиков` },
+	{ text: `16:45 - Розыгрыш` },
+	{ text: `17:00 - Лекция "Игры как искусство: Инструкция по применению"` },
+	{ text: `17:30 - Лекция "Как и какие  инструменты ИИ могут сэкономить время"` },
+	{ text: `18:00 - Everybody 1-2 switch` },
+	{ text: `18:15 - Награждение квест-маркета` },
+	{ text: `18.30 - Пиньята` },
+	{ text: `19:00 - Дискотека` },
 ];
 
-const data_autograph: TimetableData[] = [
-	{ text: "13:30 - АнтиКек" },
-	{ text: "14:00 - Бемон" },
-	{ text: "14:30 - JF Voice и FolkStudio" },
-	{ text: "15:00 - Неадекват Рекордс" },
-	{ text: "15:30 - WonderNope" },
-	{ text: "16:00 - Игорь Чай (тв)" },
-	{ text: "16:30 - Щищ (игра в Uno)" },
-];
-
-const data_lections: TimetableData[] = [
-	{ text: "13:00 - О франшизе Hylics" },
-	{ text: "13:40 - Инди игры как искусство" },
-	{ text: "14:10 - Как найти ✨ту самую✨ идею для игры" },
-	{ text: "14:40 - Краудфандинг авторской игры" },
-	{ text: "15:20 - Что такое Touhou Project и как его употреблять?" },
-	{ text: "16:00 - Производственный ад в игровой индустрии" },
-	{ text: "16:40 - Анализ игр для гейм-дизайнеров и обзорщиков" },
+const data_zones: TimetableData[] = [
+	{ text: "Автограф зона:", isTitle: true },
+	{ text: "13:00 - Уголок Акра" },
+	{ text: "14:00 - SayMaxWell" },
+	{ text: "15:00 - N-time (онлайн)" },
+	{ text: "16:00 - Антикек" },
+	{ text: "17:00 - FolkStudio, SiRus" },
+	{ text: "18:00 - DTV (онлайн)" },
+	{ text: "Вип зона:", isTitle: true },
+	{ text: "12:00 - Cuphead мультсериал 1-4 серии" },
+	{ text: "13:00 - JackBox - смертельная вечеринка 2" },
+	{ text: "14:00 - Dead sells мультсериал 1-10 серии" },
+	{ text: "15:20 - Cuphead мультсериал 5-8 серии" },
+	{ text: "16:20 - JackBox - Смехлыст 3" },
+	{ text: "17:20 - Индикросс 1-2 серии" },
+	{ text: "18:30 - Короткометражка Rusty Lake" },
+	{ text: "18:50 - Короткометражка Papers, please" },
 ];
 
 const data_tournaments: TimetableData[] = [
-	{ text: "Турниры:", isTitle: true },
-	{ text: "Unfair Undyne 11:00 - 17:30" },
-	{ text: "Endless Sans 11:00 - 17:30" },
-	{ text: "Underverse Battles 14:00" },
+	{ text: "Инди турниры:", isTitle: true },
+	{ text: "13:00 - Rivals of Aether" },
+	{ text: "15:00 - Gang Beasts" },
+	{ text: "17:00 - Ultimate Chicken Horse" },
 	{ text: "Ретро турниры:", isTitle: true },
-	{ text: "Sega - Ultimate Mortal Combat 3 - 13:00" },
-	{ text: "Ps 1 - Tekken 3 - 15:00" },
-	{ text: "Snes - Super Tetris 3 - 17:00" },
+	{ text: "13:00 - Аркадный Волейбол" },
+	{ text: "15:00 - Super Tetris 3" },
+	{ text: "17:00 - Mortal Kombat 3 Ultimate" },
+	{ text: "Настольные турниры:", isTitle: true },
+	{ text: "14:00 - Повелители токио" },
+	{ text: "16:00 - Гномы вредители" },
 ]

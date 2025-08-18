@@ -57,6 +57,22 @@ def init_dev_values(db_sess: Session, config: AppConfig):
             }
         ]})
 
+    quests = [
+        (1, "Чудик в углу"),
+        (2, "Соня"),
+        (3, "Обручальный"),
+        (4, "Чёрный"),
+        (5, "Крылатый"),
+        (6, "Парочка"),
+    ]
+    now = get_datetime_now()
+    for (i, name) in quests:
+        quest = Quest(name=name, description="", reward=0, hidden=False)
+        quest.id = i
+        quest.id_big = randstr(8)
+        Log.added(quest, user_admin, quest.get_creation_changes(), now=now, commit=False, db_sess=db_sess)
+        db_sess.add(quest)
+
     quest1 = Quest.get(db_sess, 1)
     assert quest1
     quest1.dialog1Id = dialog.id

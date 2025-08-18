@@ -1,0 +1,51 @@
+.root {
+	margin: 1rem;
+	flex-grow: 1;
+}
+
+.quests {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.btn {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	align-self: center;
+}
+.btn__box {
+	padding: 0.5rem 1rem;
+}
+
+.quest {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	text-align: left;
+	padding: 0.5rem;
+}
+
+.quest > :nth-child(2) {
+	color: var(--c-trenary);
+	display: flex;
+	align-items: center;
+}
+.quest > :nth-child(2) svg {
+	font-size: 1.2rem;
+}
+
+.questScreen {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.btnIntro {
+	align-self: center;
+}
+.btnIntro__box {
+	padding: 0.25rem 0.5rem;
+}
+.btnIntro__text {
+	font-size: 1rem;
+}

@@ -91,12 +91,12 @@ export default function GamePage()
 	}, [clicks.v, state.data?.state]);
 
 	return (<>
-		{state.data?.state == "start" && <GameDialogGame />}
+		{/* {state.data?.state == "start" && <GameDialogGame />} */}
 		{state.isLoading && <Spinner />}
 		{displayError(state)}
 		{selectTeam.isPending && <Spinner />}
 		{displayError(selectTeam)}
-		<StyledWindow className={styles.window}>
+		<StyledWindow className={styles.window} title="game">
 			{(state.isLoading || state.data?.state == "wait") && <>
 				<div className={styles.text}>
 					<div>

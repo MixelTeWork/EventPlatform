@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Color Palette</title>
+	<style>
+		body {
+			display: grid;
+  			/* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
+  			grid-template-columns: repeat(3, 1fr);
+			height: 100dvh;
+			flex-wrap: wrap;
+			margin: 0;
+			font-family: 'Courier New', Courier, monospace;
+		}
+		div {
+			background-color: var(--c);
+			color: var(--t);
+			padding: 1em;
+		}
+	</style>
+</head>
+<body>
+	<div style="--c: #00042b; --t: #b3e0ff">back</div>
+	<div style="--c: #000e31; --t: #b3e0ff">back-dim</div>
+	<div style="--c: #001e82; --t: #b3e0ff">primary</div>
+	<div style="--c: #1445b9; --t: #b3e0ff">primary-light</div>
+	<div style="--c: #618ef8; --t: #fffeaf">secondary</div>
+	<div style="--c: #3649de; --t: #fffeaf">secondary-dark</div>
+	<div style="--c: #80a6fe; --t: #fffeaf">secondary-light</div>
+	<div style="--c: #b3e0ff; --t: #00042b">text</div>
+	<div style="--c: #fffeaf; --t: #00042b">trenary</div>
+</body>
+</html>

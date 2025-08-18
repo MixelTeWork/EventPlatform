@@ -9,6 +9,7 @@ import useStateObj from "@/utils/useStateObj";
 import Spinner from "@/components/Spinner";
 import Textbox from "@mCmps/Textbox";
 import { useMutationAuthByTicket } from "@/api/user";
+import Title from "@mCmps/Title";
 
 export default function AuthByTicket({ open }: {
 	open: boolean;
@@ -41,9 +42,9 @@ export default function AuthByTicket({ open }: {
 						<span>В доступе отказано! {error.v}</span>
 					</div>
 				</Textbox>
-				<Textbox className={clsx(styles.msg3, styles.msgWide)}>
+				<Textbox className={clsx(styles.msg3, styles.msgWide)} primary>
 					<label className={styles.openFile}>
-						<div className="title">Загрузить билет</div>
+						<Title text="Загрузить билет" />
 						<input
 							type="file"
 							style={{ display: "none" }}

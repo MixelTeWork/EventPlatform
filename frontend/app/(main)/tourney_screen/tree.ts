@@ -4,6 +4,17 @@ import type { TreeNode as ITreeNode, TourneyData } from "@/api/tourney";
 export class Tree
 {
 	public static Font = "Arial";
+	public static Colors = {
+		onBack: "#ccebff",
+		node: "#618ef8",
+		nodeWinner: "#00042b",
+		nodeSelected: "#3649de",
+		onNode: "#fffeaf",
+		onNodePrimary: "#fffb00ff",
+		emptyCharacter: "#808080",
+		nodeShade: "#00000055",
+	}
+
 	private tree: TreeNode;
 	private third: TreeNode;
 	private transform = { dx: 0, dy: 0, s: 1 };
@@ -183,7 +194,9 @@ export interface TourneyCharactersTreeData
 class TreeNode
 {
 	public static readonly S = 100;
+	public static readonly R = 8;
 	public readonly S = TreeNode.S;
+	public readonly R = TreeNode.R;
 	private t = 0;
 	private newCharacterId: number;
 	public parent?: TreeNode;
@@ -206,32 +219,32 @@ class TreeNode
 
 		if (type == -1) ctx.translate(0, this.S * 4);
 
-		ctx.fillStyle = "#fff2b5";
-		if (type == 1) ctx.fillStyle = "#f9e064";
-		if (this.data.id == this.curGameNodeId) ctx.fillStyle = "#ffab40";
-		ctx.fillRect(0, 0, this.S * 3, this.S);
+		ctx.fillStyle = Tree.Colors.node;
+		if (type == 1) ctx.fillStyle = Tree.Colors.nodeWinner;
+		if (this.data.id == this.curGameNodeId) ctx.fillStyle = Tree.Colors.nodeSelected;
+		roundRect(ctx, "fill", 0, 0, this.S * 3, this.S, this.R);
 
 		if (character)
 		{
 			ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S);
 			ctx.font = "20px " + Tree.Font;
-			ctx.fillStyle = "#4a0001";
+			ctx.fillStyle = Tree.Colors.onNode;
 			ctx.fillText(character.name, imgRight ? this.S * 0.05 : this.S * 1.05, this.S / 2 + 10, this.S * 1.9);
 		}
 
-		ctx.strokeStyle = "gray";
+		ctx.strokeStyle = Tree.Colors.emptyCharacter;
 		if (character) ctx.strokeStyle = character.color;
 		ctx.lineWidth = 4;
-		ctx.strokeRect(0, 0, this.S * 3, this.S);
-		ctx.strokeRect(imgRight ? this.S * 2 : 0, 0, this.S, this.S);
+		roundRect(ctx, "stroke", 0, 0, this.S * 3, this.S, this.R);
+		roundRect(ctx, "stroke", imgRight ? this.S * 2 : 0, 0, this.S, this.S, this.R);
 
-		// ctx.font = "40px ZeroCool, Arial";
+		// ctx.font = "40px " + Tree.Font;
 		// ctx.fillStyle = "magenta";
 		// ctx.fillText(`${type}`, this.S * 0.1, this.S / 2 - 10, this.S * 0.8);
 		// ctx.fillText(`${this.data.id}`, this.S * 0.1, this.S / 2 + 30, this.S * 0.8);
 
 		ctx.font = "20px " + Tree.Font;
-		ctx.fillStyle = "#ff7700";
+		ctx.fillStyle = Tree.Colors.onNodePrimary;
 		if (type == 1 && this.data.characterId != -1)
 		{
 			ctx.fillText("Победитель", this.S * 1.05, 30, this.S * 1.9);
@@ -248,12 +261,12 @@ class TreeNode
 			}
 			else if (this.parent.data.characterId != this.data.characterId)
 			{
-				ctx.fillStyle = "#00000055";
-				ctx.fillRect(0, 0, this.S * 3, this.S);
+				ctx.fillStyle = Tree.Colors.nodeShade;
+				roundRect(ctx, "fill", 0, 0, this.S * 3, this.S, this.R);
 			}
 		}
 
-		ctx.strokeStyle = "gray";
+		ctx.strokeStyle = Tree.Colors.emptyCharacter;
 		ctx.lineWidth = 4;
 
 		if (type == 1)
@@ -625,4 +638,22 @@ function createTree(tree: ITreeNode, curGameNodeId: number, characters: TourneyC
 	if (left) left.parent = node;
 	if (right) right.parent = node;
 	return node;
+}
+
+function roundRect(ctx: CanvasRenderingContext2D, m: "fill" | "stroke", x: number, y: number, w: number, h: number, radii: number | number[])
+{
+	if (!ctx.roundRect)
+	{
+		if (m == "stroke")
+			ctx.strokeRect(x, y, w, h);
+		else
+			ctx.fillRect(x, y, w, h);
+		return;
+	}
+	ctx.beginPath();
+	ctx.roundRect(x, y, w, h, radii);
+	if (m == "stroke")
+		ctx.stroke();
+	else
+		ctx.fill();
 }

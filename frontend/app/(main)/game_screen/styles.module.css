@@ -18,7 +18,7 @@ body:has(.root) {
 		background-position: 0 0;
 	}
 	100% {
-		background-position: calc(var(--bcsize) * 4) 0;
+		background-position: calc(var(--bcsize) * 2) 0;
 	}
 }
 
@@ -75,8 +75,9 @@ body:has(.root) {
 	box-shadow: 1vw 0 1vw 1vw var(--color);
 	font-size: 4vw;
 	letter-spacing: 0.1em;
-	text-shadow: 0.1em 0 black, -0.1em 0 black, 0 0.1em black, 0 -0.1em black,
-		0.05em 0.05em black, -0.05em -0.05em black, 0.05em -0.05em black, -0.05em 0.05em black;
+	--_c: black;
+	text-shadow: 0.1em 0 var(--_c), -0.1em 0 var(--_c), 0 0.1em var(--_c), 0 -0.1em var(--_c),
+		0.05em 0.05em var(--_c), -0.05em -0.05em var(--_c), 0.05em -0.05em var(--_c), -0.05em 0.05em var(--_c);
 }
 .bar__img {
 	position: relative;
@@ -185,9 +186,10 @@ body:has(.root) {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: linear-gradient(0deg, #4a0001, #380000);
-	border: 0.5vw solid #fffeda;
-	color: #fffeda;
+	background: var(--background-calm);
+	border: 0.5vw solid var(--c-primary-light);
+	border-radius: 0.8vw;
+	color: var(--c-text);
 	padding: 1vw;
 	font-size: 3vw;
 }
@@ -195,9 +197,9 @@ body:has(.root) {
 	position: absolute;
 	top: -0.5vw;
 	left: 50%;
-	background: linear-gradient(0deg, #4a0001, #380000);
-	border: 0.5vw solid #fffeda;
-	color: #fffeda;
+	background: var(--background-calm);
+	border: 0.5vw solid var(--c-primary-light);
+	border-radius: 0.8vw;
 	font-size: 1.5rem;
 	padding: 0.5rem 1rem;
 	z-index: 10;

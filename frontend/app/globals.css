@@ -22,20 +22,29 @@ body {
 	text-decoration-skip-ink: none;
 	font-family: var(--font-PTSans), Arial, Helvetica, sans-serif;
 	font-size: 1rem;
-	--bcsize: 5px;
-	--bssize: 3.5px;
+	--bcsize: 45px;
+	--blsize: 3px;
+	--bcolor: #000f33;
 	--background:
-		linear-gradient(0deg, transparent, #ffdb6c),
-		radial-gradient(circle at var(--bcsize) var(--bcsize), #fff6a7 var(--bssize), transparent var(--bssize)) 0px 0px / calc(var(--bcsize) * 4) calc(var(--bcsize) * 4),
-		radial-gradient(circle at calc(var(--bcsize) * 3) calc(var(--bcsize) * 3), #fff6a7 var(--bssize), transparent var(--bssize)) 0px 0px / calc(var(--bcsize) * 4) calc(var(--bcsize) * 4),
-		linear-gradient(0deg, #ffe87e, #ffdb6c);
-	font-family: var(--font-MFFRBL), Arial, Helvetica, sans-serif;
-	--color: black;
-	--c-back: #ffe87e;
-	--c-primary: #f4ad51;
-	--c-secondary: #380000;
-	--c-secondary-light: #4a0000;
-	--c-text: #fffeda;
+		radial-gradient(circle at 110% 95%, #000e2f, transparent 20%),
+		radial-gradient(circle at -10% 95%, #000e2f, transparent 20%),
+		linear-gradient(180deg, transparent 40%, #00164b 80%),
+		repeating-linear-gradient(90deg, transparent, transparent var(--bcsize), var(--bcolor) var(--bcsize), var(--bcolor) calc(var(--bcsize) + var(--blsize))),
+		repeating-linear-gradient(180deg, transparent, transparent var(--bcsize), var(--bcolor) var(--bcsize), var(--bcolor) calc(var(--bcsize) + var(--blsize))),
+		linear-gradient(0deg, #000e32, #000613);
+	--background-calm: linear-gradient(0deg, #000e32, #000613);
+	font-family: var(--font-ZeroCool), Arial, Helvetica, sans-serif;
+	--color: #ccebff;
+	--c-back: #00042b;
+	--c-back-dark: #000000;
+	--c-back-dim: #000e31;
+	--c-primary: #001e82;
+	--c-primary-light: #1445b9;
+	--c-secondary: #618ef8;
+	--c-secondary-dark: #3649de;
+	--c-secondary-light: #80a6fe;
+	--c-trenary: #fffeaf;
+	--c-text: #b3e0ff;
 	color: var(--color);
 	--m-background: var(--background);
 	--m-color: var(--color);
@@ -43,6 +52,7 @@ body {
 	--m-c-primary: var(--c-primary);
 	--m-c-secondary: var(--c-secondary);
 	--m-c-secondary-light: var(--c-secondary-light);
+	--m-c-trenary: var(--c-trenary);
 	--m-c-text: var(--c-text);
 }
 

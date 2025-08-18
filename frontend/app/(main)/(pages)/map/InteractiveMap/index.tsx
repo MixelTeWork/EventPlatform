@@ -4,10 +4,8 @@ import useStateObj from "@/utils/useStateObj";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 
-export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacity = 1, zoomMin = 0.8, zoomMax = 1, disablePadding = false, fillOnStart = false }: {
+export default function InteractiveMap({ img, objects, objectsOpacity = 1, zoomMin = 0.8, zoomMax = 1, disablePadding = false, fillOnStart = false }: {
 	img: StaticImageData;
-	imgW: number;
-	imgH: number;
 	zoomMin?: number;
 	zoomMax?: number;
 	disablePadding?: boolean;
@@ -20,8 +18,8 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 	const state = useStateObj<MapState>({
 		x: 0,
 		y: 0,
-		w: imgW,
-		h: imgH,
+		w: img.width,
+		h: img.height,
 		zoom: 1,
 		toCenter: true,
 		markClick: undefined,
@@ -44,9 +42,9 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 	});
 
 	useEffect(
-		() => state.set(v => ({ ...v, s: 0, y: 0, w: imgW, h: imgH, zoom: 1, toCenter: true })),
+		() => state.set(v => ({ ...v, s: 0, y: 0, w: img.width, h: img.height, zoom: 1, toCenter: true })),
 		// eslint-disable-next-line
-		[img, imgH, imgW]
+		[img]
 	);
 	useEffect(() =>
 	{
@@ -62,11 +60,11 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 				{
 					v.toCenter = false;
 					if (fillOnStart)
-						v.zoom = Math.max(v.window.w / imgW, v.window.h / imgH);
+						v.zoom = Math.max(v.window.w / img.width, v.window.h / img.height);
 					else
-						v.zoom = Math.min(v.window.w / imgW, v.window.h / imgH);
-					v.w = imgW * v.zoom;
-					v.h = imgH * v.zoom;
+						v.zoom = Math.min(v.window.w / img.width, v.window.h / img.height);
+					v.w = img.width * v.zoom;
+					v.h = img.height * v.zoom;
 					v.x = (v.window.w - v.w) / 2;
 					v.y = (v.window.h - v.h) / 2;
 				}
@@ -80,7 +78,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			window.removeEventListener("resize", setSize);
 		}
 		// eslint-disable-next-line
-	}, [mapEl, state.v.toCenter, imgH, imgW]);
+	}, [mapEl, state.v.toCenter]);
 
 	useEffect(() =>
 	{
@@ -133,7 +131,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 		}
 		function rezoom(v: MapState, oldZ: number)
 		{
-			v.zoom = Math.max(Math.min(v.zoom, zoomMax), Math.min(v.window.w / imgW, v.window.h / imgH) * zoomMin);
+			v.zoom = Math.max(Math.min(v.zoom, zoomMax), Math.min(v.window.w / img.width, v.window.h / img.height) * zoomMin);
 			v.x -= v.window.w / 2;
 			v.y -= v.window.h / 2;
 			v.x /= oldZ;
@@ -142,8 +140,8 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			v.y *= v.zoom;
 			v.x += v.window.w / 2;
 			v.y += v.window.h / 2;
-			v.w = imgW * v.zoom;
-			v.h = imgH * v.zoom;
+			v.w = img.width * v.zoom;
+			v.h = img.height * v.zoom;
 			applyBoundaries(v);
 		}
 		function applyBoundaries(v: MapState)
@@ -283,7 +281,7 @@ export default function InteractiveMap({ img, imgW, imgH, objects, objectsOpacit
 			el.removeEventListener("touchend", onTouchEnd);
 		}
 		// eslint-disable-next-line
-	}, [mapEl, zoomMin, zoomMax, disablePadding, imgH, imgW])
+	}, [mapEl, zoomMin, zoomMax, disablePadding])
 
 	function setMarkClick(onClick: (() => void) | undefined)
 	{
