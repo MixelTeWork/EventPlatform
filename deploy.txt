@@ -1,18 +1,18 @@
 ---- Deploy ----
-pip3.9 install --user bafser
+pip3.12 install --user bafser
 // git clone -b gh-pages https://github.com/MixelTeWork/EventPlatform.git
 git clone -b gh-pages --single-branch https://github.com/MixelTeWork/EventPlatform.git --depth 1
 copy .env.example .env
 configure .env
 // docker compose up
 // gunicorn 'main:app' --bind=0.0.0.0:5000
-// python3.9 main.py
+// python3.12 main.py
 ---
-python3.9 -m bafser change_user_password admin
+python3.12 -m bafser change_user_password admin
 ---
 Source code: /home/platformevent/EventPlatform
 Working directory: /home/platformevent/EventPlatform
-wsgi.py: 
+wsgi.py:
 from main import app as application
 
 Go to directory

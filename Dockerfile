@@ -7,7 +7,7 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG NODE_VERSION=20.16.0
-ARG PYTHON_VERSION=3.9
+ARG PYTHON_VERSION=3.12
 ARG PUBLIC_URL=https://eventplatform-mixelte.amvera.io/
 
 ################################################################################
