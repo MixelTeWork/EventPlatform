@@ -10,16 +10,19 @@ export default function Footer()
 	return (
 		<div className={styles.root}>
 			<div>
-				<Textbox small btn highlight={pathname == "/map"}>
+				<Textbox small btn alterbg highlight={pathname == "/map"}>
 					<Link className={styles.btn} href={"/map"}>Карта</Link>
 				</Textbox>
-				<Textbox small btn highlight={pathname == "/timetable"}>
+				<Textbox small btn alterbg highlight={pathname == "/timetable"}>
 					<Link className={styles.btn} href={"/timetable"}>План</Link>
 				</Textbox>
-				<Textbox small btn highlight={pathname == "/store"}>
+				<Textbox small btn alterbg highlight={pathname == "/quests"}>
+					<Link className={styles.btn} href={"/quests"}>Квест</Link>
+				</Textbox>
+				<Textbox small btn alterbg highlight={pathname == "/store"}>
 					<Link className={styles.btn} href={"/store"}>Магаз</Link>
 				</Textbox>
-				<Textbox small btn highlight={pathname == "/game"}>
+				<Textbox small btn alterbg highlight={pathname == "/game"}>
 					<Link className={styles.btn} href={"/game"}>Бой</Link>
 				</Textbox>
 			</div>

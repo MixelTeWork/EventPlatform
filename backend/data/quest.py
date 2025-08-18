@@ -1,7 +1,7 @@
-from typing import Literal, Union
+from typing import Literal, Optional
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, orm, String
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey, String, literal
+from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
 from bafser import SqlAlchemyBase, Log, ObjMixin
 from data._tables import Tables
@@ -13,22 +13,20 @@ from utils import BigIdMixin
 class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
     __tablename__ = Tables.Quest
 
-    name = Column(String(128), nullable=False)
-    description = Column(String(512), nullable=False)
-    reward = Column(Integer, nullable=False)
-    hidden = Column(Boolean, nullable=False)
-    dialog1Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
-    dialog2Id = Column(Integer, ForeignKey("Dialog.id"), nullable=True)
+    name: Mapped[str] = mapped_column(String(128))
+    description: Mapped[str] = mapped_column(String(512))
+    reward: Mapped[int]
+    hidden: Mapped[bool]
+    dialog1Id: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Dialog}.id"), default=None)
+    dialog2Id: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Dialog}.id"), default=None)
 
-    dialog1 = orm.relationship("Dialog", foreign_keys="Quest.dialog1Id")
-    dialog2 = orm.relationship("Dialog", foreign_keys="Quest.dialog2Id")
-
-    def __repr__(self):
-        return f"<Quest> [{self.id}] {self.name}"
+    dialog1: Mapped["Dialog"] = relationship(foreign_keys=[dialog1Id], init=False)
+    dialog2: Mapped["Dialog"] = relationship(foreign_keys=[dialog2Id], init=False)
 
     @staticmethod
     def new(creator: User, name: str, description: str, reward: int, hidden: bool):
         db_sess = Session.object_session(creator)
+        assert db_sess
         quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
         quest.set_unique_big_id(db_sess)
 
@@ -45,14 +43,14 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
         ]
 
     @staticmethod
-    def all(db_sess: Session, includeHidden=False, includeDeleted=False):
+    def all(db_sess: Session, includeHidden=False, includeDeleted=False):  # pyright: ignore[reportIncompatibleMethodOverride]
         quests = Quest.query(db_sess, includeDeleted)
         if not includeHidden:
             quests = quests.filter(Quest.hidden == False)
         return quests.all()
 
     @staticmethod
-    def all_for_user(db_sess: Session, user: Union[User, None]):
+    def all_for_user(db_sess: Session, user: User | None):
         from data.user_quest import UserQuest
         if user:
             userQuests = db_sess.query(UserQuest).filter(UserQuest.userId == user.id)
@@ -75,10 +73,11 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
 
         all_quests = db_sess\
             .query(Quest)\
-            .values(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn)
+            .with_entities(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn if dialogColumn else literal(None))
 
         quests = []
         for v in list(all_quests):
+            v = v.tuple()
             id = v[0]
             name = v[1]
             description = v[2]
@@ -107,8 +106,8 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
 
         return quests
 
-    def update(self, actor: User, name: Union[str, None], description: Union[str, None], reward: Union[int, None],
-               hidden: Union[bool, None], dialog1: Union[object, Literal[False], None], dialog2: Union[object, Literal[False], None]):
+    def update(self, actor: User, name: str | None, description: str | None, reward: int | None,
+               hidden: bool | None, dialog1: object | Literal[False] | None, dialog2: object | Literal[False] | None):
         changes = []
 
         def updateField(field: str, value):
@@ -123,7 +122,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
         updateField("hidden", hidden)
 
         def updateDialog(field: str, value, changes: list):
-            cur: Union[Dialog, None] = getattr(self, field)
+            cur: Dialog | None = getattr(self, field)
             if value is None:
                 return
             if value is False:

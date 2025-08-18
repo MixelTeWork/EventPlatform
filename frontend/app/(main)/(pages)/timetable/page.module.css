@@ -28,13 +28,14 @@
 .item_title {
 	font-size: 1.5rem;
 	margin-block: 1rem;
-	color: #fffeda;
+	color: var(--c-trenary);
 }
 
 .btns {
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
+	gap: 0.5em;
 }
 
 .btn {
@@ -43,6 +44,27 @@
 	border: none;
 	color: inherit;
 	background: transparent;
+}
+
+@media screen and (max-width: 390px) {
+	.btn {
+		padding: 0.25em 0.5em;
+	}
+}
+
+@media screen and (max-width: 330px) {
+	.btns {
+		gap: 0.2rem;
+	}
+}
+
+@media screen and (max-height: 500px) {
+	.list {
+		margin-bottom: 0.5rem;
+	}
+	.btn {
+		padding: 0.25em 0.5em;
+	}
 }
 /*
 @media screen and (max-width: 355px) {

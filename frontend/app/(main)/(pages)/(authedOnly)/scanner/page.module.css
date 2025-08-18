@@ -26,6 +26,10 @@
 	color: var(--c-text);
 }
 
+.scanner {
+	overflow: hidden;
+}
+
 .gold {
 	color: yellow;
 	text-align: center;

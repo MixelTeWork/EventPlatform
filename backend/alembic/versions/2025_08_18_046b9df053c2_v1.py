@@ -1,8 +1,8 @@
 """v1
 
-Revision ID: c37e67086221
+Revision ID: 046b9df053c2
 Revises: 
-Create Date: 2025-08-11 23:34:36.808543
+Create Date: 2025-08-18 00:06:32.662307
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'c37e67086221'
+revision: str = '046b9df053c2'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -30,15 +30,15 @@ def upgrade() -> None:
     mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('GameLog',
-    sa.Column('startStr', sa.String(length=8), nullable=True),
-    sa.Column('duration', sa.Integer(), nullable=True),
-    sa.Column('counter', sa.Integer(), nullable=True),
-    sa.Column('oponent1Id', sa.Integer(), nullable=True),
-    sa.Column('oponent2Id', sa.Integer(), nullable=True),
+    sa.Column('startStr', sa.String(length=8), nullable=False),
+    sa.Column('duration', sa.Integer(), nullable=False),
+    sa.Column('countdown', sa.Integer(), nullable=False),
+    sa.Column('opponent1Id', sa.Integer(), nullable=True),
+    sa.Column('opponent2Id', sa.Integer(), nullable=True),
     sa.Column('startTime', sa.DateTime(), nullable=True),
-    sa.Column('clicks1', sa.Integer(), nullable=True),
-    sa.Column('clicks2', sa.Integer(), nullable=True),
-    sa.Column('winner', sa.Integer(), nullable=True),
+    sa.Column('clicks1', sa.Integer(), nullable=False),
+    sa.Column('clicks2', sa.Integer(), nullable=False),
+    sa.Column('winner', sa.Integer(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_GameLog')),
     sa.UniqueConstraint('id', name=op.f('uq_GameLog_id')),
@@ -68,7 +68,7 @@ def upgrade() -> None:
     mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Other',
-    sa.Column('ticketLoginEnabled', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('ticketLoginEnabled', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Other')),
     sa.UniqueConstraint('id', name=op.f('uq_Other_id')),
@@ -86,9 +86,9 @@ def upgrade() -> None:
     )
     op.create_table('Tourney',
     sa.Column('data', sa.JSON(), nullable=False),
-    sa.Column('curGameNodeId', sa.Integer(), server_default='-1', nullable=False),
-    sa.Column('showGame', sa.Boolean(), server_default='0', nullable=False),
-    sa.Column('ended', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('curGameNodeId', sa.Integer(), nullable=False),
+    sa.Column('showGame', sa.Boolean(), nullable=False),
+    sa.Column('ended', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Tourney')),
     sa.UniqueConstraint('id', name=op.f('uq_Tourney_id')),
@@ -96,38 +96,46 @@ def upgrade() -> None:
     mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('User',
+    sa.Column('lastName', sa.String(length=128), nullable=True),
+    sa.Column('imageUrl', sa.String(length=256), nullable=True),
+    sa.Column('ticketType', sa.String(length=128), nullable=True),
+    sa.Column('ticketTId', sa.Integer(), nullable=True),
+    sa.Column('balance', sa.Integer(), server_default='0', nullable=False),
+    sa.Column('group', sa.Integer(), server_default='0', nullable=False),
+    sa.Column('gameOpened', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('login', sa.String(length=64), nullable=False),
     sa.Column('password', sa.String(length=128), nullable=False),
     sa.Column('name', sa.String(length=64), nullable=False),
     sa.Column('deleted', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('lastName', sa.String(length=128), nullable=True),
-    sa.Column('imageUrl', sa.String(length=256), nullable=True),
-    sa.Column('ticketType', sa.String(length=128), nullable=True),
-    sa.Column('ticketTId', sa.Integer(), nullable=True),
-    sa.Column('balance', sa.Integer(), nullable=False),
-    sa.Column('group', sa.Integer(), server_default='0', nullable=False),
-    sa.Column('gameOpened', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id_big', sa.String(length=8), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_User')),
     sa.UniqueConstraint('id', name=op.f('uq_User_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_User_id_big')),
     mysql_charset='utf8mb4',
     mysql_collate='utf8mb4_unicode_ci'
     )
     with op.batch_alter_table('User', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_User_id_big'), ['id_big'], unique=True)
         batch_op.create_index(batch_op.f('ix_User_login'), ['login'], unique=True)
 
     op.create_table('UserGameLog',
-    sa.Column('gameId', sa.Integer(), nullable=True),
-    sa.Column('userId', sa.Integer(), nullable=True),
-    sa.Column('team', sa.Integer(), nullable=True),
-    sa.Column('clicks', sa.Integer(), nullable=True),
+    sa.Column('gameId', sa.Integer(), nullable=False),
+    sa.Column('userId', sa.Integer(), nullable=False),
+    sa.Column('team', sa.Integer(), nullable=False),
+    sa.Column('clicks', sa.Integer(), nullable=False),
     sa.Column('lastClick', sa.DateTime(), nullable=True),
-    sa.Column('hackAlert', sa.Integer(), nullable=True),
+    sa.Column('hackAlert', sa.Integer(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_UserGameLog')),
     sa.UniqueConstraint('id', name=op.f('uq_UserGameLog_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
+    )
+    op.create_table('db_state',
+    sa.Column('initialized', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_db_state')),
+    sa.UniqueConstraint('id', name=op.f('uq_db_state_id')),
     mysql_charset='utf8mb4',
     mysql_collate='utf8mb4_unicode_ci'
     )
@@ -168,26 +176,30 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['dialog2Id'], ['Dialog.id'], name=op.f('fk_Quest_dialog2Id_Dialog')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Quest')),
     sa.UniqueConstraint('id', name=op.f('uq_Quest_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_Quest_id_big')),
     mysql_charset='utf8mb4',
     mysql_collate='utf8mb4_unicode_ci'
     )
+    with op.batch_alter_table('Quest', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_Quest_id_big'), ['id_big'], unique=True)
+
     op.create_table('Send',
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('creatorId', sa.Integer(), nullable=False),
     sa.Column('value', sa.Integer(), nullable=False),
     sa.Column('positive', sa.Boolean(), nullable=False),
     sa.Column('reusable', sa.Boolean(), nullable=False),
-    sa.Column('used', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('used', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('id_big', sa.String(length=8), nullable=False),
     sa.ForeignKeyConstraint(['creatorId'], ['User.id'], name=op.f('fk_Send_creatorId_User')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_Send')),
     sa.UniqueConstraint('id', name=op.f('uq_Send_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_Send_id_big')),
     mysql_charset='utf8mb4',
     mysql_collate='utf8mb4_unicode_ci'
     )
+    with op.batch_alter_table('Send', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_Send_id_big'), ['id_big'], unique=True)
+
     op.create_table('Transaction',
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('fromId', sa.Integer(), nullable=False),
@@ -205,10 +217,10 @@ def upgrade() -> None:
     )
     op.create_table('UserGame',
     sa.Column('userId', sa.Integer(), nullable=False),
-    sa.Column('team', sa.Integer(), server_default='0', nullable=False),
+    sa.Column('team', sa.Integer(), nullable=False),
     sa.Column('clicks', sa.Integer(), nullable=False),
     sa.Column('lastClick', sa.DateTime(), nullable=True),
-    sa.Column('hackAlert', sa.Integer(), server_default='0', nullable=False),
+    sa.Column('hackAlert', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['userId'], ['User.id'], name=op.f('fk_UserGame_userId_User')),
     sa.PrimaryKeyConstraint('userId', name=op.f('pk_UserGame')),
     mysql_charset='utf8mb4',
@@ -226,7 +238,7 @@ def upgrade() -> None:
     op.create_table('DialogCharacter',
     sa.Column('name', sa.String(length=128), nullable=False),
     sa.Column('imgId', sa.Integer(), nullable=True),
-    sa.Column('orien', sa.Integer(), server_default='0', nullable=False),
+    sa.Column('orien', sa.Integer(), nullable=False),
     sa.Column('deleted', sa.Boolean(), server_default='0', nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['imgId'], ['Image.id'], name=op.f('fk_DialogCharacter_imgId_Image')),
@@ -246,10 +258,12 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['imgId'], ['Image.id'], name=op.f('fk_StoreItem_imgId_Image')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_StoreItem')),
     sa.UniqueConstraint('id', name=op.f('uq_StoreItem_id')),
-    sa.UniqueConstraint('id_big', name=op.f('uq_StoreItem_id_big')),
     mysql_charset='utf8mb4',
     mysql_collate='utf8mb4_unicode_ci'
     )
+    with op.batch_alter_table('StoreItem', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_StoreItem_id_big'), ['id_big'], unique=True)
+
     op.create_table('TourneyCharacter',
     sa.Column('name', sa.String(length=128), nullable=False),
     sa.Column('color', sa.String(length=32), nullable=False),
@@ -283,17 +297,17 @@ def upgrade() -> None:
     mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Game',
-    sa.Column('startStr', sa.String(length=8), server_default='17:30', nullable=False),
-    sa.Column('duration', sa.Integer(), server_default='60', nullable=False),
-    sa.Column('counter', sa.Integer(), server_default='150', nullable=False),
+    sa.Column('startStr', sa.String(length=8), nullable=False),
+    sa.Column('duration', sa.Integer(), nullable=False),
+    sa.Column('countdown', sa.Integer(), nullable=False),
     sa.Column('opponent1Id', sa.Integer(), nullable=True),
     sa.Column('opponent2Id', sa.Integer(), nullable=True),
     sa.Column('startTime', sa.DateTime(), nullable=True),
-    sa.Column('clicks1', sa.Integer(), server_default='0', nullable=False),
-    sa.Column('clicks2', sa.Integer(), server_default='0', nullable=False),
-    sa.Column('winner', sa.Integer(), server_default='0', nullable=False),
-    sa.Column('showGame', sa.Boolean(), server_default='0', nullable=False),
-    sa.Column('tourneyEnded', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('clicks1', sa.Integer(), nullable=False),
+    sa.Column('clicks2', sa.Integer(), nullable=False),
+    sa.Column('winner', sa.Integer(), nullable=False),
+    sa.Column('showGame', sa.Boolean(), nullable=False),
+    sa.Column('tourneyEnded', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['opponent1Id'], ['TourneyCharacter.id'], name=op.f('fk_Game_opponent1Id_TourneyCharacter')),
     sa.ForeignKeyConstraint(['opponent2Id'], ['TourneyCharacter.id'], name=op.f('fk_Game_opponent2Id_TourneyCharacter')),
@@ -311,18 +325,29 @@ def downgrade() -> None:
     op.drop_table('UserSend')
     op.drop_table('UserQuest')
     op.drop_table('TourneyCharacter')
+    with op.batch_alter_table('StoreItem', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_StoreItem_id_big'))
+
     op.drop_table('StoreItem')
     op.drop_table('DialogCharacter')
     op.drop_table('UserRole')
     op.drop_table('UserGame')
     op.drop_table('Transaction')
+    with op.batch_alter_table('Send', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_Send_id_big'))
+
     op.drop_table('Send')
+    with op.batch_alter_table('Quest', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_Quest_id_big'))
+
     op.drop_table('Quest')
     op.drop_table('Permission')
     op.drop_table('Image')
+    op.drop_table('db_state')
     op.drop_table('UserGameLog')
     with op.batch_alter_table('User', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_User_login'))
+        batch_op.drop_index(batch_op.f('ix_User_id_big'))
 
     op.drop_table('User')
     op.drop_table('Tourney')

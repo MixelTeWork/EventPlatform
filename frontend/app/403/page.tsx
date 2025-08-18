@@ -4,7 +4,8 @@ export default function Page()
 {
 	return (
 		<div style={{
-			background: "linear-gradient(0deg, #ffe87e, #ffdb6c)",
+			background: "linear-gradient(0deg, #00164c, #000613)",
+			color: "#b3e0ff",
 			width: "100%",
 			display: "flex",
 			flexDirection: "column",

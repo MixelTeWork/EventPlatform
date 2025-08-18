@@ -17,7 +17,6 @@ app, run = create_app(__name__, AppConfig(
     MESSAGE_TO_FRONTEND="",
     DEV_MODE="dev" in sys.argv,
     DELAY_MODE="delay" in sys.argv,
-    IMAGES_FOLDER="storage/images",
 )
     .add_secret_key_env("API_SECRET_KEY")
     # .add_secret_key("VK_SECRET_KEY", "secret_key_vk.txt")

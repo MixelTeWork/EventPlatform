@@ -15,7 +15,7 @@ PSIZE = 100
 
 @blueprint.route("/api/debug/log")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def debug_log(db_sess: Session, user: User):
@@ -28,7 +28,7 @@ def debug_log(db_sess: Session, user: User):
 
 @blueprint.route("/api/debug/log_len")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def debug_log_len(db_sess: Session, user: User):
@@ -38,7 +38,7 @@ def debug_log_len(db_sess: Session, user: User):
 
 @blueprint.route("/api/debug/log_info")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def debug_log_info(db_sess: Session, user: User):
@@ -47,7 +47,7 @@ def debug_log_info(db_sess: Session, user: User):
 
 @blueprint.route("/api/debug/log_requests")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def debug_log_requests(db_sess: Session, user: User):
@@ -56,7 +56,7 @@ def debug_log_requests(db_sess: Session, user: User):
 
 @blueprint.route("/api/debug/log_errors")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def debug_log_errors(db_sess: Session, user: User):
@@ -65,7 +65,7 @@ def debug_log_errors(db_sess: Session, user: User):
 
 @blueprint.route("/api/debug/log_frontend")
 @jwt_required()
-@use_db_session()
+@use_db_session
 @use_user()
 @permission_required(Operations.page_dev)
 def debug_log_frontend(db_sess: Session, user: User):

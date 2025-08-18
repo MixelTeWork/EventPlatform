@@ -8,8 +8,8 @@
 		"editor.insertSpaces": true,
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true,
-		"debugpy.debugJustMyCode": false,
-		"python.analysis.typeCheckingMode": "off",
+		// "debugpy.debugJustMyCode": false,
+		"python.analysis.typeCheckingMode": "standard",
 	},
 	"launch": {
 		"version": "0.2.0",

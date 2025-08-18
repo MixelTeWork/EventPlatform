@@ -12,9 +12,9 @@ export default function Layout({
 	return (
 		<div className={styles.root}>
 			<Header />
-			<div className={styles.title}>
+			{/* <div className={styles.title}>
 				<Title className={styles.title__text} text="Underparty" />
-			</div>
+			</div> */}
 			<div className={styles.body}>
 				{children}
 			</div>

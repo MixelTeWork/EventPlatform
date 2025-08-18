@@ -4,7 +4,8 @@
 	max-height: 100dvh;
 	width: 100%;
 	display: grid;
-	grid-template-rows: max-content max-content auto max-content;
+	/* grid-template-rows: max-content max-content auto max-content; */
+	grid-template-rows: max-content auto max-content;
 }
 
 .body {
@@ -23,7 +24,7 @@
 	margin-top: 1rem;
 }
 
-@media screen and (max-height: 500px) and (min-width: 400px) {
+/* @media screen and (max-height: 500px) and (min-width: 400px) {
 	.root {
 		grid-template-rows: max-content 1fr max-content;
 		grid-template-columns: 2rem auto;
@@ -55,4 +56,4 @@
 	.title__text {
 		line-height: 0.8;
 	}
-}
+} */

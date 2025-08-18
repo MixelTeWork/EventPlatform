@@ -3,10 +3,10 @@ import requests
 import sys
 
 from flask import Blueprint, abort, current_app, jsonify, redirect, request
-from flask_jwt_extended import create_access_token, unset_jwt_cookies, set_access_cookies
+from flask_jwt_extended import unset_jwt_cookies, set_access_cookies
 from sqlalchemy.orm import Session
 
-from bafser import get_json_values_from_req, randstr, response_msg, use_db_session
+from bafser import create_access_token, get_json_values_from_req, randstr, response_msg, use_db_session
 from data._roles import Roles
 from data.other import Other
 from data.user import User
@@ -22,16 +22,16 @@ EVENT_ID = 3 if "dev" in sys.argv else 15
 
 
 @blueprint.post("/api/auth")
-@use_db_session()
+@use_db_session
 def login(db_sess: Session):
-    login, password = get_json_values_from_req("login", "password")
+    login, password = get_json_values_from_req(("login", str), ("password", str))
     user = User.get_by_login(db_sess, login)
 
     if not user or not user.check_password(password):
         return response_msg("Неправильный логин или пароль", 400)
 
     response = jsonify(user.get_dict())
-    access_token = create_access_token(identity=[user.id, user.password])
+    access_token = create_access_token(user)
     set_access_cookies(response, access_token)
     return response
 
@@ -44,9 +44,9 @@ def logout():
 
 
 @blueprint.post("/api/auth_ticket")
-@use_db_session()
+@use_db_session
 def login_ticket(db_sess: Session):
-    code = get_json_values_from_req("code")
+    code = get_json_values_from_req(("code", str))
 
     obj = Other.get(db_sess)
     if not obj.ticketLoginEnabled:
@@ -60,7 +60,7 @@ def login_ticket(db_sess: Session):
         user.restore(user)
 
     response = jsonify(user.get_dict())
-    access_token = create_access_token(identity=[user.id, user.password])
+    access_token = create_access_token(user)
     set_access_cookies(response, access_token)
     return response
 
@@ -100,7 +100,7 @@ def create_user_by_ticket(db_sess: Session, code: str):
 
 
 # @blueprint.route("/auth_vk")
-@use_db_session()
+@use_db_session
 def auth_vk(db_sess: Session):
     vk_user = get_vk_user()
     if vk_user is None:
@@ -119,8 +119,8 @@ def auth_vk(db_sess: Session):
         db_sess.commit()
 
     response = redirect("/")
-    access_token = create_access_token(identity=[user.id, user.password])
-    set_access_cookies(response, access_token)
+    access_token = create_access_token(user)
+    set_access_cookies(response, access_token)  # type: ignore
     return response
 
 

@@ -1,22 +1,24 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, orm, String
-from sqlalchemy.orm import Session
+from datetime import datetime
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
 from bafser import SqlAlchemyBase, IdMixin, get_datetime_now
 from data._tables import Tables
+from data.user import User
 
 
 class Transaction(SqlAlchemyBase, IdMixin):
     __tablename__ = Tables.Transaction
 
-    date = Column(DateTime, nullable=False)
-    fromId = Column(Integer, ForeignKey("User.id"), nullable=False)
-    toId = Column(Integer, ForeignKey("User.id"), nullable=False)
-    value = Column(Integer, nullable=False)
-    action = Column(String(16), nullable=False)
-    itemId = Column(Integer, nullable=False)
+    date: Mapped[datetime]
+    fromId: Mapped[int] = mapped_column(ForeignKey(f"{Tables.User}.id"))
+    toId: Mapped[int] = mapped_column(ForeignKey(f"{Tables.User}.id"))
+    value: Mapped[int]
+    action: Mapped[str] = mapped_column(String(16))
+    itemId: Mapped[int]
 
-    userFrom = orm.relationship("User", foreign_keys=[fromId])
-    userTo = orm.relationship("User", foreign_keys=[toId])
+    userFrom: Mapped[User] = relationship(foreign_keys=[fromId], init=False)
+    userTo: Mapped[User] = relationship(foreign_keys=[toId], init=False)
 
     def __repr__(self):
         return f"<Transaction> [{self.id}] {self.action}"

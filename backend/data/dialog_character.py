@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Union
+from typing import Optional
 
 from flask import url_for
-from sqlalchemy import Column, DefaultClause, ForeignKey, Integer, orm, String
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
 from bafser import SqlAlchemyBase, Log, ObjMixin, Image
 from data._tables import Tables
@@ -13,15 +13,16 @@ from data.user import User
 class DialogCharacter(SqlAlchemyBase, ObjMixin):
     __tablename__ = Tables.DialogCharacter
 
-    name = Column(String(128), nullable=False)
-    imgId = Column(Integer, ForeignKey("Image.id"), nullable=True)
-    orien = Column(Integer, DefaultClause("0"), nullable=False)
+    name: Mapped[str] = mapped_column(String(128))
+    imgId: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Image}.id"), default=None)
+    orien: Mapped[int] = mapped_column(Integer, default=0)
 
-    image = orm.relationship("Image")
+    image: Mapped["Image"] = relationship(init=False)
 
     @staticmethod
     def new(creator: User, name: str, imgId: int, orien: int):
         db_sess = Session.object_session(creator)
+        assert db_sess
         character = DialogCharacter(name=name, imgId=imgId, orien=orien)
         db_sess.add(character)
 
@@ -33,7 +34,7 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
 
         return character
 
-    def update(self, actor: User, name: Union[str, None], imgId: Union[int, None], orien: Union[int, None]):
+    def update(self, actor: User, name: str | None, imgId: int | None, orien: int | None):
         changes = []
 
         if name is not None:
@@ -42,9 +43,8 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
 
         if imgId is not None:
             changes.append(("imgId", self.imgId, imgId))
-            image: Image = self.image
-            if image is not None:
-                image.delete(actor)
+            if self.image is not None:
+                self.image.delete(actor)
             self.imgId = imgId
 
         if orien is not None:
@@ -53,12 +53,11 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
 
         Log.updated(self, actor, changes)
 
-    def delete(self, actor: User, commit=True, now: datetime = None, db_sess: Session = None):
+    def delete(self, actor: User, commit=True, now: datetime | None = None, db_sess: Session | None = None):  # type: ignore
         super().delete(actor, commit, now, db_sess)
 
-        image: Image = self.image
-        if image is not None:
-            image.delete(actor, commit, now, db_sess)
+        if self.image is not None:
+            self.image.delete(actor, commit, now, db_sess)
 
     def get_dict(self):
         return {

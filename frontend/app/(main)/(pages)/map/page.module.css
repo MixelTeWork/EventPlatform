@@ -14,7 +14,7 @@
 }
 
 .btn {
-	font-size: 0.8rem;
+	font-size: 0.9rem;
 	padding: 0.5em 1em;
 }
 
@@ -63,10 +63,16 @@
 	padding: 0.7em 2em;
 	font-size: 1.2em;
 }
-/*
-@media screen and (max-width: 355px) {
+
+@media screen and (max-width: 390px) {
 	.btn {
-		font-size: 0.7rem;
+		padding: 0.25em 0.5em;
+	}
+}
+
+@media screen and (max-width: 330px) {
+	.btns {
+		gap: 0.2rem;
 	}
 }
 
@@ -74,13 +80,16 @@
 	.window {
 		margin-bottom: 0.5rem;
 	}
-	.btns {
+	/* .btns {
 		flex-direction: column;
 		gap: 0.25rem;
 		margin-right: 0.25rem;
+	} */
+	.btn {
+		padding: 0.25em 0.5em;
 	}
 }
-
+/*
 @media screen and (max-height: 650px) and (min-height: 500px) {
 	.btn {
 		font-size: 0.7rem;

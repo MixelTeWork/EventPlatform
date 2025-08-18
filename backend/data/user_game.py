@@ -1,23 +1,20 @@
-from datetime import timedelta
-from sqlalchemy import Column, DateTime, DefaultClause, ForeignKey, Integer
-from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
+from typing import Optional
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Session, Mapped, mapped_column
 
 from bafser import SqlAlchemyBase, get_datetime_now
 from data._tables import Tables
-from data.user import User
 
 
 class UserGame(SqlAlchemyBase):
     __tablename__ = Tables.UserGame
 
-    userId = Column(Integer, ForeignKey("User.id"), primary_key=True)
-    team = Column(Integer, DefaultClause("0"), nullable=False)
-    clicks = Column(Integer, nullable=False)
-    lastClick = Column(DateTime, nullable=True)
-    hackAlert = Column(Integer, DefaultClause("0"), nullable=False)
-
-    def __repr__(self):
-        return f"<UserGame> user: {self.userId}"
+    userId: Mapped[int] = mapped_column(ForeignKey(f"{Tables.User}.id"), primary_key=True)
+    team: Mapped[int] = mapped_column(default=0)
+    clicks: Mapped[int] = mapped_column(default=0)
+    lastClick: Mapped[Optional[datetime]] = mapped_column(default=None)
+    hackAlert: Mapped[int] = mapped_column(default=0)
 
     @staticmethod
     def get(db_sess: Session, userId: int):
@@ -28,32 +25,34 @@ class UserGame(SqlAlchemyBase):
 
         return ug
 
-    def set_team(ug, team: int):
-        db_sess = Session.object_session(ug)
-        ug.team = team
+    def set_team(self, team: int):
+        db_sess = Session.object_session(self)
+        assert db_sess
+        self.team = team
         db_sess.commit()
 
-    def click(ug, clicks: int):
-        db_sess = Session.object_session(ug)
+    def click(self, clicks: int):
+        db_sess = Session.object_session(self)
+        assert db_sess
 
         now = get_datetime_now().replace(tzinfo=None)
         now_hack = 0
-        if ug.lastClick is None:
+        if self.lastClick is None:
             if clicks > 100:
                 now_hack = 1
         else:
-            td: timedelta = now - ug.lastClick
+            td: timedelta = now - self.lastClick
             dt = td.seconds + td.microseconds / 1000000
             if clicks / dt > 16:
                 now_hack = 2
 
-        ug.lastClick = now
-        if ug.hackAlert >= 10 or now_hack > 0:
+        self.lastClick = now
+        if self.hackAlert >= 10 or now_hack > 0:
             if now_hack >= 2:
-                ug.hackAlert += 1
+                self.hackAlert += 1
             db_sess.commit()
             return False
 
-        ug.clicks += clicks
+        self.clicks += clicks
         db_sess.commit()
         return True

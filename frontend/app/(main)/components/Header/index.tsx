@@ -1,12 +1,12 @@
 "use client"
 import styles from "./styles.module.css"
 import avatar from "./avatar.png";
-import avatar_monster from "./avatar/avatar_monster.png";
-import avatar_human from "./avatar/avatar_human.png";
-import avatar_creator from "./avatar/avatar_creator.png";
-import avatar_destroyer from "./avatar/avatar_destroyer.png";
-import avatar_traveler from "./avatar/avatar_traveler.png";
-import avatar_coolman from "./avatar/avatar_coolman.png";
+import deluxe_edition from "./avatar/deluxe_edition.png"
+import goty_edition from "./avatar/goty_edition.png"
+import reload from "./avatar/reload.png"
+import standart_edition from "./avatar/standart_edition.png"
+import standart_edition_plus from "./avatar/standart_edition_plus.png"
+import ultimate_edition from "./avatar/ultimate_edition.png"
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -58,14 +58,15 @@ export default function Header({ homeBtn = false }: {
 }
 
 const TTYPES = {
-	70: avatar_monster, //"Монстр"
-	71: avatar_human, //"Человек"
-	72: avatar_coolman, //"Решительный человек"
-	73: avatar_traveler, //"Путешественник по вселенным"
-	74: avatar_destroyer, //"Разрушитель вселенных"
-	75: avatar_creator, //"Создатель"
-	90: avatar, //"Спец.Гость"
-	91: avatar, //"Маркет"
-	92: avatar, //"Участник"
-	94: avatar, //"Пресса"
+	95: standart_edition, // Standard edition
+	96: standart_edition_plus, // Standard+ edition
+	97: deluxe_edition, // Deluxe edition
+	98: ultimate_edition, // Ultimate edition
+	99: goty_edition, // GOTY edition
+	100: reload, // Reload
+	115: avatar, // Спец гость
+	116: avatar, // Выступающий
+	117: avatar, // Пресса
+	118: avatar, // Маркет
+	119: avatar, // Разработчик
 } as { [id: number]: StaticImageData };

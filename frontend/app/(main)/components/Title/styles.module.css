@@ -2,9 +2,10 @@
 	font-size: 2rem;
 	text-align: center;
 	text-transform: uppercase;
-	color: var(--c-text);
-	text-shadow: 0.1em 0 var(--c-secondary), -0.1em 0 var(--c-secondary), 0 0.1em var(--c-secondary), 0 -0.1em var(--c-secondary),
-		0.05em 0.05em var(--c-secondary), -0.05em -0.05em var(--c-secondary), 0.05em -0.05em var(--c-secondary), -0.05em 0.05em var(--c-secondary);
+	color: var(--c-primary);
+	--_c: white;
+	text-shadow: 0.1em 0 var(--_c), -0.1em 0 var(--_c), 0 0.1em var(--_c), 0 -0.1em var(--_c),
+		0.05em 0.05em var(--_c), -0.05em -0.05em var(--_c), 0.05em -0.05em var(--_c), -0.05em 0.05em var(--_c);
 }
 
 .small {

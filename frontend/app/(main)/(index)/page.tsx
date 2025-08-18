@@ -1,12 +1,13 @@
 "use client"
-import styles from "./page.module.css"
 import logo from "./logo.png";
-import btn from "./btn.png";
 import Link from "next/link";
 import Image from "next/image";
 import useStateBool from "@/utils/useStateBool";
 import AuthByTicket from "./AuthByTicket";
 import useRedirectForAuthed from "@/utils/useRedirectForAuthed";
+import Textbox from "@mCmps/Textbox";
+import Title from "@mCmps/Title";
+import styles from "./page.module.css"
 
 export default function Page()
 {
@@ -18,9 +19,12 @@ export default function Page()
 			<Link href="/auth" className={styles.auth} />
 			<div></div>
 			<Image className={styles.logo} src={logo} alt="Инди кон" />
-			<button className={styles.btn} onClick={authOpen.setT}>
-				<Image src={btn} alt="Вход" />
+			<button onClick={authOpen.setT}>
+				<Textbox className={styles.btn} primary>
+					<Title text="Вход" className={styles.btn__text} />
+				</Textbox>
 			</button>
+
 			<AuthByTicket open={authOpen.v} />
 		</div>
 	);

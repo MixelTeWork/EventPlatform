@@ -6,7 +6,6 @@ import displayError from "@/utils/displayError";
 import { useTitle } from "@/utils/useTtile";
 import Spinner from "@/components/Spinner";
 import StyledWindow from "@mCmps/StyledWindow";
-import Textbox from "@mCmps/Textbox";
 import { useStoreItems } from "@/api/store";
 
 export default function Page()
@@ -16,7 +15,7 @@ export default function Page()
 
 	return (<>
 		{items.isLoading && <Spinner />}
-		<StyledWindow title="Магазин" className={styles.list}>
+		<StyledWindow className={styles.list} title="store">
 			<div className={styles.items}>
 				{displayError(items)}
 				{items?.data?.map(item =>
@@ -26,12 +25,12 @@ export default function Page()
 								{item.img ? <img src={item.img} alt="Товар" /> : <div></div>}
 							</div>
 						</div>
-						<Textbox small btn className={styles.item__desc}>
+						<div className={styles.item__desc}>
 							<div className={styles.item__desc__inner}>
 								<span>{item.name} - </span>
 								<span>{item.price}М</span>
 							</div>
-						</Textbox>
+						</div>
 					</Link>
 				)}
 			</div>

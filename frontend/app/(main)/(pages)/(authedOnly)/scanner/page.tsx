@@ -20,8 +20,9 @@ export default function Page()
 
 	return (<>
 		{/* <div className={styles.background}></div> */}
-		<StyledWindow title="QR-Активатор" className={styles.body} onClose={() => router.back()}>
+		<StyledWindow noPad title="scanner" className={styles.body} onClose={() => router.back()}>
 			<Scanner
+				className={styles.scanner}
 				useMutation={useMutationScanner}
 				pause={popupOpen.v}
 				onScan={scanned =>

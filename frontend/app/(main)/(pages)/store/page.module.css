@@ -7,7 +7,7 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	max-width: 100%;
-	gap: 0.5rem;
+	gap: 0.75rem;
 	overflow: auto;
 }
 
@@ -22,10 +22,9 @@
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	/* gap: 0.5rem; */
+	gap: 0.25rem;
 	background-color: transparent;
 	border: none;
-	padding: 0;
 	font-size: 0.9rem;
 }
 
@@ -33,17 +32,17 @@
 	display: flex;
 	width: 100%;
 	aspect-ratio: 1;
-	padding: 0.5rem;
 }
 
 .item__img > div {
-	background-color: var(--c-text);
-	/* border: 3px solid #fdcf66;
-	box-shadow: 0 0 0 2px #9d1a42; */
+	background-color: var(--c-back);
+	border: 3px solid var(--c-text);
+	border-radius: 4px;
+	box-shadow: 4px 4px 0 var(--c-secondary-dark);
 }
-/* .item__img > div > * {
-	border: 2px solid #9d1a42;
-} */
+.item__img img {
+	border-radius: 1px;
+}
 
 .item__img div,
 .item__img img {
@@ -53,17 +52,13 @@
 	object-fit: cover;
 }
 
-/* .item__img div div {
-	background-color: #003095;
-	background:
-		radial-gradient(circle at 50% 10%, purple, transparent 50%),
-		radial-gradient(circle at 90% 90%, blue, transparent 50%),
-		radial-gradient(circle at 30% 90%, azure, transparent 50%),
-		radial-gradient(circle at 50% 50%, lightblue, violet);
-} */
-
 .item__desc {
 	flex-grow: 1;
+	background-color: var(--c-text);
+	border: 3px solid var(--c-back);
+	border-radius: 4px;
+	box-shadow: 4px 4px 0 var(--c-secondary-dark);
+	color: var(--c-back);
 }
 
 .item__desc__inner {
@@ -78,12 +73,13 @@
 
 .item::before {
 	position: absolute;
-	top: 0.25rem;
-	left: 0.25rem;
-	background-color: var(--c-secondary-light);
+	top: 0;
+	left: 0;
+	background-color: var(--c-secondary-dark);
+	border: 3px solid var(--c-text);
+	border-radius: 4px;
 	color: var(--c-text);
 	padding: 0.1rem 0.5rem 0.2rem 0.4rem;
-	font-size: 1rem;
 }
 .item_few::before {
 	content: "Мало!";

@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import Optional
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Session, Mapped, mapped_column
 
 from bafser import SqlAlchemyBase, Log, get_datetime_now
 from data._tables import Tables
@@ -12,10 +13,10 @@ from data.quest import Quest
 class UserQuest(SqlAlchemyBase):
     __tablename__ = Tables.UserQuest
 
-    userId = Column(Integer, ForeignKey("User.id"), primary_key=True)
-    questId = Column(Integer, ForeignKey("Quest.id"), primary_key=True)
-    openDate = Column(DateTime, nullable=True)
-    completeDate = Column(DateTime, nullable=True)
+    userId: Mapped[int] = mapped_column(ForeignKey(f"{Tables.User}.id"), primary_key=True)
+    questId: Mapped[int] = mapped_column(ForeignKey(f"{Tables.Quest}.id"), primary_key=True)
+    openDate: Mapped[Optional[datetime]] = mapped_column(default=None)
+    completeDate: Mapped[Optional[datetime]] = mapped_column(default=None)
 
     def __repr__(self):
         return f"<UserQuest> user: {self.userId} quest: {self.questId}"
@@ -30,7 +31,7 @@ class UserQuest(SqlAlchemyBase):
 
         now = get_datetime_now()
         uq.openDate = now
-        uq._log(actor, now, [("openDate", uq.openDate.isoformat())])
+        uq._log(actor, now, [("openDate", now.isoformat())])
 
         return True
 
@@ -44,13 +45,14 @@ class UserQuest(SqlAlchemyBase):
 
         now = get_datetime_now()
         uq.completeDate = now
-        uq._log(actor, now, [("completeDate", uq.completeDate.isoformat())])
+        uq._log(actor, now, [("completeDate", now.isoformat())])
 
         return True
 
     @staticmethod
     def _get_or_create(actor: User, user: User, quest: Quest):
         db_sess = Session.object_session(actor)
+        assert db_sess
         uq = db_sess.query(UserQuest).filter(UserQuest.userId == user.id, UserQuest.questId == quest.id).first()
 
         if uq is None:

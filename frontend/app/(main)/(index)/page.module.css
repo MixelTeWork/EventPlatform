@@ -25,14 +25,10 @@
 }
 
 .btn {
-	max-width: 350px;
-	background-color: transparent;
-	border: none;
-	-webkit-tap-highlight-color: transparent;
+	padding: 0.7em 6.4em;
 }
-.btn img {
-	width: 100%;
-	height: auto;
+.btn__text {
+	font-size: 3rem;
 }
 
 @media screen and (max-height: 400px) {

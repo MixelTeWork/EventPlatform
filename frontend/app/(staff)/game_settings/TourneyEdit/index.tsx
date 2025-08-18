@@ -182,7 +182,7 @@ function TreeNodeData({ characters, characterIdTree, editNode, collapse, start }
 				<img src={character.img} alt={character.name} />
 				<span>{character.name}</span>
 			</div> : <div>
-				<div className={styles.nodeData__img}></div>
+				<div></div>
 				<span>Нет победителя</span>
 			</div>}
 			<div style={{ flexGrow: 1 }}></div>
@@ -242,13 +242,13 @@ function ThirdPlaceMiniNode({ character }: { character: TourneyCharacter | undef
 	return (
 		<div className={styles.node}>
 			<div className={styles.nodeData}>
-				{character ? <>
+				{character ? <div>
 					<img src={character.img} alt={character.name} />
-					<div>{character.name}</div>
-				</> : <>
-					<div className={styles.nodeData__img}></div>
-					<div>Нет проигравшего</div>
-				</>}
+					<span>{character.name}</span>
+				</div> : <div>
+					<div></div>
+					<span>Нет проигравшего</span>
+				</div>}
 			</div>
 		</div>
 	)
