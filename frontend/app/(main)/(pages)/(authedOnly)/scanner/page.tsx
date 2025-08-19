@@ -49,7 +49,7 @@ export default function Page()
 			{res.v?.action == "quest" && <>
 				<Title text="Квест завершён!" />
 				<br />
-				<Textbox small className={styles.tb}>{res.v.msg}</Textbox>
+				<Textbox small className={styles.tb}><span>{res.v.msg}</span></Textbox>
 				<br />
 				<h2>
 					<span>Награда: </span>
@@ -59,7 +59,7 @@ export default function Page()
 			{res.v?.action == "store" && <>
 				<Title text="Куплено!" />
 				<br />
-				<Textbox small className={styles.tb}>{res.v.msg}</Textbox>
+				<Textbox small className={styles.tb}><span>{res.v.msg}</span></Textbox>
 				<br />
 				<h2>
 					<span>Потрачено: </span>
@@ -75,7 +75,7 @@ export default function Page()
 				<Title text="Назначение" />
 				<br />
 				<h2>Теперь вы {{
-					"worker": "волонтёр",
+					"staff": "волонтёр",
 					"manager": "управляющий",
 				}[res.v.msg] || "неизвестно"}</h2>
 			</>}

@@ -5,6 +5,12 @@ import Popup from "@/components/Popup";
 import Button from "@sCmps/Button";
 import useStateObj from "@/utils/useStateObj";
 import { useRouter } from "next/navigation";
+import useStateBool from "@/utils/useStateBool";
+import getMsgFromBack from "@/api/getMsgFromBack";
+import Textarea from "@sCmps/Textarea";
+import { useMutationSetMsg } from "@/api/log";
+import displayError from "@/utils/displayError";
+import Spinner from "@/components/Spinner";
 
 export default function Page()
 {
@@ -12,6 +18,9 @@ export default function Page()
   const log = useStateObj("");
   const logTitle = useStateObj("Log");
   const refLog = useRef<HTMLPreElement>(null);
+  const setMsgOpen = useStateBool(false);
+  const msg = useStateObj(getMsgFromBack() || "");
+  const setMsg = useMutationSetMsg(v => msg.set(v.msg));
 
   const viewLog = (title: string, path: string) => async () =>
   {
@@ -40,6 +49,15 @@ export default function Page()
       </a>
       <Popup title={logTitle.v} open={log.v != ""} close={() => log.set("")}>
         <pre ref={refLog}>{log.v}</pre>
+      </Popup>
+      <Button text="Set msg" padding="0.5rem 1rem" onClick={setMsgOpen.setT} />
+      <Popup title={"Set msg"} openState={setMsgOpen}>
+        <div className={styles.popup}>
+          {setMsg.isPending && <Spinner />}
+          {displayError(setMsg)}
+          <Textarea stateObj={msg} />
+          <Button text="Set" onClick={() => setMsg.mutate({ msg: msg.v })} />
+        </div>
       </Popup>
     </div>
   );

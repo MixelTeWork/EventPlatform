@@ -2,6 +2,7 @@ import { Modify } from "./dataTypes";
 import { fetchJsonGet } from "../utils/fetch";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { stdQuery } from "@/utils/query";
+import { stdMutation } from "@/utils/mutations";
 
 export interface LogItem
 {
@@ -24,7 +25,7 @@ export interface LogLenResponse
 	len: number,
 }
 
-const url = "/api/debug"
+const url = "/api/dev"
 const queryKey = () => ["log"];
 const queryKeyPage = (page: number) => ["log", `${page}`];
 const queryKeyLen = () => ["log"];
@@ -57,3 +58,6 @@ export function useLogCacheClear()
 }
 
 export const useLogLen = stdQuery<LogLenResponse>(queryKeyLen(), `${url}/log_len`);
+
+interface Msg { msg: string }
+export const useMutationSetMsg = stdMutation<Msg, Msg>(url + "/set_msg");

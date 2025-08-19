@@ -48,7 +48,7 @@ export interface UserWithPwd extends User
 
 const url = "/api/user"
 const urlList = "/api/users"
-const queryKey = () => ["user"];
+export const queryKey = () => ["user"];
 const queryKeyList = () => ["users"];
 const queryKeyRoles = () => ["users", "roles"];
 

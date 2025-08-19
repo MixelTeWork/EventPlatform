@@ -40,8 +40,8 @@ export interface QuestData
 	description: string,
 	reward: number,
 	hidden: boolean,
-	dialog1?: GameDialogData | false,
-	dialog2?: GameDialogData | false,
+	dialog1?: GameDialogData | { __delete__: true; },
+	dialog2?: GameDialogData | { __delete__: true; },
 }
 
 export const useMutationQuestAdd = stdMutation<QuestData, QuestFull>(url, (qc, data) =>

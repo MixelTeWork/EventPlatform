@@ -23,6 +23,8 @@
 	color: var(--c-text);
 	font-size: 1.3rem;
 	padding: 1rem;
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 .quest_hidden::before {
 	content: "Скрытый";
@@ -46,6 +48,11 @@
 	justify-content: space-between;
 	font-size: 1.6rem;
 	margin-block: 0.5rem;
+}
+
+.questCard > :first-child {
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 
 .questCard > :last-child {

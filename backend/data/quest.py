@@ -71,8 +71,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
             completed_quests = []
             dialogColumn = None
 
-        all_quests = db_sess\
-            .query(Quest)\
+        all_quests = Quest.query(db_sess)\
             .with_entities(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn if dialogColumn else literal(None))
 
         quests = []
@@ -107,7 +106,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
         return quests
 
     def update(self, actor: User, name: str | None, description: str | None, reward: int | None,
-               hidden: bool | None, dialog1: object | Literal[False] | None, dialog2: object | Literal[False] | None):
+               hidden: bool | None, dialog1: object | None, dialog2: object | None):
         changes = []
 
         def updateField(field: str, value):
@@ -125,7 +124,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
             cur: Dialog | None = getattr(self, field)
             if value is None:
                 return
-            if value is False:
+            if "__delete__" in value:
                 if cur is not None:
                     changes.append((field, cur.id, None))
                     cur.delete(actor)

@@ -33,7 +33,8 @@
 }
 
 .tourney button {
-	word-break: break-all;
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 
 .hidden {

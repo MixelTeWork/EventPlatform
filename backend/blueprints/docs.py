@@ -134,8 +134,8 @@ def docs():
                 "description": "?string",
                 "reward": "?number",
                 "hidden": "?boolean",
-                "dialog1": "?dialog.ts:GameDialogData | False",  # False - delete
-                "dialog2": "?dialog.ts:GameDialogData | False",  # False - delete
+                "dialog1": "?dialog.ts:GameDialogData | {\"__delete__\": True}",
+                "dialog2": "?dialog.ts:GameDialogData | {\"__delete__\": True}",
             },
             "response": "QuestFull",
         },

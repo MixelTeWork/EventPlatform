@@ -38,3 +38,7 @@
 .tb {
 	padding: 1em 0.5em;
 }
+.tb > span {
+	overflow: hidden;
+	overflow-wrap: break-word;
+}

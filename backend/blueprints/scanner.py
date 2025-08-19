@@ -103,13 +103,13 @@ def scanner_promote(db_sess: Session, user: User, code: str):
     if actor is None:
         return respose_wrong(user, "promote_0")
 
-    if role == "worker":
+    if role == "staff":
         text = "волонтёр"
 
         if not actor.check_permission(Operations.promote_staff):
             return respose_wrong(user, "promote_1")
 
-        r = user.add_role(actor, Roles.worker)
+        r = user.add_role(actor, Roles.staff)
 
     elif role == "manager":
         text = "управляющий"
@@ -117,7 +117,7 @@ def scanner_promote(db_sess: Session, user: User, code: str):
         if not actor.check_permission(Operations.promote_manager):
             return respose_wrong(user, "promote_2")
 
-        user.add_role(actor, Roles.worker)
+        user.add_role(actor, Roles.staff)
         r = user.add_role(actor, Roles.manager)
 
     else:

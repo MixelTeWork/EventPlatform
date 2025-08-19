@@ -2,7 +2,7 @@
 import styles from "./styles.module.css"
 import { useEffect, useState } from "react";
 import clsx from "@/utils/clsx";
-import getCookie from "@/utils/getCookies";
+import getMsgFromBack from "@/api/getMsgFromBack";
 
 let msg = "";
 export default function MessageFromBackend()
@@ -13,7 +13,7 @@ export default function MessageFromBackend()
 	{
 		const timer = setInterval(() =>
 		{
-			const msgCur = getMsg() || "";
+			const msgCur = getMsgFromBack() || "";
 			if (msgCur != msg)
 			{
 				msg = msgCur;
@@ -42,9 +42,4 @@ function trimQuotes(str: string)
 	if (str.slice(0, 1) == '"') str = str.slice(1);
 	if (str.slice(-1) == '"') str = str.slice(0, -1);
 	return str;
-}
-
-function getMsg()
-{
-	return getCookie("MESSAGE_TO_FRONTEND");
 }
