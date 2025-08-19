@@ -13,12 +13,12 @@ from data.user import User
 
 
 blueprint = Blueprint("authentication", __name__)
-CLIENT_ID = "51848582"
+# CLIENT_ID = "51848582"
 # REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
-REDIRECT_URI = "https://www.underparty.fun/auth_vk"
+# REDIRECT_URI = "https://www.underparty.fun/auth_vk"
 TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
 TICKETS_API_URL += "api/event_platform/"
-EVENT_ID = 3 if "dev" in sys.argv else 15
+EVENT_ID = 3 if "dev" in sys.argv else 19
 
 
 @blueprint.post("/api/auth")
@@ -100,86 +100,86 @@ def create_user_by_ticket(db_sess: Session, code: str):
 
 
 # @blueprint.route("/auth_vk")
-@use_db_session
-def auth_vk(db_sess: Session):
-    vk_user = get_vk_user()
-    if vk_user is None:
-        return redirect("/auth_error")
-    user_id, access_token = vk_user
+# @use_db_session
+# def auth_vk(db_sess: Session):
+#     vk_user = get_vk_user()
+#     if vk_user is None:
+#         return redirect("/auth_error")
+#     user_id, access_token = vk_user
 
-    user = User.get_by_login(db_sess, f"vk_{user_id}", includeDeleted=True)
-    if user is None:
-        user = create_vk_user(db_sess, user_id, access_token)
+#     user = User.get_by_login(db_sess, f"vk_{user_id}", includeDeleted=True)
+#     if user is None:
+#         user = create_vk_user(db_sess, user_id, access_token)
 
-    if user is None:
-        return redirect("/auth_error")
+#     if user is None:
+#         return redirect("/auth_error")
 
-    if user.deleted:
-        user.deleted = False
-        db_sess.commit()
+#     if user.deleted:
+#         user.deleted = False
+#         db_sess.commit()
 
-    response = redirect("/")
-    access_token = create_access_token(user)
-    set_access_cookies(response, access_token)  # type: ignore
-    return response
-
-
-def get_vk_user():
-    code = request.args.get("code", "")
-    error = request.args.get("error", "")
-    error_description = request.args.get("error_description", "")
-    if code == "" or error != "":
-        logging.warning(f"auth_error_1: {error}; {error_description}")
-        return None
-
-    res = requests.get("https://oauth.vk.com/access_token", {
-        "client_id": CLIENT_ID,
-        "client_secret": current_app.config["VK_SECRET_KEY"],
-        "redirect_uri": REDIRECT_URI,
-        "code": code,
-    })
-    if not res.ok:
-        logging.warning(f"auth_error_2: {res.status_code}; {res.content}")
-        return None
-
-    data = res.json()
-    access_token = data.get("access_token", None)
-    user_id = data.get("user_id", None)
-
-    if user_id is None:
-        logging.warning(f"auth_error_3: {data.get('error', None)}; {data.get('error_description', None)}")
-        return None
-
-    return user_id, access_token
+#     response = redirect("/")
+#     access_token = create_access_token(user)
+#     set_access_cookies(response, access_token)  # type: ignore
+#     return response
 
 
-def create_vk_user(db_sess: Session, user_id: int, access_token: str):
-    res = requests.get("https://api.vk.com/method/account.getProfileInfo", {
-        "access_token": access_token,
-        "v": "5.199",
-    })
-    if not res.ok:
-        logging.warning(f"auth_error_4: {res.status_code}; {res.content}")
-        return None
+# def get_vk_user():
+#     code = request.args.get("code", "")
+#     error = request.args.get("error", "")
+#     error_description = request.args.get("error_description", "")
+#     if code == "" or error != "":
+#         logging.warning(f"auth_error_1: {error}; {error_description}")
+#         return None
 
-    data = res.json()
-    response = data.get("response", None)
-    error = data.get("error", {})
+#     res = requests.get("https://oauth.vk.com/access_token", {
+#         "client_id": CLIENT_ID,
+#         "client_secret": current_app.config["VK_SECRET_KEY"],
+#         "redirect_uri": REDIRECT_URI,
+#         "code": code,
+#     })
+#     if not res.ok:
+#         logging.warning(f"auth_error_2: {res.status_code}; {res.content}")
+#         return None
 
-    if response is None:
-        logging.warning(f"auth_error_5: {error.get('error_code', None)}; {error.get('error_msg', None)}")
-        return None
+#     data = res.json()
+#     access_token = data.get("access_token", None)
+#     user_id = data.get("user_id", None)
 
-    photo = response.get("photo_200", None)
-    first_name = response.get("first_name", "Инкогнито")
-    last_name = response.get("last_name", "Инкогнито")
+#     if user_id is None:
+#         logging.warning(f"auth_error_3: {data.get('error', None)}; {data.get('error_description', None)}")
+#         return None
 
-    user = User.new(User.get_fake_system(), f"vk_{user_id}", randstr(8), first_name, [Roles.visitor])
-    user.lastName = last_name
-    user.imageUrl = photo
-    db_sess.commit()
+#     return user_id, access_token
 
-    return user
+
+# def create_vk_user(db_sess: Session, user_id: int, access_token: str):
+#     res = requests.get("https://api.vk.com/method/account.getProfileInfo", {
+#         "access_token": access_token,
+#         "v": "5.199",
+#     })
+#     if not res.ok:
+#         logging.warning(f"auth_error_4: {res.status_code}; {res.content}")
+#         return None
+
+#     data = res.json()
+#     response = data.get("response", None)
+#     error = data.get("error", {})
+
+#     if response is None:
+#         logging.warning(f"auth_error_5: {error.get('error_code', None)}; {error.get('error_msg', None)}")
+#         return None
+
+#     photo = response.get("photo_200", None)
+#     first_name = response.get("first_name", "Инкогнито")
+#     last_name = response.get("last_name", "Инкогнито")
+
+#     user = User.new(User.get_fake_system(), f"vk_{user_id}", randstr(8), first_name, [Roles.visitor])
+#     user.lastName = last_name
+#     user.imageUrl = photo
+#     db_sess.commit()
+
+#     return user
 
 
 @blueprint.post("/api/auth_ticket_err")

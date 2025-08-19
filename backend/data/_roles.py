@@ -5,7 +5,7 @@ from data._operations import Operations
 class Roles(RolesBase):
     boss = 2
     manager = 3
-    worker = 4
+    staff = 4
     visitor = 5
 
 
@@ -25,7 +25,7 @@ Roles.ROLES = {
             Operations.promote_staff,
         ]
     },
-    Roles.worker: {
+    Roles.staff: {
         "name": "Персонал",
         "operations": [
             Operations.page_staff,

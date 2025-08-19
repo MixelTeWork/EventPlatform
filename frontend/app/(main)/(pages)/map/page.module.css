@@ -40,8 +40,15 @@
 	justify-content: space-between;
 }
 
+.quest__title > :nth-child(1) {
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
+
 .quest__description {
 	padding: 0.5em;
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 
 .quest__dialog {

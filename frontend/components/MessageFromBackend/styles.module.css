@@ -48,7 +48,7 @@
 
 .message {
 	background-color: var(--c-secondary-light, #4a0000);
-	color: #fffeda;
+	color: var(--c-trenary, #fffeda);
 	padding: 0.5rem 1rem;
 	border-radius: 0.3rem;
 	font-size: 0.9rem;

@@ -41,8 +41,7 @@ class User(UserBase, BigIdMixin):
         from data.user_quest import UserQuest
         db_sess = Session.object_session(self)
         assert db_sess
-        quests = db_sess\
-            .query(Quest)\
+        quests = Quest.query(db_sess)\
             .join(UserQuest, UserQuest.questId == Quest.id)\
             .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
             .all()

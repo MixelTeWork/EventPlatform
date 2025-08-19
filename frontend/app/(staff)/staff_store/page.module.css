@@ -23,6 +23,7 @@
 }
 
 .item {
+	min-width: 0;
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -62,6 +63,11 @@
 	padding: 0.2rem;
 }
 
+.item__desc > :first-child {
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
+
 .item__desc > :last-child {
 	color: yellow;
 	flex-shrink: 0;
@@ -88,6 +94,11 @@
 }
 .item_small .item__img > * {
 	border-radius: calc(0.5rem - 2px);
+}
+
+.item_small > :nth-child(2) {
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 
 .item_small > :last-child {

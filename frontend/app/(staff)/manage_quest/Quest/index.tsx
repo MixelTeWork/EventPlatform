@@ -24,9 +24,9 @@ import getDialog from "../getDialog";
 import useGameDialogEditor from "@sCmps/GameDialogEditor";
 
 export default function Quest({ quest }:
-{
-	quest: QuestFull
-})
+	{
+		quest: QuestFull
+	})
 {
 	const changed = useStateBool(false);
 	const deleting = useStateBool(false);
@@ -129,8 +129,8 @@ export default function Quest({ quest }:
 						description: description.v,
 						reward: reward.v,
 						hidden: hidden.v,
-						dialog1: (quest.dialog1Id != null && dialog1Id.v == null) ? false : (dialog1Changed.v && dialog1Data.v) || undefined,
-						dialog2: (quest.dialog2Id != null && dialog2Id.v == null) ? false : (dialog2Changed.v && dialog2Data.v) || undefined,
+						dialog1: (quest.dialog1Id != null && dialog1Id.v == null) ? { __delete__: true } : (dialog1Changed.v && dialog1Data.v) || undefined,
+						dialog2: (quest.dialog2Id != null && dialog2Id.v == null) ? { __delete__: true } : (dialog2Changed.v && dialog2Data.v) || undefined,
 					})}
 				/>}
 				{changed.v && <Button text={<IconCancel />} onClick={() => reset()} />}

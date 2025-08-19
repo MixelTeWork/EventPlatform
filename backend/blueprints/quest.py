@@ -52,7 +52,7 @@ def quest_add(db_sess: Session, user: User):
 def quest_edit(questId, db_sess: Session, user: User):
     name, description, reward, hidden, dialog1, dialog2 =\
         get_json_values_from_req(("name", str, None), ("description", str, None), ("reward", int, None),
-                                 ("hidden", bool, None), ("dialog1", int, None), ("dialog2", int, None))
+                                 ("hidden", bool, None), ("dialog1", object, None), ("dialog2", object, None))
 
     quest = Quest.get(db_sess, questId)
     if quest is None:

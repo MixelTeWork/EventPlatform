@@ -67,7 +67,7 @@ export default function Page()
 							</Textbox>
 						</button>
 					}
-					<div>{quest.v.description || "Нет описания"}</div>
+					<div className={styles.questScreen__desc}>{quest.v.description || "Нет описания"}</div>
 				</div>
 			}
 		</StyledWindow>

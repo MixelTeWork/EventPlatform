@@ -25,6 +25,10 @@
 	padding: 0.5rem;
 }
 
+.quest > :nth-child(1) {
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
 .quest > :nth-child(2) {
 	color: var(--c-trenary);
 	display: flex;
@@ -38,6 +42,11 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
+}
+
+.questScreen__desc {
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 
 .btnIntro {
