@@ -40,10 +40,10 @@ export default function Page()
     <div className={styles.root}>
       <Button text="Users" padding="0.5rem 1rem" onClick={() => router.push("/users")} />
       <Button text="Log" padding="0.5rem 1rem" onClick={() => router.push("/log")} />
-      <Button text="Log errors" padding="0.5rem 1rem" onClick={viewLog("Log errors", "/api/debug/log_errors")} />
-      <Button text="Log info" padding="0.5rem 1rem" onClick={viewLog("Log info", "/api/debug/log_info")} />
-      <Button text="Log requests" padding="0.5rem 1rem" onClick={viewLog("Log requests", "/api/debug/log_requests")} />
-      <Button text="Log frontend" padding="0.5rem 1rem" onClick={viewLog("Log frontend", "/api/debug/log_frontend")} />
+      <Button text="Log errors" padding="0.5rem 1rem" onClick={viewLog("Log errors", "/api/dev/log_errors")} />
+      <Button text="Log info" padding="0.5rem 1rem" onClick={viewLog("Log info", "/api/dev/log_info")} />
+      <Button text="Log requests" padding="0.5rem 1rem" onClick={viewLog("Log requests", "/api/dev/log_requests")} />
+      <Button text="Log frontend" padding="0.5rem 1rem" onClick={viewLog("Log frontend", "/api/dev/log_frontend")} />
       <a href="/dev/dashboard" target="_blank">
         <Button text="Dashboard" padding="0.5rem 1rem" />
       </a>
