@@ -13,7 +13,7 @@ export default function Layout({
 		<div className={styles.root}>
 			<Header />
 			{/* <div className={styles.title}>
-				<Title className={styles.title__text} text="Underparty" />
+				<Title className={styles.title__text} text="ИНДИКОН: Reload" />
 			</div> */}
 			<div className={styles.body}>
 				{children}
