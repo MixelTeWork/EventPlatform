@@ -22,8 +22,8 @@ const font_MFFRBL = localFont({ src: "../fonts/monsterfriendforerusbylya.otf", v
 const url = new URL(process.env.PUBLIC_URL || "");
 export const metadata: Metadata = {
 	metadataBase: url,
-	title: "Underparty: Multiverse",
-	description: "Underparty: Multiverse",
+	title: "ИНДИКОН: Reload",
+	description: "ИНДИКОН: Reload",
 	openGraph: {
 		url: url,
 	},
