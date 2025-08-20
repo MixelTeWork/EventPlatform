@@ -15,7 +15,7 @@ blueprint = Blueprint("quest", __name__)
 
 @blueprint.route("/api/quests")
 @use_db_session
-@use_user(optional=True)
+@use_user(optional=True, lazyload=True)
 def quests(db_sess: Session, user: User | None):
     quests = Quest.all_for_user(db_sess, user)
     return jsonify(quests)
@@ -81,7 +81,7 @@ def quest_delete(questId, db_sess: Session, user: User):
 @blueprint.post("/api/quests/<int:questId>/open")
 @jwt_required()
 @use_db_session
-@use_user()
+@use_user(lazyload=True)
 def quest_open(questId, db_sess: Session, user: User):
     quest = Quest.get(db_sess, questId)
     if quest is None:

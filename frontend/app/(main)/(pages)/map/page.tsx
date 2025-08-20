@@ -19,7 +19,7 @@ import useStateObj, { useStateObjNull } from "@/utils/useStateObj";
 import { useTitle } from "@/utils/useTtile";
 // import Spinner from "@/components/Spinner";
 // import useGameDialog from "@/components/GameDialog";
-import usePreloadGameDialogImgs from "@/components/GameDialog/usePreloadGameDialogImgs";
+// import usePreloadGameDialogImgs from "@/components/GameDialog/usePreloadGameDialogImgs";
 import Textbox from "@mCmps/Textbox";
 import StyledWindow from "@mCmps/StyledWindow";
 import type { Quest } from "@/api/quest";
@@ -29,7 +29,7 @@ import type { Quest } from "@/api/quest";
 export default function Page()
 {
 	useTitle("Карта");
-	usePreloadGameDialogImgs();
+	// usePreloadGameDialogImgs();
 	// usePreloadImgs(map1, map2, map3, map4, mark_0, mark_1_1, mark_1_2, mark_1_3, mark_2_1, mark_2_2);
 	usePreloadImgs(map1, map2, map3, map4);
 	// const dialog = useGameDialog();
