@@ -101,7 +101,7 @@ def set_user_name(userId, db_sess: Session, user: User):
 @blueprint.post("/api/user/change_password")
 @jwt_required()
 @use_db_session
-@use_user()
+@use_user(lazyload=True)
 def change_password(db_sess: Session, user: User):
     password = get_json_values_from_req(("password", str))
 
@@ -113,7 +113,7 @@ def change_password(db_sess: Session, user: User):
 @blueprint.post("/api/user/change_name")
 @jwt_required()
 @use_db_session
-@use_user()
+@use_user(lazyload=True)
 def change_name(db_sess: Session, user: User):
     name = get_json_values_from_req(("name", str))
 
@@ -125,7 +125,7 @@ def change_name(db_sess: Session, user: User):
 @blueprint.post("/api/user/set_group")
 @jwt_required()
 @use_db_session
-@use_user()
+@use_user(lazyload=True)
 def set_group(db_sess: Session, user: User):
     group = get_json_values_from_req(("group", int))
 
@@ -137,7 +137,7 @@ def set_group(db_sess: Session, user: User):
 @blueprint.post("/api/user/open_game")
 @jwt_required()
 @use_db_session
-@use_user()
+@use_user(lazyload=True)
 def open_game(db_sess: Session, user: User):
     user.gameOpened = True
     db_sess.commit()
