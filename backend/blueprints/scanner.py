@@ -20,7 +20,7 @@ blueprint = Blueprint("scanner", __name__)
 @blueprint.post("/api/scanner")
 @jwt_required()
 @use_db_session
-@use_user(lazyload=True)
+@use_user(lazyload=True, for_update=True)
 def scanner(db_sess: Session, user: User):
     code = get_json_values_from_req(("code", str))
 

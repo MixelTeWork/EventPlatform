@@ -1,11 +1,11 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, override
 
 from flask import url_for
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, ObjMixin, Log, Image
+from bafser import SqlAlchemyBase, UserBase, ObjMixin, Log, Image
 from data._tables import Tables
 from data.user import User
 from utils import BigIdMixin
@@ -61,12 +61,18 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
 
         Log.updated(self, actor, changes)
 
-    def delete(self, actor: User, commit=True, now: datetime | None = None, db_sess: Session | None = None):  # type: ignore
-        super().delete(actor, commit, now, db_sess)
+    @override
+    def _on_delete(self, db_sess: Session, actor: UserBase, now: datetime, commit: bool) -> bool:
+        if self.image is not None:
+            self.image.delete(actor, commit, now, db_sess)
+        return True
 
-        image: Image = self.image
-        if image is not None:
-            image.delete(actor, commit, now, db_sess)
+    @override
+    def _on_restore(self, db_sess: Session, actor: UserBase, now: datetime, commit: bool) -> bool:
+        if self.image is not None:
+            if not self.image.restore(actor, commit, now, db_sess):
+                self.imgId = None
+        return True
 
     def decrease(self, actor: User | None = None, v=1):
         count = self.count
