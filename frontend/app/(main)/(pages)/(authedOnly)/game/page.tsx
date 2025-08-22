@@ -100,7 +100,7 @@ export default function GamePage()
 			{(state.isLoading || state.data?.state == "wait") && <>
 				<div className={styles.text}>
 					<div>
-						<span>Чтобы определить какой санс лучший приходите на сцену</span>
+						<span>Чтобы определить какой фандом лучший приходите на сцену</span>
 						{state.data?.start && <span> в {state.data.start}</span>}
 					</div>
 				</div>
