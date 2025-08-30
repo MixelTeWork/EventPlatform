@@ -1,6 +1,7 @@
 import os
-from sqlalchemy.orm import Session
+
 from bafser import AppConfig, Log, get_datetime_now, randstr
+from sqlalchemy.orm import Session
 
 from data.dialog import Dialog
 from data.game import Game

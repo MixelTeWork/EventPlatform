@@ -1,6 +1,5 @@
 from flask import Blueprint
 
-
 blueprint = Blueprint("docs", __name__)
 
 

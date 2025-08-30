@@ -1,9 +1,9 @@
 from typing import Any, Optional, override
 
+from bafser import Log, UserBase, UserKwargs
 from sqlalchemy import String
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from bafser import UserBase, Log, UserKwargs
 from utils import BigIdMixin
 
 

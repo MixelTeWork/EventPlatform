@@ -1,9 +1,10 @@
 import logging
+
+from bafser import SingletonMixin, SqlAlchemyBase
 from sqlalchemy import JSON
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, Session, mapped_column
 from sqlalchemy.orm.attributes import flag_modified
 
-from bafser import SqlAlchemyBase, SingletonMixin
 from data._tables import Tables
 from data.game import Game
 from data.tourney_character import TourneyCharacter

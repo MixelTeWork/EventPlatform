@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import Optional
 
+from bafser import Log, SqlAlchemyBase, get_datetime_now
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from bafser import SqlAlchemyBase, Log, get_datetime_now
 from data._tables import Tables
-from data.user import User
 from data.quest import Quest
+from data.user import User
 
 
 class UserQuest(SqlAlchemyBase):

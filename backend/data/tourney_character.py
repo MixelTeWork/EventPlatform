@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Optional, override
 
+from bafser import Image, Log, ObjMixin, SqlAlchemyBase, UserBase
 from flask import url_for
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, UserBase, Log, ObjMixin, Image
 from data._tables import Tables
 from data.user import User
 

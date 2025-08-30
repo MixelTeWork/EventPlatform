@@ -1,12 +1,11 @@
+from bafser import get_json_values_from_req, permission_required, response_not_found, use_db_session, use_user
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bafser import get_json_values_from_req, permission_required, response_not_found, use_db_session, use_user
 from data._operations import Operations
 from data.send import Send
 from data.user import User
-
 
 blueprint = Blueprint("send", __name__)
 

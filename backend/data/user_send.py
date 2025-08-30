@@ -1,7 +1,7 @@
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
-
 from bafser import SqlAlchemyBase
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
+
 from data._tables import Tables
 from data.send import Send
 from data.user import User

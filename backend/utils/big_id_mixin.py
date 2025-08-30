@@ -1,8 +1,8 @@
 from typing import Type, TypeVar
-from sqlalchemy import String
-from sqlalchemy.orm import Session, Mapped, mapped_column
 
 from bafser import ObjMixin, randstr
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, Session, mapped_column
 
 T = TypeVar("T", bound="BigIdMixin")
 

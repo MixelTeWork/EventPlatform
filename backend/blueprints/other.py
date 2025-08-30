@@ -1,14 +1,13 @@
+from bafser import get_json_values_from_req, permission_required, use_db_session, use_user
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from bafser import get_json_values_from_req, permission_required, use_db_session, use_user
 from data._operations import Operations
 from data.other import Other
 from data.user import User
 from data.user_quest import UserQuest
-
 
 blueprint = Blueprint("other", __name__)
 

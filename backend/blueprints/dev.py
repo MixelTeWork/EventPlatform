@@ -1,15 +1,14 @@
 import math
 
+from bafser import (Log, get_json_values_from_req, get_log_fpath, jsonify_list, permission_required, update_message_to_frontend, use_db_session,
+                    use_user)
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from bafser import (Log, get_log_fpath, jsonify_list, permission_required, use_db_session, use_user, update_message_to_frontend,
-                    get_json_values_from_req)
 
 import bafser_config
-from data.user import User
 from data._operations import Operations
-
+from data.user import User
 
 blueprint = Blueprint("dev", __name__)
 PSIZE = 100

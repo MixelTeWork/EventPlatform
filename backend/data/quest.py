@@ -1,9 +1,9 @@
-from typing import Literal, Optional
+from typing import Optional
 
+from bafser import Log, ObjMixin, SqlAlchemyBase
 from sqlalchemy import ForeignKey, String, literal
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, Log, ObjMixin
 from data._tables import Tables
 from data.dialog import Dialog
 from data.user import User

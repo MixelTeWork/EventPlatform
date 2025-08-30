@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from sqlalchemy import ForeignKey, func, String
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from bafser import SingletonMixin, SqlAlchemyBase, get_datetime_now
+from sqlalchemy import ForeignKey, String, func
+from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from bafser import SqlAlchemyBase, SingletonMixin, get_datetime_now
 from data._tables import Tables
 from data.user_game import UserGame
 

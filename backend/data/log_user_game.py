@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import Optional
+
+from bafser import IdMixin, SqlAlchemyBase
 from sqlalchemy.orm import Mapped
 
-from bafser import SqlAlchemyBase, IdMixin
 from data._tables import Tables
 
 

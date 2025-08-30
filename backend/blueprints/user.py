@@ -1,12 +1,11 @@
+from bafser import get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bafser import get_json_values_from_req, jsonify_list, permission_required, response_msg, use_db_session, use_user, response_not_found
-from data._roles import Roles
 from data._operations import Operations
+from data._roles import Roles
 from data.user import User
-
 
 blueprint = Blueprint("user", __name__)
 

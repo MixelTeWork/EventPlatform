@@ -1,8 +1,8 @@
 import os
 
-from flask import Flask, g
 import flask_monitoringdashboard as dashboard
 from bafser import randstr
+from flask import Flask, g
 
 
 def use_dashboard(app: Flask, file="dashboard.cfg", envpwd="ADMINPWD", envdb="DBDASHBOARDPATH"):

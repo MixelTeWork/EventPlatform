@@ -1,16 +1,15 @@
 import logging
-import requests
 import sys
 
+import requests
+from bafser import create_access_token, get_json_values_from_req, randstr, response_msg, use_db_session
 from flask import Blueprint, abort, current_app, jsonify, redirect, request
-from flask_jwt_extended import unset_jwt_cookies, set_access_cookies
+from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
 from sqlalchemy.orm import Session
 
-from bafser import create_access_token, get_json_values_from_req, randstr, response_msg, use_db_session
 from data._roles import Roles
 from data.other import Other
 from data.user import User
-
 
 blueprint = Blueprint("authentication", __name__)
 # CLIENT_ID = "51848582"

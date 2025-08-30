@@ -1,8 +1,8 @@
+from bafser import get_json_values_from_req, use_db_session, use_user
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from bafser import get_json_values_from_req, use_db_session, use_user
 from data._operations import Operations
 from data._roles import Roles
 from data.quest import Quest
@@ -12,7 +12,6 @@ from data.transaction import Actions, Transaction
 from data.user import User
 from data.user_quest import UserQuest
 from data.user_send import UserSend
-
 
 blueprint = Blueprint("scanner", __name__)
 

@@ -1,8 +1,9 @@
 from datetime import datetime
-from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, IdMixin, get_datetime_now
+from bafser import IdMixin, SqlAlchemyBase, get_datetime_now
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
+
 from data._tables import Tables
 from data.user import User
 
