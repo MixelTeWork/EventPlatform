@@ -1,3 +1,4 @@
+from bafser import render_docs_page
 from flask import Blueprint
 
 blueprint = Blueprint("docs", __name__)
@@ -5,29 +6,8 @@ blueprint = Blueprint("docs", __name__)
 
 @blueprint.route("/api")
 def docs():
+    return render_docs_page()
     return {
-        "/api/auth POST": {
-            "__desc__": "Get auth cookie",
-            "request": {
-                "login": "string",
-                "password": "string",
-            },
-            "response": "User",
-        },
-        "/api/auth_ticket POST": {
-            "__desc__": "Auth as visitor by ticket code",
-            "request": {
-                "code": "string",
-            },
-            "response": "User",
-        },
-        "/api/logout POST": {
-            "__desc__": "Remove auth cookie",
-        },
-        "/api/user": {
-            "__desc__": "Get current user",
-            "response": "User",
-        },
         "/api/user/change_password POST": {
             "__desc__": "Set new password",
             "request": {

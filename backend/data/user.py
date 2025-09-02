@@ -1,6 +1,6 @@
-from typing import Any, Optional, override
+from typing import Any, Optional, TypedDict, override
 
-from bafser import Log, UserBase, UserKwargs
+from bafser import Log, RoleDict, UserBase, UserKwargs
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
@@ -59,7 +59,7 @@ class User(UserBase, BigIdMixin):
 
         return list(map(lambda v: v[0], quests))
 
-    def get_dict(self):  # pyright: ignore[reportIncompatibleMethodOverride]
+    def get_dict(self) -> "UserDict":  # pyright: ignore[reportIncompatibleMethodOverride]
         return {
             "id": self.id_big,
             "name": self.name,
@@ -73,7 +73,7 @@ class User(UserBase, BigIdMixin):
             "ticketTId": self.ticketTId,
         }
 
-    def get_dict_full(self):  # pyright: ignore[reportIncompatibleMethodOverride]
+    def get_dict_full(self) -> "UserFullDict":  # pyright: ignore[reportIncompatibleMethodOverride]
         return {
             "id": self.id,
             "id_big": self.id_big,
@@ -89,3 +89,32 @@ class User(UserBase, BigIdMixin):
             "gameOpened": self.gameOpened,
             "ticketTId": self.ticketTId,
         }
+
+
+class UserDict(TypedDict):
+    id: str
+    name: str
+    last_name: str | None
+    photo: str | None
+    balance: int
+    roles: list[str]
+    operations: list[str]
+    group: int
+    gameOpened: bool
+    ticketTId: int | None
+
+
+class UserFullDict(TypedDict):
+    id: int
+    id_big: str
+    login: str
+    name: str
+    last_name: str | None
+    photo: str | None
+    balance: int
+    roles: list[RoleDict]
+    deleted: bool
+    operations: list[str]
+    group: int
+    gameOpened: bool
+    ticketTId: int | None

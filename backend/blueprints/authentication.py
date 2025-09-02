@@ -2,14 +2,14 @@ import logging
 import sys
 
 import requests
-from bafser import create_access_token, get_json_values_from_req, randstr, response_msg, use_db_session
+from bafser import JsonObj, create_access_token, doc_api, randstr, response_msg, use_db_session
 from flask import Blueprint, abort, current_app, jsonify, redirect, request
 from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
 from sqlalchemy.orm import Session
 
 from data._roles import Roles
 from data.other import Other
-from data.user import User
+from data.user import User, UserDict
 
 blueprint = Blueprint("authentication", __name__)
 # CLIENT_ID = "51848582"
@@ -20,13 +20,19 @@ TICKETS_API_URL += "api/event_platform/"
 EVENT_ID = 3 if "dev" in sys.argv else 19
 
 
+class LoginJson(JsonObj):
+    login: str
+    password: str
+
+
 @blueprint.post("/api/auth")
+@doc_api(req=LoginJson, res=UserDict, desc="Get auth cookie")
 @use_db_session
 def login(db_sess: Session):
-    login, password = get_json_values_from_req(("login", str), ("password", str))
-    user = User.get_by_login(db_sess, login)
+    data = LoginJson.get_from_req()
+    user = User.get_by_login(db_sess, data.login)
 
-    if not user or not user.check_password(password):
+    if not user or not user.check_password(data.password):
         return response_msg("Неправильный логин или пароль", 400)
 
     response = jsonify(user.get_dict())
@@ -36,16 +42,22 @@ def login(db_sess: Session):
 
 
 @blueprint.post("/api/logout")
+@doc_api(desc="Remove auth cookie")
 def logout():
     response = response_msg("logout successful")
     unset_jwt_cookies(response)
     return response
 
 
+class LoginTicketJson(JsonObj):
+    code: str
+
+
 @blueprint.post("/api/auth_ticket")
+@doc_api(req=LoginTicketJson, res=UserDict, desc="Auth as visitor by ticket code")
 @use_db_session
 def login_ticket(db_sess: Session):
-    code = get_json_values_from_req(("code", str))
+    code = LoginTicketJson.get_from_req().code
 
     obj = Other.get(db_sess)
     if not obj.ticketLoginEnabled:
