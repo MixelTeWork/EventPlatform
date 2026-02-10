@@ -31,31 +31,35 @@ def init_dev_values(db_sess: Session, config: AppConfig):
         img.id = id
         db_sess.add(img)
 
-    character1 = DialogCharacter.new(user_admin, "Ярик Всемогущий", 1, 1)
-    character2 = DialogCharacter.new(user_admin, "Альвер Шухтен", 2, 1)
+    character1 = DialogCharacter.new("Ярик Всемогущий", 1, 1, creator=user_admin)
+    character2 = DialogCharacter.new("Альвер Шухтен", 2, 1, creator=user_admin)
 
-    TourneyCharacter.new(user_admin, "Ярик Всемогущий", "#ae00ff", 1)
-    TourneyCharacter.new(user_admin, "Альвер Шухтен", "#00ccff", 2)
-    TourneyCharacter.new(user_admin, "Курита Мален", "#ffae00", 3)
-    TourneyCharacter.new(user_admin, "Суль Минохон", "#00ff1e", 4)
-    TourneyCharacter.new(user_admin, "Минь Сулёхен", "#ff0000", 4)
+    TourneyCharacter.new("Ярик Всемогущий", "#ae00ff", creator=user_admin)
+    TourneyCharacter.new("Альвер Шухтен", "#00ccff", creator=user_admin)
+    TourneyCharacter.new("Курита Мален", "#ffae00", creator=user_admin)
+    TourneyCharacter.new("Суль Минохон", "#00ff1e", creator=user_admin)
+    TourneyCharacter.new("Минь Сулёхен", "#ff0000", creator=user_admin)
     for i in range(16 - 5):
         seed(i + 7)
-        TourneyCharacter.new(user_admin, f"Бот #{i + 1}", f"#{randint(0, 16777215):x}", 5)
+        TourneyCharacter.new(f"Бот #{i + 1}", f"#{randint(0, 16777215):x}", 5, creator=user_admin)
     Tourney.get(db_sess).gen_new_tree()
     Tourney.get(db_sess).data = json.loads(read_file("scripts/dev_init_data/tourney.json"))
 
-    dialog = Dialog.new(user_admin, {
-        "nodes": [
-            {
-                "characterId": character1.id,
-                "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus, officiis assumenda consequatur unde perspiciatis error quos laudantium laborum. Totam tenetur alias reiciendis voluptatibus.",  # noqa: E501
-            },
-            {
-                "characterId": character2.id,
-                "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus.",
-            }
-        ]})
+    dialog = Dialog.new(
+        {
+            "nodes": [
+                {
+                    "characterId": character1.id,
+                    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus, officiis assumenda consequatur unde perspiciatis error quos laudantium laborum. Totam tenetur alias reiciendis voluptatibus.",  # noqa: E501
+                },
+                {
+                    "characterId": character2.id,
+                    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, quo distinctio quisquam ab aliquid delectus natus.",
+                },
+            ]
+        },  # pyright: ignore[reportUnknownArgumentType]
+        creator=user_admin,
+    )
 
     quests = [
         (1, "Чудик в углу"),
@@ -66,11 +70,11 @@ def init_dev_values(db_sess: Session, config: AppConfig):
         (6, "Парочка"),
     ]
     now = get_datetime_now()
-    for (i, name) in quests:
+    for i, name in quests:
         quest = Quest(name=name, description="", reward=0, hidden=False)
         quest.id = i
         quest.id_big = randstr(8)
-        Log.added(quest, user_admin, quest.get_creation_changes(), now=now, commit=False, db_sess=db_sess)
+        Log.added(quest, user_admin, now=now, commit=False, db_sess=db_sess)
         db_sess.add(quest)
 
     quest1 = Quest.get(db_sess, 1)

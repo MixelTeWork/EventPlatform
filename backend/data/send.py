@@ -1,12 +1,12 @@
 from datetime import datetime
+from typing import TypedDict
 
-from bafser import IdMixin, SqlAlchemyBase, get_datetime_now
+from bafser import BigIdMixin, IdMixin, SqlAlchemyBase, get_datetime_now, get_db_session
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
 from data._tables import Tables
 from data.user import User
-from utils import BigIdMixin
 
 
 class Send(SqlAlchemyBase, IdMixin, BigIdMixin):
@@ -25,7 +25,7 @@ class Send(SqlAlchemyBase, IdMixin, BigIdMixin):
         return f"<Send> [{self.id}] {'+' if self.positive else '-'}{self.value}"
 
     @staticmethod
-    def new(db_sess: Session, creatorId: int, value: int, positive: bool, reusable: bool):
+    def new(creatorId: int, value: int, positive: bool, reusable: bool, *, db_sess: Session | None = None):
         send = Send(
             date=get_datetime_now(),
             creatorId=creatorId,
@@ -33,7 +33,8 @@ class Send(SqlAlchemyBase, IdMixin, BigIdMixin):
             positive=positive,
             reusable=reusable,
         )
-        send.set_unique_big_id(db_sess)
+        db_sess = db_sess if db_sess else get_db_session()
+        send.set_unique_big_id(db_sess=db_sess)
 
         db_sess.add(send)
         db_sess.commit()
@@ -42,19 +43,22 @@ class Send(SqlAlchemyBase, IdMixin, BigIdMixin):
 
     def check_used_by(self, user: User):
         from data.user_send import UserSend
-        db_sess = Session.object_session(self)
-        assert db_sess
-        used = db_sess\
-            .query(UserSend)\
-            .filter(UserSend.sendId == self.id, UserSend.userId == user.id)\
-            .first()
+
+        used = self.db_sess.query(UserSend).filter(UserSend.sendId == self.id, UserSend.userId == user.id).first()
 
         return used is not None
 
-    def get_dict(self):
+    def get_dict(self) -> "SendDict":
         return {
             "id": self.id_big,
             "value": self.value,
             "positive": self.positive,
             "reusable": self.reusable,
         }
+
+
+class SendDict(TypedDict):
+    id: str
+    value: int
+    positive: bool
+    reusable: bool

@@ -1,13 +1,11 @@
-from typing import Optional
+from typing import Any, Optional, TypedDict
 
-from bafser import Log, ObjMixin, SqlAlchemyBase
+from bafser import BigIdMixin, Log, ObjMixin, SqlAlchemyBase, get_db_session
 from sqlalchemy import ForeignKey, String, literal
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from data._tables import Tables
+from data import Tables, User
 from data.dialog import Dialog
-from data.user import User
-from utils import BigIdMixin
 
 
 class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
@@ -24,38 +22,32 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
     dialog2: Mapped["Dialog"] = relationship(foreign_keys=[dialog2Id], init=False)
 
     @staticmethod
-    def new(creator: User, name: str, description: str, reward: int, hidden: bool):
-        db_sess = Session.object_session(creator)
-        assert db_sess
+    def new(name: str, description: str, reward: int, hidden: bool, *, creator: User | None = None):
         quest = Quest(name=name, description=description, reward=reward, hidden=hidden)
-        quest.set_unique_big_id(db_sess)
+        quest.set_unique_big_id(db_sess=creator.db_sess if creator else get_db_session())
 
-        db_sess.add(quest)
-        Log.added(quest, creator, quest.get_creation_changes())
+        Log.added(quest, creator)
 
         return quest
 
-    def get_creation_changes(self):
-        return [
-            ("name", self.name),
-            ("reward", self.reward),
-            ("hidden", self.hidden),
-        ]
-
     @staticmethod
-    def all(db_sess: Session, includeHidden=False, includeDeleted=False):  # pyright: ignore[reportIncompatibleMethodOverride]
+    def all(*, db_sess: Session | None = None, includeHidden: bool = False, includeDeleted: bool = False):  # pyright: ignore[reportIncompatibleMethodOverride]
+        db_sess = db_sess if db_sess else get_db_session()
         quests = Quest.query(db_sess, includeDeleted)
         if not includeHidden:
             quests = quests.filter(Quest.hidden == False)
         return quests.all()
 
     @staticmethod
-    def all_for_user(db_sess: Session, user: User | None):
+    def all_for_user(user: User | None, *, db_sess: Session | None = None):
         from data.user_quest import UserQuest
+
+        db_sess = db_sess if db_sess else get_db_session()
+
         if user:
             userQuests = db_sess.query(UserQuest).filter(UserQuest.userId == user.id)
-            opened_quests = []
-            completed_quests = []
+            opened_quests: list[int] = []
+            completed_quests: list[int] = []
             for userQuest in userQuests:
                 if userQuest.openDate != None:
                     opened_quests.append(userQuest.questId)
@@ -71,10 +63,11 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
             completed_quests = []
             dialogColumn = None
 
-        all_quests = Quest.query(db_sess)\
-            .with_entities(Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn if dialogColumn else literal(None))
+        all_quests = Quest.query(db_sess).with_entities(
+            Quest.id, Quest.name, Quest.description, Quest.reward, Quest.hidden, dialogColumn if dialogColumn else literal(None)
+        )
 
-        quests = []
+        quests: list[QuestUserDict] = []
         for v in list(all_quests):
             v = v.tuple()
             id = v[0]
@@ -93,56 +86,61 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
                 completed = True
 
             if not hidden or completed:
-                quests.append({
-                    "id": id,
-                    "name": name,
-                    "description": description,
-                    "reward": reward,
-                    "completed": completed,
-                    "dialogId": dialog,
-                    "opened": opened,
-                })
+                quests.append(
+                    {
+                        "id": id,
+                        "name": name,
+                        "description": description,
+                        "reward": reward,
+                        "completed": completed,
+                        "dialogId": dialog,
+                        "opened": opened,
+                    }
+                )
 
         return quests
 
-    def update(self, actor: User, name: str | None, description: str | None, reward: int | None,
-               hidden: bool | None, dialog1: object | None, dialog2: object | None):
-        changes = []
+    def update(
+        self,
+        name: str | None,
+        description: str | None,
+        reward: int | None,
+        hidden: bool | None,
+        dialog1: dict[str, Any] | None,
+        dialog2: dict[str, Any] | None,
+        *,
+        actor: User | None = None,
+    ):
+        if name is not None:
+            self.name = name
+        if description is not None:
+            self.description = description
+        if reward is not None:
+            self.reward = reward
+        if hidden is not None:
+            self.hidden = hidden
 
-        def updateField(field: str, value):
-            cur = getattr(self, field)
-            if value is not None and cur != value:
-                changes.append((field, cur, value))
-                setattr(self, field, value)
-
-        updateField("name", name)
-        updateField("description", description)
-        updateField("reward", reward)
-        updateField("hidden", hidden)
-
-        def updateDialog(field: str, value, changes: list):
+        def updateDialog(field: str, value: dict[str, Any] | None):
             cur: Dialog | None = getattr(self, field)
             if value is None:
                 return
             if "__delete__" in value:
                 if cur is not None:
-                    changes.append((field, cur.id, None))
-                    cur.delete(actor)
+                    cur.delete2(actor=actor)
                     setattr(self, field, None)
                 return
             if cur is None:
-                dialog = Dialog.new(actor, value)
-                changes.append((field, None, dialog.id))
+                dialog = Dialog.new(value)
                 setattr(self, field, dialog)
             else:
-                cur.update(actor, value)
+                cur.update(value, actor=actor)
 
-        updateDialog("dialog1", dialog1, changes)
-        updateDialog("dialog2", dialog2, changes)
+        updateDialog("dialog1", dialog1)
+        updateDialog("dialog2", dialog2)
 
-        Log.updated(self, actor, changes)
+        Log.updated(self, actor)
 
-    def get_dict(self):
+    def get_dict(self) -> "QuestDict":
         return {
             "id": self.id,
             "name": self.name,
@@ -150,7 +148,7 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
             "reward": self.reward,
         }
 
-    def get_dict_full(self):
+    def get_dict_full(self) -> "QuestFullDict":
         return {
             "id": self.id,
             "id_big": self.id_big,
@@ -161,3 +159,31 @@ class Quest(SqlAlchemyBase, ObjMixin, BigIdMixin):
             "dialog1Id": self.dialog1Id,
             "dialog2Id": self.dialog2Id,
         }
+
+
+class QuestDict(TypedDict):
+    id: int
+    name: str
+    description: str
+    reward: int
+
+
+class QuestFullDict(TypedDict):
+    id: int
+    id_big: str
+    name: str
+    description: str
+    reward: int
+    hidden: bool
+    dialog1Id: int | None
+    dialog2Id: int | None
+
+
+class QuestUserDict(TypedDict):
+    id: int
+    name: str
+    description: str
+    reward: int
+    completed: bool
+    dialogId: int | None
+    opened: bool

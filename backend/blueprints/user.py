@@ -1,144 +1,130 @@
-from bafser import get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
+from bafser import JsonObj, TJson, TJsonListOf, doc_api, get_json_values_from_req, jsonify_list, protected_route, response_msg, response_not_found
 from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required
-from sqlalchemy.orm import Session
 
-from data._operations import Operations
-from data._roles import Roles
-from data.user import User
+from data import Operations, Roles
+from data.user import User, UserFullDict
 
 blueprint = Blueprint("user", __name__)
 
 
 @blueprint.route("/api/users")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def users(db_sess: Session, user: User):
-    users = User.all(db_sess, includeDeleted=True)
+@doc_api(res=list[UserFullDict], desc="Get all users")
+@protected_route(perms=Operations.page_dev)
+def users():
+    users = User.all2(includeDeleted=True)
     return jsonify_list(users, "get_dict_full")
 
 
+class UserJson(JsonObj):
+    login: str
+    password: str
+    name: str
+    roles: list[int]
+
+
 @blueprint.post("/api/users")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def add_user(db_sess: Session, user: User):
-    login, password, name, roles = get_json_values_from_req(("login", str), ("password", str), ("name", str), ("roles", list[int]))
-
-    u = User.new(user, login, password, name, roles)
-
+@doc_api(req=UserJson, res=UserFullDict, desc="Add user")
+@protected_route(perms=Operations.page_dev)
+def add_user():
+    data = UserJson.get_from_req()
+    u = User.new(User.current, data.login, data.password, data.name, data.roles)
     return u.get_dict_full()
 
 
 @blueprint.route("/api/users/roles")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def roles(db_sess: Session, user: User):
+@doc_api(res=TJsonListOf["id", int, "name", str], desc="Get all roles")
+@protected_route(perms=Operations.page_dev)
+def roles():
     return jsonify([{"id": v[0], "name": v[1]} for v in Roles.get_all()])
 
 
 @blueprint.post("/api/users/<int:userId>/roles")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def set_user_roles(userId, db_sess: Session, user: User):
+@doc_api(req=TJson["roles", list[int]], res=UserFullDict, desc="Set user roles")
+@protected_route(perms=Operations.page_dev)
+def set_user_roles(userId: int):
     roles = get_json_values_from_req(("roles", list[int]))
 
-    u = User.get(db_sess, userId, includeDeleted=True)
+    u = User.get2(userId, includeDeleted=True)
     if u is None:
         return response_not_found("user", userId)
 
     cur_roles = [v[0] for v in u.get_roles()]
     for role in set(cur_roles) - set(roles):
-        u.remove_role(user, role)
+        u.remove_role(User.current, role)
     for role in set(roles) - set(cur_roles):
-        u.add_role(user, role)
+        u.add_role(User.current, role)
 
     return u.get_dict_full()
 
 
 @blueprint.post("/api/users/<int:userId>/set_password")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def set_user_password(userId, db_sess: Session, user: User):
+@doc_api(req=TJson["password", str], res=UserFullDict, desc="Set user password")
+@protected_route(perms=Operations.page_dev)
+def set_user_password(userId: int):
     password = get_json_values_from_req(("password", str))
 
-    u = User.get(db_sess, userId, includeDeleted=True)
+    u = User.get2(userId, includeDeleted=True)
     if u is None:
         return response_not_found("user", userId)
 
-    u.update_password(user, password)
+    u.update_password(User.current, password)
 
     return u.get_dict_full()
 
 
 @blueprint.post("/api/users/<int:userId>/set_name")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def set_user_name(userId, db_sess: Session, user: User):
+@doc_api(req=TJson["name", str], res=UserFullDict, desc="Set user name")
+@protected_route(perms=Operations.page_dev)
+def set_user_name(userId: int):
     name = get_json_values_from_req(("name", str))
 
-    u = User.get(db_sess, userId, includeDeleted=True)
+    u = User.get2(userId, includeDeleted=True)
     if u is None:
         return response_not_found("user", userId)
 
-    u.update_name(user, name)
+    u.update_name(User.current, name)
 
     return u.get_dict_full()
 
 
 @blueprint.post("/api/user/change_password")
-@jwt_required()
-@use_db_session
-@use_user(lazyload=True)
-def change_password(db_sess: Session, user: User):
+@doc_api(req=TJson["password", str], desc="Set new password")
+@protected_route()
+def change_password():
     password = get_json_values_from_req(("password", str))
 
-    user.update_password(user, password)
+    User.current.update_password(User.current, password)
 
     return response_msg("ok")
 
 
 @blueprint.post("/api/user/change_name")
-@jwt_required()
-@use_db_session
-@use_user(lazyload=True)
-def change_name(db_sess: Session, user: User):
+@doc_api(req=TJson["name", str], desc="Set new name")
+@protected_route()
+def change_name():
     name = get_json_values_from_req(("name", str))
 
-    user.update_name(user, name)
+    User.current.update_name(User.current, name)
 
     return response_msg("ok")
 
 
 @blueprint.post("/api/user/set_group")
-@jwt_required()
-@use_db_session
-@use_user(lazyload=True)
-def set_group(db_sess: Session, user: User):
+@doc_api(req=TJson["group", int], res=TJson["group", int], desc="Set user group")
+@protected_route()
+def set_group():
     group = get_json_values_from_req(("group", int))
 
-    group = user.set_group(group)
+    group = User.current.set_group(group)
 
     return jsonify({"group": group})
 
 
 @blueprint.post("/api/user/open_game")
-@jwt_required()
-@use_db_session
-@use_user(lazyload=True)
-def open_game(db_sess: Session, user: User):
-    user.gameOpened = True
-    db_sess.commit()
+@doc_api(desc="Mark game dialog as opened")
+@protected_route()
+def open_game():
+    User.current.gameOpened = True
+    User.current.db_sess.commit()
 
     return response_msg("ok")

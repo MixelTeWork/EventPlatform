@@ -5,8 +5,8 @@ from bafser import randstr
 from flask import Flask, g
 
 
-def use_dashboard(app: Flask, file="dashboard.cfg", envpwd="ADMINPWD", envdb="DBDASHBOARDPATH"):
-    dashboard.config.init_from(file=file)
+def use_dashboard(app: Flask, file: str = "dashboard.cfg", envpwd: str = "ADMINPWD", envdb: str = "DBDASHBOARDPATH"):
+    dashboard.config.init_from(file=file)  # pyright: ignore[reportUnknownMemberType]
     password = os.environ.get(envpwd)
     if password is None:
         raise Exception(f"env var not set: {envpwd}")
@@ -17,4 +17,4 @@ def use_dashboard(app: Flask, file="dashboard.cfg", envpwd="ADMINPWD", envdb="DB
     dashboard.config.password = password
     dashboard.config.database_name = db
     dashboard.config.group_by = lambda: g.get("userId", "anonym")  # type: ignore
-    dashboard.bind(app, schedule=False)
+    dashboard.bind(app, schedule=False)  # pyright: ignore[reportUnknownMemberType]

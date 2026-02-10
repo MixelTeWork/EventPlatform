@@ -9,7 +9,10 @@
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true,
 		// "debugpy.debugJustMyCode": false,
-		"python.analysis.typeCheckingMode": "standard",
+		"python.analysis.typeCheckingMode": "strict",
+		"python.analysis.diagnosticSeverityOverrides": {
+			"reportMissingTypeStubs": "none"
+		}
 	},
 	"launch": {
 		"version": "0.2.0",

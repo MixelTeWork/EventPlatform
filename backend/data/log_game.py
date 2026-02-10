@@ -5,7 +5,7 @@ from bafser import IdMixin, SqlAlchemyBase
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from data._tables import Tables
+from data import Tables
 from data.game import Game
 from data.log_user_game import UserGameLog
 from data.user_game import UserGame

@@ -4,7 +4,7 @@ from typing import Optional
 from bafser import IdMixin, SqlAlchemyBase
 from sqlalchemy.orm import Mapped
 
-from data._tables import Tables
+from data import Tables
 
 
 class UserGameLog(SqlAlchemyBase, IdMixin):

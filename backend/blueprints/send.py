@@ -1,37 +1,30 @@
-from bafser import get_json_values_from_req, permission_required, response_not_found, use_db_session, use_user
+from bafser import TJson, doc_api, get_json_values_from_req, protected_route, response_not_found
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
-from sqlalchemy.orm import Session
 
-from data._operations import Operations
-from data.send import Send
-from data.user import User
+from data import Operations, User
+from data.send import Send, SendDict
 
-blueprint = Blueprint("send", __name__)
+bp = Blueprint("send", __name__)
 
 
-@blueprint.post("/api/send")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.send_any)
-def send(db_sess: Session, user: User):
+@bp.post("/api/send")
+@doc_api(req=TJson["value", int, "positive", bool, "reusable", bool], res=SendDict, desc="Create send operation")
+@protected_route(perms=Operations.send_any)
+def send():
     value, positive, reusable = get_json_values_from_req(("value", int), ("positive", bool), ("reusable", bool))
 
-    send = Send.new(db_sess, user.id, value, positive, reusable)
+    send = Send.new(User.current.id, value, positive, reusable)
 
     return send.get_dict()
 
 
-@blueprint.post("/api/send_check")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.send_any)
-def send_check(db_sess: Session, user: User):
+@bp.post("/api/send_check")
+@doc_api(req=TJson["id", str], res=TJson["successful", bool], desc="Check if send is successful")
+@protected_route(perms=Operations.send_any)
+def send_check():
     sendId = get_json_values_from_req(("id", str))
 
-    send = Send.get_by_big_id(db_sess, sendId)
+    send = Send.get_by_big_id(sendId)
     if send is None:
         return response_not_found("send", sendId)
 

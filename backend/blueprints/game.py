@@ -1,125 +1,109 @@
-from bafser import get_json_values_from_req, permission_required, use_db_session, use_user, use_userId
+from bafser import TJson, doc_api, get_json_values_from_req, get_userId, protected_route, use_db_sess
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 
-from data._operations import Operations
-from data.game import Game, GameState
-from data.user import User
-from data.user_game import UserGame
+from data import Operations
+from data.game import Game, GameDict, GameState
 
-blueprint = Blueprint("game", __name__)
+bp = Blueprint("game", __name__)
 
 
-@blueprint.route("/api/game/duration")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def duration(db_sess: Session, user: User):
-    game = Game.get(db_sess)
+@bp.route("/api/game/duration")
+@doc_api(res=TJson["duration", int])
+@protected_route(perms=Operations.manage_games)
+def duration():
+    game = Game.get2()
     return {"duration": game.duration}
 
 
-@blueprint.post("/api/game/duration")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def set_duration(db_sess: Session, user: User):
+@bp.post("/api/game/duration")
+@doc_api(req=TJson["duration", int], res=TJson["duration", int])
+@protected_route(perms=Operations.manage_games)
+def set_duration():
     duration = get_json_values_from_req(("duration", int))
-    game = Game.get(db_sess)
+    game = Game.get2()
     game.duration = duration
-    db_sess.commit()
+    game.db_sess.commit()
     return {"duration": game.duration}
 
 
-@blueprint.route("/api/game/countdown")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def countdown(db_sess: Session, user: User):
-    game = Game.get(db_sess)
+@bp.route("/api/game/countdown")
+@doc_api(res=TJson["counter", int])
+@protected_route(perms=Operations.manage_games)
+def countdown():
+    game = Game.get2()
     return {"counter": game.countdown}
 
 
-@blueprint.post("/api/game/countdown")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def set_countdown(db_sess: Session, user: User):
+@bp.post("/api/game/countdown")
+@doc_api(req=TJson["counter", int], res=TJson["counter", int])
+@protected_route(perms=Operations.manage_games)
+def set_countdown():
     counter = get_json_values_from_req(("counter", int))
-    game = Game.get(db_sess)
+    game = Game.get2()
     game.countdown = counter
-    db_sess.commit()
+    game.db_sess.commit()
     return {"counter": game.countdown}
 
 
-@blueprint.route("/api/game/startStr")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def startStr(db_sess: Session, user: User):
-    game = Game.get(db_sess)
+@bp.route("/api/game/startStr")
+@doc_api(res=TJson["startStr", str])
+@protected_route(perms=Operations.manage_games)
+def startStr():
+    game = Game.get2()
     return {"startStr": game.startStr}
 
 
-@blueprint.post("/api/game/startStr")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def set_startStr(db_sess: Session, user: User):
+@bp.post("/api/game/startStr")
+@doc_api(req=TJson["startStr", str], res=TJson["startStr", str])
+@protected_route(perms=Operations.manage_games)
+def set_startStr():
     startStr = get_json_values_from_req(("startStr", str))
-    game = Game.get(db_sess)
+    game = Game.get2()
     game.startStr = startStr
-    db_sess.commit()
+    game.db_sess.commit()
     return {"startStr": game.startStr}
 
 
-@blueprint.route("/api/game/state")
-@use_db_session
-@use_userId(optional=True)
-def state(db_sess: Session, userId: int):
-    return Game.get_state(db_sess, userId=userId)
+@bp.route("/api/game/state")
+@doc_api(res=GameDict)
+@use_db_sess
+def state(db_sess: Session):
+    return Game.get_state(db_sess, userId=get_userId())
 
 
-@blueprint.route("/api/game/state_full")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def state_full(db_sess: Session, user: User):
+@bp.route("/api/game/state_full")
+@doc_api(res=GameDict)
+@protected_route(perms=Operations.manage_games)
+@use_db_sess
+def state_full(db_sess: Session):
     return Game.get_state_update(db_sess)
 
 
-@blueprint.post("/api/game/click")
-@jwt_required()
-@use_db_session
-@use_userId()
-def click(db_sess: Session, userId: int):
+@bp.post("/api/game/click")
+@doc_api(res=GameDict)
+@protected_route()
+@use_db_sess
+def click(db_sess: Session):
     count = get_json_values_from_req(("count", int))
-    usergame = {"v": None}
-    state = Game.get_state(db_sess, userId=userId, usergame=usergame)
+    usergame: Game.Tget_state_out_usergame = {"v": None}
+    state = Game.get_state(db_sess, userId=get_userId(), out_usergame=usergame)
     if state["state"] == GameState.going:
-        ug: UserGame = usergame["v"]  # type: ignore
+        ug = usergame["v"]
         if ug and not ug.click(count):
             return "", 429
     return state
 
 
-@blueprint.post("/api/game/select_team")
-@jwt_required()
-@use_db_session
-@use_userId()
-def select_team(db_sess: Session, userId: int):
+@bp.post("/api/game/select_team")
+@doc_api(res=GameDict)
+@protected_route()
+@use_db_sess
+def select_team(db_sess: Session):
     team = get_json_values_from_req(("team", int))
-    usergame = {"v": None}
-    state = Game.get_state(db_sess, userId=userId, usergame=usergame)
-    ug: UserGame = usergame["v"]  # type: ignore
+    usergame: Game.Tget_state_out_usergame = {"v": None}
+    state = Game.get_state(db_sess, userId=get_userId(), out_usergame=usergame)
+    ug = usergame["v"]
     if ug:
         ug.set_team(team)
         state["team"] = team

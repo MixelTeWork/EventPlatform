@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import Optional
 
-from bafser import Log, SqlAlchemyBase, get_datetime_now
+from bafser import Log, SqlAlchemyBase, get_datetime_now, get_db_session
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, Session, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
 from data._tables import Tables
 from data.quest import Quest
@@ -22,7 +22,7 @@ class UserQuest(SqlAlchemyBase):
         return f"<UserQuest> user: {self.userId} quest: {self.questId}"
 
     @staticmethod
-    def open_quest(actor: User, user: User, quest: Quest) -> bool:
+    def open_quest(user: User, quest: Quest, *, actor: User | None = None) -> bool:
         """returns False if already opened"""
         uq = UserQuest._get_or_create(actor, user, quest)
 
@@ -31,12 +31,12 @@ class UserQuest(SqlAlchemyBase):
 
         now = get_datetime_now()
         uq.openDate = now
-        uq._log(actor, now, [("openDate", now.isoformat())])
+        uq._log(actor, now)
 
         return True
 
     @staticmethod
-    def complete_quest(actor: User, user: User, quest: Quest) -> bool:
+    def complete_quest(user: User, quest: Quest, *, actor: User | None = None) -> bool:
         """returns False if already completed"""
         uq = UserQuest._get_or_create(actor, user, quest)
 
@@ -45,14 +45,13 @@ class UserQuest(SqlAlchemyBase):
 
         now = get_datetime_now()
         uq.completeDate = now
-        uq._log(actor, now, [("completeDate", now.isoformat())])
+        uq._log(actor, now)
 
         return True
 
     @staticmethod
-    def _get_or_create(actor: User, user: User, quest: Quest):
-        db_sess = Session.object_session(actor)
-        assert db_sess
+    def _get_or_create(actor: User | None, user: User, quest: Quest):
+        db_sess = actor.db_sess if actor else get_db_session()
         uq = db_sess.query(UserQuest).filter(UserQuest.userId == user.id, UserQuest.questId == quest.id).first()
 
         if uq is None:
@@ -61,12 +60,8 @@ class UserQuest(SqlAlchemyBase):
 
         return uq
 
-    def _log(self, actor: User, now: datetime, changes):
-        if Session.object_session(self) is None:
-            Log.added(self, actor, [
-                ("userId", self.userId),
-                ("questId", self.questId),
-                *changes,
-            ], now=now)
+    def _log(self, actor: User | None, now: datetime):
+        if self.get_session() is None:
+            Log.added(self, actor, now=now)
         else:
-            Log.updated(self, actor, [(v if len(v) == 3 else (v[0], None, v[1])) for v in changes], now=now)
+            Log.updated(self, actor, now=now)

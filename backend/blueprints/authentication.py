@@ -2,9 +2,9 @@ import logging
 import sys
 
 import requests
-from bafser import JsonObj, create_access_token, doc_api, randstr, response_msg, use_db_session
-from flask import Blueprint, abort, current_app, jsonify, redirect, request
-from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
+from bafser import JsonObj, create_access_token, doc_api, randstr, response_msg, use_db_sess
+from flask import Blueprint, abort, current_app, jsonify
+from flask_jwt_extended import set_access_cookies, unset_jwt_cookies  # pyright: ignore[reportUnknownVariableType]
 from sqlalchemy.orm import Session
 
 from data._roles import Roles
@@ -16,7 +16,7 @@ blueprint = Blueprint("authentication", __name__)
 # REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
 # REDIRECT_URI = "https://www.underparty.fun/auth_vk"
 TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
-TICKETS_API_URL += "api/event_platform/"
+TICKETS_API_URL += "api/event_platform/"  # pyright: ignore[reportConstantRedefinition]
 EVENT_ID = 3 if "dev" in sys.argv else 19
 
 
@@ -27,7 +27,7 @@ class LoginJson(JsonObj):
 
 @blueprint.post("/api/auth")
 @doc_api(req=LoginJson, res=UserDict, desc="Get auth cookie")
-@use_db_session
+@use_db_sess
 def login(db_sess: Session):
     data = LoginJson.get_from_req()
     user = User.get_by_login(db_sess, data.login)
@@ -55,7 +55,7 @@ class LoginTicketJson(JsonObj):
 
 @blueprint.post("/api/auth_ticket")
 @doc_api(req=LoginTicketJson, res=UserDict, desc="Auth as visitor by ticket code")
-@use_db_session
+@use_db_sess
 def login_ticket(db_sess: Session):
     code = LoginTicketJson.get_from_req().code
 
@@ -77,11 +77,14 @@ def login_ticket(db_sess: Session):
 
 
 def create_user_by_ticket(db_sess: Session, code: str):
-    res = requests.get(TICKETS_API_URL + "user_info_by_ticket", json={
-        "apikey": current_app.config["API_SECRET_KEY"],
-        "eventId": EVENT_ID,
-        "code": code,
-    })
+    res = requests.get(
+        TICKETS_API_URL + "user_info_by_ticket",
+        json={
+            "apikey": current_app.config["API_SECRET_KEY"],
+            "eventId": EVENT_ID,
+            "code": code,
+        },  # pyright: ignore[reportUnknownArgumentType]
+    )
     if not res.ok:
         logging.warning(f"auth_error: {res.status_code}; code={code}; {res.content}")
         abort(500)

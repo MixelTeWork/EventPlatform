@@ -1,6 +1,6 @@
 from bafser import SqlAlchemyBase
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from data._tables import Tables
 from data.send import Send
@@ -20,10 +20,8 @@ class UserSend(SqlAlchemyBase):
 
     @staticmethod
     def new(user: User, send: Send):
-        db_sess = Session.object_session(user)
-        assert db_sess
         us = UserSend(userId=user.id, sendId=send.id)
-        db_sess.add(us)
-        db_sess.commit()
+        user.db_sess.add(us)
+        user.db_sess.commit()
 
         return us

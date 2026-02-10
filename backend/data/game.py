@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Literal, NotRequired, Optional, TypedDict, cast
 
 from bafser import SingletonMixin, SqlAlchemyBase, get_datetime_now
 from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from data._tables import Tables
+from data import Tables
 from data.user_game import UserGame
 
 
@@ -66,6 +66,7 @@ class Game(SqlAlchemyBase, SingletonMixin):
         game.clicks2 = clicks.get("clicks2", 0)
         game.winner = 1 if game.clicks1 > game.clicks2 else 2
         from data.log_game import GameLog
+
         GameLog.create(db_sess)
         db_sess.commit()
 
@@ -75,10 +76,12 @@ class Game(SqlAlchemyBase, SingletonMixin):
             return game.opponent2Id
         return -1
 
+    type Tget_state_out_usergame = dict[Literal["v"], UserGame | None]
+
     @staticmethod
-    def get_state(db_sess: Session, game: "Game | None" = None, userId: int | None = None, usergame: dict | None = None):
+    def get_state(db_sess: Session, game: "Game | None" = None, userId: int | None = None, out_usergame: Tget_state_out_usergame | None = None):
         game = Game.get(db_sess) if game is None else game
-        state = {
+        state: GameDict = {
             "state": GameState.wait,
             "opponent1Id": game.opponent1Id,
             "opponent2Id": game.opponent2Id,
@@ -91,14 +94,15 @@ class Game(SqlAlchemyBase, SingletonMixin):
             "tourneyWinner3": -1,
         }
         if userId is not None:
-            ug = UserGame.get(db_sess, userId)
-            if usergame is not None:
-                usergame["v"] = ug
+            ug = UserGame.get(userId, db_sess=db_sess)
+            if out_usergame is not None:
+                out_usergame["v"] = ug
             state["team"] = ug.team
 
         if game.tourneyEnded:
             state["state"] = GameState.tourneyEnd
             from data.tourney import Tourney
+
             winner1, winner2, winner3 = Tourney.get_winners(db_sess)
             state["tourneyWinner1"] = winner1
             state["tourneyWinner2"] = winner2
@@ -139,13 +143,14 @@ class Game(SqlAlchemyBase, SingletonMixin):
             return state
 
         if game.winner == 0:
-            state = {**state, **Game.get_clicks(db_sess)}
+            state = cast(GameDict, {**state, **Game.get_clicks(db_sess)})
             if state["state"] == GameState.end:
-                game.clicks1 = state["clicks1"]
-                game.clicks2 = state["clicks2"]
+                game.clicks1 = state.get("clicks1", 0)
+                game.clicks2 = state.get("clicks2", 0)
                 game.winner = 1 if game.clicks1 > game.clicks2 else 2
                 state["winner"] = game.winner
                 from data.log_game import GameLog
+
                 GameLog.create(db_sess)
                 db_sess.commit()
 
@@ -153,12 +158,14 @@ class Game(SqlAlchemyBase, SingletonMixin):
 
     @staticmethod
     def get_clicks(db_sess: Session):
-        return {(f"clicks{v[0]}"): safeDiv(int(v[1]), int(v[2])) for v in db_sess
-                .query(UserGame.team, func.sum(UserGame.clicks), func.count(UserGame.userId))
-                .group_by(UserGame.team)
-                .filter(UserGame.hackAlert < 10)
-                .filter(UserGame.clicks > 0)
-                .all()}
+        return {
+            (f"clicks{v[0]}"): safeDiv(int(v[1]), int(v[2]))
+            for v in db_sess.query(UserGame.team, func.sum(UserGame.clicks), func.count(UserGame.userId))
+            .group_by(UserGame.team)
+            .filter(UserGame.hackAlert < 10)
+            .filter(UserGame.clicks > 0)
+            .all()
+        }
 
 
 def safeDiv(v1: int, v2: int):
@@ -173,3 +180,19 @@ class GameState:
     going = "going"
     end = "end"
     tourneyEnd = "tourneyEnd"
+
+
+class GameDict(TypedDict):
+    state: str
+    opponent1Id: int | None
+    opponent2Id: int | None
+    start: str
+    counter: int
+    winner: int
+    team: int
+    tourneyWinner1: int
+    tourneyWinner2: int
+    tourneyWinner3: int
+    clicks1: NotRequired[int]
+    clicks2: NotRequired[int]
+    showGame: NotRequired[bool]
