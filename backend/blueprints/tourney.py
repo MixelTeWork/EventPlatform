@@ -184,7 +184,7 @@ class TourneyCharacterEditJson(JsonObj):
 @bp.post("/api/tourney/characters/<int:characterId>")
 @doc_api(req=TourneyCharacterEditJson, res=TourneyCharacterDict, desc="Edit tourney character")
 @protected_route(perms=Operations.manage_games)
-def store_item_patch(characterId: int):
+def edit_character(characterId: int):
     data = TourneyCharacterEditJson.get_from_req()
 
     character = TourneyCharacter.get2(characterId)
