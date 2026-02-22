@@ -16,6 +16,8 @@ app, run = create_app(__name__, AppConfig(
     MESSAGE_TO_FRONTEND="",
     DEV_MODE="dev" in sys.argv,
     DELAY_MODE="delay" in sys.argv,
+    THREADED="dev" not in sys.argv,
+    HEALTH_ROUTE=True,
 )
     .add_secret_key_env("API_SECRET_KEY")
     # .add_secret_key("VK_SECRET_KEY", "secret_key_vk.txt")
