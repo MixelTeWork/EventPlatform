@@ -11,8 +11,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    env:
-      REGISTRY_PATH: ghcr.io/${{ github.repository | toLowerCase }}
 
     steps:
       - name: Checkout repository
@@ -27,6 +25,12 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Set lowercase registry path
+        run: |
+          echo "REGISTRY_PATH=ghcr.io/${REPOSITORY,,}" >> "${GITHUB_ENV}"
+        env:
+          REPOSITORY: '${{ github.repository }}'
 
       - name: Build and push
         uses: docker/build-push-action@v5
