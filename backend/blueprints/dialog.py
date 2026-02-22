@@ -1,105 +1,118 @@
+from bafser import (
+    Image,
+    ImageJson,
+    JsonObj,
+    JsonOpt,
+    TJson,
+    Undefined,
+    doc_api,
+    get_json_values_from_req,
+    jsonify_list,
+    protected_route,
+    response_msg,
+    response_not_found,
+)
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
-from sqlalchemy.orm import Session
 
-from bafser import (Image, ImageJson, get_json_values_from_req, jsonify_list, permission_required,
-                    response_msg, response_not_found, use_db_session, use_user)
-from data._operations import Operations
-from data.dialog import Dialog
-from data.dialog_character import DialogCharacter
-from data.user import User
+from data import Operations
+from data.dialog import Dialog, DialogDict
+from data.dialog_character import DialogCharacter, DialogCharacterDict
 
-
-blueprint = Blueprint("dialog", __name__)
+bp = Blueprint("dialog", __name__)
+UD = Undefined.default
+U = Undefined.defined
 
 
-@blueprint.route("/api/dialog/<int:dialogId>")
-@use_db_session
-def dialog(dialogId, db_sess: Session):
-    dialog = Dialog.get(db_sess, dialogId)
+@bp.route("/api/dialog/<int:dialogId>")
+@doc_api(res=DialogDict, desc="Get dialog")
+def dialog(dialogId: int):
+    dialog = Dialog.get2(dialogId)
     if dialog is None:
         return response_not_found("dialog", dialogId)
 
     return dialog.get_dict()
 
 
-@blueprint.post("/api/dialog/<int:dialogId>")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_quest)
-def dialog_edit(dialogId, db_sess: Session, user: User):
+@bp.post("/api/dialog/<int:dialogId>")
+@doc_api(req=TJson["data", object], res=DialogDict, desc="Edit dialog (see dialog.ts:GameDialogData)")
+@protected_route(perms=Operations.manage_quest)
+def dialog_edit(dialogId: int):
     data = get_json_values_from_req(("data", object))
 
-    dialog = Dialog.get(db_sess, dialogId)
+    dialog = Dialog.get2(dialogId)
     if dialog is None:
         return response_not_found("dialog", dialogId)
 
-    dialog.update(user, data)
+    dialog.update(data)
 
     return dialog.get_dict()
 
 
-@blueprint.route("/api/dialog/characters")
-@use_db_session
-def characters(db_sess: Session):
-    items = DialogCharacter.all(db_sess)
-    return jsonify_list(items)
+@bp.route("/api/dialog/characters")
+@doc_api(res=list[DialogCharacterDict], desc="Get all characters of all dialogs")
+def characters():
+    return jsonify_list(DialogCharacter.all2())
 
 
-@blueprint.post("/api/dialog/characters")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_quest)
-def character_add(db_sess: Session, user: User):
-    name, img_data, orien = get_json_values_from_req(("name", str), ("img", ImageJson), ("orien", int))
+class CharacterJson(JsonObj):
+    name: str
+    img: ImageJson
+    orien: int
 
-    img, image_error = Image.new(user, img_data)
+
+@bp.post("/api/dialog/characters")
+@doc_api(req=CharacterJson, res=DialogCharacterDict, desc="Add character")
+@protected_route(perms=Operations.manage_quest)
+def character_add():
+    data = CharacterJson.get_from_req()
+
+    img, image_error = Image.new2(data.img)
     if image_error:
         return response_msg(image_error), 400
     assert img
 
-    character = DialogCharacter.new(user, name, img.id, orien)
+    character = DialogCharacter.new(data.name, img.id, data.orien)
 
     return character.get_dict()
 
 
-@blueprint.post("/api/dialog/characters/<int:characterId>")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_quest)
-def character_edit(characterId, db_sess: Session, user: User):
-    name, img_data, orien = get_json_values_from_req(("name", str, None), ("img", ImageJson, None), ("orien", int, None))
+class CharacterEditJson(JsonObj):
+    name: JsonOpt[str]
+    img: JsonOpt[ImageJson]
+    orien: JsonOpt[int]
 
-    character = DialogCharacter.get(db_sess, characterId)
+
+@bp.post("/api/dialog/characters/<int:characterId>")
+@doc_api(req=CharacterEditJson, res=DialogCharacterDict, desc="Edit character")
+@protected_route(perms=Operations.manage_quest)
+def character_edit(characterId: int):
+    data = CharacterEditJson.get_from_req()
+
+    character = DialogCharacter.get2(characterId)
     if character is None:
         return response_not_found("character", characterId)
 
     imgId = None
-    if img_data is not None:
-        img, image_error = Image.new(user, img_data)
+    if U(data.img):
+        img, image_error = Image.new2(data.img)
         if image_error:
             return response_msg(image_error), 400
         assert img
         imgId = img.id
 
-    character.update(user, name, imgId, orien)
+    character.update(UD(data.name), imgId, UD(data.orien))
 
     return character.get_dict()
 
 
-@blueprint.delete("/api/dialog/characters/<int:characterId>")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_quest)
-def character_delete(characterId, db_sess: Session, user: User):
-    character = DialogCharacter.get(db_sess, characterId)
+@bp.delete("/api/dialog/characters/<int:characterId>")
+@doc_api(desc="Delete character")
+@protected_route(perms=Operations.manage_quest)
+def character_delete(characterId: int):
+    character = DialogCharacter.get2(characterId)
     if character is None:
         return response_not_found("character", characterId)
 
-    character.delete(user)
+    character.delete2()
 
     return response_msg("ok")

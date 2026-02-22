@@ -1,9 +1,10 @@
-from sqlalchemy import JSON
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from typing import TypedDict
 
-from bafser import SqlAlchemyBase, Log, ObjMixin
-from data._tables import Tables
-from data.user import User
+from bafser import Log, ObjMixin, SqlAlchemyBase, UserBase
+from sqlalchemy import JSON
+from sqlalchemy.orm import Mapped, Session, mapped_column
+
+from data import Tables, User
 
 
 class Dialog(SqlAlchemyBase, ObjMixin):
@@ -12,25 +13,26 @@ class Dialog(SqlAlchemyBase, ObjMixin):
     data: Mapped[object] = mapped_column(JSON)
 
     @staticmethod
-    def new(creator: User, data: object, id: int | None = None, db_sess: Session | None = None):
-        db_sess = db_sess if db_sess else Session.object_session(creator)
-        assert db_sess
+    def new(data: object, *, id: int | None = None, db_sess: Session | None = None, creator: UserBase | None = None):
         dialog = Dialog(data=data)
         if id is not None:
             dialog.id = id
-        db_sess.add(dialog)
 
-        Log.added(dialog, creator, [("data", dialog.data)], db_sess=db_sess)
+        Log.added(dialog, creator, db_sess=db_sess)
 
         return dialog
 
-    def update(self, actor: User, data: object):
-        changes = [("data", self.data, data)]
+    def update(self, data: object, *, actor: User | None = None):
         self.data = data
-        Log.updated(self, actor, changes)
+        Log.updated(self, actor)
 
-    def get_dict(self):
+    def get_dict(self) -> "DialogDict":
         return {
             "id": self.id,
             "data": self.data,
         }
+
+
+class DialogDict(TypedDict):
+    id: int
+    data: object

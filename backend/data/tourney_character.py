@@ -1,13 +1,12 @@
 from datetime import datetime
-from typing import Optional, override
+from typing import Optional, TypedDict, override
 
+from bafser import Image, Log, ObjMixin, SqlAlchemyBase, UserBase
 from flask import url_for
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, UserBase, Log, ObjMixin, Image
-from data._tables import Tables
-from data.user import User
+from data import Tables
 
 
 class TourneyCharacter(SqlAlchemyBase, ObjMixin):
@@ -17,42 +16,25 @@ class TourneyCharacter(SqlAlchemyBase, ObjMixin):
     color: Mapped[str] = mapped_column(String(32))
     imgId: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Image}.id"), default=None)
 
-    image: Mapped[Image] = relationship(init=False)
+    image: Mapped[Image | None] = relationship(init=False)
 
     @staticmethod
-    def new(creator: User, name: str, color: str, imgId: int):
-        db_sess = Session.object_session(creator)
-        assert db_sess
+    def new(name: str, color: str, imgId: int | None = None, *, creator: UserBase | None = None):
         character = TourneyCharacter(name=name, color=color, imgId=imgId)
-        db_sess.add(character)
-
-        Log.added(character, creator, [
-            ("name", character.name),
-            ("color", character.color),
-            ("imgId", character.imgId),
-        ])
-
+        Log.added(character, creator)
         return character
 
-    def update(self, actor: User, name: str | None, color: str | None, imgId: int | None):
-        changes = []
-
+    def update(self, name: str | None, color: str | None, imgId: int | None, *, actor: UserBase | None = None):
         if name is not None:
-            changes.append(("name", self.name, name))
             self.name = name
-
         if color is not None:
-            changes.append(("color", self.color, color))
             self.color = color
-
         if imgId is not None:
-            changes.append(("imgId", self.imgId, imgId))
-            image: Image = self.image
-            if image is not None:
-                image.delete(actor)
+            if self.image is not None:
+                self.image.delete2(actor=actor)
             self.imgId = imgId
 
-        Log.updated(self, actor, changes)
+        Log.updated(self, actor)
 
     @override
     def _on_delete(self, db_sess: Session, actor: UserBase, now: datetime, commit: bool) -> bool:
@@ -67,10 +49,17 @@ class TourneyCharacter(SqlAlchemyBase, ObjMixin):
                 self.imgId = None
         return True
 
-    def get_dict(self):
+    def get_dict(self) -> "TourneyCharacterDict":
         return {
             "id": self.id,
             "name": self.name,
             "color": self.color,
             "img": url_for("images.img", imgId=self.imgId),
         }
+
+
+class TourneyCharacterDict(TypedDict):
+    id: int
+    name: str
+    color: str
+    img: str

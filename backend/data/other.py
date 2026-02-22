@@ -1,8 +1,9 @@
 import logging
-from sqlalchemy.orm import Session, Mapped, mapped_column
 
-from bafser import SqlAlchemyBase, SingletonMixin
-from data._tables import Tables
+from bafser import SingletonMixin, SqlAlchemyBase
+from sqlalchemy.orm import Mapped, Session, mapped_column
+
+from data import Tables
 
 
 class Other(SqlAlchemyBase, SingletonMixin):
@@ -11,8 +12,8 @@ class Other(SqlAlchemyBase, SingletonMixin):
     ticketLoginEnabled: Mapped[bool] = mapped_column(default=False)
 
     @staticmethod
-    def set_ticketLoginEnabled(db_sess: Session, value: bool):
-        obj = Other.get(db_sess)
+    def set_ticketLoginEnabled(value: bool, *, db_sess: Session | None = None):
+        obj = Other.get2(db_sess=db_sess)
         obj.ticketLoginEnabled = value
-        db_sess.commit()
+        obj.db_sess.commit()
         logging.info(f"set_ticketLoginEnabled {value=}")

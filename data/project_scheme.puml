@@ -1,0 +1,81 @@
+@startuml project_scheme
+title Full Stack Deployment Architecture\nFlask + SQLAlchemy + Next.js + Nginx + MySQL
+
+skinparam titleFontColor white
+skinparam backgroundColor #34446b
+skinparam componentStyle rectangle
+skinparam shadowing true
+skinparam defaultTextAlignment center
+skinparam ArrowColor #94a3b8
+skinparam ArrowFontColor #b6d4ff
+skinparam ArrowThickness 1.5
+skinparam rectangle {
+  BackgroundColor #243457
+  BorderColor #60a5fa
+  FontColor #e5e7eb
+}
+skinparam node {
+  BackgroundColor #020617
+  BorderColor #22c55e
+  FontColor #e5e7eb
+}
+skinparam cloud {
+  BackgroundColor #020617
+  BorderColor #f59e0b
+  FontColor #e5e7eb
+}
+
+cloud "Internet" as internet
+
+node "Docker Host" {
+
+  rectangle "Public Network" {
+    component "Nginx\nReverse Proxy\n:80" as nginx
+  }
+
+  rectangle "App Network (internal)" {
+    component "Flask API\nGunicorn\n:8000" as server
+  }
+
+  rectangle "Data Network (internal)" {
+    database "MySQL 8.4\nPersistent DB" as db
+  }
+
+  rectangle "Named Volumes" {
+    component "frontend-build\n(shared static)" as vol_frontend
+    component "data\n(user storage)" as vol_data
+    component "db-data\n(database)" as vol_db
+  }
+}
+
+'======================
+' Request Flow
+'======================
+internet --> nginx : HTTP Request
+nginx --> server : /api/* proxy
+nginx -down-> vol_frontend : Serve static files
+server -left-> db : SQLAlchemy queries
+
+'======================
+' Volumes
+'======================
+server --> vol_frontend : rsync build artifacts
+server --> vol_data : user uploads
+db --> vol_db : persistent storage
+
+'======================
+' Startup Dependencies
+'======================
+' db -down-> server : healthcheck\n(required)
+' server -down-> nginx : healthcheck\n(required)
+
+'======================
+' Build Pipeline
+'======================
+node "Docker Build Stage" {
+  component "Next.js Build\n(node:alpine)" as build
+}
+
+build ---> server : copy /out → /app/build
+
+@enduml

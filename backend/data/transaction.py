@@ -1,10 +1,11 @@
 from datetime import datetime
-from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
+from typing import TypedDict
 
-from bafser import SqlAlchemyBase, IdMixin, get_datetime_now
-from data._tables import Tables
-from data.user import User
+from bafser import IdMixin, SqlAlchemyBase, get_datetime_now, get_db_session
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
+
+from data import Tables, User
 
 
 class Transaction(SqlAlchemyBase, IdMixin):
@@ -24,7 +25,7 @@ class Transaction(SqlAlchemyBase, IdMixin):
         return f"<Transaction> [{self.id}] {self.action}"
 
     @staticmethod
-    def new(db_sess: Session, userFromId: int, userToId: int, value: int, action: str, itemId: int = -1, commit=True):
+    def new(userFromId: int, userToId: int, value: int, action: str, itemId: int = -1, *, commit: bool = True, db_sess: Session | None = None):
         item = Transaction(
             date=get_datetime_now(),
             fromId=userFromId,
@@ -33,13 +34,14 @@ class Transaction(SqlAlchemyBase, IdMixin):
             action=action,
             itemId=itemId,
         )
+        db_sess = db_sess if db_sess else get_db_session()
         db_sess.add(item)
         if commit:
             db_sess.commit()
 
         return item
 
-    def get_dict(self):
+    def get_dict(self) -> "TransactionDict":
         return {
             "id": self.id,
             "date": self.date,
@@ -57,3 +59,13 @@ class Actions:
     send = "sendMoney"
     gameJoin = "gameJoin"
     gameWin = "gameWin"
+
+
+class TransactionDict(TypedDict):
+    id: int
+    date: datetime
+    fromId: int
+    toId: int
+    value: int
+    action: str
+    itemId: int

@@ -1,10 +1,11 @@
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import String
-from sqlalchemy.orm import Session, Mapped, mapped_column
 
-from bafser import SqlAlchemyBase, IdMixin
-from data._tables import Tables
+from bafser import IdMixin, SqlAlchemyBase
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, Session, mapped_column
+
+from data import Tables
 from data.game import Game
 from data.log_user_game import UserGameLog
 from data.user_game import UserGame

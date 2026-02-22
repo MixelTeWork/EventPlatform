@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Session, Mapped, mapped_column
 
-from bafser import SqlAlchemyBase, get_datetime_now
-from data._tables import Tables
+from bafser import SqlAlchemyBase, get_datetime_now, get_db_session
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, Session, mapped_column
+
+from data import Tables
 
 
 class UserGame(SqlAlchemyBase):
@@ -17,7 +18,8 @@ class UserGame(SqlAlchemyBase):
     hackAlert: Mapped[int] = mapped_column(default=0)
 
     @staticmethod
-    def get(db_sess: Session, userId: int):
+    def get(userId: int, *, db_sess: Session | None = None):
+        db_sess = db_sess or get_db_session()
         ug = db_sess.get(UserGame, userId)
         if ug is None:
             ug = UserGame(userId=userId, clicks=0, hackAlert=0, team=0)
@@ -26,15 +28,10 @@ class UserGame(SqlAlchemyBase):
         return ug
 
     def set_team(self, team: int):
-        db_sess = Session.object_session(self)
-        assert db_sess
         self.team = team
-        db_sess.commit()
+        self.db_sess.commit()
 
     def click(self, clicks: int):
-        db_sess = Session.object_session(self)
-        assert db_sess
-
         now = get_datetime_now().replace(tzinfo=None)
         now_hack = 0
         if self.lastClick is None:
@@ -50,9 +47,9 @@ class UserGame(SqlAlchemyBase):
         if self.hackAlert >= 10 or now_hack > 0:
             if now_hack >= 2:
                 self.hackAlert += 1
-            db_sess.commit()
+            self.db_sess.commit()
             return False
 
         self.clicks += clicks
-        db_sess.commit()
+        self.db_sess.commit()
         return True

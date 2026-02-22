@@ -1,41 +1,54 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
 ARG NODE_VERSION=20.16.0
 ARG PYTHON_VERSION=3.12
-ARG PUBLIC_URL=https://eventplatform-mixelte.amvera.io/
+ARG PUBLIC_URL=localhost
 
-################################################################################
-# Use node image for base image for all stages.
+########################
+# Frontend build stage #
+########################
 FROM node:${NODE_VERSION}-alpine AS build
-
-# Set working directory for all build stages.
 WORKDIR /usr/src/app
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage bind mounts to package.json and package-lock.json to avoid having to copy them
-# into this layer.
-COPY frontend/package.json package.json
-COPY frontend/package-lock.json package-lock.json
-RUN --mount=type=cache,target=/root/.npm \
-    # --mount=type=bind,source=package.json,target=package.json \
-    # --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    npm ci
+COPY frontend/package*.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
 
-# Copy the rest of the source files into the image.
 COPY frontend .
 ARG PUBLIC_URL
 ENV PUBLIC_URL=${PUBLIC_URL}
-# Run the build script.
 RUN npm run build
 
+########################
+# Backend runtime      #
+########################
 FROM python:${PYTHON_VERSION}-slim AS base
+WORKDIR /app
+
+# # Install curl for HEALTHCHECK
+# RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+    CMD ["curl", "--fail", "--max-time", "2", "http://localhost:8000/api/health"]
+# HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+#     CMD python -c "import urllib.request,sys; \
+#     sys.exit(0) if urllib.request.urlopen('http://localhost:8000/api/health', timeout=2).getcode()==200 else sys.exit(1)"
+
+RUN apt-get update && apt-get install -y rsync gosu curl && rm -rf /var/lib/apt/lists/*
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Create non-root user
+ARG UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    appuser
 
 # Prevents Python from writing pyc files.
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -44,38 +57,23 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
-
-# # Create a non-privileged user that the app will run under.
-# # See https://docs.docker.com/go/dockerfile-user-best-practices/
-# ARG UID=10001
-# RUN adduser \
-#     --disabled-password \
-#     --gecos "" \
-#     --home "/nonexistent" \
-#     --shell "/sbin/nologin" \
-#     --no-create-home \
-#     --uid "${UID}" \
-#     appuser
-
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
-# Leverage a bind mount to requirements.txt to avoid having to copy them into
-# into this layer.
-COPY backend/requirements.txt requirements.txt
+# Install Python deps
+COPY backend/requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
-    # --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt
 
-# Switch to the non-privileged user to run the application.
-# USER appuser
-
-# Copy the source code into the container.
+# Copy app source
 COPY backend/ .
 COPY --from=build /usr/src/app/out ./build
+RUN mkdir -p /app/storage && chown -R appuser:appuser /app/storage
 
-# Expose the port that the application listens on.
-EXPOSE 80
-
-# Run the application.
-CMD ["gunicorn", "main:app", "--bind=0.0.0.0:80"]
+# USER appuser  # user now changed in entrypoint.sh
+EXPOSE 8000
+CMD ["gunicorn", "main:app", \
+    "--worker-class=gthread", \
+    "--workers=2", \
+    "--threads=4", \
+    "--bind=0.0.0.0:8000", \
+    "--timeout=60", \
+    "--max-requests=1000", \
+    "--max-requests-jitter=100"]

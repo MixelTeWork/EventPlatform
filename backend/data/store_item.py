@@ -1,14 +1,12 @@
 from datetime import datetime
-from typing import Optional, override
+from typing import Optional, TypedDict, override
 
+from bafser import BigIdMixin, Image, Log, ObjMixin, SqlAlchemyBase, UserBase, get_db_session
 from flask import url_for
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, UserBase, ObjMixin, Log, Image
-from data._tables import Tables
-from data.user import User
-from utils import BigIdMixin
+from data import Tables, User
 
 
 class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
@@ -19,47 +17,30 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
     count: Mapped[int]
     imgId: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Image}.id"), default=None)
 
-    image: Mapped[Image] = relationship(init=False)
+    image: Mapped[Image | None] = relationship(init=False)
 
     @staticmethod
-    def new(creator: User, name: str, price: int, count: int, imgId: int | None):
-        db_sess = Session.object_session(creator)
-        assert db_sess
+    def new(name: str, price: int, count: int, imgId: int | None, *, creator: UserBase | None = None):
         item = StoreItem(name=name, price=price, count=count, imgId=imgId)
-        item.set_unique_big_id(db_sess)
+        item.set_unique_big_id(db_sess=creator.db_sess if creator else get_db_session())
 
-        db_sess.add(item)
-        Log.added(item, creator, [
-            ("name", item.name),
-            ("price", item.price),
-            ("count", item.count),
-            ("imgId", item.imgId),
-        ])
-
+        Log.added(item, creator)
         return item
 
-    def update(self, actor: User, name: str | None, price: int | None, count: int | None, imgId: int | None):
-        changes = []
-
-        def updateField(field: str, value):
-            cur = getattr(self, field)
-            if value is not None and cur != value:
-                changes.append((field, cur, value))
-                setattr(self, field, value)
-
+    def update(self, name: str | None, price: int | None, count: int | None, imgId: int | None, *, actor: UserBase | None = None):
         if imgId is not None and imgId != self.imgId:
-            if self.image is None:
-                changes.append(("imgId", None, imgId))
-            else:
-                self.image.delete(actor)
-                changes.append(("imgId", self.imgId, imgId))
+            if self.image is not None:
+                self.image.delete2(actor=actor)
             self.imgId = imgId
 
-        updateField("name", name)
-        updateField("price", price)
-        updateField("count", count)
+        if name is not None:
+            self.name = name
+        if price is not None:
+            self.price = price
+        if count is not None:
+            self.count = count
 
-        Log.updated(self, actor, changes)
+        Log.updated(self, actor)
 
     @override
     def _on_delete(self, db_sess: Session, actor: UserBase, now: datetime, commit: bool) -> bool:
@@ -74,13 +55,11 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
                 self.imgId = None
         return True
 
-    def decrease(self, actor: User | None = None, v=1):
-        count = self.count
-        self.count = count - v
+    def decrease(self, v: int = 1, *, actor: User | None = None):
+        self.count -= v
+        Log.updated(self, actor)
 
-        Log.updated(self, actor, [("count", count, self.count)], db_sess=Session.object_session(self))
-
-    def get_dict(self):
+    def get_dict(self) -> "StoreItemDict":
         count = "many"
         if self.count <= 15:
             count = "few"
@@ -95,7 +74,7 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
             "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId),
         }
 
-    def get_dict_full(self):
+    def get_dict_full(self) -> "StoreItemFullDict":
         return {
             "id": self.id,
             "id_big": self.id_big,
@@ -104,3 +83,20 @@ class StoreItem(SqlAlchemyBase, ObjMixin, BigIdMixin):
             "count": self.count,
             "img": None if self.imgId is None else url_for("images.img", imgId=self.imgId),
         }
+
+
+class StoreItemDict(TypedDict):
+    id: int
+    name: str
+    price: int
+    count: str
+    img: str | None
+
+
+class StoreItemFullDict(TypedDict):
+    id: int
+    id_big: str
+    name: str
+    price: int
+    count: int
+    img: str | None

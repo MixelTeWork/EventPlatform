@@ -1,26 +1,20 @@
 import math
 
+from bafser import Log, get_json_values_from_req, get_log_fpath, jsonify_list, protected_route, update_message_to_frontend, use_db_sess
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
-from bafser import (Log, get_log_fpath, jsonify_list, permission_required, use_db_session, use_user, update_message_to_frontend,
-                    get_json_values_from_req)
 
 import bafser_config
-from data.user import User
-from data._operations import Operations
-
+from data import Operations
 
 blueprint = Blueprint("dev", __name__)
 PSIZE = 100
 
 
 @blueprint.route("/api/dev/log")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def dev_log(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+@use_db_sess
+def dev_log(db_sess: Session):
     p = request.args.get("p", 0, type=int)
     if p < 0:
         return jsonify_list([])
@@ -29,63 +23,46 @@ def dev_log(db_sess: Session, user: User):
 
 
 @blueprint.post("/api/dev/set_msg")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def set_msg(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+def set_msg():
     msg = get_json_values_from_req(("msg", str))
     update_message_to_frontend(msg)
     return {"msg": msg}
 
 
 @blueprint.route("/api/dev/log_len")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def dev_log_len(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+@use_db_sess
+def dev_log_len(db_sess: Session):
     count = db_sess.query(Log).count()
     return {"len": math.ceil(count / PSIZE)}
 
 
 @blueprint.route("/api/dev/log_info")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def dev_log_info(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+def dev_log_info():
     return last_n_lines(get_log_fpath(bafser_config.log_info_path), 256)
 
 
 @blueprint.route("/api/dev/log_requests")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def dev_log_requests(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+def dev_log_requests():
     return last_n_lines(get_log_fpath(bafser_config.log_requests_path), 256)
 
 
 @blueprint.route("/api/dev/log_errors")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def dev_log_errors(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+def dev_log_errors():
     return last_n_lines(get_log_fpath(bafser_config.log_errors_path), 256)
 
 
 @blueprint.route("/api/dev/log_frontend")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_dev)
-def dev_log_frontend(db_sess: Session, user: User):
+@protected_route(perms=Operations.page_dev)
+def dev_log_frontend():
     return last_n_lines(get_log_fpath(bafser_config.log_frontend_path), 256)
 
 
-def last_n_lines(filename, n=1):
+def last_n_lines(filename: str, n: int = 1):
     lines = ["" for _ in range(n)]
     i = 0
     with open(filename, "r", encoding="utf-8", errors="ignore") as f:

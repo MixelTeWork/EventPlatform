@@ -1,36 +1,42 @@
+from bafser import (
+    Image,
+    ImageJson,
+    JsonObj,
+    JsonOpt,
+    TJson,
+    Undefined,
+    doc_api,
+    get_json_values_from_req,
+    jsonify_list,
+    protected_route,
+    response_msg,
+    response_not_found,
+)
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
-from sqlalchemy.orm import Session
 
-from bafser import Image, ImageJson, get_json_values_from_req, jsonify_list, permission_required, response_msg, response_not_found, use_db_session, use_user
-from data._operations import Operations
-from data.tourney import Tourney
-from data.tourney_character import TourneyCharacter
-from data.user import User
+from data import Operations
+from data.tourney import Tourney, TurneyDict
+from data.tourney_character import TourneyCharacter, TourneyCharacterDict
 
-
-blueprint = Blueprint("tourney", __name__)
+bp = Blueprint("tourney", __name__)
+UD = Undefined.default
+U = Undefined.defined
 
 
-@blueprint.route("/api/tourney")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def tourney(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
-    return tourney.get_dict()
+@bp.route("/api/tourney")
+@doc_api(res=TurneyDict, desc="Get tourney")
+@protected_route(perms=Operations.manage_games)
+def tourney():
+    return Tourney.get2().get_dict()
 
 
-@blueprint.post("/api/tourney/nodes/<int:nodeId>")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def edit_node(nodeId, db_sess: Session, user: User):
+@bp.post("/api/tourney/nodes/<int:nodeId>")
+@doc_api(req=TJson["characterId", int], res=TurneyDict, desc="Edit tourney node")
+@protected_route(perms=Operations.manage_games)
+def edit_node(nodeId: int):
     characterId = get_json_values_from_req(("characterId", int))
 
-    tourney = Tourney.get(db_sess)
+    tourney = Tourney.get2()
     r = tourney.edit_node(nodeId, characterId)
     if not r:
         return response_not_found("node", nodeId)
@@ -38,29 +44,25 @@ def edit_node(nodeId, db_sess: Session, user: User):
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/third")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def set_third(db_sess: Session, user: User):
+@bp.post("/api/tourney/third")
+@doc_api(req=TJson["characterId", int], res=TurneyDict, desc="Edit third place")
+@protected_route(perms=Operations.manage_games)
+def set_third():
     characterId = get_json_values_from_req(("characterId", int))
 
-    tourney = Tourney.get(db_sess)
+    tourney = Tourney.get2()
     tourney.set_third(characterId)
 
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/start_game_at_node")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def start_game_at_node(db_sess: Session, user: User):
+@bp.post("/api/tourney/start_game_at_node")
+@doc_api(req=TJson["nodeId", int], res=TurneyDict, desc="Start game at node")
+@protected_route(perms=Operations.manage_games)
+def start_game_at_node():
     nodeId = get_json_values_from_req(("nodeId", int))
 
-    tourney = Tourney.get(db_sess)
+    tourney = Tourney.get2()
     r = tourney.start_game_at_node(nodeId)
     if r >= 0:
         return tourney.get_dict()
@@ -74,151 +76,142 @@ def start_game_at_node(db_sess: Session, user: User):
     return response_msg("err", 400)
 
 
-@blueprint.post("/api/tourney/select_next_game")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def select_next_game(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/select_next_game")
+@doc_api(res=TurneyDict, desc="Select next game node")
+@protected_route(perms=Operations.manage_games)
+def select_next_game():
+    tourney = Tourney.get2()
     tourney.select_next_game()
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/start_game")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def start_game(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/start_game")
+@doc_api(res=TurneyDict, desc="Start game at current node")
+@protected_route(perms=Operations.manage_games)
+def start_game():
+    tourney = Tourney.get2()
     r = tourney.start_game()
     if r >= 0:
         return tourney.get_dict()
 
     if r == -1:
         return response_msg("cur game not selected", 400)
-    if r == -2 or r == -2:
+    if r == -2 or r == -3:
         return response_msg(f"wrong cur game selected {r=}", 400)
     return response_msg("err", 400)
 
 
-@blueprint.post("/api/tourney/end_game")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def end_game(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/end_game")
+@doc_api(res=TurneyDict, desc="End current game")
+@protected_route(perms=Operations.manage_games)
+def end_game():
+    tourney = Tourney.get2()
     tourney.end_game()
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/show_pretourney")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def show_pretourney(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/show_pretourney")
+@doc_api(res=TurneyDict, desc="Show pretourney screen to players")
+@protected_route(perms=Operations.manage_games)
+def show_pretourney():
+    tourney = Tourney.get2()
     tourney.show_pretourney()
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/end_tourney")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def end_tourney(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/end_tourney")
+@doc_api(res=TurneyDict, desc="End tourney")
+@protected_route(perms=Operations.manage_games)
+def end_tourney():
+    tourney = Tourney.get2()
     tourney.end_tourney()
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/unend_tourney")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def unend_tourney(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/unend_tourney")
+@doc_api(res=TurneyDict, desc="Cancel tourney end")
+@protected_route(perms=Operations.manage_games)
+def unend_tourney():
+    tourney = Tourney.get2()
     tourney.unend_tourney()
     return tourney.get_dict()
 
 
-@blueprint.post("/api/tourney/reset")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def reset(db_sess: Session, user: User):
-    tourney = Tourney.get(db_sess)
+@bp.post("/api/tourney/reset")
+@doc_api(res=TurneyDict, desc="Full reset of tourney")
+@protected_route(perms=Operations.manage_games)
+def reset():
+    tourney = Tourney.get2()
     tourney.reset()
     return tourney.get_dict()
 
 
-@blueprint.route("/api/tourney/characters")
-@jwt_required()
-@use_db_session
-def characters(db_sess: Session):
-    characters = TourneyCharacter.all(db_sess)
-    return jsonify_list(characters)
+@bp.route("/api/tourney/characters")
+@doc_api(res=list[TourneyCharacterDict], desc="Get all tourney characters")
+@protected_route()
+def characters():
+    return jsonify_list(TourneyCharacter.all2())
 
 
-@blueprint.post("/api/tourney/characters")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def add_character(db_sess: Session, user: User):
-    name, color, img_data = get_json_values_from_req(("name", str), ("color", str), ("img", ImageJson))
+class TourneyCharacterJson(JsonObj):
+    name: str
+    color: str
+    img: ImageJson
 
-    img, image_error = Image.new(user, img_data)
+
+@bp.post("/api/tourney/characters")
+@doc_api(req=TourneyCharacterJson, res=TourneyCharacterDict, desc="Add tourney character")
+@protected_route(perms=Operations.manage_games)
+def add_character():
+    data = TourneyCharacterJson.get_from_req()
+
+    img, image_error = Image.new2(data.img)
     if image_error:
         return response_msg(image_error, 400)
     assert img
 
-    character = TourneyCharacter.new(user, name, color, img.id)
+    character = TourneyCharacter.new(data.name, data.color, img.id)
 
     return character.get_dict()
 
 
-@blueprint.post("/api/tourney/characters/<int:characterId>")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def store_item_patch(characterId, db_sess: Session, user: User):
-    name, color, img_data = get_json_values_from_req(("name", str, None), ("color", str, None), ("img", ImageJson, None))
+class TourneyCharacterEditJson(JsonObj):
+    name: JsonOpt[str]
+    color: JsonOpt[str]
+    img: JsonOpt[ImageJson]
 
-    character = TourneyCharacter.get(db_sess, characterId)
+
+@bp.post("/api/tourney/characters/<int:characterId>")
+@doc_api(req=TourneyCharacterEditJson, res=TourneyCharacterDict, desc="Edit tourney character")
+@protected_route(perms=Operations.manage_games)
+def edit_character(characterId: int):
+    data = TourneyCharacterEditJson.get_from_req()
+
+    character = TourneyCharacter.get2(characterId)
     if character is None:
         return response_not_found("tourneyCharacter", characterId)
 
     imgId = None
-    if img_data is not None:
-        img, image_error = Image.new(user, img_data)
+    if U(data.img):
+        img, image_error = Image.new2(data.img)
         if image_error:
             return response_msg(image_error, 400)
         assert img
         imgId = img.id
 
-    character.update(user, name, color, imgId)
+    character.update(UD(data.name), UD(data.color), imgId)
 
     return character.get_dict()
 
 
-@blueprint.delete("/api/tourney/characters/<int:characterId>")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.manage_games)
-def delete_character(characterId, db_sess: Session, user: User):
-    character = TourneyCharacter.get(db_sess, characterId)
+@bp.delete("/api/tourney/characters/<int:characterId>")
+@doc_api(desc="Delete tourney character")
+@protected_route(perms=Operations.manage_games)
+def delete_character(characterId: int):
+    character = TourneyCharacter.get2(characterId)
     if character is None:
         return response_not_found("tourneyCharacter", characterId)
 
-    character.delete(user)
+    character.delete2()
 
     return response_msg("ok")

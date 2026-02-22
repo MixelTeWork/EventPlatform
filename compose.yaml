@@ -1,52 +1,88 @@
 services:
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    networks:
+      - public
+      - app
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - frontend-build:/usr/share/nginx/html:ro
+
   server:
     build:
       context: .
       args:
-        PUBLIC_URL: http://localhost:3000/
-    ports:
-      - 5000:80
+        PUBLIC_URL: http://localhost/
+    restart: unless-stopped
+    # ports:
+    #   - 5000:8000
+    expose:
+      - "8000"
+    networks:
+      - app
+      - data
     volumes:
       - data:/app/storage
+      - frontend-build:/frontend-build
     environment:
-      - API_SECRET_KEY=${API_SECRET_KEY}
-      - ADMINPWD=${ADMINPWD}
-      - DBPATH=root:${DBPWD}@db:3306/default
-      - DBDASHBOARDPATH=mysql+pymysql://root:${DBPWD}@db:3306/dashboard
+      - API_SECRET_KEY=${API_SECRET_KEY?:}
+      - ADMINPWD=${ADMINPWD?:}
+      - DBPATH=app:${DBPWD?:}@db:3306/default
+      - DBDASHBOARDPATH=mysql+pymysql://app:${DBPWD}@db:3306/dashboard
     depends_on:
       db:
         condition: service_healthy
 
+  # migrate:  # If server is in multiple replicas remove migration in server and use this (docker compose run --rm migrate)
+  #   build: .
+  #   command: python main.py --setup
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+
   db:
     image: mysql:8.4
-    # command: --mysql-native-password=ON --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    entrypoint:
-      sh -c "
-        echo 'CREATE DATABASE IF NOT EXISTS dashboard;' > /docker-entrypoint-initdb.d/init.sql;
-        /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-      "
-    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
     secrets:
       - db-password
     volumes:
       - db-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
     environment:
-      - MYSQL_DATABASE=default
-      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
-      # - MYSQL_ROOT_PASSWORD=strong_password
+      MYSQL_DATABASE: default
+      MYSQL_USER: app
+      MYSQL_PASSWORD_FILE: /run/secrets/db-password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-password
     expose:
       - 3306
+    networks:
+      - data
     healthcheck:
       test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 --password="$$(cat /run/secrets/db-password)" --silent']
-      interval: 3s
+      interval: 5s
       retries: 5
       start_period: 45s
 
 volumes:
   db-data:
   data:
+  frontend-build:  # to share build between server and nginx
 
 secrets:
   db-password:
     # file: db/password.txt
     environment: DBPWD
+
+networks:
+  public:
+  app:
+    internal: true
+  data:
+    internal: true

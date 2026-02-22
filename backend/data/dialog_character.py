@@ -1,13 +1,12 @@
 from datetime import datetime
-from typing import Optional, override
+from typing import Optional, TypedDict, override
 
+from bafser import Image, Log, ObjMixin, SqlAlchemyBase, UserBase
 from flask import url_for
 from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.orm import Session, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from bafser import SqlAlchemyBase, UserBase, Log, ObjMixin, Image
-from data._tables import Tables
-from data.user import User
+from data import Tables, User
 
 
 class DialogCharacter(SqlAlchemyBase, ObjMixin):
@@ -17,41 +16,27 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
     imgId: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.Image}.id"), default=None)
     orien: Mapped[int] = mapped_column(Integer, default=0)
 
-    image: Mapped["Image"] = relationship(init=False)
+    image: Mapped["Image | None"] = relationship(init=False, lazy="joined")
 
     @staticmethod
-    def new(creator: User, name: str, imgId: int, orien: int):
-        db_sess = Session.object_session(creator)
-        assert db_sess
+    def new(name: str, imgId: int, orien: int, *, creator: User | None = None):
         character = DialogCharacter(name=name, imgId=imgId, orien=orien)
-        db_sess.add(character)
-
-        Log.added(character, creator, [
-            ("name", character.name),
-            ("imgId", character.imgId),
-            ("orien", character.orien),
-        ])
-
+        Log.added(character, creator)
         return character
 
-    def update(self, actor: User, name: str | None, imgId: int | None, orien: int | None):
-        changes = []
-
+    def update(self, name: str | None, imgId: int | None, orien: int | None, *, actor: User | None = None):
         if name is not None:
-            changes.append(("name", self.name, name))
             self.name = name
 
         if imgId is not None:
-            changes.append(("imgId", self.imgId, imgId))
             if self.image is not None:
-                self.image.delete(actor)
+                self.image.delete2(actor=actor)
             self.imgId = imgId
 
         if orien is not None:
-            changes.append(("orien", self.orien, orien))
             self.orien = orien
 
-        Log.updated(self, actor, changes)
+        Log.updated(self, actor)
 
     @override
     def _on_delete(self, db_sess: Session, actor: UserBase, now: datetime, commit: bool) -> bool:
@@ -66,10 +51,17 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
                 self.imgId = None
         return True
 
-    def get_dict(self):
+    def get_dict(self) -> "DialogCharacterDict":
         return {
             "id": self.id,
             "name": self.name,
             "img": url_for("images.img", imgId=self.imgId),
             "orien": self.orien,
         }
+
+
+class DialogCharacterDict(TypedDict):
+    id: int
+    name: str
+    img: str
+    orien: int

@@ -1,10 +1,8 @@
-from typing import Any, Optional, override
+from typing import Any, Optional, TypedDict, override
 
+from bafser import BigIdMixin, Log, RoleDict, UserBase, UserKwargs
 from sqlalchemy import String
-from sqlalchemy.orm import Session, Mapped, mapped_column
-
-from bafser import UserBase, Log, UserKwargs
-from utils import BigIdMixin
+from sqlalchemy.orm import Mapped, Session, mapped_column
 
 
 class User(UserBase, BigIdMixin):
@@ -19,10 +17,9 @@ class User(UserBase, BigIdMixin):
     @classmethod
     @override
     def _new(cls, db_sess: Session, user_kwargs: UserKwargs, *, balance: int = 0, **kwargs: Any):
-        user = User(**user_kwargs)
-        user.set_unique_big_id(db_sess)
-        changes = [("balance", 0)]
-        return user, changes
+        user = User(**user_kwargs, balance=balance)
+        user.set_unique_big_id(db_sess=db_sess)
+        return user
 
     def set_group(self, group: int):
         if group not in (0, 1, 2):
@@ -30,36 +27,32 @@ class User(UserBase, BigIdMixin):
         if self.group == group:
             return group
 
-        old_group = self.group
         self.group = group
-        Log.updated(self, self, [("group", old_group, group)])
-
+        Log.updated(self, self)
         return group
 
     def get_complited_quests(self):
         from data.quest import Quest
         from data.user_quest import UserQuest
-        db_sess = Session.object_session(self)
-        assert db_sess
-        quests = Quest.query(db_sess)\
-            .join(UserQuest, UserQuest.questId == Quest.id)\
-            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
+
+        return (
+            Quest.query(self.db_sess)
+            .join(UserQuest, UserQuest.questId == Quest.id)
+            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)
             .all()
+        )
 
-        return quests
-
-    def get_complited_quest_ids(self):
+    def get_complited_quest_ids(self) -> list[int]:
         from data.user_quest import UserQuest
-        db_sess = Session.object_session(self)
-        assert db_sess
-        quests = db_sess\
-            .query(UserQuest)\
-            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)\
-            .values(UserQuest.questId)
 
-        return list(map(lambda v: v[0], quests))
+        return [
+            v[0]
+            for v in self.db_sess.query(UserQuest)
+            .filter(UserQuest.userId == self.id, UserQuest.completeDate != None)
+            .with_entities(UserQuest.questId)
+        ]
 
-    def get_dict(self):  # pyright: ignore[reportIncompatibleMethodOverride]
+    def get_dict(self) -> "UserDict":  # pyright: ignore[reportIncompatibleMethodOverride]
         return {
             "id": self.id_big,
             "name": self.name,
@@ -73,7 +66,7 @@ class User(UserBase, BigIdMixin):
             "ticketTId": self.ticketTId,
         }
 
-    def get_dict_full(self):  # pyright: ignore[reportIncompatibleMethodOverride]
+    def get_dict_full(self) -> "UserFullDict":  # pyright: ignore[reportIncompatibleMethodOverride]
         return {
             "id": self.id,
             "id_big": self.id_big,
@@ -89,3 +82,32 @@ class User(UserBase, BigIdMixin):
             "gameOpened": self.gameOpened,
             "ticketTId": self.ticketTId,
         }
+
+
+class UserDict(TypedDict):
+    id: str
+    name: str
+    last_name: str | None
+    photo: str | None
+    balance: int
+    roles: list[str]
+    operations: list[str]
+    group: int
+    gameOpened: bool
+    ticketTId: int | None
+
+
+class UserFullDict(TypedDict):
+    id: int
+    id_big: str
+    login: str
+    name: str
+    last_name: str | None
+    photo: str | None
+    balance: int
+    roles: list[RoleDict]
+    deleted: bool
+    operations: list[str]
+    group: int
+    gameOpened: bool
+    ticketTId: int | None

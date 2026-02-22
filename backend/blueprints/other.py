@@ -1,51 +1,38 @@
+from bafser import TJson, doc_api, get_json_values_from_req, protected_route, use_db_sess
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from bafser import get_json_values_from_req, permission_required, use_db_session, use_user
-from data._operations import Operations
+from data import Operations, User
 from data.other import Other
-from data.user import User
 from data.user_quest import UserQuest
-
 
 blueprint = Blueprint("other", __name__)
 
 
 @blueprint.route("/api/other/ticketLoginEnabled")
-@use_db_session
-def startStr(db_sess: Session):
-    obj = Other.get(db_sess)
+@doc_api(res=TJson["value", bool])
+def startStr():
+    obj = Other.get2()
     return {"value": obj.ticketLoginEnabled}
 
 
 @blueprint.post("/api/other/ticketLoginEnabled")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.site_config)
-def set_startStr(db_sess: Session, user: User):
+@doc_api(req=TJson["value", bool], res=TJson["value", bool])
+@protected_route(perms=Operations.site_config)
+def set_startStr():
     value = get_json_values_from_req(("value", bool))
-    Other.set_ticketLoginEnabled(db_sess, value)
+    Other.set_ticketLoginEnabled(value)
     return {"value": value}
 
 
 @blueprint.route("/api/other/stats")
-@jwt_required()
-@use_db_session
-@use_user()
-@permission_required(Operations.page_stats)
-def stats(db_sess: Session, user: User):
-    data_completed = (db_sess
-                      .query(User.group, func.count(UserQuest.completeDate))
-                      .join(User, User.id == UserQuest.userId)
-                      .group_by(User.group)
-                      .all())
-    data_members = (db_sess
-                    .query(User.group, func.count(User.id))
-                    .group_by(User.group)
-                    .all())
+@doc_api(res=TJson["group1_completed", int, "group1_members", int, "group2_completed", int, "group2_members", int])
+@protected_route(perms=Operations.page_stats)
+@use_db_sess
+def stats(db_sess: Session):
+    data_completed = db_sess.query(User.group, func.count(UserQuest.completeDate)).join(User, User.id == UserQuest.userId).group_by(User.group).all()
+    data_members = db_sess.query(User.group, func.count(User.id)).group_by(User.group).all()
     r = {
         "group1_completed": 0,
         "group1_members": 0,

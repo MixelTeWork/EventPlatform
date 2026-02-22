@@ -1,18 +1,40 @@
 import logging
+from typing import TypedDict
+
+from bafser import SingletonMixin, SqlAlchemyBase
 from sqlalchemy import JSON
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, Session, mapped_column
 from sqlalchemy.orm.attributes import flag_modified
 
-from bafser import SqlAlchemyBase, SingletonMixin
-from data._tables import Tables
+from data import Tables
 from data.game import Game
 from data.tourney_character import TourneyCharacter
+
+
+class TreeNodeDict(TypedDict):
+    id: int
+    characterId: int
+    left: "TreeNodeDict | None"
+    right: "TreeNodeDict | None"
+
+
+class TurneyData(TypedDict):
+    tree: TreeNodeDict
+    third: int
+
+
+class TurneyDict(TypedDict):
+    tree: TreeNodeDict
+    third: int
+    curGameNodeId: int
+    showGame: bool
+    ended: bool
 
 
 class Tourney(SqlAlchemyBase, SingletonMixin):
     __tablename__ = Tables.Tourney
 
-    data: Mapped[dict] = mapped_column(JSON, init=False)
+    data: Mapped[TurneyData] = mapped_column(JSON, init=False)
     curGameNodeId: Mapped[int] = mapped_column(default=-1)
     showGame: Mapped[bool] = mapped_column(default=False)
     ended: Mapped[bool] = mapped_column(default=False)
@@ -30,15 +52,13 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         return winner1, winner2, winner3
 
     def gen_new_tree(self):
-        db_sess = Session.object_session(self)
-        assert db_sess
-        characters = TourneyCharacter.all(db_sess)
+        characters = TourneyCharacter.all(self.db_sess)
         if len(characters) == 0:
             return
 
         child_nodes = [tree_node(i, ch.id) for i, ch in enumerate(characters)]
         last_id = child_nodes[-1]["id"]
-        parent_nodes = []
+        parent_nodes: list[TreeNodeDict] = []
         while len(child_nodes) != 1:
             while len(child_nodes) > 0:
                 last_id += 1
@@ -53,7 +73,7 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         self.data["tree"] = child_nodes.pop()
         self.data["third"] = -1
         flag_modified(self, "data")
-        db_sess.commit()
+        self.db_sess.commit()
         logging.info("gen_new_tree")
 
     def edit_node(self, node_id: int, characterId: int):
@@ -108,11 +128,11 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         db_sess = Session.object_session(self)
         assert db_sess
 
-        nodes = []
+        nodes: list[TreeNodeDict] = []
         next_nodes = [self.data["tree"]]
         while any(n["characterId"] == -1 for n in next_nodes):
             nodes = next_nodes
-            next_nodes = []
+            next_nodes: list[TreeNodeDict] = []
             for node in nodes:
                 if node["left"]:
                     next_nodes.append(node["left"])
@@ -151,7 +171,7 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         winner = Game.end_game(db_sess)
         node = find_node(self.data["tree"], self.curGameNodeId)
         err, oponent1Id, oponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
-        if err >= 0 and (winner == oponent1Id or winner == oponent2Id):
+        if err >= 0 and winner is not None:
             if self.curGameNodeId == -3:
                 self.data["third"] = winner
             elif node:
@@ -196,7 +216,7 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         Game.reset(db_sess)
         logging.info("reset")
 
-    def get_dict(self):
+    def get_dict(self) -> "TurneyDict":
         return {
             "tree": self.data["tree"],
             "third": self.data["third"],
@@ -206,7 +226,7 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         }
 
 
-def tree_node(id: int, characterId=-1, left=None, right=None):
+def tree_node(id: int, characterId: int = -1, left: TreeNodeDict | None = None, right: TreeNodeDict | None = None) -> TreeNodeDict:
     return {
         "id": id,
         "characterId": characterId,
@@ -215,7 +235,7 @@ def tree_node(id: int, characterId=-1, left=None, right=None):
     }
 
 
-def find_node(tree, id: int):
+def find_node(tree: TreeNodeDict, id: int) -> TreeNodeDict | None:
     if tree["id"] == id:
         return tree
     if tree["left"]:
@@ -227,7 +247,7 @@ def find_node(tree, id: int):
     return None
 
 
-def get_not_winner(tree):
+def get_not_winner(tree: TreeNodeDict):
     if not tree or tree["characterId"] == -1:
         return -1
     left = tree["left"]
@@ -239,7 +259,7 @@ def get_not_winner(tree):
     return left["characterId"]
 
 
-def get_opponents_by_node_id(tree, node_id: int):
+def get_opponents_by_node_id(tree: TreeNodeDict, node_id: int):
     if node_id != -3 and node_id < 0:
         return -1, -1, -1
 
@@ -270,7 +290,7 @@ def get_opponents_by_node_id(tree, node_id: int):
     return 0, left, right
 
 
-INIT_DATA = {
+INIT_DATA: TurneyData = {
     "tree": tree_node(1),
     "third": -1,
 }

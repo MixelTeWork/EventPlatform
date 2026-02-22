@@ -1,11 +1,11 @@
 import os
+
+from bafser import AppConfig, randstr
 from sqlalchemy.orm import Session
-from bafser import AppConfig, Log, get_datetime_now, randstr
 
 from data.dialog import Dialog
 from data.game import Game
 from data.other import Other
-from data.quest import Quest
 from data.tourney import Tourney
 from data.user import User
 
@@ -16,8 +16,8 @@ def init_db(db_sess: Session, config: AppConfig):
     Other.get(db_sess)
     Game.get(db_sess)
     Tourney.get(db_sess)
-    Dialog.new(user_system, {"nodes": []}, 1, db_sess=db_sess)
-    Dialog.new(user_system, {"nodes": []}, 2, db_sess=db_sess)
+    Dialog.new({"nodes": []}, id=1, db_sess=db_sess, creator=user_system)
+    Dialog.new({"nodes": []}, id=2, db_sess=db_sess, creator=user_system)
 
     # quests = [
     #     (1, "Чудик в углу"),
