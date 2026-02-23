@@ -8,6 +8,7 @@ class Roles(RolesBase):
     manager = 3
     staff = 4
     visitor = 5
+    game_master = 6
 
 
 Roles.ROLES = {
@@ -18,6 +19,13 @@ Roles.ROLES = {
             Operations.manage_store,
             Operations.manage_quest,
             Operations.site_config,
+        ]
+    },
+    Roles.game_master: {
+        "name": "Game Master",
+        "operations": [
+            Operations.page_staff,
+            Operations.manage_games,
         ]
     },
     Roles.manager: {
@@ -34,7 +42,6 @@ Roles.ROLES = {
             Operations.page_staff_store,
             Operations.page_stats,
             Operations.send_any,
-            Operations.manage_games,
         ]
     },
     Roles.visitor: {
