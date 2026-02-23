@@ -14,7 +14,7 @@ from data.user_game import UserGame
 class GameLog(SqlAlchemyBase, IdMixin):
     __tablename__ = Tables.GameLog
 
-    startStr: Mapped[str] = mapped_column(String(8))
+    startStr: Mapped[str] = mapped_column(String(16))
     duration: Mapped[int]
     countdown: Mapped[int]
     opponent1Id: Mapped[Optional[int]]

@@ -8,7 +8,7 @@ import clsx from "@/utils/clsx";
 export default function InputImage({ className, curImg, imgData, width, aspectRatio }: {
 	imgData: StateObj<ImgData | null>,
 	className?: string,
-	curImg?: string,
+	curImg?: string | null,
 	width?: string,
 	aspectRatio?: string
 })

@@ -7,11 +7,11 @@ export default function usePreloadGameDialogImgs()
 	useEffect(() =>
 	{
 		if (!characters.data) return;
-		const els = Object.values(characters.data).map(v =>
+		const els = Object.values(characters.data).filter(v => !!v.img).map(v =>
 		{
 			const el = document.createElement("link");
 			el.rel = "preload";
-			el.href = v.img;
+			el.href = v.img!;
 			el.as = "image";
 			document.head.appendChild(el);
 			return el;

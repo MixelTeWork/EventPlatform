@@ -106,7 +106,7 @@ class Tourney
 			this.characters.forEach(ch =>
 			{
 				const img = new Image();
-				img.src = ch.img;
+				img.src = ch.img || SINGLE_TRANSPARENT_PIXEL;
 				characters[ch.id] = { ...ch, img };
 			});
 			this.tree = new Tree(this.state, characters);
@@ -187,6 +187,7 @@ class Tourney
 		this.draw();
 	}
 }
+const SINGLE_TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAEElEQVR4AQEFAPr/AAAAAAAABQABZHiVOAAAAABJRU5ErkJggg==";
 
 
 const tourney = new Tourney();

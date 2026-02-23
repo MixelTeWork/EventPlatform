@@ -55,7 +55,7 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
         return {
             "id": self.id,
             "name": self.name,
-            "img": url_for("images.img", imgId=self.imgId),
+            "img": url_for("images.img", imgId=self.imgId) if self.imgId else None,
             "orien": self.orien,
         }
 
@@ -63,5 +63,5 @@ class DialogCharacter(SqlAlchemyBase, ObjMixin):
 class DialogCharacterDict(TypedDict):
     id: int
     name: str
-    img: str
+    img: str | None
     orien: int

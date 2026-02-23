@@ -1,8 +1,8 @@
 """v1
 
-Revision ID: 89b85bc88ddb
+Revision ID: 9f8b80cda65d
 Revises: 
-Create Date: 2025-08-19 00:23:47.156973
+Create Date: 2026-02-23 13:58:41.624429
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '89b85bc88ddb'
+revision: str = '9f8b80cda65d'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -30,7 +30,7 @@ def upgrade() -> None:
     mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('GameLog',
-    sa.Column('startStr', sa.String(length=8), nullable=False),
+    sa.Column('startStr', sa.String(length=16), nullable=False),
     sa.Column('duration', sa.Integer(), nullable=False),
     sa.Column('countdown', sa.Integer(), nullable=False),
     sa.Column('opponent1Id', sa.Integer(), nullable=True),
@@ -42,6 +42,14 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_GameLog')),
     sa.UniqueConstraint('id', name=op.f('uq_GameLog_id')),
+    mysql_charset='utf8mb4',
+    mysql_collate='utf8mb4_unicode_ci'
+    )
+    op.create_table('GameStartTime',
+    sa.Column('startStr', sa.String(length=16), nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_GameStartTime')),
+    sa.UniqueConstraint('id', name=op.f('uq_GameStartTime_id')),
     mysql_charset='utf8mb4',
     mysql_collate='utf8mb4_unicode_ci'
     )
@@ -297,7 +305,7 @@ def upgrade() -> None:
     mysql_collate='utf8mb4_unicode_ci'
     )
     op.create_table('Game',
-    sa.Column('startStr', sa.String(length=8), nullable=False),
+    sa.Column('startStr', sa.String(length=16), nullable=False),
     sa.Column('duration', sa.Integer(), nullable=False),
     sa.Column('countdown', sa.Integer(), nullable=False),
     sa.Column('opponent1Id', sa.Integer(), nullable=True),
@@ -355,6 +363,7 @@ def downgrade() -> None:
     op.drop_table('Other')
     op.drop_table('Operation')
     op.drop_table('Log')
+    op.drop_table('GameStartTime')
     op.drop_table('GameLog')
     op.drop_table('Dialog')
     # ### end Alembic commands ###

@@ -24,8 +24,7 @@ def init_dev_values(db_sess: Session, config: AppConfig):
 
     now = get_datetime_now()
     os.makedirs(bafser_config.images_folder, exist_ok=True)
-    for i, ext in enumerate(["jpeg", "jpeg", "png", "png", "png"]):
-        id = i + 1
+    for id, ext in enumerate(["jpeg", "jpeg", "png", "png", "png"], start=1):
         shutil.copy(f"scripts/dev_init_data/{id}.{ext}", f"{bafser_config.images_folder}/{id}.{ext}")
         img = Image(name=f"img{id}", type=ext, creationDate=now, createdById=user_admin.id)
         img.id = id
@@ -34,11 +33,11 @@ def init_dev_values(db_sess: Session, config: AppConfig):
     character1 = DialogCharacter.new("Ярик Всемогущий", 1, 1, creator=user_admin)
     character2 = DialogCharacter.new("Альвер Шухтен", 2, 1, creator=user_admin)
 
-    TourneyCharacter.new("Ярик Всемогущий", "#ae00ff", creator=user_admin)
-    TourneyCharacter.new("Альвер Шухтен", "#00ccff", creator=user_admin)
-    TourneyCharacter.new("Курита Мален", "#ffae00", creator=user_admin)
-    TourneyCharacter.new("Суль Минохон", "#00ff1e", creator=user_admin)
-    TourneyCharacter.new("Минь Сулёхен", "#ff0000", creator=user_admin)
+    TourneyCharacter.new("Ярик Всемогущий", "#ae00ff", imgId=1, creator=user_admin)
+    TourneyCharacter.new("Альвер Шухтен", "#00ccff", imgId=2, creator=user_admin)
+    TourneyCharacter.new("Курита Мален", "#ffae00", imgId=3, creator=user_admin)
+    TourneyCharacter.new("Суль Минохон", "#00ff1e", imgId=4, creator=user_admin)
+    TourneyCharacter.new("Минь Сулёхен", "#ff0000", imgId=5, creator=user_admin)
     for i in range(16 - 5):
         seed(i + 7)
         TourneyCharacter.new(f"Бот #{i + 1}", f"#{randint(0, 16777215):x}", 5, creator=user_admin)

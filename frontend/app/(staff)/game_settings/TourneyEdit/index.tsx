@@ -59,7 +59,7 @@ function CharacterIcon({ character, textNA = "N/A" }: { character: TourneyCharac
 {
 	return (
 		<span className={styles.characterName}>
-			{character ? <img src={character.img} alt={character.name} /> : <div></div>}
+			{character?.img ? <img src={character.img} alt={character.name} /> : <div></div>}
 			<span>{character?.name ?? textNA}</span>
 		</span>
 	);
@@ -179,7 +179,7 @@ function TreeNodeData({ characters, characterIdTree, editNode, collapse, start }
 	return (
 		<div className={styles.nodeData} onClick={collapse ?? undefined}>
 			{character ? <div>
-				<img src={character.img} alt={character.name} />
+				{character.img ? <img src={character.img} alt={character.name} /> : <div></div>}
 				<span>{character.name}</span>
 			</div> : <div>
 				<div></div>
@@ -243,7 +243,7 @@ function ThirdPlaceMiniNode({ character }: { character: TourneyCharacter | undef
 		<div className={styles.node}>
 			<div className={styles.nodeData}>
 				{character ? <div>
-					<img src={character.img} alt={character.name} />
+					{character.img ? <img src={character.img} alt={character.name} /> : <div></div>}
 					<span>{character.name}</span>
 				</div> : <div>
 					<div></div>

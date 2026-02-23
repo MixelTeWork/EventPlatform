@@ -8,6 +8,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from data import Tables
 from data.game import Game
+from data.game_start_time import GameStartTime
 from data.tourney_character import TourneyCharacter
 
 
@@ -29,6 +30,8 @@ class TurneyDict(TypedDict):
     curGameNodeId: int
     showGame: bool
     ended: bool
+    games: int
+    played: int
 
 
 class Tourney(SqlAlchemyBase, SingletonMixin):
@@ -165,10 +168,11 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         return 0
 
     def end_game(self):
-        db_sess = Session.object_session(self)
-        assert db_sess
+        _, played = get_torney_info(self.data)
+        start_times = GameStartTime.get_all()
+        new_start_time = start_times[played + 1] if played + 1 < len(start_times) else None
 
-        winner = Game.end_game(db_sess)
+        winner = Game.end_game(self.db_sess, new_start_time)
         node = find_node(self.data["tree"], self.curGameNodeId)
         err, oponent1Id, oponent2Id = get_opponents_by_node_id(self.data["tree"], self.curGameNodeId)
         if err >= 0 and winner is not None:
@@ -179,8 +183,10 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
             flag_modified(self, "data")
 
         self.showGame = False
-        db_sess.commit()
+        self.db_sess.commit()
         logging.info(f"end_game {winner=} {err=} {oponent1Id=} {oponent2Id=}")
+        if self.data["tree"]["characterId"] != -1:
+            self.end_tourney()
 
     def show_pretourney(self):
         db_sess = Session.object_session(self)
@@ -217,12 +223,15 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         logging.info("reset")
 
     def get_dict(self) -> "TurneyDict":
+        games, played = get_torney_info(self.data)
         return {
             "tree": self.data["tree"],
             "third": self.data["third"],
             "curGameNodeId": self.curGameNodeId,
             "showGame": self.showGame,
             "ended": self.ended,
+            "games": games,
+            "played": played,
         }
 
 
@@ -288,6 +297,26 @@ def get_opponents_by_node_id(tree: TreeNodeDict, node_id: int):
         return -3, -1, -1
 
     return 0, left, right
+
+
+def get_torney_info(turney: TurneyData):
+    """Returns: (games count, played games)"""
+    games = 1
+    played = 0 if turney["third"] < 0 else 1
+
+    queue: list[TreeNodeDict] = [turney["tree"]]
+    while queue:
+        node = queue.pop(0)
+        if node["left"] and node["right"]:
+            games += 1
+            if node["characterId"] >= 0:
+                played += 1
+        if node["left"]:
+            queue.append(node["left"])
+        if node["right"]:
+            queue.append(node["right"])
+
+    return games, played
 
 
 INIT_DATA: TurneyData = {

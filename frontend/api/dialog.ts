@@ -23,7 +23,7 @@ export interface GameDialogCharacter
 {
 	id: number;
 	name: string;
-	img: string;
+	img: string | null;
 	orien: number;
 }
 export type GameDialogCharacterData = { [id: number]: GameDialogCharacter; };
