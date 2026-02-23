@@ -12,7 +12,7 @@ from data.user_game import UserGame
 class Game(SqlAlchemyBase, SingletonMixin):
     __tablename__ = Tables.Game
 
-    startStr: Mapped[str] = mapped_column(String(8), default="17:30")
+    startStr: Mapped[str] = mapped_column(String(16), default="17:30")
     duration: Mapped[int] = mapped_column(default="60")
     countdown: Mapped[int] = mapped_column(default="150")
     opponent1Id: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.TourneyCharacter}.id"), default=None)
@@ -58,16 +58,22 @@ class Game(SqlAlchemyBase, SingletonMixin):
         return -1
 
     @staticmethod
-    def end_game(db_sess: Session):
+    def end_game(db_sess: Session, new_start_time: str | None = None):
         game = Game.get(db_sess)
         game.showGame = False
         clicks = Game.get_clicks(db_sess)
         game.clicks1 = clicks.get("clicks1", 0)
         game.clicks2 = clicks.get("clicks2", 0)
+        already_ended = game.winner != 0
         game.winner = 1 if game.clicks1 > game.clicks2 else 2
         from data.log_game import GameLog
 
-        GameLog.create(db_sess)
+        if not already_ended:
+            GameLog.create(db_sess)
+
+        if new_start_time:
+            game.startStr = new_start_time
+
         db_sess.commit()
 
         if game.winner == 1:

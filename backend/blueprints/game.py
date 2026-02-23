@@ -1,9 +1,12 @@
-from bafser import TJson, doc_api, get_json_values_from_req, get_userId, protected_route, use_db_sess
+import logging
+
+from bafser import TJson, doc_api, get_json_values_from_req, get_userId, protected_route, use_db_sess, get_json_list_from_req
 from flask import Blueprint
 from sqlalchemy.orm import Session
 
 from data import Operations
 from data.game import Game, GameDict, GameState
+from data.game_start_time import GameStartTime
 
 bp = Blueprint("game", __name__)
 
@@ -24,6 +27,7 @@ def set_duration():
     game = Game.get2()
     game.duration = duration
     game.db_sess.commit()
+    logging.info(f"set {duration=}")
     return {"duration": game.duration}
 
 
@@ -43,6 +47,7 @@ def set_countdown():
     game = Game.get2()
     game.countdown = counter
     game.db_sess.commit()
+    logging.info(f"set {counter=}")
     return {"counter": game.countdown}
 
 
@@ -62,7 +67,25 @@ def set_startStr():
     game = Game.get2()
     game.startStr = startStr
     game.db_sess.commit()
+    logging.info(f"set {startStr=}")
     return {"startStr": game.startStr}
+
+
+@bp.route("/api/game/start_times")
+@doc_api(res=list[str])
+@protected_route(perms=Operations.manage_games)
+def start_times():
+    return GameStartTime.get_all()
+
+
+@bp.post("/api/game/start_times")
+@doc_api(req=list[str], res=list[str])
+@protected_route(perms=Operations.manage_games)
+def set_start_times():
+    start_times = get_json_list_from_req(str)
+    GameStartTime.update(start_times)
+    logging.info(f"set start_times=[{", ".join(start_times)}]")
+    return GameStartTime.get_all()
 
 
 @bp.route("/api/game/state")
