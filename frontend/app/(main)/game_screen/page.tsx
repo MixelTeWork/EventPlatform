@@ -54,11 +54,11 @@ export default function Page()
 				<div className={styles.bar}>
 					<div className={styles.barLeft} style={{ "--color": characterLeft?.color } as React.CSSProperties}>
 						<span>{characterLeft?.name}</span>
-						<div className={styles.bar__img}><img src={characterLeft?.img} alt={characterLeft?.name} /></div>
+						<div className={styles.bar__img}><img src={characterLeft?.img || SINGLE_TRANSPARENT_PIXEL} alt={characterLeft?.name} /></div>
 						<div className={styles.nums}></div>
 					</div>
 					<div className={styles.barRight} style={{ "--color": characterRight?.color } as React.CSSProperties}>
-						<div className={styles.bar__img}><img src={characterRight?.img} alt={characterRight?.name} /></div>
+						<div className={styles.bar__img}><img src={characterRight?.img || SINGLE_TRANSPARENT_PIXEL} alt={characterRight?.name} /></div>
 						<span>{characterRight?.name}</span>
 					</div>
 				</div>
@@ -83,6 +83,7 @@ export default function Page()
 		</div>
 	);
 }
+const SINGLE_TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAEElEQVR4AQEFAPr/AAAAAAAABQABZHiVOAAAAABJRU5ErkJggg==";
 
 function spawnRect(parent: HTMLDivElement)
 {
