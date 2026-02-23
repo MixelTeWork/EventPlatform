@@ -153,17 +153,17 @@ export default function GamePage()
 					<div className={styles.title2}>Турнир завершён!</div>
 					<div className={styles.tourney_winners}>
 						<Textbox small className={styles.tourney_winner}>
-							<img src={characterTourneyWinner1?.img} alt={characterTourneyWinner1?.name || "N/A"} />
+							<img src={characterTourneyWinner1?.img || SINGLE_TRANSPARENT_PIXEL} alt={characterTourneyWinner1?.name || "N/A"} />
 							<div>1 место</div>
 							<div>{characterTourneyWinner1?.name || "N/A"}</div>
 						</Textbox>
 						<Textbox small className={styles.tourney_winner}>
-							<img src={characterTourneyWinner2?.img} alt={characterTourneyWinner2?.name || "N/A"} />
+							<img src={characterTourneyWinner2?.img || SINGLE_TRANSPARENT_PIXEL} alt={characterTourneyWinner2?.name || "N/A"} />
 							<div>2 место</div>
 							<div>{characterTourneyWinner2?.name || "N/A"}</div>
 						</Textbox>
 						<Textbox small className={styles.tourney_winner}>
-							<img src={characterTourneyWinner3?.img} alt={characterTourneyWinner3?.name || "N/A"} />
+							<img src={characterTourneyWinner3?.img || SINGLE_TRANSPARENT_PIXEL} alt={characterTourneyWinner3?.name || "N/A"} />
 							<div>3 место</div>
 							<div>{characterTourneyWinner3?.name || "N/A"}</div>
 						</Textbox>
@@ -173,6 +173,8 @@ export default function GamePage()
 		</StyledWindow>
 	</>);
 }
+const SINGLE_TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAEElEQVR4AQEFAPr/AAAAAAAABQABZHiVOAAAAABJRU5ErkJggg==";
+
 
 function animateBtnPress(el: HTMLElement)
 {
