@@ -86,3 +86,7 @@ button:disabled {
 ::-webkit-scrollbar-thumb {
 	background-color: gray;
 }
+
+b {
+	font-weight: bold;
+}

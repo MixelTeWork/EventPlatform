@@ -25,8 +25,8 @@ export default function Input<T extends React.HTMLInputTypeAttribute>({ classNam
 		ref={ref}
 		required={required}
 		type={type}
-		value={value || (typeof stateObj?.v == "boolean" ? undefined : stateObj?.v)}
-		checked={checked || (typeof stateObj?.v == "boolean" ? stateObj?.v : undefined)}
+		value={value ?? (typeof stateObj?.v == "boolean" ? undefined : stateObj?.v)}
+		checked={checked ?? (typeof stateObj?.v == "boolean" ? stateObj?.v : undefined)}
 		onChange={e =>
 		{
 			const value =

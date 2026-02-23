@@ -7,13 +7,16 @@
 	grid-template-columns: 15% 1fr auto;
 }
 
-.root img {
+.img {
 	width: 100%;
 	height: fit-content;
 	aspect-ratio: 9/16;
 	object-fit: cover;
 	border-radius: 0.25rem;
 	align-self: center;
+}
+div.img {
+	background: var(--img);
 }
 
 .body {

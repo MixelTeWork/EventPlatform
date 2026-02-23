@@ -54,7 +54,7 @@ class TourneyCharacter(SqlAlchemyBase, ObjMixin):
             "id": self.id,
             "name": self.name,
             "color": self.color,
-            "img": url_for("images.img", imgId=self.imgId),
+            "img": url_for("images.img", imgId=self.imgId) if self.imgId else None,
         }
 
 
@@ -62,4 +62,4 @@ class TourneyCharacterDict(TypedDict):
     id: int
     name: str
     color: str
-    img: str
+    img: str | None

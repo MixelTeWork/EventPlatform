@@ -39,7 +39,42 @@ export function useStateObjNull<S, T = S | null>(initialState: T | (() => T) = n
 	return { ...state, setNull: () => state.set(null as T) };
 }
 
+export function useStateList<T>(initialState: T[] | (() => T[]) = [] as T[], onSet?: (v: T[], pv: T[]) => void): StateList<T>
+{
+	const state = useStateObj(initialState, onSet);
+	return {
+		...state,
+		setI: (i, v) => state.set(old =>
+		{
+			const list = [...old];
+			list[i] = v;
+			return list;
+		}),
+		push: (v, i) => state.set(old =>
+		{
+			const list = [...old];
+			if (i != undefined) list.splice(i, 0, v);
+			else list.push(v);
+			return list;
+		}),
+		pop: (i) => state.set(old =>
+		{
+			const list = [...old];
+			if (i != undefined) list.splice(i, 1);
+			else list.pop();
+			return list;
+		}),
+	};
+}
+
 export interface StateObjNullable<S> extends StateObj<S>
 {
 	setNull: () => void,
+}
+
+export interface StateList<T> extends StateObj<T[]>
+{
+	setI: (i: number, v: T) => void,
+	push: (v: T, i?: number) => void,
+	pop: (i?: number) => void,
 }

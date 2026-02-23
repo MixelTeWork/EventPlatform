@@ -30,7 +30,7 @@ export default function DialogNode({ data, deleteNode, moveUp, addUp, moveDown, 
 
 	return (
 		<div className={styles.root}>
-			<img src={character?.img} alt={character?.name} />
+			{character?.img ? <img src={character.img} alt={character.name} className={styles.img} /> : <div className={styles.img}></div>}
 			<div className={styles.body}>
 				<Select className={styles.selectName} values={characters.data} item={it => it.name} stateObj={characterId} />
 				<textarea

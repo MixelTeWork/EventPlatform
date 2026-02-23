@@ -168,7 +168,7 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         return 0
 
     def end_game(self):
-        _, played = get_torney_info(self.data["tree"])
+        _, played = get_torney_info(self.data)
         start_times = GameStartTime.get_all()
         new_start_time = start_times[played + 1] if played + 1 < len(start_times) else None
 
@@ -185,6 +185,8 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         self.showGame = False
         self.db_sess.commit()
         logging.info(f"end_game {winner=} {err=} {oponent1Id=} {oponent2Id=}")
+        if self.data["tree"]["characterId"] != -1:
+            self.end_tourney()
 
     def show_pretourney(self):
         db_sess = Session.object_session(self)
@@ -221,7 +223,7 @@ class Tourney(SqlAlchemyBase, SingletonMixin):
         logging.info("reset")
 
     def get_dict(self) -> "TurneyDict":
-        games, played = get_torney_info(self.data["tree"])
+        games, played = get_torney_info(self.data)
         return {
             "tree": self.data["tree"],
             "third": self.data["third"],
@@ -297,12 +299,12 @@ def get_opponents_by_node_id(tree: TreeNodeDict, node_id: int):
     return 0, left, right
 
 
-def get_torney_info(tree: TreeNodeDict):
+def get_torney_info(turney: TurneyData):
     """Returns: (games count, played games)"""
-    games = 0
-    played = 0
+    games = 1
+    played = 0 if turney["third"] < 0 else 1
 
-    queue: list[TreeNodeDict] = [tree]
+    queue: list[TreeNodeDict] = [turney["tree"]]
     while queue:
         node = queue.pop(0)
         if node["left"] and node["right"]:

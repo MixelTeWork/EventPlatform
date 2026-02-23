@@ -6,24 +6,26 @@ import type { UseMutationResult } from "@tanstack/react-query";
 import Popup from "@/components/Popup";
 import Button from "@sCmps/Button";
 
-export default function ConfirmingButton({ text, bt, rt, disabled, className, mutation }: {
+export default function ConfirmingButton({ text, btnText, bt, rt, disabled, className, mutation, onSuccess }: {
 	text: string,
+	btnText?: React.ReactNode,
 	bt: string,
 	rt: string,
 	disabled?: boolean,
 	className?: string | false,
 	mutation: (onSuccess?: () => void, onError?: (err: unknown) => void) => UseMutationResult<unknown, unknown, void, unknown>
+	onSuccess?: () => void,
 })
 {
 	const popupOpen = useStateBool(false);
 	const popupOpen2 = useStateBool(false);
 	const err = useStateObjNull();
 
-	const mutate = mutation(popupOpen2.setT, err.set)
+	const mutate = mutation(() => { popupOpen2.setT(); onSuccess?.(); }, err.set)
 
 	return <>
 		{mutate.isPending && <Spinner />}
-		<Button text={text} className={className || ""} onClick={popupOpen.setT} disabled={disabled} padding="0.4rem" calm />
+		<Button text={btnText || text} className={className || ""} onClick={popupOpen.setT} disabled={disabled} padding="0.4rem" calm />
 		<Popup openState={popupOpen} closeOnOutclick>
 			<h2>{text}?</h2>
 			<br />
@@ -31,7 +33,7 @@ export default function ConfirmingButton({ text, bt, rt, disabled, className, mu
 			{
 				popupOpen.setF();
 				mutate.mutate();
-			}}/>
+			}} />
 		</Popup>
 		<Popup openState={popupOpen2} closeOnOutclick>
 			<h2>{rt}</h2>

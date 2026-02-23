@@ -1,0 +1,41 @@
+.root {
+	--_color: var(--c-secondary);
+	position: relative;
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+	border: 1px solid var(--_color);
+	vertical-align: bottom;
+	margin-bottom: 0.1em;
+	text-align: center;
+}
+
+.root > :first-child {
+	font-size: 0.9em;
+	display: block;
+	transform: translateY(-0.1em);
+}
+
+.root > :last-child {
+	position: absolute;
+	width: max-content;
+	max-width: 200px;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	padding-top: 1em;
+	display: none;
+}
+.root:hover > :last-child {
+	display: block;
+}
+.root > :last-child span {
+	display: block;
+	background-color: rgba(from var(--_color) r g b / 0.2);
+	border: 1px solid var(--_color);
+	color: var(--color);
+	padding: 0.2em;
+	border-radius: 0.25em;
+	font-size: 0.9em;
+}

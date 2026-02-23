@@ -11,6 +11,8 @@ export interface TourneyData
 	curGameNodeId: number,
 	showGame: boolean,
 	ended: boolean,
+	games: number,
+	played: number,
 }
 
 export interface TreeNode
@@ -26,7 +28,7 @@ export interface TourneyCharacter
 	id: number,
 	name: string,
 	color: string,
-	img: string,
+	img: string | null,
 }
 
 const url = "/api/tourney"

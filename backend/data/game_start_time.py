@@ -12,12 +12,14 @@ class GameStartTime(SqlAlchemyBase, IdMixin):
 
     @staticmethod
     def get_all():
-        return [v.startStr for v in GameStartTime.query2().order_by(GameStartTime.id.desc())]
+        return [v.startStr for v in GameStartTime.query2().order_by(GameStartTime.id.asc())]
 
     @staticmethod
     def update(times: list[str]):
         GameStartTime.query2().delete()
         db_sess = get_db_session()
-        for v in times:
-            db_sess.add(GameStartTime(startStr=v))
+        for id, v in enumerate(times, start=1):
+            e = GameStartTime(startStr=v)
+            e.id = id
+            db_sess.add(e)
         db_sess.commit()

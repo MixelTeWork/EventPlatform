@@ -1,0 +1,74 @@
+.root {
+	display: inline-flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.btn {
+	position: relative;
+}
+.saved {
+	position: absolute;
+	left: 50%;
+	bottom: -80%;
+	transform: translateX(-50%);
+	font-size: 0.8rem;
+	opacity: 0;
+	user-select: none;
+	pointer-events: none;
+}
+.saved_visible {
+	animation: saved_visible 2.5s ease-in-out;
+}
+@keyframes saved_visible {
+	0% {
+		opacity: 0;
+		transform: translateX(-50%) scale(0.5);
+	}
+	5% {
+		opacity: 0.8;
+		transform: translateX(-50%) scale(1.2);
+	}
+	15% {
+		opacity: 0.8;
+		transform: translateX(-50%) scale(1);
+	}
+	75% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+.hint {
+	max-width: 270px;
+	font-family: var(--font-PTSans);
+	font-size: 0.8rem;
+	text-wrap-mode: wrap;
+	margin-bottom: 1rem;
+}
+
+.list {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.list > div {
+	display: grid;
+	grid-template-columns: 1.5em 5em;
+}
+
+.list > :last-child {
+	grid-column: 1/3;
+	margin-top: 1rem;
+}
+
+.confirm {
+	display: flex;
+	gap: 1rem;
+	justify-content: flex-end;
+}

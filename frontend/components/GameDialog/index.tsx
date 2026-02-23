@@ -102,7 +102,7 @@ function GameDialog({ data, characters, close }: {
 				<div className={styles.dialog}>
 					<img
 						className={clsx(styles.img, character.orien == 1 && styles.img_right, character.orien == 2 && styles.img_center)}
-						src={character.img}
+						src={character.img || SINGLE_TRANSPARENT_PIXEL}
 						alt={character.name}
 					/>
 					<div className={styles.dialog__title}>{character.name}</div>
@@ -125,3 +125,5 @@ function GameDialog({ data, characters, close }: {
 		</div>
 	);
 }
+
+const SINGLE_TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAEElEQVR4AQEFAPr/AAAAAAAABQABZHiVOAAAAABJRU5ErkJggg==";
