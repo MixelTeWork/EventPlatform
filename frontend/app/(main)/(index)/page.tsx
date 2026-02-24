@@ -5,9 +5,9 @@ import Image from "next/image";
 import useStateBool from "@/utils/useStateBool";
 import AuthByTicket from "./AuthByTicket";
 import useRedirectForAuthed from "@/utils/useRedirectForAuthed";
-import Textbox from "@mCmps/Textbox";
 import Title from "@mCmps/Title";
 import styles from "./page.module.css"
+import Textbox2 from "@mCmps/Textbox2";
 
 export default function Page()
 {
@@ -17,12 +17,12 @@ export default function Page()
 	return (
 		<div className={styles.root}>
 			<Link href="/auth" className={styles.auth} />
-			<div></div>
-			<Image className={styles.logo} src={logo} alt="Инди кон" />
+			<Title text="Underparty"  className={styles.title} />
+			<Image className={styles.logo} src={logo} alt="Underparty" priority />
 			<button onClick={authOpen.setT}>
-				<Textbox className={styles.btn} primary>
-					<Title text="Вход" className={styles.btn__text} />
-				</Textbox>
+				<Textbox2 primary>
+					<Title text="Вход" className={styles.btn} />
+				</Textbox2>
 			</button>
 
 			<AuthByTicket open={authOpen.v} />

@@ -12,6 +12,7 @@ import Textbox from "@mCmps/Textbox";
 import { characterById, useTourneyCharacters } from "@/api/tourney";
 import { useGameState, useMutationGameSelectTeam, useMutationSendClick } from "@/api/game";
 import GameDialogGame from "./GameDialogGame";
+import Textbox2 from "@mCmps/Textbox2";
 
 
 export default function GamePage()
@@ -96,13 +97,19 @@ export default function GamePage()
 		{displayError(state)}
 		{selectTeam.isPending && <Spinner />}
 		{displayError(selectTeam)}
-		<StyledWindow className={styles.window} title="game">
+		<StyledWindow className={styles.window} title="game" invisible>
 			{(state.isLoading || state.data?.state == "wait") && <>
 				<div className={styles.text}>
-					<div>
-						<span>Чтобы определить какой фандом лучший приходите на сцену</span>
+					{/* <div>
+						<span style={{ color: "red" }}>Чтобы определить какой фандом лучший приходите на сцену</span>
 						{state.data?.start && <span> в {state.data.start}</span>}
-					</div>
+					</div> */}
+					<Textbox2 primary>
+						<div style={{ padding: "1rem" }}>
+							<span style={{ color: "red" }}>Чтобы определить какой фандом лучший приходите на сцену</span>
+							{state.data?.start && <span> в {state.data.start}</span>}
+						</div>
+					</Textbox2>
 				</div>
 			</>}
 			{state.data?.team == 0 && (state.data?.state == "start" || state.data?.state == "going") ? <>

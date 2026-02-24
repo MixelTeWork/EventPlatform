@@ -7,7 +7,7 @@
 	height: 100dvh;
 	width: 100%;
 	gap: 2rem;
-	padding-bottom: 8rem;
+	padding: 8rem 0;
 }
 
 .auth {
@@ -25,10 +25,14 @@
 }
 
 .btn {
-	padding: 0.7em 6.4em;
+	padding: 1.1rem 6.4rem;
+	font-size: 2.2rem;
 }
-.btn__text {
-	font-size: 3rem;
+
+@media screen and (max-width: 500px) {
+	.btn {
+		padding: 1.1rem 2.4rem;
+	}
 }
 
 @media screen and (max-height: 400px) {

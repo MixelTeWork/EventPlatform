@@ -4,12 +4,13 @@ import btns from "./btns.png"
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 
-export default function StyledWindow({ children, footer, className, scrollUpdate, noPad=false, title="", onClose }: {
+export default function StyledWindow({ children, footer, className, scrollUpdate, noPad=false, invisible=false, title="", onClose }: {
 	title?: string,
 	footer?: React.ReactNode,
 	className?: string,
 	scrollUpdate?: unknown,
 	noPad?: boolean,
+	invisible?: boolean,
 	onClose?: () => void,
 } & React.PropsWithChildren)
 {
@@ -22,11 +23,11 @@ export default function StyledWindow({ children, footer, className, scrollUpdate
 	}, [scrollUpdate])
 
 	return (
-		<div className={clsx(styles.root, className)}>
-			<div className={styles.header}>
+		<div className={clsx(styles.root, className, invisible && styles.invisible)}>
+			{/* <div className={styles.header}>
 				<span>Indiecon.com/{title}</span>
 				<button onClick={onClose}><Image src={btns} alt="btns" /></button>
-			</div>
+			</div> */}
 			<div className={clsx(styles.content, noPad && styles.noPad)}>
 				<div className={styles.body}>
 					<div ref={contentRef}>

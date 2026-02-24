@@ -18,19 +18,20 @@ const font_PTSans = localFont({
 
 const font_ZeroCool = localFont({ src: "../fonts/ZeroCool.ttf", variable: "--font-ZeroCool", fallback: ["var(--font-PTSans)"], adjustFontFallback: false });
 const font_MFFRBL = localFont({ src: "../fonts/monsterfriendforerusbylya.otf", variable: "--font-MFFRBL", fallback: ["var(--font-PTSans)"], adjustFontFallback: false });
+const font_Undertale = localFont({ src: "../fonts/Undertale-Battle-Font.ttf", variable: "--font-Undertale", fallback: ["var(--font-PTSans)"], adjustFontFallback: false });
 
 const url = new URL(process.env.PUBLIC_URL || "");
 export const metadata: Metadata = {
 	metadataBase: url,
-	title: "ИНДИКОН: Reload",
-	description: "ИНДИКОН: Reload",
+	title: "Underparty",
+	description: "Самый-самый фестиваль по Undertale и Deltarune",
 	openGraph: {
 		url: url,
 	},
 };
 
 export const viewport: Viewport = {
-	themeColor: "#00042b",
+	themeColor: "#000000",
 }
 
 export default function RootLayout({
@@ -41,7 +42,7 @@ export default function RootLayout({
 {
 	return (
 		<html lang="en">
-			<body className={clsx(font_PTSans.variable, font_ZeroCool.variable, font_MFFRBL.variable)}>
+			<body className={clsx(font_PTSans.variable, font_ZeroCool.variable, font_MFFRBL.variable, font_Undertale.variable)}>
 				<MessageFromBackend />
 				<ReactQueryProvider>
 					<UserLoader />

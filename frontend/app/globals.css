@@ -23,17 +23,15 @@ body {
 	font-family: var(--font-PTSans), Arial, Helvetica, sans-serif;
 	font-size: 1rem;
 	--bcsize: 45px;
-	--blsize: 3px;
-	--bcolor: #000f33;
+	--blsize: 1px;
+	--bcolor: #370037;
 	--background:
-		radial-gradient(circle at 110% 95%, #000e2f, transparent 20%),
-		radial-gradient(circle at -10% 95%, #000e2f, transparent 20%),
-		linear-gradient(180deg, transparent 40%, #00164b 80%),
+		radial-gradient(circle at center, #000000dd, transparent 100%),
 		repeating-linear-gradient(90deg, transparent, transparent var(--bcsize), var(--bcolor) var(--bcsize), var(--bcolor) calc(var(--bcsize) + var(--blsize))),
 		repeating-linear-gradient(180deg, transparent, transparent var(--bcsize), var(--bcolor) var(--bcsize), var(--bcolor) calc(var(--bcsize) + var(--blsize))),
-		linear-gradient(0deg, #000e32, #000613);
+		#000;
 	--background-calm: linear-gradient(0deg, #000e32, #000613);
-	font-family: var(--font-ZeroCool), Arial, Helvetica, sans-serif;
+	font-family: var(--font-MFFRBL), Arial, Helvetica, sans-serif;
 	--color: #ccebff;
 	--c-back: #00042b;
 	--c-back-dark: #000000;
@@ -54,6 +52,18 @@ body {
 	--m-c-secondary-light: var(--c-secondary-light);
 	--m-c-trenary: var(--c-trenary);
 	--m-c-text: var(--c-text);
+
+	--color: #fff;
+	--c-back: #000;
+	--c-back-dark: #000;
+	--c-back-dim: #333;
+	--c-primary: #fff;
+	--c-primary-light: #fff;
+	--c-secondary: #000;
+	--c-secondary-dark: #000;
+	--c-secondary-light: #000;
+	--c-trenary: #fff;
+	--c-text: #fff;
 }
 
 a {

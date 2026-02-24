@@ -39,7 +39,8 @@
 	background-color: var(--c-back);
 	border: 3px solid var(--c-text);
 	border-radius: 4px;
-	box-shadow: 4px 4px 0 var(--c-secondary-dark);
+	/* box-shadow: 4px 4px 0 var(--c-secondary-dark); */
+	border-radius: 12px;
 }
 .item__img img {
 	border-radius: 1px;
@@ -55,11 +56,16 @@
 
 .item__desc {
 	flex-grow: 1;
-	background-color: var(--c-text);
-	border: 3px solid var(--c-back);
-	border-radius: 4px;
-	box-shadow: 4px 4px 0 var(--c-secondary-dark);
-	color: var(--c-back);
+	/* background-color: var(--c-text); */
+	/* border: 3px solid var(--c-back); */
+	/* border-radius: 4px; */
+	/* box-shadow: 4px 4px 0 var(--c-secondary-dark); */
+	/* color: var(--c-back); */
+	border-radius: 12px;
+	background-color: var(--c-back);
+	border: 3px solid var(--c-text);
+	font-family: var(--font-Undertale);
+	transform: translateY(-10px);
 }
 
 .item__desc__inner {

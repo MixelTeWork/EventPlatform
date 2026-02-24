@@ -12,6 +12,7 @@ import Spinner from "@/components/Spinner";
 import displayError from "@/utils/displayError";
 import Link from "next/link";
 import styles from "./page.module.css"
+import Textbox2 from "@mCmps/Textbox2";
 
 export default function Page()
 {
@@ -32,39 +33,53 @@ export default function Page()
 	return (
 		<StyledWindow className={styles.root} scrollUpdate={quest.v} onClose={quest.setNull} title={"quests" + (quest.v ? `/${slug(quest.v.name)}` : "")}
 			footer={<Link href="/scanner" className={styles.btn}>
-				<Textbox primary className={styles.btn__box}>
-					<Title small text="Сдать" />
-				</Textbox>
+				<Textbox2 small>
+					<Title small text="Сдать" className={styles.btn__box} />
+				</Textbox2>
 			</Link>}
+			invisible
 		>
 			{dialog.el()}
 			{quests.isLoading && <Spinner />}
 			{!quest.v ?
 				<div className={styles.quests}>
-					<Title text="Квесты:" />
+					{/* <Title text="Квесты:" /> */}
 					{displayError(quests)}
 					{quests.data?.map(q =>
 						<button key={q.id} onClick={() => quest.set(q)}>
-							<Textbox darkbg className={styles.quest}>
+							{/* <Textbox darkbg className={styles.quest}>
 								<div>{q.name}</div>
 								<div>{q.completed ? <IconCheck /> : `${q.reward}M`}</div>
-							</Textbox>
+							</Textbox> */}
+							<div className={styles.quest}>
+								<Textbox2 small><div className={styles.quest__title}>{q.name}</div></Textbox2>
+								<div>{q.completed ? <IconCheck /> : `${q.reward}G`}</div>
+							</div>
 						</button>
 					)}
 				</div>
 				:
 				<div className={styles.questScreen}>
 					<button onClick={quest.setNull}>
-						<Textbox darkbg className={styles.quest}>
+						{/* <Textbox darkbg className={styles.quest}>
 							<div>{quest.v.name}</div>
 							<div>{quest.v.completed ? <IconCheck /> : `${quest.v.reward}M`}</div>
-						</Textbox>
+						</Textbox> */}
+						<div className={styles.quest}>
+							<Textbox2 small><div className={styles.quest__title}>{quest.v.name}</div></Textbox2>
+							<div>{quest.v.completed ? <IconCheck /> : `${quest.v.reward}G`}</div>
+						</div>
 					</button>
 					{quest.v.dialogId != null &&
 						<button className={styles.btnIntro} onClick={() => quest.v?.dialogId != null && dialog.run(quest.v.dialogId)}>
-							<Textbox primary className={styles.btnIntro__box}>
+							{/* <Textbox primary className={styles.btnIntro__box}>
 								<Title small text="Вступление" className={styles.btnIntro__text} />
-							</Textbox>
+							</Textbox> */}
+							<Textbox2 small>
+								<div className={styles.btnIntro__box} style={{padding: "0.75rem 1rem"}}>
+									<Title small text="Вступление" className={styles.btnIntro__text} />
+								</div>
+							</Textbox2>
 						</button>
 					}
 					<div className={styles.questScreen__desc}>{quest.v.description || "Нет описания"}</div>

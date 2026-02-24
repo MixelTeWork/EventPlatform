@@ -6,7 +6,7 @@ export default function Layout({
 {
 	return (
 		<>
-			<style>{`body { background: var(--background, linear-gradient(0deg, #00164c, #000613)); }`}</style>
+			<style>{`body { background: var(--background, #000000); }`}</style>
 			{children}
 		</>
 	);

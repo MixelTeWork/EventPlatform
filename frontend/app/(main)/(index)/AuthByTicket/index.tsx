@@ -7,9 +7,9 @@ import clsx from "@/utils/clsx";
 import imagefileToData from "@/utils/imagefileToData";
 import useStateObj from "@/utils/useStateObj";
 import Spinner from "@/components/Spinner";
-import Textbox from "@mCmps/Textbox";
 import { useMutationAuthByTicket } from "@/api/user";
 import Title from "@mCmps/Title";
+import Textbox2 from "@mCmps/Textbox2";
 
 export default function AuthByTicket({ open }: {
 	open: boolean;
@@ -22,29 +22,29 @@ export default function AuthByTicket({ open }: {
 		<div className={clsx(styles.root, open && styles.open)}>
 			{mutation.isPending && <Spinner />}
 			<div className={styles.body}>
-				<Textbox className={styles.msgWide}>
+				<Textbox2 className={styles.msgWide}>
 					<div className={styles.msg1}>
 						<Image src={logo} alt="Инди кон" />
 						<span>Загрузка системы...</span>
 					</div>
-				</Textbox>
-				<Textbox className={styles.msg2box}>
+				</Textbox2>
+				<Textbox2 className={styles.msg2box}>
 					<div className={styles.msg2}>
 						<Image src={avatar} alt="Avatar" />
 						<h2 className="title">Админ</h2>
-						<span>{`Добро пожаловать на ИНДИКОН: Reload! Для того, чтобы попасть на сайт мероприятия, загрузи свой билет`}</span>
+						<span>{`Добро пожаловать на Underparty! Для того, чтобы попасть на сайт мероприятия, загрузи свой билет`}</span>
 					</div>
-				</Textbox>
-				<Textbox className={clsx(styles.msg2box, styles.msg_error, error.v && styles.msg_error_open)}>
+				</Textbox2>
+				<Textbox2 className={clsx(styles.msg2box, styles.msg_error, error.v && styles.msg_error_open)}>
 					<div className={styles.msg2}>
 						<Image src={avatar} alt="Avatar" />
 						<h2 className="title">Админ</h2>
 						<span>В доступе отказано! {error.v}</span>
 					</div>
-				</Textbox>
-				<Textbox className={clsx(styles.msg3, styles.msgWide)} primary>
+				</Textbox2>
+				<Textbox2 className={clsx(styles.msg3, styles.msgWide)} primary>
 					<label className={styles.openFile}>
-						<Title text="Загрузить билет" />
+						<Title text="Загрузить билет" small />
 						<input
 							type="file"
 							style={{ display: "none" }}
@@ -76,7 +76,7 @@ export default function AuthByTicket({ open }: {
 							}}
 						/>
 					</label>
-				</Textbox>
+				</Textbox2>
 			</div>
 		</div>
 	);

@@ -1,0 +1,37 @@
+.root {
+	width: calc(100% - 1.5rem);
+	max-width: 800px;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.5em 1em;
+	margin: 0.75rem auto;
+	font-family: var(--font-Undertale);
+	font-size: 0.9rem;
+	background-color: var(--c-back);
+	color: var(--c-text);
+	border: 2px solid var(--c-primary-light);
+	border-radius: 0.5rem;
+	z-index: 10;
+}
+
+.menu {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	flex-wrap: wrap;
+	max-height: 100%;
+	gap: 0.2em;
+	font-size: 1.5em;
+}
+.menu > * {
+	display: flex;
+}
+.home {
+	width: 1em;
+	height: 1em;
+}
+
+.gap {
+	flex-grow: 1;
+}
