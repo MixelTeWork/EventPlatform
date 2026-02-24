@@ -20,13 +20,15 @@
 
 .items > * {
 	z-index: 1;
+	width: 100%;
 }
 .item {
+	width: 100%;
 	padding: 0.5rem;
 	font-size: 1.1rem;
 }
 .item_title {
-	font-size: 1.5rem;
+	font-size: 1.2rem;
 	margin-block: 1rem;
 	color: var(--c-trenary);
 }

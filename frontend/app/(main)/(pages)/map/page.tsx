@@ -1,9 +1,8 @@
 "use client"
 import styles from "./page.module.css"
-import map1 from "./map1.png";
-import map2 from "./map2.png";
-import map3 from "./map3.png";
-import map4 from "./map4.png";
+import map1 from "./map1.jpg";
+import map2 from "./map2.jpg";
+import map3 from "./map3.jpg";
 // import mark_0 from "./marks/0.png";
 // import mark_1_1 from "./marks/1_1.png";
 // import mark_1_2 from "./marks/1_2.png";
@@ -23,6 +22,7 @@ import { useTitle } from "@/utils/useTtile";
 import Textbox from "@mCmps/Textbox";
 import StyledWindow from "@mCmps/StyledWindow";
 import type { Quest } from "@/api/quest";
+import Textbox2 from "@mCmps/Textbox2";
 // import { useMutationQuestOpen, useQuests, type Quest } from "@/api/quest";
 // import GameDialogGreetings from "./GameDialogGreetings";
 
@@ -31,7 +31,7 @@ export default function Page()
 	useTitle("Карта");
 	// usePreloadGameDialogImgs();
 	// usePreloadImgs(map1, map2, map3, map4, mark_0, mark_1_1, mark_1_2, mark_1_3, mark_2_1, mark_2_2);
-	usePreloadImgs(map1, map2, map3, map4);
+	usePreloadImgs(map1, map2, map3);
 	// const dialog = useGameDialog();
 	// const mutationOpen = useMutationQuestOpen();
 	const dialog = { run: (_: number) => { } };
@@ -82,7 +82,7 @@ export default function Page()
 			{/* {displayError(quests)} */}
 			<div className={styles.map} style={{ display: openedQuest.v ? "none" : "" }}>
 				<InteractiveMap
-					img={[map1, map2, map3, map4][map.v]}
+					img={[map1, map2, map3][map.v]}
 					zoomMin={1}
 					disablePadding
 					fillOnStart
@@ -128,18 +128,15 @@ export default function Page()
 				</div>}
 		</StyledWindow>
 		<div className={styles.btns}>
-			<Textbox small btn highlight={map.v == 0}>
+			<Textbox2 small btn highlight={map.v == 0}>
 				<button onClick={() => map.set(0)} className={styles.btn}>Этаж 1</button>
-			</Textbox>
-			<Textbox small btn highlight={map.v == 1}>
+			</Textbox2>
+			<Textbox2 small btn highlight={map.v == 1}>
 				<button onClick={() => map.set(1)} className={styles.btn}>Этаж 2</button>
-			</Textbox>
-			<Textbox small btn highlight={map.v == 2}>
-				<button onClick={() => map.set(2)} className={styles.btn}>Этаж 3</button>
-			</Textbox>
-			<Textbox small btn highlight={map.v == 3}>
-				<button onClick={() => map.set(3)} className={styles.btn}>маркет</button>
-			</Textbox>
+			</Textbox2>
+			<Textbox2 small btn highlight={map.v == 2}>
+				<button onClick={() => map.set(2)} className={styles.btn}>Маркет</button>
+			</Textbox2>
 		</div>
 	</>);
 }

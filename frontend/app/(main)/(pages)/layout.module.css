@@ -4,8 +4,8 @@
 	max-height: 100dvh;
 	width: 100%;
 	display: grid;
-	/* grid-template-rows: max-content max-content auto max-content; */
-	grid-template-rows: max-content auto max-content;
+	grid-template-rows: max-content max-content auto max-content;
+	/* grid-template-rows: max-content auto max-content; */
 }
 
 .body {
@@ -21,7 +21,7 @@
 .title {
 	position: relative;
 	justify-self: center;
-	margin-top: 1rem;
+	/* margin-top: 1rem; */
 }
 
 /* @media screen and (max-height: 500px) and (min-width: 400px) {

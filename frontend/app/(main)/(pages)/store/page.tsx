@@ -15,7 +15,7 @@ export default function Page()
 
 	return (<>
 		{items.isLoading && <Spinner />}
-		<StyledWindow className={styles.list} title="store">
+		<StyledWindow className={styles.list} title="store" invisible>
 			<div className={styles.items}>
 				{displayError(items)}
 				{items?.data?.map(item =>

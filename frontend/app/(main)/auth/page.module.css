@@ -7,6 +7,11 @@
 	gap: 1.8rem;
 }
 
+.root h2,
+.root h3 {
+	text-align: center;
+}
+
 .back {
 	position: fixed;
 	top: 1rem;

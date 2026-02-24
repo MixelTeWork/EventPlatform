@@ -4,13 +4,16 @@
 	flex-direction: column;
 	min-height: 200px;
 	padding: 6px;
-	padding-top: 2px;
+	/* padding-top: 2px; */
 	gap: 4px;
 	border: 3px solid var(--c-primary-light);
 	border-radius: 12px;
 	background: var(--c-back-dark);
-	box-shadow: 8px 8px 0 0 var(--c-back-dark);
-	/* margin: 1em; */
+	/* box-shadow: 8px 8px 0 0 var(--c-back-dark); */
+}
+.invisible {
+	background: transparent;
+	border: none;
 }
 
 .header {
@@ -44,6 +47,9 @@
 	background: linear-gradient(0deg, var(--c-secondary-light), var(--c-secondary));
 	padding: 8px;
 	border-radius: 2px 2px 4px 4px;
+}
+.invisible .content {
+	background: transparent;
 }
 .noPad {
 	padding: 0;
