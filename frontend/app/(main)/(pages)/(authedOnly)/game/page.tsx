@@ -101,13 +101,15 @@ export default function GamePage()
 			{(state.isLoading || state.data?.state == "wait") && <>
 				<div className={styles.text}>
 					{/* <div>
-						<span style={{ color: "red" }}>Чтобы определить какой фандом лучший приходите на сцену</span>
+						<span>Чтобы определить какой фандом лучший приходите на сцену</span>
 						{state.data?.start && <span> в {state.data.start}</span>}
 					</div> */}
 					<Textbox2 primary>
 						<div style={{ padding: "1rem" }}>
-							<span style={{ color: "red" }}>Чтобы определить какой фандом лучший приходите на сцену</span>
-							{state.data?.start && <span> в {state.data.start}</span>}
+							{state.data ?
+								<span>{state.data.startPhrase.replaceAll("$", state.data.start)}</span> :
+								<span>Загрузка...</span>
+							}
 						</div>
 					</Textbox2>
 				</div>
@@ -127,9 +129,11 @@ export default function GamePage()
 			</> : <>
 				{state.data?.state == "start" && <>
 					<div className={styles.text}>
-						<div className={styles.title2}>Ваш выбор {characterTeam?.name || "N/A"}</div>
-						<h2 className={styles.subtitle}>Дождитесь начала</h2>
-						<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
+						<Textbox2 primary style2={{ padding: "0.5rem" }}>
+							<div className={styles.title2}>Ваш выбор {characterTeam?.name || "N/A"}</div>
+							<h2 className={styles.subtitle}>Дождитесь начала</h2>
+							<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
+						</Textbox2>
 					</div>
 				</>}
 				{state.data?.state == "going" && <button
@@ -148,11 +152,13 @@ export default function GamePage()
 			</>}
 			{state.data?.state == "end" && <>
 				<div className={styles.text}>
-					<div className={styles.title2}>{characterWinner?.name || "..."} побеждает!</div>
-					<h1 className={styles.title3}>
-						{state.data.winner == 0 ? "Игра завершена!" :
-							state.data.team == state.data.winner ? "Победа!" : "Проигрыш!"}
-					</h1>
+					<Textbox2 primary style2={{ padding: "0.5rem" }}>
+						<div className={styles.title2}>{characterWinner?.name || "..."} побеждает!</div>
+						<h1 className={styles.title3}>
+							{state.data.winner == 0 ? "Игра завершена!" :
+								state.data.team == state.data.winner ? "Победа!" : "Проигрыш!"}
+						</h1>
+					</Textbox2>
 				</div>
 			</>}
 			{state.data?.state == "tourneyEnd" && <>

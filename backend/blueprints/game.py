@@ -1,6 +1,6 @@
 import logging
 
-from bafser import TJson, doc_api, get_json_values_from_req, get_userId, protected_route, use_db_sess, get_json_list_from_req
+from bafser import TJson, doc_api, get_json_list_from_req, get_json_values_from_req, get_userId, protected_route, use_db_sess
 from flask import Blueprint
 from sqlalchemy.orm import Session
 
@@ -71,6 +71,26 @@ def set_startStr():
     return {"startStr": game.startStr}
 
 
+@bp.route("/api/game/startPhrase")
+@doc_api(res=TJson["startPhrase", str])
+@protected_route(perms=Operations.manage_games)
+def startPhrase():
+    game = Game.get2()
+    return {"startPhrase": game.startPhrase}
+
+
+@bp.post("/api/game/startPhrase")
+@doc_api(req=TJson["startPhrase", str], res=TJson["startPhrase", str])
+@protected_route(perms=Operations.manage_games)
+def set_startPhrase():
+    startPhrase = get_json_values_from_req(("startPhrase", str))
+    game = Game.get2()
+    game.startPhrase = startPhrase
+    game.db_sess.commit()
+    logging.info(f"set {startPhrase=}")
+    return {"startPhrase": game.startPhrase}
+
+
 @bp.route("/api/game/start_times")
 @doc_api(res=list[str])
 @protected_route(perms=Operations.manage_games)
@@ -84,7 +104,7 @@ def start_times():
 def set_start_times():
     start_times = get_json_list_from_req(str)
     GameStartTime.update(start_times)
-    logging.info(f"set start_times=[{", ".join(start_times)}]")
+    logging.info(f"set start_times=[{', '.join(start_times)}]")
     return GameStartTime.get_all()
 
 

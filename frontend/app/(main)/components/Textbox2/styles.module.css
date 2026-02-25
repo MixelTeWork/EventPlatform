@@ -3,7 +3,6 @@
 	margin: 6px;
 	display: flex;
 	color: var(--c-trenary);
-	font-family: var(--font-Undertale);
 	isolation: isolate;
 }
 

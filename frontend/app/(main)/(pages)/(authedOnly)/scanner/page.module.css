@@ -24,6 +24,7 @@
 	height: 100%;
 	margin: 1rem;
 	color: var(--c-text);
+	font-family: var(--font-Undertale);
 }
 
 .scanner {
@@ -35,10 +36,13 @@
 	text-align: center;
 }
 
-.tb {
+/* .tb {
+	padding: 1em 0.5em;
+} */
+.tb > div {
 	padding: 1em 0.5em;
 }
-.tb > span {
+.tb span {
 	overflow: hidden;
 	overflow-wrap: break-word;
 }

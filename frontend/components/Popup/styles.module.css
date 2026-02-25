@@ -55,6 +55,7 @@
 
 .close {
 	--_c: var(--c-secondary);
+	--_c: var(--c-primary);
 	position: relative;
 	background-color: rgba(from var(--_c) r g b / 0.2);
 	border: 2px solid var(--_c);

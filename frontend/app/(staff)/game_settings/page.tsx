@@ -11,7 +11,7 @@ import useSecuredPage from "@/utils/useSecuredPage";
 import { characterById, findTourneyTreeNode, useMutationTourneyEndGame, useMutationTourneyEndTourney, useMutationTourneyReset, useMutationTourneySelectNextGame, useMutationTourneyShowPretourney, useMutationTourneyStartGame, useMutationTourneyUnendTourney, useTourneyCharacters, useTourneyData } from "@/api/tourney";
 import Link from "next/link";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
-import { useGameCounter, useGameDuration, useGameStartStr, useMutationGameCounter, useMutationGameDuration, useMutationGameStartStr, useUpdateGameStartStr } from "@/api/game";
+import { useGameCounter, useGameDuration, useGameStartPhrase, useGameStartStr, useMutationGameCounter, useMutationGameDuration, useMutationGameStartPhrase, useMutationGameStartStr, useUpdateGameStartStr } from "@/api/game";
 import ConfirmingButton from "./ConfirmingButton";
 import Input from "@sCmps/Input";
 import Button from "@sCmps/Button";
@@ -39,6 +39,7 @@ export default function Page()
 		<Link href="/tourney_screen" className={styles.link}>Открыть экран</Link>
 		<Link href="/game_characters" className={styles.link}>Персонажи турнира</Link>
 		<SettingInput text={<StartTimeList games={tourney.data?.games} />} type="text" query={useGameStartStr} getv={d => d?.startStr || ""} mutation={useMutationGameStartStr} />
+		<SettingInput text={<span>Предтурнирная фраза <Help text="Доллар заменяется на время начала" /></span>} type="textarea" query={useGameStartPhrase} getv={d => d?.startPhrase || ""} mutation={useMutationGameStartPhrase} />
 		<SettingInput text="Длительность игры (сек.)" type="number" query={useGameDuration} getv={d => d?.duration || 0} mutation={useMutationGameDuration} />
 		<SettingInput text="Обратный отсчёт (сек.)" type="number" query={useGameCounter} getv={d => d?.counter || 0} mutation={useMutationGameCounter} />
 		<div className={styles.tourney}>
@@ -62,7 +63,7 @@ export default function Page()
 
 function SettingInput<T, K extends number | string>({ text, type, getv, query, mutation }: {
 	text: React.ReactNode,
-	type: "number" | "text",
+	type: "number" | "text" | "textarea",
 	getv: (data?: T) => K,
 	query: () => UseQueryResult<T, unknown>,
 	mutation: (onSuccess?: () => void) => UseMutationResult<T, unknown, K, unknown>,
@@ -77,7 +78,7 @@ function SettingInput<T, K extends number | string>({ text, type, getv, query, m
 	useEffect(() => value.set(getv(queryR.data)), [queryR.data]);
 
 	return (
-		<div className={styles.input}>
+		<div className={clsx(styles.input, type == "textarea" && styles.input_long)}>
 			{queryR.isLoading && <Spinner />}
 			{mutate.isPending && <Spinner />}
 			{displayError(queryR)}

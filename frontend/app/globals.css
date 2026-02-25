@@ -30,8 +30,9 @@ body {
 		repeating-linear-gradient(90deg, transparent, transparent var(--bcsize), var(--bcolor) var(--bcsize), var(--bcolor) calc(var(--bcsize) + var(--blsize))),
 		repeating-linear-gradient(180deg, transparent, transparent var(--bcsize), var(--bcolor) var(--bcsize), var(--bcolor) calc(var(--bcsize) + var(--blsize))),
 		#000;
-	--background-calm: linear-gradient(0deg, #000e32, #000613);
-	font-family: var(--font-MFFRBL), Arial, Helvetica, sans-serif;
+	/* --background-calm: linear-gradient(0deg, #000e32, #000613); */
+	--background-calm: black;
+	font-family: var(--font-Undertale), Arial, Helvetica, sans-serif;
 	--color: #ccebff;
 	--c-back: #00042b;
 	--c-back-dark: #000000;
