@@ -26,7 +26,7 @@ def upgrade() -> None:
 
     conn = op.get_bind()
     conn.execute(
-        sa.text('UPDATE "Game" SET "startPhrase" = :phrase WHERE "startPhrase" IS NULL'),
+        sa.text('UPDATE Game SET startPhrase = :phrase WHERE startPhrase IS NULL'),
         {"phrase": "Чтобы определить победителя приходите на сцену в $"},
     )
 
