@@ -1,7 +1,7 @@
 import styles from "./styles.module.css"
 import clsx from "@/utils/clsx";
 
-export default function Textbox2({ children, btn = false, small = false, highlight = false, primary = false, alterbg = false, darkbg = false, className }: {
+export default function Textbox2({ children, btn = false, small = false, highlight = false, primary = false, alterbg = false, darkbg = false, style, style2, className }: {
 	highlight?: boolean;
 	primary?: boolean;
 	btn?: boolean;
@@ -9,6 +9,8 @@ export default function Textbox2({ children, btn = false, small = false, highlig
 	alterbg?: boolean;
 	darkbg?: boolean;
 	className?: string;
+	style?: React.CSSProperties;
+	style2?: React.CSSProperties;
 } & React.PropsWithChildren)
 {
 	return (
@@ -20,10 +22,10 @@ export default function Textbox2({ children, btn = false, small = false, highlig
 				primary && styles.primary,
 				alterbg && styles.alterbg,
 				darkbg && styles.darkbg,
-				className)}>
+				className)} style={style}>
 			<div></div>
 			<div></div>
-			<div>{children}</div>
+			<div style={style2}>{children}</div>
 		</div>
 	);
 }
