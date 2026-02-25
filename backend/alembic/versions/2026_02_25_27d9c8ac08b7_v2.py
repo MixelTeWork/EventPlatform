@@ -26,12 +26,12 @@ def upgrade() -> None:
 
     conn = op.get_bind()
     conn.execute(
-        sa.text('UPDATE Game SET startPhrase = :phrase WHERE startPhrase IS NULL'),
+        sa.text("UPDATE Game SET startPhrase = :phrase WHERE startPhrase IS NULL"),
         {"phrase": "Чтобы определить победителя приходите на сцену в $"},
     )
 
     with op.batch_alter_table("Game", schema=None) as batch_op:
-        batch_op.alter_column("startPhrase", nullable=False)
+        batch_op.alter_column("startPhrase", existing_type=sa.String(length=128), nullable=False)
 
     # ### end Alembic commands ###
 
