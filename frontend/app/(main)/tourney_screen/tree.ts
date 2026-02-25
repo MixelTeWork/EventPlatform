@@ -6,7 +6,8 @@ export class Tree
 	public static Font = "Arial";
 	public static Colors = {
 		onBack: "#ccebff",
-		node: "#618ef8",
+		// node: "#618ef8",
+		node: "#000000",
 		nodeWinner: "#00042b",
 		nodeSelected: "#3649de",
 		onNode: "#fffeaf",
@@ -226,7 +227,8 @@ class TreeNode
 
 		if (character)
 		{
-			ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S);
+			try { ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S); }
+			catch (x) { }
 			ctx.font = "20px " + Tree.Font;
 			ctx.fillStyle = Tree.Colors.onNode;
 			ctx.fillText(character.name, imgRight ? this.S * 0.05 : this.S * 1.05, this.S / 2 + 10, this.S * 1.9);

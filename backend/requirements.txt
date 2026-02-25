@@ -1,4 +1,4 @@
-bafser==2.8.3
+bafser==2.8.5
 python-dotenv
 requests
 gunicorn

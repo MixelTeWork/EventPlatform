@@ -101,13 +101,15 @@ export default function GamePage()
 			{(state.isLoading || state.data?.state == "wait") && <>
 				<div className={styles.text}>
 					{/* <div>
-						<span style={{ color: "red" }}>Чтобы определить какой фандом лучший приходите на сцену</span>
+						<span>Чтобы определить какой фандом лучший приходите на сцену</span>
 						{state.data?.start && <span> в {state.data.start}</span>}
 					</div> */}
 					<Textbox2 primary>
 						<div style={{ padding: "1rem" }}>
-							<span style={{ color: "red" }}>Чтобы определить какой фандом лучший приходите на сцену</span>
-							{state.data?.start && <span> в {state.data.start}</span>}
+							{state.data ?
+								<span>{state.data.startPhrase.replaceAll("$", state.data.start)}</span> :
+								<span>Загрузка...</span>
+							}
 						</div>
 					</Textbox2>
 				</div>

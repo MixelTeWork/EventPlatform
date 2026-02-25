@@ -13,6 +13,7 @@ export interface GameState
 	winner: UserGroup,
 	counter: number,
 	start: string,
+	startPhrase: string,
 	team: number,
 	tourneyWinner1: number,
 	tourneyWinner2: number,
@@ -36,6 +37,10 @@ export interface GameStartStr
 {
 	startStr: string,
 }
+export interface GameStartPhrase
+{
+	startPhrase: string,
+}
 
 const url = "/api/game"
 const queryKey = () => ["gameState"];
@@ -43,6 +48,7 @@ const queryKeyFull = () => ["gameStateFull"];
 const queryKeyDuration = () => ["gameDuration"];
 const queryKeyCounter = () => ["gameCounter"];
 const queryKeyStartStr = () => ["gameStartStr"];
+const queryKeyStartPhrase = () => ["gameStartPhrase"];
 const queryKeyStartTimes = () => ["gameStartTimes"];
 
 export const useGameState = stdQuery<GameState>(queryKey(), `${url}/state`);
@@ -57,6 +63,7 @@ export const useMutationSendClick = stdMutation<number, GameState>(`${url}/click
 export const useGameDuration = stdQuery<GameDuration>(queryKeyDuration(), `${url}/duration`);
 export const useGameCounter = stdQuery<GameCounter>(queryKeyCounter(), `${url}/countdown`);
 export const useGameStartStr = stdQuery<GameStartStr>(queryKeyStartStr(), `${url}/startStr`);
+export const useGameStartPhrase = stdQuery<GameStartPhrase>(queryKeyStartPhrase(), `${url}/startPhrase`);
 export const useGameStartTimes = stdQuery<string[]>(queryKeyStartTimes(), `${url}/start_times`);
 
 export function useUpdateGameStartStr()
@@ -76,6 +83,10 @@ export const useMutationGameCounter = stdMutation<number, GameCounter>(`${url}/c
 export const useMutationGameStartStr = stdMutation<string, GameStartStr>(`${url}/startStr`,
 	(qc, data) => qc.setQueryData(queryKeyStartStr(), data),
 	(startStr: string) => ({ startStr }),
+);
+export const useMutationGameStartPhrase = stdMutation<string, GameStartPhrase>(`${url}/startPhrase`,
+	(qc, data) => qc.setQueryData(queryKeyStartPhrase(), data),
+	(startPhrase: string) => ({ startPhrase }),
 );
 export const useMutationGameStartTimes = stdMutation<string[], string[]>(`${url}/start_times`,
 	(qc, data) => qc.setQueryData(queryKeyStartTimes(), data),

@@ -13,6 +13,7 @@ class Game(SqlAlchemyBase, SingletonMixin):
     __tablename__ = Tables.Game
 
     startStr: Mapped[str] = mapped_column(String(16), default="17:30")
+    startPhrase: Mapped[str] = mapped_column(String(128), default="Чтобы определить победителя приходите на сцену в $")
     duration: Mapped[int] = mapped_column(default="60")
     countdown: Mapped[int] = mapped_column(default="150")
     opponent1Id: Mapped[Optional[int]] = mapped_column(ForeignKey(f"{Tables.TourneyCharacter}.id"), default=None)
@@ -92,6 +93,7 @@ class Game(SqlAlchemyBase, SingletonMixin):
             "opponent1Id": game.opponent1Id,
             "opponent2Id": game.opponent2Id,
             "start": game.startStr,
+            "startPhrase": game.startPhrase,
             "counter": 0,
             "winner": game.winner,
             "team": 0,
@@ -193,6 +195,7 @@ class GameDict(TypedDict):
     opponent1Id: int | None
     opponent2Id: int | None
     start: str
+    startPhrase: str
     counter: int
     winner: int
     team: int
