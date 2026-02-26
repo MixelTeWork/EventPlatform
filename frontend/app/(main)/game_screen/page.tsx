@@ -1,38 +1,39 @@
 "use client"
 import styles from "./styles.module.css"
-// import ost from "./ost.mp3"
+import wait_1 from "./ost/wait_1.mp3"
+import wait_2 from "./ost/wait_2.mp3"
+import wait_3 from "./ost/wait_3.mp3"
+import game_1 from "./ost/game_1.mp3"
+import game_2 from "./ost/game_2.mp3"
+import game_3 from "./ost/game_3.mp3"
+import game_4 from "./ost/game_4.mp3"
+import game_5 from "./ost/game_5.mp3"
+import game_6 from "./ost/game_6.mp3"
+import game_7 from "./ost/game_7.mp3"
+import game_8 from "./ost/game_8.mp3"
+import game_9 from "./ost/game_9.mp3"
+import game_10 from "./ost/game_10.mp3"
 import { useEffect, useRef } from "react";
 import useStateBool from "@/utils/useStateBool";
-// import useSound from "@/utils/useSound";
+import useSound from "@/utils/useSound";
 import { useTitle } from "@/utils/useTtile";
 import { useGame } from "./game";
 import { useTourneyCharacters } from "@/api/tourney";
 import { characterById } from "@/api/tourney";
 import clsx from "@/utils/clsx";
+import useStateObj from "@/utils/useStateObj"
+import randomInt from "@/utils/randomInt"
 
 export default function Page()
 {
 	useTitle("Игра");
 	const game = useGame();
 	const characters = useTourneyCharacters();
-	// const ostSound = useSound(ost, true);
-	const soundEnable = useStateBool(true);
 	const rectsEl = useRef<HTMLDivElement>(null);
 
 	const characterLeft = characterById(characters.data, game.opponentLeftId);
 	const characterRight = characterById(characters.data, game.opponentRightId);
 	const characterWinner = characterById(characters.data, game.winnerId);
-
-	// useEffect(() =>
-	// {
-	// 	if (!soundEnable.v) return;
-
-	// 	if (game.isGoing)
-	// 		ostSound.play(soundEnable.set);
-	// 	else
-	// 		ostSound.stop();
-	// 	// eslint-disable-next-line
-	// }, [game.isGoing, soundEnable.v])
 
 	useEffect(() =>
 	{
@@ -49,7 +50,7 @@ export default function Page()
 	return (
 		<div className={clsx(styles.root, game.isGoing && styles.going)} style={{ "--bar": game.barPercent } as React.CSSProperties}>
 			<div className={styles.rects} ref={rectsEl}></div>
-			<div className={styles.frame}></div>
+			{/* <div className={styles.frame}></div> */}
 			<div className={styles.barShake}>
 				<div className={styles.bar}>
 					<div className={styles.barLeft} style={{ "--color": characterLeft?.color } as React.CSSProperties}>
@@ -73,12 +74,7 @@ export default function Page()
 					<span className="title" style={{ marginLeft: "0.25em" }}>{characterWinner?.name}</span>
 					<span>!</span>
 				</>}
-				{!soundEnable.v && <button
-					className={styles.soundBtn}
-					onClick={soundEnable.setT}
-				>
-					Включить звук
-				</button>}
+				<SoundPlayer gameIsGoing={game.isGoing} />
 			</div>
 		</div>
 	);
@@ -93,4 +89,43 @@ function spawnRect(parent: HTMLDivElement)
 	rect.style.left = `${Math.random() * 100}%`;
 
 	setTimeout(() => parent.removeChild(rect), 1000);
+}
+
+function SoundPlayer({ gameIsGoing }: { gameIsGoing: boolean })
+{
+	const ostWait = [wait_1, wait_2, wait_3];
+	const ostGame = [game_1, game_2, game_3, game_4, game_5, game_6, game_7, game_8, game_9, game_10]
+	const ostWaitI = useStateObj(randomInt(ostWait.length));
+	const ostGameI = useStateObj(randomInt(ostGame.length));
+	const ostSoundWait = useSound(ostWait[ostWaitI.v], true);
+	const ostSoundGame = useSound(ostGame[ostGameI.v], true);
+	const soundEnabled = useStateBool(false);
+
+	useEffect(() =>
+	{
+		if (!soundEnabled.v) return;
+
+		if (gameIsGoing)
+		{
+			ostSoundGame.play();
+			ostSoundWait.stop();
+		}
+		else
+		{
+			ostSoundGame.stop();
+			ostSoundWait.play();
+		}
+		// eslint-disable-next-line
+	}, [gameIsGoing, soundEnabled.v])
+
+	return <>
+		{/* <div ref={el => { if (!el || !ostSoundWait.el) return; el.innerHTML = ""; ostSoundWait.el.controls = true; el.appendChild(ostSoundWait.el) }}></div> */}
+		{/* <div ref={el => { if (!el || !ostSoundGame.el) return; el.innerHTML = ""; ostSoundGame.el.controls = true; el.appendChild(ostSoundGame.el) }}></div> */}
+		{!soundEnabled.v && <button
+			className={styles.soundBtn}
+			onClick={soundEnabled.setT}
+		>
+			Включить звук
+		</button>}
+	</>
 }
