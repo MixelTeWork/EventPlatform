@@ -44,7 +44,7 @@ export default function Page()
       <Button text="Log info" padding="0.5rem 1rem" onClick={viewLog("Log info", "/api/dev/log_info")} />
       <Button text="Log requests" padding="0.5rem 1rem" onClick={viewLog("Log requests", "/api/dev/log_requests")} />
       <Button text="Log frontend" padding="0.5rem 1rem" onClick={viewLog("Log frontend", "/api/dev/log_frontend")} />
-      <a href="/dev/dashboard" target="_blank">
+      <a href="/api/dashboard" target="_blank">
         <Button text="Dashboard" padding="0.5rem 1rem" />
       </a>
       <Popup title={logTitle.v} open={log.v != ""} close={() => log.set("")}>
