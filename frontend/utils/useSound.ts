@@ -1,38 +1,38 @@
 "use client"
-import { useEffect } from "react";
-import { useStateObjNull } from "./useStateObj";
+import { useEffect, useRef } from "react";
 
-export default function useSound(url: string, loop = false)
+export default function useSound(url: string, loop = false, onEnd?: () => void)
 {
-	const audio = useStateObjNull<HTMLAudioElement>();
+	const audio = useRef<HTMLAudioElement>(null);
 
 	useEffect(() =>
 	{
-		audio.set(old =>
+		const el = new Audio(url)
+		el.preload = "auto";
+		el.addEventListener("ended", () =>
 		{
-			const audio = new Audio(url)
-			audio.preload = "auto";
-			if (loop)
-				audio.addEventListener("ended", audio.play);
-			if (old && !old.paused)
-				audio.play();
-			return audio;
+			if (loop && el == audio.current) el.play();
+			if (onEnd) onEnd();
 		});
+		if (audio.current && !audio.current.paused)
+			el.play();
+		audio.current = el;
 		// eslint-disable-next-line
 	}, [url, loop]);
 
-	useEffect(() => { const v = audio.v; return () => v?.pause() }, [audio.v]);
+	useEffect(() => { const v = audio.current; return () => v?.pause() }, [audio.current]);
 
 	return {
-		play: (r?: (r: boolean) => void) =>
+		el: audio.current,
+		play: (reset: boolean = false, r?: (r: boolean) => void) =>
 		{
-			if (!audio.v) return;
-			audio.v.currentTime = 0;
-			audio.v.play().then(() => r?.(true)).catch(() => r?.(false));
+			if (!audio.current) return;
+			if (reset) audio.current.currentTime = 0;
+			audio.current.play().then(() => r?.(true)).catch(() => r?.(false));
 		},
 		stop: () =>
 		{
-			audio.v?.pause();
+			audio.current?.pause();
 		}
 	};
 };
