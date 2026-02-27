@@ -87,7 +87,7 @@ function SettingInput<T, K extends number | string>({ text, type, getv, query, m
 			{displayError(mutate)}
 			<span>{text}</span>
 			<span className={clsx(styles.input__saved, showSaved.v && styles.input__saved_visible)}>Сохранено!</span>
-			<span className={clsx(styles.input__error, showError.v && styles.input__error_visible)}>{showError.v}</span>
+			{queryR.data && <span className={clsx(styles.input__error, showError.v && styles.input__error_visible)}>{showError.v}</span>}
 			{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 			<Input type={type} stateObj={value as any} />
 			{queryR.data && value.v != getv(queryR.data) && <>

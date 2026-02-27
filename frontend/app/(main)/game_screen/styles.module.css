@@ -107,6 +107,7 @@ body:has(.root) {
 
 .barLeft {
 	--color: #fea45c;
+	--color: trasparent;
 	flex-basis: calc(var(--bar) * 1%);
 	/* flex-grow: calc(var(--bar) * 2); */
 	justify-content: flex-end;
@@ -119,6 +120,7 @@ body:has(.root) {
 }
 .barRight {
 	--color: #85c3ee;
+	--color: trasparent;
 	flex-basis: calc((100 - var(--bar)) * 1%);
 	/* flex-grow: calc((100 - var(--bar)) * 2); */
 	border-left: 0.5vw solid white;
