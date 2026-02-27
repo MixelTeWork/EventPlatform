@@ -237,7 +237,7 @@ class TreeNode
 				const drawH = h * scale;
 				const offsetX = (this.S - drawW) / 2;
 				const offsetY = (this.S - drawH) / 2;
-				ctx.drawImage(character.img, imgRight ? this.S * 2 : 0 + offsetX, offsetY, drawW, drawH);
+				ctx.drawImage(character.img, (imgRight ? this.S * 2 : 0) + offsetX, offsetY, drawW, drawH);
 				// ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S);
 			}
 			catch (x) { }

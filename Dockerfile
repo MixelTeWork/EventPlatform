@@ -71,9 +71,10 @@ RUN mkdir -p /app/storage && chown -R appuser:appuser /app/storage
 EXPOSE 8000
 CMD ["gunicorn", "main:app", \
     "--worker-class=gthread", \
-    "--workers=2", \
+    "--workers=3", \
     "--threads=4", \
     "--bind=0.0.0.0:8000", \
     "--timeout=60", \
+    "--graceful-timeout=10", \
     "--max-requests=1000", \
     "--max-requests-jitter=100"]
