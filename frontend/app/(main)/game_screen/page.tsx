@@ -50,7 +50,7 @@ export default function Page()
 	return (
 		<div className={clsx(styles.root, game.isGoing && styles.going)} style={{ "--bar": game.barPercent } as React.CSSProperties}>
 			<div className={styles.rects} ref={rectsEl}></div>
-			{/* <div className={styles.frame}></div> */}
+			<div className={styles.frame}></div>
 			<div className={styles.barShake}>
 				<div className={styles.bar}>
 					<div className={styles.barLeft} style={{ "--color": characterLeft?.color } as React.CSSProperties}>
@@ -103,17 +103,15 @@ function SoundPlayer({ gameIsGoing }: { gameIsGoing: boolean })
 
 	useEffect(() =>
 	{
-		if (!soundEnabled.v) return;
-
 		if (gameIsGoing)
 		{
-			ostSoundGame.play();
+			ostSoundGame.play(false, soundEnabled.set);
 			ostSoundWait.stop();
 		}
 		else
 		{
 			ostSoundGame.stop();
-			ostSoundWait.play();
+			ostSoundWait.play(false, soundEnabled.set);
 		}
 		// eslint-disable-next-line
 	}, [gameIsGoing, soundEnabled.v])

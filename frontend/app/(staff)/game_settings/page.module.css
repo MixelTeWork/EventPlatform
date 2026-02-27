@@ -23,7 +23,8 @@
 	font-size: 1rem;
 }
 
-.input__saved {
+.input__saved,
+.input__error {
 	position: absolute;
 	right: 5.9rem;
 	bottom: -100%;
@@ -54,6 +55,37 @@
 	}
 	100% {
 		opacity: 0;
+	}
+}
+.input__error {
+	transform: unset;
+	right: 4.2rem;
+	color: tomato;
+}
+.input__error_visible {
+	animation: input__error_visible 375ms ease-in-out forwards,
+		input__error_blink 500ms 375ms ease-in-out infinite alternate;
+}
+@keyframes input__error_visible {
+	0% {
+		opacity: 0;
+		transform: scale(0.5);
+	}
+	40% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+@keyframes input__error_blink {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(1.1);
 	}
 }
 
