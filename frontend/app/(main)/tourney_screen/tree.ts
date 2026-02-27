@@ -227,7 +227,19 @@ class TreeNode
 
 		if (character)
 		{
-			try { ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S); }
+
+			try
+			{
+				const w = character.img.width;
+				const h = character.img.height;
+				const scale = Math.min(this.S / w, this.S / h);
+				const drawW = w * scale;
+				const drawH = h * scale;
+				const offsetX = (this.S - drawW) / 2;
+				const offsetY = (this.S - drawH) / 2;
+				ctx.drawImage(character.img, imgRight ? this.S * 2 : 0 + offsetX, offsetY, drawW, drawH);
+				// ctx.drawImage(character.img, imgRight ? this.S * 2 : 0, 0, this.S, this.S);
+			}
 			catch (x) { }
 			ctx.font = "20px " + Tree.Font;
 			ctx.fillStyle = Tree.Colors.onNode;
