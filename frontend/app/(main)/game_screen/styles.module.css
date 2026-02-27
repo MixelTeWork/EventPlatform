@@ -115,6 +115,7 @@ body:has(.root) {
 }
 .barLeft .bar__img {
 	margin-left: 1vw;
+	margin-right: 1.5vw;
 }
 .barRight {
 	--color: #85c3ee;
@@ -124,6 +125,7 @@ body:has(.root) {
 	padding-left: 0 !important;
 }
 .barRight .bar__img {
+	margin-left: 1.5vw;
 	margin-right: 1vw;
 }
 .barLeft::after,

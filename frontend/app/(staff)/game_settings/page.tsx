@@ -39,7 +39,7 @@ export default function Page()
 		<Link href="/tourney_screen" className={styles.link}>Открыть экран</Link>
 		<Link href="/game_characters" className={styles.link}>Персонажи турнира</Link>
 		<SettingInput text={<StartTimeList games={tourney.data?.games} />} type="text" query={useGameStartStr} getv={d => d?.startStr || ""} mutation={useMutationGameStartStr} />
-		<SettingInput text={<span>Предтурнирная фраза <Help text="Доллар заменяется на время начала" /></span>} type="textarea" query={useGameStartPhrase} getv={d => d?.startPhrase || ""} mutation={useMutationGameStartPhrase} />
+		<SettingInput text={<span>Предтурнирная фраза <Help text="Доллар заменяется на время начала" /></span>} type="textarea" query={useGameStartPhrase} getv={d => d?.startPhrase || ""} mutation={useMutationGameStartPhrase} check={v => !v.includes("$") && "Вы забыли доллар"} />
 		<SettingInput text="Длительность игры (сек.)" type="number" query={useGameDuration} getv={d => d?.duration || 0} mutation={useMutationGameDuration} />
 		<SettingInput text="Обратный отсчёт (сек.)" type="number" query={useGameCounter} getv={d => d?.counter || 0} mutation={useMutationGameCounter} />
 		<div className={styles.tourney}>
@@ -61,16 +61,18 @@ export default function Page()
 	</>;
 }
 
-function SettingInput<T, K extends number | string>({ text, type, getv, query, mutation }: {
+function SettingInput<T, K extends number | string>({ text, type, getv, query, mutation, check }: {
 	text: React.ReactNode,
 	type: "number" | "text" | "textarea",
 	getv: (data?: T) => K,
 	query: () => UseQueryResult<T, unknown>,
 	mutation: (onSuccess?: () => void) => UseMutationResult<T, unknown, K, unknown>,
+	check?: (v: K) => string | null | undefined | false,
 })
 {
 	const showSaved = useStateBool(false);
-	const value = useStateObj(getv());
+	const showError = useStateObj<string | null | undefined | false>("");
+	const value = useStateObj(getv(), check ? v => showError.set(check(v)) : undefined);
 	const queryR = query();
 	const mutate = mutation(showSaved.setT);
 
@@ -85,6 +87,7 @@ function SettingInput<T, K extends number | string>({ text, type, getv, query, m
 			{displayError(mutate)}
 			<span>{text}</span>
 			<span className={clsx(styles.input__saved, showSaved.v && styles.input__saved_visible)}>Сохранено!</span>
+			<span className={clsx(styles.input__error, showError.v && styles.input__error_visible)}>{showError.v}</span>
 			{/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 			<Input type={type} stateObj={value as any} />
 			{queryR.data && value.v != getv(queryR.data) && <>
