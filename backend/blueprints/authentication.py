@@ -17,7 +17,7 @@ blueprint = Blueprint("authentication", __name__)
 # REDIRECT_URI = "https://www.underparty.fun/auth_vk"
 TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
 TICKETS_API_URL += "api/event_platform/"  # pyright: ignore[reportConstantRedefinition]
-EVENT_ID = 3 if "dev" in sys.argv else 19
+EVENT_ID = 3 if "dev" in sys.argv else 24
 
 
 class LoginJson(JsonObj):
