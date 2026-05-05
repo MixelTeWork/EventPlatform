@@ -74,7 +74,7 @@ def login_ticket(db_sess: Session):
 
 
 def create_user_by_ticket(db_sess: Session, code: str):
-    TICKETS_API_URL = cast(str, current_app.config["EVENT_ID"]).rstrip("/") + "/api/event_platform/"
+    TICKETS_API_URL = cast(str, current_app.config["TICKETS_API_URL"]).rstrip("/") + "/api/event_platform/"
     EVENT_ID = cast(int, current_app.config["EVENT_ID"])
     res = requests.get(
         TICKETS_API_URL + "user_info_by_ticket",
