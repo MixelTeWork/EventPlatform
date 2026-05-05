@@ -1,5 +1,5 @@
 import logging
-import sys
+from typing import cast
 
 import requests
 from bafser import JsonObj, create_access_token, doc_api, randstr, response_msg, use_db_sess
@@ -15,9 +15,6 @@ blueprint = Blueprint("authentication", __name__)
 # CLIENT_ID = "51848582"
 # REDIRECT_URI = "https://platformevent.pythonanywhere.com/auth_vk"
 # REDIRECT_URI = "https://www.underparty.fun/auth_vk"
-TICKETS_API_URL = "http://localhost:5001/" if "dev" in sys.argv else "https://ticketsystem.pythonanywhere.com/"
-TICKETS_API_URL += "api/event_platform/"  # pyright: ignore[reportConstantRedefinition]
-EVENT_ID = 3 if "dev" in sys.argv else 24
 
 
 class LoginJson(JsonObj):
@@ -77,6 +74,8 @@ def login_ticket(db_sess: Session):
 
 
 def create_user_by_ticket(db_sess: Session, code: str):
+    TICKETS_API_URL = cast(str, current_app.config["EVENT_ID"]).rstrip("/") + "/api/event_platform/"
+    EVENT_ID = cast(int, current_app.config["EVENT_ID"])
     res = requests.get(
         TICKETS_API_URL + "user_info_by_ticket",
         json={
