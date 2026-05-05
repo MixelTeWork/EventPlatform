@@ -19,7 +19,9 @@ app, run = create_app(__name__, AppConfig(
     THREADED="dev" not in sys.argv,
     HEALTH_ROUTE=True,
 )
-    .add_secret_key_env("API_SECRET_KEY")
+    .add_env_var("API_SECRET_KEY")
+    .add_env_var("TICKETS_API_URL")
+    .add_env_var_int("EVENT_ID")
     # .add_secret_key("VK_SECRET_KEY", "secret_key_vk.txt")
 )
 

@@ -129,7 +129,7 @@ export default function GamePage()
 			</> : <>
 				{state.data?.state == "start" && <>
 					<div className={styles.text}>
-						<Textbox2 primary style2={{ padding: "0.5rem" }}>
+						<Textbox2 primary style2={{ padding: "1.5rem" }}>
 							<div className={styles.title2}>Ваш выбор {characterTeam?.name || "N/A"}</div>
 							<h2 className={styles.subtitle}>Дождитесь начала</h2>
 							<h1 className={styles.title}>{Math.floor(counter.v / 60)}:{(counter.v % 60).toString().padStart(2, "0")}</h1>
@@ -152,7 +152,7 @@ export default function GamePage()
 			</>}
 			{state.data?.state == "end" && <>
 				<div className={styles.text}>
-					<Textbox2 primary style2={{ padding: "0.5rem" }}>
+					<Textbox2 primary style2={{ padding: "1.5rem" }}>
 						<div className={styles.title2}>{characterWinner?.name || "..."} побеждает!</div>
 						<h1 className={styles.title3}>
 							{state.data.winner == 0 ? "Игра завершена!" :

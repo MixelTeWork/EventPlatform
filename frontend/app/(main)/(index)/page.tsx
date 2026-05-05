@@ -11,7 +11,7 @@ import Textbox2 from "@mCmps/Textbox2";
 
 export default function Page()
 {
-	useRedirectForAuthed("/map");
+	useRedirectForAuthed("/game");
 	const authOpen = useStateBool(false);
 
 	return (
