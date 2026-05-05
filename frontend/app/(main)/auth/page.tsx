@@ -11,7 +11,7 @@ import useRedirectForAuthed from "@/utils/useRedirectForAuthed";
 export default function Page()
 {
 	useTitle("Авторизация");
-	useRedirectForAuthed("/map");
+	useRedirectForAuthed("/game");
 	const [error, setError] = useState("");
 	const inp_login = useRef<HTMLInputElement>(null);
 	const inp_password = useRef<HTMLInputElement>(null);

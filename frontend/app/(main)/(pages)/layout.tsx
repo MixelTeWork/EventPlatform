@@ -19,7 +19,8 @@ export default function Layout({
 			<div className={styles.body}>
 				{children}
 			</div>
-			<Footer />
+			<footer style={{ height: "3em" }}></footer>
+			{/* <Footer /> */}
 		</div>
 	);
 }
