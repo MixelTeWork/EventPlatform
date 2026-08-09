@@ -1,7 +1,7 @@
 import sys
 from datetime import timedelta
 
-from bafser import AppConfig, create_app
+from bafser import AccessControlHeaders, AppConfig, create_app
 from dotenv import load_dotenv
 
 from scripts.init_db import init_db
@@ -18,6 +18,8 @@ app, run = create_app(__name__, AppConfig(
     DELAY_MODE="delay" in sys.argv,
     THREADED="dev" not in sys.argv,
     HEALTH_ROUTE=True,
+    JWT_COOKIE_SAMESITE="None",
+    CORS_HEADERS_DEV=AccessControlHeaders(origin="***", credentials=True)
 )
     .add_env_var("API_SECRET_KEY")
     .add_env_var("TICKETS_API_URL")
