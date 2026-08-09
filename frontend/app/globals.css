@@ -68,12 +68,15 @@ body {
 	--m-c-text: var(--c-text);
 
 
+	--c-back: #ff9c19;
 	--c-primary: #ffb000;
 	--c-primary-light: #ffcf66;
 	--bcolor: #ff954b;
 	--bgcolor1: #ff9b00;
 	--bgcolor2: #ffa600;
 	--bgcolor3: #ffbf00;
+	--background-calm: #ff9c19;
+	--c-text: #0083c1;
 
 /*
 	--color: #fff;

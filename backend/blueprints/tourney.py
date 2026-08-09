@@ -148,7 +148,7 @@ def reset():
 
 @bp.route("/api/tourney/characters")
 @doc_api(res=list[TourneyCharacterDict], desc="Get all tourney characters")
-@protected_route()
+# @protected_route()
 def characters():
     return jsonify_list(TourneyCharacter.all2())
 
