@@ -13,7 +13,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - nginx_logs:/var/log/nginx
-      - frontend-build:/usr/share/nginx/html:ro
+      - frontend:/usr/share/nginx/html:ro
 
   app:
     build:
@@ -30,7 +30,7 @@ services:
       - data
     volumes:
       - data:/app/storage
-      - frontend-build:/frontend-build
+      - frontend:/frontend-build
     environment:
       - TICKETS_API_URL=${TICKETS_API_URL?:}
       - API_SECRET_KEY=${API_SECRET_KEY?:}
@@ -75,7 +75,8 @@ services:
 volumes:
   db-data:
   data:
-  frontend-build:  # to share build between app and nginx
+  nginx_logs:
+  frontend:  # to share build between app and nginx
 
 secrets:
   db-password:

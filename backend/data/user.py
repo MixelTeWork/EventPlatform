@@ -1,11 +1,13 @@
+from datetime import datetime
 from typing import Any, Optional, TypedDict, override
 
-from bafser import BigIdMixin, Log, RoleDict, UserBase, UserKwargs
+from bafser import BigIdMixin, Log, RoleDict, UserBase, UserKwargs, get_datetime_now
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
 
 class User(UserBase, BigIdMixin):
+    createdAt: Mapped[datetime]
     lastName: Mapped[Optional[str]] = mapped_column(String(128), default=None)
     imageUrl: Mapped[Optional[str]] = mapped_column(String(256), default=None)
     ticketType: Mapped[Optional[str]] = mapped_column(String(128), default=None)
@@ -17,7 +19,7 @@ class User(UserBase, BigIdMixin):
     @classmethod
     @override
     def _new(cls, db_sess: Session, user_kwargs: UserKwargs, *, balance: int = 0, **kwargs: Any):
-        user = User(**user_kwargs, balance=balance)
+        user = User(**user_kwargs, balance=balance, createdAt=get_datetime_now())
         user.set_unique_big_id(db_sess=db_sess)
         return user
 

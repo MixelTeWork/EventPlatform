@@ -6,7 +6,7 @@
 	gap: 1rem;
 	padding: 0.5em 1em;
 	margin: 0.75rem auto;
-	font-family: var(--font-Undertale);
+	/* font-family: var(--font-Undertale); */
 	font-size: 0.9rem;
 	background-color: var(--c-back);
 	color: var(--c-text);

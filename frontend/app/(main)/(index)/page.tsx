@@ -1,5 +1,5 @@
 "use client"
-import logo from "./logo.png";
+import logo from "./logo.svg";
 import Link from "next/link";
 import Image from "next/image";
 import useStateBool from "@/utils/useStateBool";
@@ -17,7 +17,7 @@ export default function Page()
 	return (
 		<div className={styles.root}>
 			<Link href="/auth" className={styles.auth} />
-			<Title text="Underparty"  className={styles.title} />
+			{/* <Title text="Underparty"  className={styles.title} /> */}
 			<Image className={styles.logo} src={logo} alt="Underparty" priority />
 			<button onClick={authOpen.setT}>
 				<Textbox2 primary>

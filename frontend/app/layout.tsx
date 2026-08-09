@@ -23,8 +23,8 @@ const font_Undertale = localFont({ src: "../fonts/Undertale-Battle-Font.ttf", va
 const url = new URL(process.env.PUBLIC_URL || "");
 export const metadata: Metadata = {
 	metadataBase: url,
-	title: "Underparty",
-	description: "Самый-самый фестиваль по Undertale и Deltarune",
+	title: "ИНДИКОН 2.0",
+	description: "Любите инди-игры и анимацию? Хотите встретить единомышленников, посмотреть мерч и поучаствовать в активностях? Тогда добро пожаловать на наш фестиваль!",
 	openGraph: {
 		url: url,
 	},

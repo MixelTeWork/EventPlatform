@@ -7,7 +7,8 @@ export class Tree
 	public static Colors = {
 		onBack: "#ccebff",
 		// node: "#618ef8",
-		node: "#000000",
+		node: "#ffbc00",
+		// node: "#000000",
 		nodeWinner: "#00042b",
 		nodeSelected: "#3649de",
 		onNode: "#fffeaf",
