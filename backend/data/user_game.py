@@ -1,11 +1,15 @@
 from datetime import datetime, timedelta
+from logging import Logger
 from typing import Optional
 
-from bafser import SqlAlchemyBase, get_datetime_now, get_db_session
+from bafser import SqlAlchemyBase, add_logger, create_log_handler, get_datetime_now, get_db_session
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
+import bafser_config
 from data import Tables
+
+logger_click: Logger | None = None
 
 
 class UserGame(SqlAlchemyBase):
@@ -32,15 +36,26 @@ class UserGame(SqlAlchemyBase):
         self.db_sess.commit()
 
     def click(self, clicks: int):
+        global logger_click
+        if not logger_click:
+            logger_click = add_logger(
+                "clicks",
+                create_log_handler(
+                    bafser_config.log_clicks_path,
+                    "%(uid)-6s;%(asctime)s;%(message)s",
+                ),
+            )
         now = get_datetime_now().replace(tzinfo=None)
         now_hack = 0
         if self.lastClick is None:
+            logger_click.info(f"{clicks};;")
             if clicks > 100:
                 now_hack = 1
         else:
             td: timedelta = now - self.lastClick
             dt = td.seconds + td.microseconds / 1000000
-            if clicks / dt > 16:
+            logger_click.info(f"{clicks};{dt};{clicks / dt}")
+            if clicks / dt > 40:  # 16 for single finger
                 now_hack = 2
 
         self.lastClick = now
