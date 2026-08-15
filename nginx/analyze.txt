@@ -1,0 +1,5 @@
+# Install GoAccess
+sudo apt install goaccess -y  # Ubuntu/Debian
+
+# Run it directly against your access log
+goaccess /var/log/nginx/access.log --log-format=COMBINED

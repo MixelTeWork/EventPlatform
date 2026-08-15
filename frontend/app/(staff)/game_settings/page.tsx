@@ -36,7 +36,7 @@ export default function Page()
 		<h1 className="layout_gap">Настройки игры</h1>
 		{tourney.isLoading && <Spinner />}
 		{displayError(tourney)}
-		<Link href="/tourney_screen" className={styles.link}>Открыть экран</Link>
+		<Link href="/game_screen" className={styles.link}>Открыть экран</Link>
 		<Link href="/game_characters" className={styles.link}>Персонажи турнира</Link>
 		<SettingInput text={<StartTimeList games={tourney.data?.games} />} type="text" query={useGameStartStr} getv={d => d?.startStr || ""} mutation={useMutationGameStartStr} />
 		<SettingInput text={<span>Предтурнирная фраза <Help text="Доллар заменяется на время начала" /></span>} type="textarea" query={useGameStartPhrase} getv={d => d?.startPhrase || ""} mutation={useMutationGameStartPhrase} check={v => !v.includes("$") && "Вы забыли доллар"} />
