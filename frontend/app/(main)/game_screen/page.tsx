@@ -3,16 +3,18 @@ import styles from "./styles.module.css"
 import wait_1 from "./ost/wait_1.mp3"
 import wait_2 from "./ost/wait_2.mp3"
 import wait_3 from "./ost/wait_3.mp3"
+import wait_4 from "./ost/wait_4.mp3"
+import wait_5 from "./ost/wait_5.mp3"
+import wait_6 from "./ost/wait_6.mp3"
+import wait_7 from "./ost/wait_7.mp3"
+import wait_8 from "./ost/wait_8.mp3"
+import wait_9 from "./ost/wait_9.mp3"
 import game_1 from "./ost/game_1.mp3"
 import game_2 from "./ost/game_2.mp3"
 import game_3 from "./ost/game_3.mp3"
 import game_4 from "./ost/game_4.mp3"
 import game_5 from "./ost/game_5.mp3"
 import game_6 from "./ost/game_6.mp3"
-import game_7 from "./ost/game_7.mp3"
-import game_8 from "./ost/game_8.mp3"
-import game_9 from "./ost/game_9.mp3"
-import game_10 from "./ost/game_10.mp3"
 import { useEffect, useRef } from "react";
 import useStateBool from "@/utils/useStateBool";
 import useSound from "@/utils/useSound";
@@ -93,8 +95,8 @@ function spawnRect(parent: HTMLDivElement)
 
 function SoundPlayer({ gameIsGoing }: { gameIsGoing: boolean })
 {
-	const ostWait = [wait_1, wait_2, wait_3];
-	const ostGame = [game_1, game_2, game_3, game_4, game_5, game_6, game_7, game_8, game_9, game_10]
+	const ostWait = [wait_1, wait_2, wait_3, wait_4, wait_5, wait_6, wait_7, wait_8, wait_9];
+	const ostGame = [game_1, game_2, game_3, game_4, game_5, game_6]
 	const ostWaitI = useStateObj(randomInt(ostWait.length));
 	const ostGameI = useStateObj(randomInt(ostGame.length));
 	const ostSoundWait = useSound(ostWait[ostWaitI.v], true);
